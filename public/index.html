@@ -744,7 +744,7 @@ function Home({go}){
           <div className="brand-en">MAGIC ORACLE</div>
           <div className="tagline">有些答案,宇宙會在<br/>你準備好時,悄悄告訴你。</div>
           <div className="cta"><button className="btn" onClick={()=>go("think")}>今天抽一籤</button></div>
-          <div className="free">第一籤免費 · 第二籤起每次 NT$50</div>
+          <div className="free">每日第一籤免費 · 當日第二籤起每次 NT$50</div>
         </div>
         <div className="art"><img className="cyl-hero" src={CYL} alt="籤筒"/></div>
       </div>
@@ -1041,24 +1041,41 @@ function ShareModal({fortune,onClose}){
 }
 
 
-function oracleHasUsedFreeDraw(){
-  return localStorage.getItem("magic_oracle_free_draw_used")==="1";
+function oracleTodayKey(){
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth()+1).padStart(2,"0");
+  const d = String(now.getDate()).padStart(2,"0");
+  return `${y}-${m}-${d}`;
 }
+
+function oracleHasUsedFreeDraw(){
+  return localStorage.getItem("magic_oracle_free_draw_date") === oracleTodayKey();
+}
+
 function oracleHasPaidDraw(){
   return sessionStorage.getItem("magic_oracle_paid_draw")==="1";
 }
+
 function oracleCanEnterDrawFlow(){
   return !oracleHasUsedFreeDraw() || oracleHasPaidDraw();
 }
+
 function oracleConsumeDrawCredit(){
   if(!oracleHasUsedFreeDraw()){
-    localStorage.setItem("magic_oracle_free_draw_used","1");
+    localStorage.setItem("magic_oracle_free_draw_date", oracleTodayKey());
+
+    // Clean up the old permanent flag from earlier versions, if present.
+    localStorage.removeItem("magic_oracle_free_draw_used");
+
     return true;
   }
+
   if(oracleHasPaidDraw()){
     sessionStorage.removeItem("magic_oracle_paid_draw");
     return true;
   }
+
   return false;
 }
 
@@ -1099,5 +1116,16 @@ function App(){
 }
 ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
+
+<script>
+/*
+  未完籤所免費規則：
+  - 依使用者裝置「本地日期」判斷。
+  - 每個自然日第一籤免費。
+  - 同日後續每一籤需購買一個 NT$50 單次抽籤額度。
+  - 換裝置／清除 localStorage／無痕模式仍可能重新取得免費籤（MVP 行為）。
+*/
+</script>
+
 </body>
 </html>
