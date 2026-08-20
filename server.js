@@ -148,16 +148,35 @@ app.post("/api/ecpay/callback",(req,res)=>{
 
 // Browser payment result POST (for real-time payment types).
 app.post("/api/ecpay/result",(req,res)=>{
-  if(!verifyEcpay(req.body)){
-    return res.redirect("/?payment=failed");
+  const macValid = verifyEcpay(req.body);
+
+  console.log("=== ECPAY RESULT ===");
+  console.log("MerchantTradeNo:", req.body.MerchantTradeNo);
+  console.log("RtnCode:", req.body.RtnCode);
+  console.log("RtnMsg:", req.body.RtnMsg);
+  console.log("TradeAmt:", req.body.TradeAmt);
+  console.log("PaymentType:", req.body.PaymentType);
+  console.log("CheckMacValue valid:", macValid);
+  console.log("====================");
+
+  if(!macValid){
+    return res.redirect("/?payment=failed&reason=mac");
   }
+
   const order = markOrder(req.body);
-  if(order.status !== "paid"){
-    return res.redirect("/?payment=failed");
+
+  if(String(req.body.RtnCode) !== "1"){
+    return res.redirect(
+      `/?payment=failed&reason=rtn&rtnCode=${encodeURIComponent(req.body.RtnCode || "")}`
+    );
   }
+
   const type = encodeURIComponent(order.kind);
   const id = encodeURIComponent(order.merchantTradeNo);
-  return res.redirect(`/?payment=success&type=${type}&order=${id}`);
+
+  return res.redirect(
+    `/?payment=success&type=${type}&order=${id}`
+  );
 });
 
 app.get("/api/ecpay/order/:id",(req,res)=>{
