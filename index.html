@@ -973,7 +973,7 @@ function Home({go}){
           <div className="brand-cn">未完籤所</div>
           <div className="brand-en">MAGIC ORACLE</div>
           <div className="tagline">有些答案,宇宙會在<br/>你準備好時,悄悄告訴你。</div>
-          <div className="cta"><button className="btn" onClick={()=>go("think")}>今天抽一籤</button></div>
+          <div className="cta"><button className="btn" onClick={()=>go("theme")}>今天抽一籤</button></div>
         </div>
         <div className="art"><img className="cyl-hero" src={CYL} alt="籤筒"/></div>
       </div>
@@ -1134,7 +1134,7 @@ function Result({go,fortune,share}){
           <div className="soft" style={{fontSize:13.5,lineHeight:2,marginTop:8}}>{fortune.adv}</div>
           <div className="actions" style={{gridTemplateColumns:"repeat(2,1fr)"}}>
             <button className="act" onClick={share}><Share size={20}/><span>分享籤文</span></button>
-            <button className="act" onClick={()=>go("think")}><Rotate size={20}/><span>再抽一次</span></button>
+            <button className="act" onClick={()=>go("theme")}><Rotate size={20}/><span>再抽一次</span></button>
           </div>
         </div>
 
