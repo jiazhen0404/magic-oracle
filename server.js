@@ -190,7 +190,24 @@ app.get("/api/ecpay/order/:id",(req,res)=>{
   });
 });
 
-app.use(express.static(path.join(__dirname,"public")));
+// Static files: keep HTML fresh, cache images/data safely.
+const PUBLIC_DIR = path.join(__dirname,"public");
+app.use("/assets", express.static(path.join(PUBLIC_DIR,"assets"), { maxAge: "30d", immutable: true }));
+app.use("/data", express.static(path.join(PUBLIC_DIR,"data"), { maxAge: "5m" }));
+app.use(express.static(PUBLIC_DIR, {
+  setHeaders(res, filePath){
+    if(filePath.endsWith(".html")){
+      res.setHeader("Cache-Control","no-cache, no-store, must-revalidate");
+    }
+  }
+}));
+
+// App fallback: query-string entries and non-file routes still load the oracle UI.
+app.get("*", (req,res,next)=>{
+  if(req.path.startsWith("/api/")) return next();
+  res.setHeader("Cache-Control","no-cache, no-store, must-revalidate");
+  return res.sendFile(path.join(PUBLIC_DIR,"index.html"));
+});
 
 app.listen(PORT,()=>{
   console.log(`Magic Oracle running at http://localhost:${PORT}`);
