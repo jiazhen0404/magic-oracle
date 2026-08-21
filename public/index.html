@@ -466,7 +466,7 @@ body::before {
    把下方的連結換成你自己的斗內頁面（Ko-fi、Linktree、
    街口、LINE Pay、歐付寶等均可）。
    ─────────────────────────────────────────────────── */
-const DONATE_URL = "https://ko-fi.com/your_id"; // ← 改成你的斗內連結
+const DONATE_URL = "https://ko-fi.com/jiazhen0404";
 
 /* 斗內金額選項（NT$）*/
 const DONATE_AMOUNTS = [30, 50, 100];
@@ -541,18 +541,53 @@ function magicOraclePay(){
 .donate-hint{
   font-size:11px;color:var(--text-faint);margin-top:14px;line-height:1.7;
 }
-/* 結果頁斗內按鈕 */
-.donate-result-btn{
-  display:block;width:100%;margin-top:18px;padding:11px 0;
-  border-radius:10px;background:none;
-  border:1px solid rgba(217,189,130,.28);
-  color:var(--gold-soft);font-size:13px;font-family:var(--serif);
-  letter-spacing:.1em;cursor:pointer;
-  transition:border-color .2s,color .2s,box-shadow .2s;
+/* ── 結果頁內嵌斗內區塊 ── */
+.donate-inline-block{
+  margin-top:16px;padding:22px 20px 20px;
+  border-radius:16px;
+  border:1px solid var(--gold-line);
+  background:linear-gradient(160deg,rgba(34,26,69,.6),rgba(18,12,38,.6));
+  text-align:center;
 }
-.donate-result-btn:hover{
-  border-color:var(--gold);color:var(--gold);
-  box-shadow:0 0 16px rgba(217,189,130,.14);
+.donate-inline-title{
+  color:var(--gold);font-size:15px;letter-spacing:.2em;margin-bottom:6px;
+}
+.donate-inline-sub{
+  color:var(--text-faint);font-size:12px;letter-spacing:.08em;margin-bottom:16px;
+}
+.donate-qr-img{
+  width:148px;height:148px;border-radius:12px;
+  object-fit:cover;display:block;margin:0 auto 14px;
+  border:1px solid var(--gold-line);
+  background:rgba(255,255,255,.04);
+}
+.donate-inline-amounts{
+  display:flex;gap:8px;justify-content:center;margin-bottom:10px;
+}
+.donate-inline-tag{
+  padding:5px 12px;border-radius:20px;
+  border:1px solid var(--gold-line);
+  color:var(--gold-soft);font-size:12px;
+}
+.donate-inline-hint{
+  color:var(--text-faint);font-size:11px;letter-spacing:.06em;
+}
+.donate-inline-message{
+  color:var(--text-soft);font-size:13px;line-height:2;
+  margin-bottom:18px;letter-spacing:.05em;
+}
+.donate-kofi-btn{
+  display:block;width:100%;padding:12px 0;border-radius:10px;
+  background:linear-gradient(135deg,var(--btn-a),var(--btn-b));
+  border:1px solid rgba(217,189,130,.28);
+  color:var(--text);font-size:14px;font-family:var(--serif);
+  letter-spacing:.15em;cursor:pointer;
+  box-shadow:0 0 18px rgba(122,103,172,.4);
+  transition:box-shadow .2s,border-color .2s;
+}
+.donate-kofi-btn:hover{
+  box-shadow:0 0 28px rgba(122,103,172,.65);
+  border-color:var(--gold-line);
 }
 </style>
 
@@ -891,7 +926,7 @@ function DonationModal({onClose, onConfirm}){
   );
 }
 
-function Result({go,fortune,share,onDonate}){
+function Result({go,fortune,share}){
   return (
     <div className="device">
       <TopBar title="籤文" onBack={()=>go("home")}/>
@@ -911,10 +946,25 @@ function Result({go,fortune,share,onDonate}){
             <button className="act" onClick={share}><Share size={20}/><span>分享籤文</span></button>
             <button className="act" onClick={()=>go("think")}><Rotate size={20}/><span>再抽一次</span></button>
           </div>
-          <button className="donate-result-btn" onClick={onDonate}>
-            ♥ 喜歡這個籤所？斗內支持一下
+        </div>
+
+        {/* ── 斗內區塊 ── */}
+        <div className="donate-inline-block">
+          <div className="donate-inline-title">✦ 斗內支持 ✦</div>
+          <div className="donate-inline-message">
+            每一份斗內，都是宇宙傳回來的心意。<br/><br/>
+            未完籤所是一個人在深夜裡慢慢做出來的地方。<br/>
+            每一支籤語、每一句解籤，都是真心想陪你走過那些說不清楚的時刻。<br/><br/>
+            如果今天這支籤有輕輕碰到你，<br/>
+            歡迎留下一份心意——<br/>
+            讓這盞燈繼續亮著。<br/><br/>
+            謝謝你讓這個籤所繼續存在。✦
+          </div>
+          <button className="donate-kofi-btn" onClick={()=>window.open(DONATE_URL,"_blank","noopener,noreferrer")}>
+            ♥ 前往 Ko-fi 斗內
           </button>
         </div>
+
       </div>
       <Nav screen="result" go={go}/>
     </div>
@@ -1156,7 +1206,6 @@ function App(){
   const [fortune,setFortune]=useState(null);
   const [note,setNote]=useState("");
   const [showShare,setShowShare]=useState(false);
-  const [showDonate,setShowDonate]=useState(false);
 
   const go=s=>{
     setScreen(s==="draw"?"think":s);
@@ -1172,9 +1221,8 @@ function App(){
       {screen==="think" && <Think go={go} note={note} setNote={setNote}/>}
       {screen==="theme" && <Theme go={go} pick={pick}/>}
       {screen==="drawing" && <Drawing go={go}/>}
-      {screen==="result" && fortune && <Result go={go} fortune={fortune} share={()=>setShowShare(true)} onDonate={()=>setShowDonate(true)}/>}
+      {screen==="result" && fortune && <Result go={go} fortune={fortune} share={()=>setShowShare(true)}/>}
       {showShare && fortune && <ShareModal fortune={fortune} onClose={()=>setShowShare(false)}/>}
-      {showDonate && <DonationModal onClose={()=>setShowDonate(false)} onConfirm={()=>setShowDonate(false)}/>}
     </div>
   );
 }
