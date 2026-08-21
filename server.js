@@ -190,6 +190,14 @@ app.get("/api/ecpay/order/:id",(req,res)=>{
   });
 });
 
+// Legacy SEO entry links used ?entry=breakup. Always send them into the real oracle flow.
+app.get("/", (req,res,next)=>{
+  if(req.query && req.query.entry){
+    return res.redirect(302, "/#start");
+  }
+  next();
+});
+
 // Static files: keep HTML fresh, cache images/data safely.
 const PUBLIC_DIR = path.join(__dirname,"public");
 app.use("/assets", express.static(path.join(PUBLIC_DIR,"assets"), { maxAge: "30d", immutable: true }));
