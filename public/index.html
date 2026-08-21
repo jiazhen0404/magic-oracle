@@ -447,10 +447,9 @@ body::before {
 
 <style>
 /* Theme category titles: white */
-.theme-card > div:nth-child(2) > div:first-child{
+.theme-name{
   color:#ffffff !important;
-  opacity:1 !important;
-  text-shadow:0 0 8px rgba(255,255,255,.10);
+  opacity:1;
 }
 </style>
 
@@ -463,60 +462,86 @@ body::before {
 
 
 <script>
-async function magicOraclePay(kind, amount){
-  try{
-    const numericAmount = Number(amount);
-    if(!Number.isInteger(numericAmount) || numericAmount < 10 || numericAmount > 10000){
-      alert("付款金額格式不正確");
-      return;
-    }
+/* ── 斗內設定 ─────────────────────────────────────────
+   把下方的連結換成你自己的斗內頁面（Ko-fi、Linktree、
+   街口、LINE Pay、歐付寶等均可）。
+   ─────────────────────────────────────────────────── */
+const DONATE_URL = "https://ko-fi.com/your_id"; // ← 改成你的斗內連結
 
-    const res = await fetch("/api/ecpay/create-order",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({kind, amount:numericAmount})
-    });
-    if(!res.ok){
-      const msg = await res.text();
-      throw new Error(msg || "建立付款訂單失敗");
-    }
-    const data = await res.json();
+/* 斗內金額選項（NT$）*/
+const DONATE_AMOUNTS = [30, 50, 100];
 
-    const form=document.createElement("form");
-    form.method="POST";
-    form.action=data.paymentUrl;
-    form.style.display="none";
-    Object.entries(data.fields).forEach(([k,v])=>{
-      const input=document.createElement("input");
-      input.type="hidden";
-      input.name=k;
-      input.value=String(v);
-      form.appendChild(input);
-    });
-    document.body.appendChild(form);
-    form.submit();
-  }catch(err){
-    console.error(err);
-    alert("目前無法開啟付款頁，請稍後再試。");
-  }
+/* 全域事件橋：React component 可透過此函式開啟斗內 Modal */
+let _openDonateModal = null;
+function magicOraclePay(){
+  if(_openDonateModal) _openDonateModal();
 }
-
-function magicOracleHandlePaymentReturn(){
-  const p=new URLSearchParams(location.search);
-  if(p.get("payment")==="success"){
-    const type=p.get("type");
-    if(type==="draw"){
-      sessionStorage.setItem("magic_oracle_paid_draw","1");
-      setTimeout(()=>alert("付款成功 ✦ 你可以再抽一籤了。"),250);
-    }
-    history.replaceState({},document.title,location.pathname);
-  }else if(p.get("payment")==="failed"){
-    setTimeout(()=>alert("這次付款沒有完成，你可以稍後再試。"),250);
-    history.replaceState({},document.title,location.pathname);
-  }
-}
-window.addEventListener("DOMContentLoaded",magicOracleHandlePaymentReturn);
 </script>
+
+
+<style>
+/* ── 斗內 Modal ── */
+.donate-modal-overlay{
+  position:fixed;inset:0;background:rgba(6,4,16,.88);
+  display:flex;align-items:center;justify-content:center;
+  z-index:40;padding:24px;animation:fade .22s ease;
+}
+.donate-card{
+  position:relative;width:100%;max-width:340px;
+  background:linear-gradient(160deg,#221a45,#160e30);
+  border:1px solid var(--gold-line);border-radius:20px;
+  padding:28px 22px 22px;text-align:center;
+  box-shadow:0 0 48px rgba(122,103,172,.45);
+}
+.donate-title{
+  font-size:20px;color:var(--gold);letter-spacing:.25em;margin-bottom:4px;
+}
+.donate-sub{
+  font-size:12px;color:var(--text-faint);letter-spacing:.1em;margin-bottom:20px;
+}
+.donate-amounts{
+  display:flex;gap:10px;justify-content:center;margin-bottom:18px;
+}
+.donate-amount-btn{
+  flex:1;padding:10px 0;border-radius:10px;
+  border:1px solid var(--gold-line);
+  background:rgba(20,14,42,.45);
+  color:var(--text-soft);font-size:14px;font-family:var(--serif);
+  cursor:pointer;transition:border-color .18s,color .18s,box-shadow .18s;
+}
+.donate-amount-btn:hover{
+  border-color:rgba(217,189,130,.7);color:var(--gold);
+  box-shadow:0 0 14px rgba(217,189,130,.14);
+}
+.donate-link-btn{
+  display:block;width:100%;padding:11px 0;border-radius:10px;
+  background:linear-gradient(135deg,var(--btn-a),var(--btn-b));
+  border:1px solid rgba(217,189,130,.28);
+  color:var(--text);font-size:14px;font-family:var(--serif);
+  letter-spacing:.12em;cursor:pointer;margin-bottom:12px;
+  box-shadow:0 0 18px rgba(122,103,172,.4);
+  transition:box-shadow .2s;
+}
+.donate-link-btn:hover{
+  box-shadow:0 0 28px rgba(122,103,172,.65);
+}
+.donate-confirm-btn{
+  display:block;width:100%;padding:10px 0;border-radius:10px;
+  background:none;border:1px solid rgba(217,189,130,.35);
+  color:var(--gold-soft);font-size:13px;font-family:var(--serif);
+  cursor:pointer;letter-spacing:.1em;transition:border-color .18s,color .18s;
+}
+.donate-confirm-btn:hover{
+  border-color:var(--gold);color:var(--gold);
+}
+.donate-close{
+  position:absolute;top:14px;right:14px;background:none;border:none;
+  color:var(--text-faint);cursor:pointer;padding:4px;
+}
+.donate-hint{
+  font-size:11px;color:var(--text-faint);margin-top:14px;line-height:1.7;
+}
+</style>
 
 
 <style>
@@ -822,7 +847,38 @@ function Drawing({go}){
   );
 }
 
-function Result({go,fortune,share}){
+function DonationModal({onClose, onConfirm}){
+  const openLink = ()=>{
+    window.open(DONATE_URL, "_blank", "noopener,noreferrer");
+  };
+  return (
+    <div className="donate-modal-overlay" onClick={onClose}>
+      <div className="donate-card" onClick={e=>e.stopPropagation()}>
+        <button className="donate-close" onClick={onClose}><XI size={20}/></button>
+        <div className="donate-title">✦ 斗內支持 ✦</div>
+        <div className="donate-sub">每一份心意都讓籤更有力量</div>
+        <div className="donate-amounts">
+          {DONATE_AMOUNTS.map(amt=>(
+            <button key={amt} className="donate-amount-btn" onClick={openLink}>
+              NT${amt}
+            </button>
+          ))}
+        </div>
+        <button className="donate-link-btn" onClick={openLink}>
+          前往斗內頁面 →
+        </button>
+        <button className="donate-confirm-btn" onClick={onConfirm}>
+          我已完成斗內，繼續抽籤 ✓
+        </button>
+        <div className="donate-hint">
+          完成斗內後點選上方按鈕<br/>即可解鎖本日第二籤
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Result({go,fortune,share,onDonate}){
   return (
     <div className="device">
       <TopBar title="籤文" onBack={()=>go("home")}/>
@@ -840,7 +896,7 @@ function Result({go,fortune,share}){
           <div className="soft" style={{fontSize:13.5,lineHeight:2,marginTop:8}}>{fortune.adv}</div>
           <div className="actions" style={{gridTemplateColumns:"repeat(2,1fr)"}}>
             <button className="act" onClick={share}><Share size={20}/><span>分享籤文</span></button>
-            <button className="act" onClick={()=>magicOraclePay("draw",50)}><Rotate size={20}/><span>再抽一次 · NT$50</span></button>
+            <button className="act" onClick={onDonate}><Rotate size={20}/><span>再抽一次</span></button>
           </div>
         </div>
       </div>
@@ -1084,10 +1140,20 @@ function App(){
   const [fortune,setFortune]=useState(null);
   const [note,setNote]=useState("");
   const [showShare,setShowShare]=useState(false);
+  const [showDonate,setShowDonate]=useState(false);
+  const [pendingAction,setPendingAction]=useState(null); // "go" | "pick" | null
+
+  /* 讓全域 magicOraclePay() 也能觸發此 modal */
+  React.useEffect(()=>{
+    _openDonateModal = ()=>{ setPendingAction("go"); setShowDonate(true); };
+    return ()=>{ _openDonateModal = null; };
+  },[]);
+
   const go=s=>{
     if(s==="draw" || s==="think"){
       if(!oracleCanEnterDrawFlow()){
-        magicOraclePay("draw",50);
+        setPendingAction("go");
+        setShowDonate(true);
         return;
       }
       setScreen("think");
@@ -1097,20 +1163,39 @@ function App(){
   };
   const pick=t=>{
     if(!oracleConsumeDrawCredit()){
-      magicOraclePay("draw",50);
+      setPendingAction(()=>t); // store theme
+      setShowDonate(true);
       return;
     }
     setFortune(draw(t));
     setScreen("drawing");
   };
+
+  /* 使用者確認已斗內 → 授予一次抽籤額度 */
+  const handleDonateConfirm=()=>{
+    sessionStorage.setItem("magic_oracle_paid_draw","1");
+    setShowDonate(false);
+    if(typeof pendingAction === "function"){
+      // pending pick(theme)
+      const theme = pendingAction;
+      setPendingAction(null);
+      setFortune(draw(theme));
+      setScreen("drawing");
+    } else {
+      setPendingAction(null);
+      setScreen("think");
+    }
+  };
+
   return (
     <div className="app">
       {screen==="home" && <Home go={go}/>}
       {screen==="think" && <Think go={go} note={note} setNote={setNote}/>}
       {screen==="theme" && <Theme go={go} pick={pick}/>}
       {screen==="drawing" && <Drawing go={go}/>}
-      {screen==="result" && fortune && <Result go={go} fortune={fortune} share={()=>setShowShare(true)}/>}
+      {screen==="result" && fortune && <Result go={go} fortune={fortune} share={()=>setShowShare(true)} onDonate={()=>{setPendingAction("go");setShowDonate(true);}}/>}
       {showShare && fortune && <ShareModal fortune={fortune} onClose={()=>setShowShare(false)}/>}
+      {showDonate && <DonationModal onClose={()=>{setShowDonate(false);setPendingAction(null);}} onConfirm={handleDonateConfirm}/>}
     </div>
   );
 }
