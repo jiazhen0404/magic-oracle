@@ -200,9 +200,15 @@ app.get("/", (req,res,next)=>{
 
 // Static files: keep HTML fresh, cache images/data safely.
 const PUBLIC_DIR = path.join(__dirname,"public");
-app.use("/assets", express.static(path.join(PUBLIC_DIR,"assets"), { maxAge: "30d", immutable: true }));
-app.use("/data", express.static(path.join(PUBLIC_DIR,"data"), { maxAge: "5m" }));
+const APP_INDEX = path.join(__dirname,"index.html");
+
+// The lightweight oracle UI and its split assets live at the project root.
+// Keep the URL structure stable without exposing the rest of the project as
+// static files. (The old public/index.html is a legacy embedded landing build.)
+app.use("/assets", express.static(path.join(__dirname,"assets"), { maxAge: "30d", immutable: true }));
+app.use("/data", express.static(path.join(__dirname,"data"), { maxAge: "5m" }));
 app.use(express.static(PUBLIC_DIR, {
+  index: false,
   setHeaders(res, filePath){
     if(filePath.endsWith(".html")){
       res.setHeader("Cache-Control","no-cache, no-store, must-revalidate");
@@ -214,7 +220,7 @@ app.use(express.static(PUBLIC_DIR, {
 app.get("*", (req,res,next)=>{
   if(req.path.startsWith("/api/")) return next();
   res.setHeader("Cache-Control","no-cache, no-store, must-revalidate");
-  return res.sendFile(path.join(PUBLIC_DIR,"index.html"));
+  return res.sendFile(APP_INDEX);
 });
 
 app.listen(PORT,()=>{
