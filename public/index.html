@@ -541,6 +541,19 @@ function magicOraclePay(){
 .donate-hint{
   font-size:11px;color:var(--text-faint);margin-top:14px;line-height:1.7;
 }
+/* 結果頁斗內按鈕 */
+.donate-result-btn{
+  display:block;width:100%;margin-top:18px;padding:11px 0;
+  border-radius:10px;background:none;
+  border:1px solid rgba(217,189,130,.28);
+  color:var(--gold-soft);font-size:13px;font-family:var(--serif);
+  letter-spacing:.1em;cursor:pointer;
+  transition:border-color .2s,color .2s,box-shadow .2s;
+}
+.donate-result-btn:hover{
+  border-color:var(--gold);color:var(--gold);
+  box-shadow:0 0 16px rgba(217,189,130,.14);
+}
 </style>
 
 
@@ -896,8 +909,11 @@ function Result({go,fortune,share,onDonate}){
           <div className="soft" style={{fontSize:13.5,lineHeight:2,marginTop:8}}>{fortune.adv}</div>
           <div className="actions" style={{gridTemplateColumns:"repeat(2,1fr)"}}>
             <button className="act" onClick={share}><Share size={20}/><span>分享籤文</span></button>
-            <button className="act" onClick={onDonate}><Rotate size={20}/><span>再抽一次</span></button>
+            <button className="act" onClick={()=>go("think")}><Rotate size={20}/><span>再抽一次</span></button>
           </div>
+          <button className="donate-result-btn" onClick={onDonate}>
+            ♥ 喜歡這個籤所？斗內支持一下
+          </button>
         </div>
       </div>
       <Nav screen="result" go={go}/>
@@ -1141,50 +1157,13 @@ function App(){
   const [note,setNote]=useState("");
   const [showShare,setShowShare]=useState(false);
   const [showDonate,setShowDonate]=useState(false);
-  const [pendingAction,setPendingAction]=useState(null); // "go" | "pick" | null
-
-  /* 讓全域 magicOraclePay() 也能觸發此 modal */
-  React.useEffect(()=>{
-    _openDonateModal = ()=>{ setPendingAction("go"); setShowDonate(true); };
-    return ()=>{ _openDonateModal = null; };
-  },[]);
 
   const go=s=>{
-    if(s==="draw" || s==="think"){
-      if(!oracleCanEnterDrawFlow()){
-        setPendingAction("go");
-        setShowDonate(true);
-        return;
-      }
-      setScreen("think");
-      return;
-    }
-    setScreen(s);
+    setScreen(s==="draw"?"think":s);
   };
   const pick=t=>{
-    if(!oracleConsumeDrawCredit()){
-      setPendingAction(()=>t); // store theme
-      setShowDonate(true);
-      return;
-    }
     setFortune(draw(t));
     setScreen("drawing");
-  };
-
-  /* 使用者確認已斗內 → 授予一次抽籤額度 */
-  const handleDonateConfirm=()=>{
-    sessionStorage.setItem("magic_oracle_paid_draw","1");
-    setShowDonate(false);
-    if(typeof pendingAction === "function"){
-      // pending pick(theme)
-      const theme = pendingAction;
-      setPendingAction(null);
-      setFortune(draw(theme));
-      setScreen("drawing");
-    } else {
-      setPendingAction(null);
-      setScreen("think");
-    }
   };
 
   return (
@@ -1193,9 +1172,9 @@ function App(){
       {screen==="think" && <Think go={go} note={note} setNote={setNote}/>}
       {screen==="theme" && <Theme go={go} pick={pick}/>}
       {screen==="drawing" && <Drawing go={go}/>}
-      {screen==="result" && fortune && <Result go={go} fortune={fortune} share={()=>setShowShare(true)} onDonate={()=>{setPendingAction("go");setShowDonate(true);}}/>}
+      {screen==="result" && fortune && <Result go={go} fortune={fortune} share={()=>setShowShare(true)} onDonate={()=>setShowDonate(true)}/>}
       {showShare && fortune && <ShareModal fortune={fortune} onClose={()=>setShowShare(false)}/>}
-      {showDonate && <DonationModal onClose={()=>{setShowDonate(false);setPendingAction(null);}} onConfirm={handleDonateConfirm}/>}
+      {showDonate && <DonationModal onClose={()=>setShowDonate(false)} onConfirm={()=>setShowDonate(false)}/>}
     </div>
   );
 }
