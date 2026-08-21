@@ -3,7 +3,29 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>未完籤所 · MAGIC ORACLE</title>
+<title>未完籤所｜免費線上抽籤・愛情占卜・工作運勢</title>
+<meta name="description" content="未完籤所提供免費線上抽籤，包含失戀、曖昧、關係、單身、求職、轉職、職場與創業等情境。不需登入，想著此刻最放不下的問題，抽一支屬於你的籤。" />
+<meta name="robots" content="index,follow,max-image-preview:large" />
+<link rel="canonical" href="https://unfinished.tw/" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="zh_TW" />
+<meta property="og:site_name" content="未完籤所" />
+<meta property="og:title" content="未完籤所｜免費線上抽籤・愛情占卜・工作運勢" />
+<meta property="og:description" content="失戀、曖昧、關係、單身、求職、轉職與工作迷惘，都可以免費抽一支籤。" />
+<meta property="og:url" content="https://unfinished.tw/" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="未完籤所｜免費線上抽籤" />
+<meta name="twitter:description" content="想著此刻最放不下的問題，免費抽一支屬於你的籤。" />
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebSite",
+  "name":"未完籤所",
+  "alternateName":"MAGIC ORACLE",
+  "url":"https://unfinished.tw/",
+  "inLanguage":"zh-Hant"
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
@@ -721,6 +743,15 @@ body::after {
 </head>
 <body>
 <div class="starfield" id="stars"></div>
+<main id="seo-intro" aria-label="未完籤所免費線上抽籤介紹" style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden">
+  <h1>未完籤所｜免費線上抽籤</h1>
+  <p>有些問題沒有答案，但你可以先抽一支籤。未完籤所提供免費線上抽籤，依照你此刻的處境，閱讀更貼近問題的籤語與解籤。</p>
+  <h2>愛情抽籤</h2>
+  <p>愛情情境包含<a href="/love/breakup/">失戀占卜</a>、曖昧、關係中與單身。你可以帶著「他還會回來嗎」、「我們會在一起嗎」、「這段關係該繼續嗎」等問題抽籤。</p>
+  <h2>工作運勢</h2>
+  <p>工作情境包含迷惘、求職、轉職、職場與創業，適合在面試、離職、職涯選擇或事業方向不確定時，整理此刻的想法。</p>
+  <p>未完籤所的內容提供自我整理與娛樂參考，不取代專業、法律、醫療或財務建議。</p>
+</main>
 <div id="root"></div>
 
 <script>
@@ -1331,14 +1362,32 @@ function oracleConsumeDrawCredit(){
   return false;
 }
 
+const ENTRY_PRESETS={
+  breakup:{theme:"love",context:"失戀中"}
+};
+
 function App(){
-  const [screen,setScreen]=useState("home");
+  const initialEntry=ENTRY_PRESETS[new URLSearchParams(window.location.search).get("entry")]||null;
+  const [entryPreset,setEntryPreset]=useState(initialEntry);
+  const [screen,setScreen]=useState(initialEntry?"think":"home");
   const [fortune,setFortune]=useState(null);
   const [note,setNote]=useState("");
   const [showShare,setShowShare]=useState(false);
-  const [selectedTheme,setSelectedTheme]=useState(null);
+  const [selectedTheme,setSelectedTheme]=useState(initialEntry?initialEntry.theme:null);
 
   const go=s=>{
+    if(s==="home" && entryPreset){
+      setEntryPreset(null);
+      setSelectedTheme(null);
+    }
+    if(s==="theme" && entryPreset){
+      sessionStorage.setItem("magic_oracle_last_theme", entryPreset.theme);
+      sessionStorage.setItem("magic_oracle_last_context", entryPreset.context);
+      setFortune(draw(entryPreset.theme,entryPreset.context));
+      setEntryPreset(null);
+      setScreen("drawing");
+      return;
+    }
     setScreen(s==="draw"?"think":s);
   };
   const pickTheme=t=>{
