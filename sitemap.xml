@@ -108,4 +108,11 @@
     <loc>https://unfinished.tw/pet/passed-away/</loc>
     <lastmod>2026-08-23</lastmod>
   </url>
+  <url><loc>https://unfinished.tw/pet/passed-away/is-it-okay/</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://unfinished.tw/pet/passed-away/visit/</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://unfinished.tw/pet/passed-away/message/</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://unfinished.tw/pet/passed-away/blame-me/</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://unfinished.tw/pet/passed-away/reincarnation/</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://unfinished.tw/pet/passed-away/dream/</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://unfinished.tw/pet/passed-away/meet-again/</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
 </urlset>

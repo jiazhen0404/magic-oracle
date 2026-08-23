@@ -218,10 +218,15 @@ app.use(express.static(PUBLIC_DIR, {
 
 // Crawlable SEO landing pages with unique metadata and copy.
 const SEO_DIR = __dirname;
-app.get(/^\/(love|work|choice|life|pet)(?:\/([a-z0-9-]+))?\/?$/, (req,res,next)=>{
+app.get(/^\/(love|work|choice|life|pet)(?:\/([a-z0-9-]+))?(?:\/([a-z0-9-]+))?\/?$/, (req,res,next)=>{
   const category = req.params[0];
   const sub = req.params[1];
-  const filePath = sub ? path.join(SEO_DIR, category, sub, "index.html") : path.join(SEO_DIR, category, "index.html");
+  const detail = req.params[2];
+  const filePath = detail
+    ? path.join(SEO_DIR, category, sub, detail, "index.html")
+    : sub
+      ? path.join(SEO_DIR, category, sub, "index.html")
+      : path.join(SEO_DIR, category, "index.html");
   res.setHeader("Cache-Control","public, max-age=300");
   res.sendFile(filePath, err=>{ if(err) next(); });
 });
