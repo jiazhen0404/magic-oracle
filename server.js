@@ -216,6 +216,16 @@ app.use(express.static(PUBLIC_DIR, {
   }
 }));
 
+// Crawlable SEO landing pages with unique metadata and copy.
+const SEO_DIR = __dirname;
+app.get(/^\/(love|work|choice|life|pet)(?:\/([a-z0-9-]+))?\/?$/, (req,res,next)=>{
+  const category = req.params[0];
+  const sub = req.params[1];
+  const filePath = sub ? path.join(SEO_DIR, category, sub, "index.html") : path.join(SEO_DIR, category, "index.html");
+  res.setHeader("Cache-Control","public, max-age=300");
+  res.sendFile(filePath, err=>{ if(err) next(); });
+});
+
 // App fallback: query-string entries and non-file routes still load the oracle UI.
 app.get("*", (req,res,next)=>{
   if(req.path.startsWith("/api/")) return next();
