@@ -644,6 +644,18 @@ function magicOraclePay(){
   background:linear-gradient(160deg,rgba(34,26,69,.6),rgba(18,12,38,.6));
   text-align:center;
 }
+.extended-preview{
+  margin:22px 0 4px;padding:22px 18px;border:1px solid rgba(199,156,82,.48);
+  border-radius:18px;background:linear-gradient(145deg,rgba(61,31,72,.72),rgba(16,10,27,.9));
+  box-shadow:0 12px 34px rgba(0,0,0,.25),inset 0 0 28px rgba(199,156,82,.05);text-align:center;
+}
+.extended-preview-kicker{color:var(--gold);font-size:11px;letter-spacing:.2em}
+.extended-preview-title{margin-top:9px;font-family:"Noto Serif TC","Songti TC",serif;font-size:19px;line-height:1.55;color:var(--text)}
+.extended-preview-copy{margin:10px auto 16px;max-width:310px;color:var(--text-soft);font-size:12.5px;line-height:1.85}
+.extended-preview-btn{width:100%;min-height:48px;padding:11px 16px;border:1px solid var(--gold);border-radius:999px;color:#fff7df;background:linear-gradient(110deg,rgba(147,92,41,.88),rgba(89,48,85,.92));font-size:13.5px;letter-spacing:.06em;box-shadow:0 7px 22px rgba(0,0,0,.22);cursor:pointer}
+.extended-preview-btn:active{transform:translateY(1px)}
+.extended-preview-btn[disabled]{cursor:default;opacity:.78}
+.extended-preview-thanks{margin-top:12px;color:#e6c98f;font-size:12px;line-height:1.7}
 .donate-inline-title{
   color:var(--gold);font-size:15px;letter-spacing:.2em;margin-bottom:6px;
 }
@@ -1091,6 +1103,94 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
   - 同日後續每一籤需購買一個 NT$50 單次抽籤額度。
   - 換裝置／清除 localStorage／無痕模式仍可能重新取得免費籤（MVP 行為）。
 */
+</script>
+
+<script>
+/* 分類興趣與延伸解籤需求追蹤 v1 */
+(function(){
+  const themeByLabel={"愛情":"love","工作":"work","選擇":"choice","生活":"life","毛孩心語":"pet","隨機一籤":"random"};
+  const themeLabels={love:"愛情",work:"工作",choice:"選擇",life:"生活",pet:"毛孩心語",random:"隨機一籤"};
+  const situationSlugs={
+    "失戀中":"breakup","曖昧中":"ambiguous","關係中":"relationship","單身中":"single","桃花運勢":"peach_blossom",
+    "迷惘中":"confused","求職中":"job_search","轉職中":"career_change","職場中":"workplace","創業中":"business",
+    "兩難中":"dilemma","決定中":"decision","方向中":"direction","迷茫中":"lost","家庭中":"family","夢想中":"dream","日常中":"daily",
+    "陪伴中":"together","擔心中":"worried","思念中":"missing","離別中":"passed_away","隨機訊息":"random_message"
+  };
+  const situationThemes={
+    breakup:"love",ambiguous:"love",relationship:"love",single:"love",peach_blossom:"love",
+    confused:"work",job_search:"work",career_change:"work",workplace:"work",business:"work",
+    dilemma:"choice",decision:"choice",direction:"choice",lost:"life",family:"life",dream:"life",daily:"life",
+    together:"pet",worried:"pet",missing:"pet",passed_away:"pet",random_message:"random"
+  };
+  function send(name,params){if(typeof trackOracleEvent==="function")trackOracleEvent(name,params||{});}
+  function rememberTheme(theme){if(theme)sessionStorage.setItem("oracle_selected_theme",theme);}
+  function currentTheme(situation){
+    const slug=situationSlugs[situation]||"";
+    return sessionStorage.getItem("oracle_selected_theme")||situationThemes[slug]||"unknown";
+  }
+  document.addEventListener("click",function(event){
+    const card=event.target.closest(".theme-card");
+    if(!card)return;
+    const screenTitle=(card.closest(".device")?.querySelector(".topbar .ttl")?.textContent||"").trim();
+    const label=(card.querySelector(".theme-name")?.textContent||"").trim();
+    if(screenTitle==="選擇主題"){
+      const theme=themeByLabel[label]||"unknown";
+      rememberTheme(theme);
+      const params={theme:theme,theme_label:label,selection_level:"category"};
+      send("select_theme",params);
+      if(theme!=="unknown")send("category_interest_"+theme,params);
+    }else if(screenTitle==="選擇情境"){
+      const theme=currentTheme(label);
+      const slug=situationSlugs[label]||"unknown";
+      const params={theme:theme,theme_label:themeLabels[theme]||theme,subtheme:label,situation_key:slug,selection_level:"situation"};
+      send("select_subtheme",params);
+      if(theme!=="unknown"&&slug!=="unknown")send("situation_interest_"+theme+"_"+slug,params);
+    }
+  },true);
+
+  const initialQuery=new URLSearchParams(location.search);
+  const entryTheme=initialQuery.get("theme");
+  const entrySubtheme=initialQuery.get("sub");
+  if(entryTheme&&themeLabels[entryTheme]){
+    rememberTheme(entryTheme);
+    send("category_entry_"+entryTheme,{theme:entryTheme,theme_label:themeLabels[entryTheme],subtheme:entrySubtheme||"",entry_source:"direct_link"});
+  }
+
+  function addExtendedPreview(){
+    const frame=document.querySelector(".device > .scroll > .frame");
+    const resultScroll=frame?.parentElement;
+    if(!frame||!resultScroll||resultScroll.querySelector(".extended-preview"))return;
+    const actionText=Array.from(resultScroll.querySelectorAll(".actions .act span")).map(el=>el.textContent.trim());
+    if(actionText.includes("回到首頁"))return;
+    const titleNode=frame.querySelector(".brand-cn");
+    const subtheme=(titleNode?.querySelector(".faint")?.textContent||"").trim();
+    const title=titleNode?Array.from(titleNode.childNodes).filter(node=>node.nodeType===Node.TEXT_NODE).map(node=>node.textContent).join("").trim():"";
+    const numberText=(frame.querySelector(".gold-label")?.textContent||"").trim();
+    const fortuneNumber=(numberText.match(/\d+/)||[])[0]||"";
+    const theme=currentTheme(subtheme);
+    const storageKey="extended_reading_interest:"+[fortuneNumber,title,subtheme].join("|");
+    const section=document.createElement("section");
+    section.className="extended-preview";
+    section.setAttribute("aria-label","完整延伸解籤預告");
+    section.innerHTML='<div class="extended-preview-kicker">COMING SOON · 即將開放</div><div class="extended-preview-title">想知道這支籤，如何對應你現在的處境？</div><div class="extended-preview-copy">完整延伸解籤將包含情境解析、對方或環境的可能反應、後續走向，以及你現在能採取的具體行動。</div><button type="button" class="extended-preview-btn">我想看完整延伸解籤</button><div class="extended-preview-thanks" role="status" hidden>已記下你的期待，正式開放時會在這裡出現。</div>';
+    const button=section.querySelector(".extended-preview-btn");
+    const thanks=section.querySelector(".extended-preview-thanks");
+    function showSent(){button.textContent="✓ 已記下，我想看完整解析";button.disabled=true;thanks.hidden=false;}
+    if(sessionStorage.getItem(storageKey)==="1")showSent();
+    button.addEventListener("click",function(){
+      if(sessionStorage.getItem(storageKey)==="1"){showSent();return;}
+      sessionStorage.setItem(storageKey,"1");
+      const params={theme:theme,theme_label:themeLabels[theme]||theme,subtheme:subtheme,fortune_number:fortuneNumber,fortune_title:title,button_location:"result_after_fortune",interest_version:"preview_v1"};
+      send("extended_reading_interest",params);
+      if(theme!=="unknown")send("extended_interest_"+theme,params);
+      showSent();
+    });
+    frame.insertAdjacentElement("afterend",section);
+  }
+  const observer=new MutationObserver(addExtendedPreview);
+  observer.observe(document.getElementById("root"),{childList:true,subtree:true});
+  addExtendedPreview();
+})();
 </script>
 
 
