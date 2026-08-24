@@ -1186,6 +1186,14 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
       showSent();
     });
     frame.insertAdjacentElement("afterend",section);
+      // 看到解鎖頁（延伸預告出現）→ 送付款漏斗第一層，每支籤每階段只送一次
+      try{
+        var pvKey="paywall_view:"+[fortuneNumber,title,subtheme].join("|");
+        if(window.OracleCommerce&&sessionStorage.getItem(pvKey)!=="1"){
+          sessionStorage.setItem(pvKey,"1");
+          window.OracleCommerce.viewPaywall({theme:theme,theme_label:themeLabels[theme]||theme,subtheme:subtheme,fortune_number:fortuneNumber,fortune_title:title});
+        }
+      }catch(e){}
   }
   const observer=new MutationObserver(addExtendedPreview);
   observer.observe(document.getElementById("root"),{childList:true,subtree:true});
@@ -1201,5 +1209,82 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
     斗內支持
   </button>
 </div>
+
+<!-- 未完籤所・付款漏斗追蹤模組 已整合 -->
+<!-- ===================================================================
+  未完籤所・付款漏斗追蹤模組  (GA4 · G-71RMD00WPJ)
+  貼在 index.html 的 body 結束前，或現有追蹤區塊後方即可。
+  依現有風格：每個動作送「GA4 標準電商事件」＋「分類事件」各一。
+  漏斗：view_item(看到解鎖頁) → begin_checkout(點付款) → purchase(付款成功)
+==================================================================== -->
+<script>
+(function () {
+  var PRICE = 99;
+  var CURRENCY = "TWD";
+
+  // 與站上其他事件共用同一個送出管道
+  function fire(name, params) {
+    try {
+      if (typeof trackOracleEvent === "function") return trackOracleEvent(name, params || {});
+      if (typeof window.gtag === "function") return window.gtag("event", name, params || {});
+    } catch (e) { console.warn("GA4 commerce event failed", name, e); }
+  }
+
+  // ctx = { theme, theme_label, subtheme, fortune_number, fortune_title }
+  function item(ctx) {
+    return {
+      item_id: "extended_" + (ctx.theme || "unknown") + "_" + (ctx.fortune_number || ""),
+      item_name: "延伸解籤・" + (ctx.subtheme || ctx.theme || ""),
+      item_category: ctx.theme || "unknown",        // ← 用主題當品類，之後可按主題切分收入
+      item_category2: ctx.subtheme || "",           // ← 細情境
+      price: PRICE,
+      quantity: 1
+    };
+  }
+  function base(ctx) {
+    return {
+      theme: ctx.theme || "",
+      theme_label: ctx.theme_label || "",
+      subtheme: ctx.subtheme || "",
+      fortune_number: ctx.fortune_number || "",
+      fortune_title: ctx.fortune_title || ""
+    };
+  }
+
+  // 1) 看到解鎖頁（付費預覽真正出現在畫面上時呼叫）
+  function viewPaywall(ctx) {
+    var p = Object.assign(base(ctx), { currency: CURRENCY, value: PRICE, items: [item(ctx)] });
+    fire("view_item", p);                                    // GA4 標準：進「營利」報表
+    if (ctx.theme) fire("paywall_view_" + ctx.theme, base(ctx)); // 分類版：好切分
+  }
+
+  // 2) 點「解鎖 / 付款」按鈕，準備進金流時呼叫
+  function beginCheckout(ctx) {
+    var p = Object.assign(base(ctx), { currency: CURRENCY, value: PRICE, items: [item(ctx)] });
+    fire("begin_checkout", p);                               // GA4 標準
+    if (ctx.theme) fire("checkout_" + ctx.theme, base(ctx));
+  }
+
+  // 3) 付款成功——★只能在「後端確認 ECPay ReturnURL」之後呼叫，不可在前端跳轉時就送★
+  //    transactionId 必填、且要去重（同一筆訂單只送一次），否則收入會灌水。
+  function purchase(ctx, transactionId) {
+    if (!transactionId) { console.warn("purchase() 需要 transactionId，已略過"); return; }
+    var dedupeKey = "oracle_purchased:" + transactionId;
+    try { if (sessionStorage.getItem(dedupeKey) === "1") return; } catch (e) {}
+    var p = Object.assign(base(ctx), {
+      transaction_id: transactionId,
+      currency: CURRENCY,
+      value: PRICE,
+      items: [item(ctx)]
+    });
+    fire("purchase", p);                                     // GA4 標準：算營收
+    if (ctx.theme) fire("purchase_" + ctx.theme, base(ctx)); // 分類版：哪一類的人真的付錢
+    try { sessionStorage.setItem(dedupeKey, "1"); } catch (e) {}
+  }
+
+  window.OracleCommerce = { viewPaywall: viewPaywall, beginCheckout: beginCheckout, purchase: purchase };
+})();
+</script>
+
 </body>
 </html>
