@@ -1,0 +1,26 @@
+{
+  "bond": {
+    "label": "緣分／靠近",
+    "asset": "/assets/oracle-icons/oracle-bond.webp"
+  },
+  "direction": {
+    "label": "方向／轉機",
+    "asset": "/assets/oracle-icons/oracle-direction.webp"
+  },
+  "timing": {
+    "label": "等待／時機",
+    "asset": "/assets/oracle-icons/oracle-timing.webp"
+  },
+  "thought": {
+    "label": "思念／觀察",
+    "asset": "/assets/oracle-icons/oracle-thought.webp"
+  },
+  "block": {
+    "label": "阻礙／離開",
+    "asset": "/assets/oracle-icons/oracle-block.webp"
+  },
+  "message": {
+    "label": "消息／回應",
+    "asset": "/assets/oracle-icons/oracle-message.webp"
+  }
+}

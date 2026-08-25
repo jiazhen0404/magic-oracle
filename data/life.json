@@ -12,7 +12,12 @@
     "fw": "近期的努力較容易看見成果，適合主動把握機會。",
     "sa": "選定最重要的一件事持續推進，別讓雜音分散好勢頭。把握這股順勢，同時替自己留一手。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "path_not_revealed",
+    "sceneLabel": "答案尚未顯現",
+    "iconKey": "path_not_revealed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 40,
@@ -27,7 +32,12 @@
     "fw": "這則消息會改善心情與安排，但仍需要後續落實。",
     "sa": "先接住好消息，再冷靜確認下一個實際步驟。順的時候更要穩住，好局面才走得長。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "path_inner_preference",
+    "sceneLabel": "其實已有偏向",
+    "iconKey": "path_inner_preference",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 41,
@@ -42,7 +52,12 @@
     "fw": "未來不是突然翻轉，而是一天比一天更能承受。",
     "sa": "維持一個已經有效的小習慣，連續做七天再評估。接住眼前的好，腳步也放踏實。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "path_narrow_problem",
+    "sceneLabel": "先縮小問題",
+    "iconKey": "path_narrow_problem",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 42,
@@ -57,7 +72,12 @@
     "fw": "短期以維持為主，之後才會出現更明確的新方向。",
     "sa": "不要急著打破平衡，先把生活基本盤照顧好。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "path_external_noise",
+    "sceneLabel": "外界聲音太多",
+    "iconKey": "path_external_noise",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 43,
@@ -72,7 +92,12 @@
     "fw": "這段等待還需要一些時間，硬推反而容易耗損。",
     "sa": "替等待安排日常，不讓全部生活都被同一件事占據。撐與放都行，只是別再假裝沒看見。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "path_small_test",
+    "sceneLabel": "先小規模試驗",
+    "iconKey": "path_small_test",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 44,
@@ -87,7 +112,12 @@
     "fw": "這是先難後易的階段，關鍵在於願不願意調整原計畫。",
     "sa": "保留核心目標，但允許方法與時間表重新設定。若情勢始終沒變，收手也是一種答案。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "path_not_revealed",
+    "sceneLabel": "答案尚未顯現",
+    "iconKey": "path_not_revealed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 45,
@@ -102,7 +132,12 @@
     "fw": "若不調整，短期內仍會感到卡住。",
     "sa": "先停止一項最消耗你的安排，必要時尋求可信任或專業支持。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "path_inner_preference",
+    "sceneLabel": "其實已有偏向",
+    "iconKey": "path_inner_preference",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 46,
@@ -117,7 +152,12 @@
     "fw": "結束不代表失敗，而是在替更真實的新生活清出位置。",
     "sa": "完成一個告別行動，並寫下下一階段不願再犧牲的三件事。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "path_narrow_problem",
+    "sceneLabel": "先縮小問題",
+    "iconKey": "path_narrow_problem",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 47,
@@ -132,7 +172,12 @@
     "fw": "近期的努力較容易看見成果，適合主動把握機會。",
     "sa": "選定最重要的一件事持續推進，別讓雜音分散好勢頭。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "path_external_noise",
+    "sceneLabel": "外界聲音太多",
+    "iconKey": "path_external_noise",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 48,
@@ -147,7 +192,12 @@
     "fw": "這則消息會改善心情與安排，但仍需要後續落實。",
     "sa": "先接住好消息，再冷靜確認下一個實際步驟。好的時候多做一點，往後就少一點勉強。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "path_small_test",
+    "sceneLabel": "先小規模試驗",
+    "iconKey": "path_small_test",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 49,
@@ -162,7 +212,12 @@
     "fw": "未來不是突然翻轉，而是一天比一天更能承受。",
     "sa": "維持一個已經有效的小習慣，連續做七天再評估。把握這股順勢，同時替自己留一手。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "path_not_revealed",
+    "sceneLabel": "答案尚未顯現",
+    "iconKey": "path_not_revealed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 50,
@@ -177,7 +232,12 @@
     "fw": "短期以維持為主，之後才會出現更明確的新方向。",
     "sa": "不要急著打破平衡，先把生活基本盤照顧好。順的時候更要穩住，好局面才走得長。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "path_inner_preference",
+    "sceneLabel": "其實已有偏向",
+    "iconKey": "path_inner_preference",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 88,
@@ -192,7 +252,12 @@
     "fw": "這段等待還需要一些時間，硬推反而容易耗損。",
     "sa": "替等待安排日常，不讓全部生活都被同一件事占據。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "path_narrow_problem",
+    "sceneLabel": "先縮小問題",
+    "iconKey": "path_narrow_problem",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 89,
@@ -207,7 +272,12 @@
     "fw": "這是先難後易的階段，關鍵在於願不願意調整原計畫。",
     "sa": "保留核心目標，但允許方法與時間表重新設定。看不到回應時，停下來並不是失敗。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "path_external_noise",
+    "sceneLabel": "外界聲音太多",
+    "iconKey": "path_external_noise",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 90,
@@ -222,7 +292,12 @@
     "fw": "若不調整，短期內仍會感到卡住。",
     "sa": "先停止一項最消耗你的安排，必要時尋求可信任或專業支持。撐與放都行，只是別再假裝沒看見。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "path_small_test",
+    "sceneLabel": "先小規模試驗",
+    "iconKey": "path_small_test",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 91,
@@ -237,7 +312,12 @@
     "fw": "結束不代表失敗，而是在替更真實的新生活清出位置。",
     "sa": "完成一個告別行動，並寫下下一階段不願再犧牲的三件事。若情勢始終沒變，收手也是一種答案。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "path_not_revealed",
+    "sceneLabel": "答案尚未顯現",
+    "iconKey": "path_not_revealed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 92,
@@ -252,7 +332,12 @@
     "fw": "近期的努力較容易看見成果，適合主動把握機會。",
     "sa": "選定最重要的一件事持續推進，別讓雜音分散好勢頭。順的時候更要穩住，好局面才走得長。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "path_inner_preference",
+    "sceneLabel": "其實已有偏向",
+    "iconKey": "path_inner_preference",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 93,
@@ -267,7 +352,12 @@
     "fw": "這則消息會改善心情與安排，但仍需要後續落實。",
     "sa": "先接住好消息，再冷靜確認下一個實際步驟。接住眼前的好，腳步也放踏實。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "path_narrow_problem",
+    "sceneLabel": "先縮小問題",
+    "iconKey": "path_narrow_problem",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 94,
@@ -282,7 +372,12 @@
     "fw": "未來不是突然翻轉，而是一天比一天更能承受。",
     "sa": "維持一個已經有效的小習慣，連續做七天再評估。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "path_external_noise",
+    "sceneLabel": "外界聲音太多",
+    "iconKey": "path_external_noise",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 95,
@@ -297,7 +392,12 @@
     "fw": "短期以維持為主，之後才會出現更明確的新方向。",
     "sa": "不要急著打破平衡，先把生活基本盤照顧好。好的時候多做一點，往後就少一點勉強。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "path_small_test",
+    "sceneLabel": "先小規模試驗",
+    "iconKey": "path_small_test",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 96,
@@ -312,7 +412,12 @@
     "fw": "這段等待還需要一些時間，硬推反而容易耗損。",
     "sa": "替等待安排日常，不讓全部生活都被同一件事占據。若情勢始終沒變，收手也是一種答案。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "path_not_revealed",
+    "sceneLabel": "答案尚未顯現",
+    "iconKey": "path_not_revealed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 97,
@@ -327,7 +432,12 @@
     "fw": "這是先難後易的階段，關鍵在於願不願意調整原計畫。",
     "sa": "保留核心目標，但允許方法與時間表重新設定。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "path_inner_preference",
+    "sceneLabel": "其實已有偏向",
+    "iconKey": "path_inner_preference",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 98,
@@ -342,7 +452,12 @@
     "fw": "若不調整，短期內仍會感到卡住。",
     "sa": "先停止一項最消耗你的安排，必要時尋求可信任或專業支持。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "path_narrow_problem",
+    "sceneLabel": "先縮小問題",
+    "iconKey": "path_narrow_problem",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 99,
@@ -357,7 +472,12 @@
     "fw": "結束不代表失敗，而是在替更真實的新生活清出位置。",
     "sa": "完成一個告別行動，並寫下下一階段不願再犧牲的三件事。看不到回應時，停下來並不是失敗。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "path_external_noise",
+    "sceneLabel": "外界聲音太多",
+    "iconKey": "path_external_noise",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 100,
@@ -372,7 +492,12 @@
     "fw": "近期的努力較容易看見成果，適合主動把握機會。",
     "sa": "選定最重要的一件事持續推進，別讓雜音分散好勢頭。好的時候多做一點，往後就少一點勉強。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "path_small_test",
+    "sceneLabel": "先小規模試驗",
+    "iconKey": "path_small_test",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 39,
@@ -387,7 +512,12 @@
     "fw": "這段等待還需要一些時間，硬推反而容易耗損。",
     "sa": "替等待安排日常，不讓全部生活都被同一件事占據。若情勢始終沒變，收手也是一種答案。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "path_not_revealed",
+    "sceneLabel": "答案尚未顯現",
+    "iconKey": "path_not_revealed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 40,
@@ -402,7 +532,12 @@
     "fw": "這是先難後易的階段，關鍵在於願不願意調整原計畫。",
     "sa": "保留核心目標，但允許方法與時間表重新設定。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "path_inner_preference",
+    "sceneLabel": "其實已有偏向",
+    "iconKey": "path_inner_preference",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 41,
@@ -417,7 +552,12 @@
     "fw": "若不調整，短期內仍會感到卡住。",
     "sa": "先停止一項最消耗你的安排，必要時尋求可信任或專業支持。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "path_narrow_problem",
+    "sceneLabel": "先縮小問題",
+    "iconKey": "path_narrow_problem",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 42,
@@ -432,7 +572,12 @@
     "fw": "結束不代表失敗，而是在替更真實的新生活清出位置。",
     "sa": "完成一個告別行動，並寫下下一階段不願再犧牲的三件事。看不到回應時，停下來並不是失敗。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "path_external_noise",
+    "sceneLabel": "外界聲音太多",
+    "iconKey": "path_external_noise",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 43,
@@ -447,7 +592,12 @@
     "fw": "近期的努力較容易看見成果，適合主動把握機會。",
     "sa": "選定最重要的一件事持續推進，別讓雜音分散好勢頭。好的時候多做一點，往後就少一點勉強。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "path_small_test",
+    "sceneLabel": "先小規模試驗",
+    "iconKey": "path_small_test",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 44,
@@ -462,7 +612,12 @@
     "fw": "這則消息會改善心情與安排，但仍需要後續落實。",
     "sa": "先接住好消息，再冷靜確認下一個實際步驟。把握這股順勢，同時替自己留一手。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "path_not_revealed",
+    "sceneLabel": "答案尚未顯現",
+    "iconKey": "path_not_revealed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 45,
@@ -477,7 +632,12 @@
     "fw": "未來不是突然翻轉，而是一天比一天更能承受。",
     "sa": "維持一個已經有效的小習慣，連續做七天再評估。順的時候更要穩住，好局面才走得長。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "path_inner_preference",
+    "sceneLabel": "其實已有偏向",
+    "iconKey": "path_inner_preference",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 46,
@@ -492,7 +652,12 @@
     "fw": "短期以維持為主，之後才會出現更明確的新方向。",
     "sa": "不要急著打破平衡，先把生活基本盤照顧好。接住眼前的好，腳步也放踏實。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "path_narrow_problem",
+    "sceneLabel": "先縮小問題",
+    "iconKey": "path_narrow_problem",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 47,
@@ -507,7 +672,12 @@
     "fw": "這段等待還需要一些時間，硬推反而容易耗損。",
     "sa": "替等待安排日常，不讓全部生活都被同一件事占據。看不到回應時，停下來並不是失敗。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "path_external_noise",
+    "sceneLabel": "外界聲音太多",
+    "iconKey": "path_external_noise",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 48,
@@ -522,7 +692,12 @@
     "fw": "這是先難後易的階段，關鍵在於願不願意調整原計畫。",
     "sa": "保留核心目標，但允許方法與時間表重新設定。撐與放都行，只是別再假裝沒看見。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "path_small_test",
+    "sceneLabel": "先小規模試驗",
+    "iconKey": "path_small_test",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 49,
@@ -537,7 +712,12 @@
     "fw": "若不調整，短期內仍會感到卡住。",
     "sa": "先停止一項最消耗你的安排，必要時尋求可信任或專業支持。若情勢始終沒變，收手也是一種答案。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "path_not_revealed",
+    "sceneLabel": "答案尚未顯現",
+    "iconKey": "path_not_revealed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 50,
@@ -552,7 +732,12 @@
     "fw": "結束不代表失敗，而是在替更真實的新生活清出位置。",
     "sa": "完成一個告別行動，並寫下下一階段不願再犧牲的三件事。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "path_inner_preference",
+    "sceneLabel": "其實已有偏向",
+    "iconKey": "path_inner_preference",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 88,
@@ -567,7 +752,12 @@
     "fw": "近期的努力較容易看見成果，適合主動把握機會。",
     "sa": "選定最重要的一件事持續推進，別讓雜音分散好勢頭。接住眼前的好，腳步也放踏實。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "path_narrow_problem",
+    "sceneLabel": "先縮小問題",
+    "iconKey": "path_narrow_problem",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 89,
@@ -582,7 +772,12 @@
     "fw": "這則消息會改善心情與安排，但仍需要後續落實。",
     "sa": "先接住好消息，再冷靜確認下一個實際步驟。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "path_external_noise",
+    "sceneLabel": "外界聲音太多",
+    "iconKey": "path_external_noise",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 90,
@@ -597,7 +792,12 @@
     "fw": "未來不是突然翻轉，而是一天比一天更能承受。",
     "sa": "維持一個已經有效的小習慣，連續做七天再評估。好的時候多做一點，往後就少一點勉強。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "path_small_test",
+    "sceneLabel": "先小規模試驗",
+    "iconKey": "path_small_test",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 91,
@@ -612,7 +812,12 @@
     "fw": "短期以維持為主，之後才會出現更明確的新方向。",
     "sa": "不要急著打破平衡，先把生活基本盤照顧好。把握這股順勢，同時替自己留一手。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "path_not_revealed",
+    "sceneLabel": "答案尚未顯現",
+    "iconKey": "path_not_revealed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 92,
@@ -627,7 +832,12 @@
     "fw": "這段等待還需要一些時間，硬推反而容易耗損。",
     "sa": "替等待安排日常，不讓全部生活都被同一件事占據。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "path_inner_preference",
+    "sceneLabel": "其實已有偏向",
+    "iconKey": "path_inner_preference",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 93,
@@ -642,7 +852,12 @@
     "fw": "這是先難後易的階段，關鍵在於願不願意調整原計畫。",
     "sa": "保留核心目標，但允許方法與時間表重新設定。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "path_narrow_problem",
+    "sceneLabel": "先縮小問題",
+    "iconKey": "path_narrow_problem",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 94,
@@ -657,7 +872,12 @@
     "fw": "若不調整，短期內仍會感到卡住。",
     "sa": "先停止一項最消耗你的安排，必要時尋求可信任或專業支持。看不到回應時，停下來並不是失敗。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "path_external_noise",
+    "sceneLabel": "外界聲音太多",
+    "iconKey": "path_external_noise",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 95,
@@ -672,7 +892,12 @@
     "fw": "結束不代表失敗，而是在替更真實的新生活清出位置。",
     "sa": "完成一個告別行動，並寫下下一階段不願再犧牲的三件事。撐與放都行，只是別再假裝沒看見。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "path_small_test",
+    "sceneLabel": "先小規模試驗",
+    "iconKey": "path_small_test",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 96,
@@ -687,7 +912,12 @@
     "fw": "近期的努力較容易看見成果，適合主動把握機會。",
     "sa": "選定最重要的一件事持續推進，別讓雜音分散好勢頭。把握這股順勢，同時替自己留一手。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "path_not_revealed",
+    "sceneLabel": "答案尚未顯現",
+    "iconKey": "path_not_revealed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 97,
@@ -702,7 +932,12 @@
     "fw": "這則消息會改善心情與安排，但仍需要後續落實。",
     "sa": "先接住好消息，再冷靜確認下一個實際步驟。順的時候更要穩住，好局面才走得長。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "path_inner_preference",
+    "sceneLabel": "其實已有偏向",
+    "iconKey": "path_inner_preference",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 98,
@@ -717,7 +952,12 @@
     "fw": "未來不是突然翻轉，而是一天比一天更能承受。",
     "sa": "維持一個已經有效的小習慣，連續做七天再評估。接住眼前的好，腳步也放踏實。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "path_narrow_problem",
+    "sceneLabel": "先縮小問題",
+    "iconKey": "path_narrow_problem",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 99,
@@ -732,7 +972,12 @@
     "fw": "短期以維持為主，之後才會出現更明確的新方向。",
     "sa": "不要急著打破平衡，先把生活基本盤照顧好。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "path_external_noise",
+    "sceneLabel": "外界聲音太多",
+    "iconKey": "path_external_noise",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 100,
@@ -747,7 +992,12 @@
     "fw": "這段等待還需要一些時間，硬推反而容易耗損。",
     "sa": "替等待安排日常，不讓全部生活都被同一件事占據。撐與放都行，只是別再假裝沒看見。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "path_small_test",
+    "sceneLabel": "先小規模試驗",
+    "iconKey": "path_small_test",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 39,
@@ -762,7 +1012,12 @@
     "fw": "近期的努力較容易看見成果，適合主動把握機會。",
     "sa": "選定最重要的一件事持續推進，別讓雜音分散好勢頭。把握這股順勢，同時替自己留一手。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "path_not_revealed",
+    "sceneLabel": "答案尚未顯現",
+    "iconKey": "path_not_revealed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 40,
@@ -777,7 +1032,12 @@
     "fw": "這則消息會改善心情與安排，但仍需要後續落實。",
     "sa": "先接住好消息，再冷靜確認下一個實際步驟。順的時候更要穩住，好局面才走得長。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "path_inner_preference",
+    "sceneLabel": "其實已有偏向",
+    "iconKey": "path_inner_preference",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 41,
@@ -792,7 +1052,12 @@
     "fw": "未來不是突然翻轉，而是一天比一天更能承受。",
     "sa": "維持一個已經有效的小習慣，連續做七天再評估。接住眼前的好，腳步也放踏實。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "path_narrow_problem",
+    "sceneLabel": "先縮小問題",
+    "iconKey": "path_narrow_problem",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 42,
@@ -807,7 +1072,12 @@
     "fw": "短期以維持為主，之後才會出現更明確的新方向。",
     "sa": "不要急著打破平衡，先把生活基本盤照顧好。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "path_external_noise",
+    "sceneLabel": "外界聲音太多",
+    "iconKey": "path_external_noise",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 43,
@@ -822,7 +1092,12 @@
     "fw": "這段等待還需要一些時間，硬推反而容易耗損。",
     "sa": "替等待安排日常，不讓全部生活都被同一件事占據。撐與放都行，只是別再假裝沒看見。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "path_small_test",
+    "sceneLabel": "先小規模試驗",
+    "iconKey": "path_small_test",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 44,
@@ -837,7 +1112,12 @@
     "fw": "這是先難後易的階段，關鍵在於願不願意調整原計畫。",
     "sa": "保留核心目標，但允許方法與時間表重新設定。若情勢始終沒變，收手也是一種答案。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "path_not_revealed",
+    "sceneLabel": "答案尚未顯現",
+    "iconKey": "path_not_revealed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 45,
@@ -852,7 +1132,12 @@
     "fw": "若不調整，短期內仍會感到卡住。",
     "sa": "先停止一項最消耗你的安排，必要時尋求可信任或專業支持。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "path_inner_preference",
+    "sceneLabel": "其實已有偏向",
+    "iconKey": "path_inner_preference",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 46,
@@ -867,7 +1152,12 @@
     "fw": "結束不代表失敗，而是在替更真實的新生活清出位置。",
     "sa": "完成一個告別行動，並寫下下一階段不願再犧牲的三件事。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "path_narrow_problem",
+    "sceneLabel": "先縮小問題",
+    "iconKey": "path_narrow_problem",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 47,
@@ -882,7 +1172,12 @@
     "fw": "近期的努力較容易看見成果，適合主動把握機會。",
     "sa": "選定最重要的一件事持續推進，別讓雜音分散好勢頭。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "path_external_noise",
+    "sceneLabel": "外界聲音太多",
+    "iconKey": "path_external_noise",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 48,
@@ -897,7 +1192,12 @@
     "fw": "這則消息會改善心情與安排，但仍需要後續落實。",
     "sa": "先接住好消息，再冷靜確認下一個實際步驟。好的時候多做一點，往後就少一點勉強。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "path_small_test",
+    "sceneLabel": "先小規模試驗",
+    "iconKey": "path_small_test",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 49,
@@ -912,7 +1212,12 @@
     "fw": "未來不是突然翻轉，而是一天比一天更能承受。",
     "sa": "維持一個已經有效的小習慣，連續做七天再評估。把握這股順勢，同時替自己留一手。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "path_not_revealed",
+    "sceneLabel": "答案尚未顯現",
+    "iconKey": "path_not_revealed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 50,
@@ -927,7 +1232,12 @@
     "fw": "短期以維持為主，之後才會出現更明確的新方向。",
     "sa": "不要急著打破平衡，先把生活基本盤照顧好。順的時候更要穩住，好局面才走得長。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "path_inner_preference",
+    "sceneLabel": "其實已有偏向",
+    "iconKey": "path_inner_preference",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 88,
@@ -942,7 +1252,12 @@
     "fw": "這段等待還需要一些時間，硬推反而容易耗損。",
     "sa": "替等待安排日常，不讓全部生活都被同一件事占據。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "path_narrow_problem",
+    "sceneLabel": "先縮小問題",
+    "iconKey": "path_narrow_problem",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 89,
@@ -957,7 +1272,12 @@
     "fw": "這是先難後易的階段，關鍵在於願不願意調整原計畫。",
     "sa": "保留核心目標，但允許方法與時間表重新設定。看不到回應時，停下來並不是失敗。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "path_external_noise",
+    "sceneLabel": "外界聲音太多",
+    "iconKey": "path_external_noise",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 90,
@@ -972,7 +1292,12 @@
     "fw": "若不調整，短期內仍會感到卡住。",
     "sa": "先停止一項最消耗你的安排，必要時尋求可信任或專業支持。撐與放都行，只是別再假裝沒看見。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "path_small_test",
+    "sceneLabel": "先小規模試驗",
+    "iconKey": "path_small_test",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 91,
@@ -987,7 +1312,12 @@
     "fw": "結束不代表失敗，而是在替更真實的新生活清出位置。",
     "sa": "完成一個告別行動，並寫下下一階段不願再犧牲的三件事。若情勢始終沒變，收手也是一種答案。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "path_not_revealed",
+    "sceneLabel": "答案尚未顯現",
+    "iconKey": "path_not_revealed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 92,
@@ -1002,7 +1332,12 @@
     "fw": "近期的努力較容易看見成果，適合主動把握機會。",
     "sa": "選定最重要的一件事持續推進，別讓雜音分散好勢頭。順的時候更要穩住，好局面才走得長。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "path_inner_preference",
+    "sceneLabel": "其實已有偏向",
+    "iconKey": "path_inner_preference",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 93,
@@ -1017,7 +1352,12 @@
     "fw": "這則消息會改善心情與安排，但仍需要後續落實。",
     "sa": "先接住好消息，再冷靜確認下一個實際步驟。接住眼前的好，腳步也放踏實。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "path_narrow_problem",
+    "sceneLabel": "先縮小問題",
+    "iconKey": "path_narrow_problem",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 94,
@@ -1032,7 +1372,12 @@
     "fw": "未來不是突然翻轉，而是一天比一天更能承受。",
     "sa": "維持一個已經有效的小習慣，連續做七天再評估。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "path_external_noise",
+    "sceneLabel": "外界聲音太多",
+    "iconKey": "path_external_noise",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 95,
@@ -1047,7 +1392,12 @@
     "fw": "短期以維持為主，之後才會出現更明確的新方向。",
     "sa": "不要急著打破平衡，先把生活基本盤照顧好。好的時候多做一點，往後就少一點勉強。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "path_small_test",
+    "sceneLabel": "先小規模試驗",
+    "iconKey": "path_small_test",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 96,
@@ -1062,7 +1412,12 @@
     "fw": "這段等待還需要一些時間，硬推反而容易耗損。",
     "sa": "替等待安排日常，不讓全部生活都被同一件事占據。若情勢始終沒變，收手也是一種答案。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "path_not_revealed",
+    "sceneLabel": "答案尚未顯現",
+    "iconKey": "path_not_revealed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 97,
@@ -1077,7 +1432,12 @@
     "fw": "這是先難後易的階段，關鍵在於願不願意調整原計畫。",
     "sa": "保留核心目標，但允許方法與時間表重新設定。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "path_inner_preference",
+    "sceneLabel": "其實已有偏向",
+    "iconKey": "path_inner_preference",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 98,
@@ -1092,7 +1452,12 @@
     "fw": "若不調整，短期內仍會感到卡住。",
     "sa": "先停止一項最消耗你的安排，必要時尋求可信任或專業支持。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "path_narrow_problem",
+    "sceneLabel": "先縮小問題",
+    "iconKey": "path_narrow_problem",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 99,
@@ -1107,7 +1472,12 @@
     "fw": "結束不代表失敗，而是在替更真實的新生活清出位置。",
     "sa": "完成一個告別行動，並寫下下一階段不願再犧牲的三件事。看不到回應時，停下來並不是失敗。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "path_external_noise",
+    "sceneLabel": "外界聲音太多",
+    "iconKey": "path_external_noise",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 100,
@@ -1122,7 +1492,12 @@
     "fw": "近期的努力較容易看見成果，適合主動把握機會。",
     "sa": "選定最重要的一件事持續推進，別讓雜音分散好勢頭。好的時候多做一點，往後就少一點勉強。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "path_small_test",
+    "sceneLabel": "先小規模試驗",
+    "iconKey": "path_small_test",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 39,
@@ -1137,7 +1512,12 @@
     "fw": "這段等待還需要一些時間，硬推反而容易耗損。",
     "sa": "替等待安排日常，不讓全部生活都被同一件事占據。若情勢始終沒變，收手也是一種答案。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "path_not_revealed",
+    "sceneLabel": "答案尚未顯現",
+    "iconKey": "path_not_revealed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 40,
@@ -1152,7 +1532,12 @@
     "fw": "這是先難後易的階段，關鍵在於願不願意調整原計畫。",
     "sa": "保留核心目標，但允許方法與時間表重新設定。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "path_inner_preference",
+    "sceneLabel": "其實已有偏向",
+    "iconKey": "path_inner_preference",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 41,
@@ -1167,7 +1552,12 @@
     "fw": "若不調整，短期內仍會感到卡住。",
     "sa": "先停止一項最消耗你的安排，必要時尋求可信任或專業支持。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "path_narrow_problem",
+    "sceneLabel": "先縮小問題",
+    "iconKey": "path_narrow_problem",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 42,
@@ -1182,7 +1572,12 @@
     "fw": "結束不代表失敗，而是在替更真實的新生活清出位置。",
     "sa": "完成一個告別行動，並寫下下一階段不願再犧牲的三件事。看不到回應時，停下來並不是失敗。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "path_external_noise",
+    "sceneLabel": "外界聲音太多",
+    "iconKey": "path_external_noise",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 43,
@@ -1197,7 +1592,12 @@
     "fw": "近期的努力較容易看見成果，適合主動把握機會。",
     "sa": "選定最重要的一件事持續推進，別讓雜音分散好勢頭。好的時候多做一點，往後就少一點勉強。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "path_small_test",
+    "sceneLabel": "先小規模試驗",
+    "iconKey": "path_small_test",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 44,
@@ -1212,7 +1612,12 @@
     "fw": "這則消息會改善心情與安排，但仍需要後續落實。",
     "sa": "先接住好消息，再冷靜確認下一個實際步驟。把握這股順勢，同時替自己留一手。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "path_not_revealed",
+    "sceneLabel": "答案尚未顯現",
+    "iconKey": "path_not_revealed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 45,
@@ -1227,7 +1632,12 @@
     "fw": "未來不是突然翻轉，而是一天比一天更能承受。",
     "sa": "維持一個已經有效的小習慣，連續做七天再評估。順的時候更要穩住，好局面才走得長。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "path_inner_preference",
+    "sceneLabel": "其實已有偏向",
+    "iconKey": "path_inner_preference",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 46,
@@ -1242,7 +1652,12 @@
     "fw": "短期以維持為主，之後才會出現更明確的新方向。",
     "sa": "不要急著打破平衡，先把生活基本盤照顧好。接住眼前的好，腳步也放踏實。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "path_narrow_problem",
+    "sceneLabel": "先縮小問題",
+    "iconKey": "path_narrow_problem",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 47,
@@ -1257,7 +1672,12 @@
     "fw": "這段等待還需要一些時間，硬推反而容易耗損。",
     "sa": "替等待安排日常，不讓全部生活都被同一件事占據。看不到回應時，停下來並不是失敗。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "path_external_noise",
+    "sceneLabel": "外界聲音太多",
+    "iconKey": "path_external_noise",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 48,
@@ -1272,7 +1692,12 @@
     "fw": "這是先難後易的階段，關鍵在於願不願意調整原計畫。",
     "sa": "保留核心目標，但允許方法與時間表重新設定。撐與放都行，只是別再假裝沒看見。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "path_small_test",
+    "sceneLabel": "先小規模試驗",
+    "iconKey": "path_small_test",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 49,
@@ -1287,7 +1712,12 @@
     "fw": "若不調整，短期內仍會感到卡住。",
     "sa": "先停止一項最消耗你的安排，必要時尋求可信任或專業支持。若情勢始終沒變，收手也是一種答案。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "path_not_revealed",
+    "sceneLabel": "答案尚未顯現",
+    "iconKey": "path_not_revealed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 50,
@@ -1302,7 +1732,12 @@
     "fw": "結束不代表失敗，而是在替更真實的新生活清出位置。",
     "sa": "完成一個告別行動，並寫下下一階段不願再犧牲的三件事。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "path_inner_preference",
+    "sceneLabel": "其實已有偏向",
+    "iconKey": "path_inner_preference",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 88,
@@ -1317,7 +1752,12 @@
     "fw": "近期的努力較容易看見成果，適合主動把握機會。",
     "sa": "選定最重要的一件事持續推進，別讓雜音分散好勢頭。接住眼前的好，腳步也放踏實。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "path_narrow_problem",
+    "sceneLabel": "先縮小問題",
+    "iconKey": "path_narrow_problem",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 89,
@@ -1332,7 +1772,12 @@
     "fw": "這則消息會改善心情與安排，但仍需要後續落實。",
     "sa": "先接住好消息，再冷靜確認下一個實際步驟。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "path_external_noise",
+    "sceneLabel": "外界聲音太多",
+    "iconKey": "path_external_noise",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 90,
@@ -1347,7 +1792,12 @@
     "fw": "未來不是突然翻轉，而是一天比一天更能承受。",
     "sa": "維持一個已經有效的小習慣，連續做七天再評估。好的時候多做一點，往後就少一點勉強。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "path_small_test",
+    "sceneLabel": "先小規模試驗",
+    "iconKey": "path_small_test",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 91,
@@ -1362,7 +1812,12 @@
     "fw": "短期以維持為主，之後才會出現更明確的新方向。",
     "sa": "不要急著打破平衡，先把生活基本盤照顧好。把握這股順勢，同時替自己留一手。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "path_not_revealed",
+    "sceneLabel": "答案尚未顯現",
+    "iconKey": "path_not_revealed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 92,
@@ -1377,7 +1832,12 @@
     "fw": "這段等待還需要一些時間，硬推反而容易耗損。",
     "sa": "替等待安排日常，不讓全部生活都被同一件事占據。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "path_inner_preference",
+    "sceneLabel": "其實已有偏向",
+    "iconKey": "path_inner_preference",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 93,
@@ -1392,7 +1852,12 @@
     "fw": "這是先難後易的階段，關鍵在於願不願意調整原計畫。",
     "sa": "保留核心目標，但允許方法與時間表重新設定。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "path_narrow_problem",
+    "sceneLabel": "先縮小問題",
+    "iconKey": "path_narrow_problem",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 94,
@@ -1407,7 +1872,12 @@
     "fw": "若不調整，短期內仍會感到卡住。",
     "sa": "先停止一項最消耗你的安排，必要時尋求可信任或專業支持。看不到回應時，停下來並不是失敗。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "path_external_noise",
+    "sceneLabel": "外界聲音太多",
+    "iconKey": "path_external_noise",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 95,
@@ -1422,7 +1892,12 @@
     "fw": "結束不代表失敗，而是在替更真實的新生活清出位置。",
     "sa": "完成一個告別行動，並寫下下一階段不願再犧牲的三件事。撐與放都行，只是別再假裝沒看見。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "path_small_test",
+    "sceneLabel": "先小規模試驗",
+    "iconKey": "path_small_test",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 96,
@@ -1437,7 +1912,12 @@
     "fw": "近期的努力較容易看見成果，適合主動把握機會。",
     "sa": "選定最重要的一件事持續推進，別讓雜音分散好勢頭。把握這股順勢，同時替自己留一手。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "path_not_revealed",
+    "sceneLabel": "答案尚未顯現",
+    "iconKey": "path_not_revealed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 97,
@@ -1452,7 +1932,12 @@
     "fw": "這則消息會改善心情與安排，但仍需要後續落實。",
     "sa": "先接住好消息，再冷靜確認下一個實際步驟。順的時候更要穩住，好局面才走得長。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "path_inner_preference",
+    "sceneLabel": "其實已有偏向",
+    "iconKey": "path_inner_preference",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 98,
@@ -1467,7 +1952,12 @@
     "fw": "未來不是突然翻轉，而是一天比一天更能承受。",
     "sa": "維持一個已經有效的小習慣，連續做七天再評估。接住眼前的好，腳步也放踏實。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "path_narrow_problem",
+    "sceneLabel": "先縮小問題",
+    "iconKey": "path_narrow_problem",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 99,
@@ -1482,7 +1972,12 @@
     "fw": "短期以維持為主，之後才會出現更明確的新方向。",
     "sa": "不要急著打破平衡，先把生活基本盤照顧好。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "path_external_noise",
+    "sceneLabel": "外界聲音太多",
+    "iconKey": "path_external_noise",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 100,
@@ -1497,6 +1992,11 @@
     "fw": "這段等待還需要一些時間，硬推反而容易耗損。",
     "sa": "替等待安排日常，不讓全部生活都被同一件事占據。撐與放都行，只是別再假裝沒看見。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "path_small_test",
+    "sceneLabel": "先小規模試驗",
+    "iconKey": "path_small_test",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   }
 ]
