@@ -12,7 +12,12 @@
     "fw": "只要維持熟悉節奏，這份安心感會繼續累積。",
     "sa": "延續牠喜歡的日常，讓牠主動決定互動距離。把握這股順勢，同時替自己留一手。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "pet_safe_base",
+    "sceneLabel": "把你當安全基地",
+    "iconKey": "pet-home-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 102,
@@ -27,7 +32,12 @@
     "fw": "好轉值得珍惜，但仍要確認是否能穩定維持。",
     "sa": "記錄三天變化；若曾有不適，仍依獸醫建議追蹤。順的時候更要穩住，好局面才走得長。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "pet_more_interaction",
+    "sceneLabel": "想增加互動",
+    "iconKey": "pet-play-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 103,
@@ -42,7 +52,12 @@
     "fw": "整體走向偏正面，但需要耐心與一致照顧。",
     "sa": "維持環境穩定，一次只調整一個照顧變因。接住眼前的好，腳步也放踏實。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "pet_routine",
+    "sceneLabel": "喜歡固定日常",
+    "iconKey": "pet-home-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 104,
@@ -57,7 +72,12 @@
     "fw": "短期以平穩為主，重點是建立牠平常狀態的基準。",
     "sa": "照常陪伴並簡單記錄，不必把每個小動作解讀成預兆。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "pet_more_clingy",
+    "sceneLabel": "最近比較黏",
+    "iconKey": "pet-play-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 105,
@@ -72,7 +92,12 @@
     "fw": "再觀察幾天後趨勢會更清楚；持續異常則需專業評估。",
     "sa": "記錄食慾、精神、排泄與活動，設定明確的就醫條件。撐與放都行，只是別再假裝沒看見。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "pet_own_space",
+    "sceneLabel": "需要自己的空間",
+    "iconKey": "pet-moon-bed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 106,
@@ -87,7 +112,12 @@
     "fw": "走向屬於先緊張後安定，但過程中仍要排除身體不適。",
     "sa": "降低刺激、提供安全角落，持續異常就詢問獸醫。若情勢始終沒變，收手也是一種答案。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "pet_safe_base",
+    "sceneLabel": "把你當安全基地",
+    "iconKey": "pet-home-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 107,
@@ -102,7 +132,12 @@
     "fw": "狀況若持續或加重，拖延可能增加風險。",
     "sa": "優先安排獸醫評估，並帶上完整的變化紀錄。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "pet_more_interaction",
+    "sceneLabel": "想增加互動",
+    "iconKey": "pet-play-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 108,
@@ -117,7 +152,12 @@
     "fw": "停止勉強後，牠才有機會建立新的安全感。",
     "sa": "撤掉造成壓力的因素，重新以牠的反應規劃照顧方式。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "pet_routine",
+    "sceneLabel": "喜歡固定日常",
+    "iconKey": "pet-home-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 109,
@@ -132,7 +172,12 @@
     "fw": "只要維持熟悉節奏，這份安心感會繼續累積。",
     "sa": "延續牠喜歡的日常，讓牠主動決定互動距離。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "pet_more_clingy",
+    "sceneLabel": "最近比較黏",
+    "iconKey": "pet-play-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 110,
@@ -147,7 +192,12 @@
     "fw": "好轉值得珍惜，但仍要確認是否能穩定維持。",
     "sa": "記錄三天變化；若曾有不適，仍依獸醫建議追蹤。好的時候多做一點，往後就少一點勉強。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "pet_own_space",
+    "sceneLabel": "需要自己的空間",
+    "iconKey": "pet-moon-bed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 111,
@@ -162,7 +212,12 @@
     "fw": "整體走向偏正面，但需要耐心與一致照顧。",
     "sa": "維持環境穩定，一次只調整一個照顧變因。把握這股順勢，同時替自己留一手。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "pet_safe_base",
+    "sceneLabel": "把你當安全基地",
+    "iconKey": "pet-home-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 112,
@@ -177,7 +232,12 @@
     "fw": "短期以平穩為主，重點是建立牠平常狀態的基準。",
     "sa": "照常陪伴並簡單記錄，不必把每個小動作解讀成預兆。順的時候更要穩住，好局面才走得長。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "pet_more_interaction",
+    "sceneLabel": "想增加互動",
+    "iconKey": "pet-play-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 113,
@@ -192,7 +252,12 @@
     "fw": "再觀察幾天後趨勢會更清楚；持續異常則需專業評估。",
     "sa": "記錄食慾、精神、排泄與活動，設定明確的就醫條件。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "pet_routine",
+    "sceneLabel": "喜歡固定日常",
+    "iconKey": "pet-home-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 114,
@@ -207,7 +272,12 @@
     "fw": "走向屬於先緊張後安定，但過程中仍要排除身體不適。",
     "sa": "降低刺激、提供安全角落，持續異常就詢問獸醫。看不到回應時，停下來並不是失敗。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "pet_more_clingy",
+    "sceneLabel": "最近比較黏",
+    "iconKey": "pet-play-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 115,
@@ -222,7 +292,12 @@
     "fw": "狀況若持續或加重，拖延可能增加風險。",
     "sa": "優先安排獸醫評估，並帶上完整的變化紀錄。撐與放都行，只是別再假裝沒看見。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "pet_own_space",
+    "sceneLabel": "需要自己的空間",
+    "iconKey": "pet-moon-bed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 116,
@@ -237,7 +312,12 @@
     "fw": "停止勉強後，牠才有機會建立新的安全感。",
     "sa": "撤掉造成壓力的因素，重新以牠的反應規劃照顧方式。若情勢始終沒變，收手也是一種答案。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "pet_safe_base",
+    "sceneLabel": "把你當安全基地",
+    "iconKey": "pet-home-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 117,
@@ -252,7 +332,12 @@
     "fw": "只要維持熟悉節奏，這份安心感會繼續累積。",
     "sa": "延續牠喜歡的日常，讓牠主動決定互動距離。順的時候更要穩住，好局面才走得長。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "pet_more_interaction",
+    "sceneLabel": "想增加互動",
+    "iconKey": "pet-play-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 118,
@@ -267,7 +352,12 @@
     "fw": "好轉值得珍惜，但仍要確認是否能穩定維持。",
     "sa": "記錄三天變化；若曾有不適，仍依獸醫建議追蹤。接住眼前的好，腳步也放踏實。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "pet_routine",
+    "sceneLabel": "喜歡固定日常",
+    "iconKey": "pet-home-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 119,
@@ -282,7 +372,12 @@
     "fw": "整體走向偏正面，但需要耐心與一致照顧。",
     "sa": "維持環境穩定，一次只調整一個照顧變因。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "pet_more_clingy",
+    "sceneLabel": "最近比較黏",
+    "iconKey": "pet-play-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 120,
@@ -297,7 +392,12 @@
     "fw": "短期以平穩為主，重點是建立牠平常狀態的基準。",
     "sa": "照常陪伴並簡單記錄，不必把每個小動作解讀成預兆。好的時候多做一點，往後就少一點勉強。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "pet_own_space",
+    "sceneLabel": "需要自己的空間",
+    "iconKey": "pet-moon-bed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 121,
@@ -312,7 +412,12 @@
     "fw": "再觀察幾天後趨勢會更清楚；持續異常則需專業評估。",
     "sa": "記錄食慾、精神、排泄與活動，設定明確的就醫條件。若情勢始終沒變，收手也是一種答案。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "pet_safe_base",
+    "sceneLabel": "把你當安全基地",
+    "iconKey": "pet-home-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 122,
@@ -327,7 +432,12 @@
     "fw": "走向屬於先緊張後安定，但過程中仍要排除身體不適。",
     "sa": "降低刺激、提供安全角落，持續異常就詢問獸醫。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "pet_more_interaction",
+    "sceneLabel": "想增加互動",
+    "iconKey": "pet-play-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 123,
@@ -342,7 +452,12 @@
     "fw": "狀況若持續或加重，拖延可能增加風險。",
     "sa": "優先安排獸醫評估，並帶上完整的變化紀錄。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "pet_routine",
+    "sceneLabel": "喜歡固定日常",
+    "iconKey": "pet-home-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 124,
@@ -357,7 +472,12 @@
     "fw": "停止勉強後，牠才有機會建立新的安全感。",
     "sa": "撤掉造成壓力的因素，重新以牠的反應規劃照顧方式。看不到回應時，停下來並不是失敗。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "pet_more_clingy",
+    "sceneLabel": "最近比較黏",
+    "iconKey": "pet-play-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 125,
@@ -372,7 +492,12 @@
     "fw": "只要維持熟悉節奏，這份安心感會繼續累積。",
     "sa": "延續牠喜歡的日常，讓牠主動決定互動距離。好的時候多做一點，往後就少一點勉強。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "pet_own_space",
+    "sceneLabel": "需要自己的空間",
+    "iconKey": "pet-moon-bed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 126,
@@ -387,7 +512,12 @@
     "fw": "好轉值得珍惜，但仍要確認是否能穩定維持。",
     "sa": "記錄三天變化；若曾有不適，仍依獸醫建議追蹤。把握這股順勢，同時替自己留一手。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "pet_safe_base",
+    "sceneLabel": "把你當安全基地",
+    "iconKey": "pet-home-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 127,
@@ -402,7 +532,12 @@
     "fw": "整體走向偏正面，但需要耐心與一致照顧。",
     "sa": "維持環境穩定，一次只調整一個照顧變因。順的時候更要穩住，好局面才走得長。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "pet_more_interaction",
+    "sceneLabel": "想增加互動",
+    "iconKey": "pet-play-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 128,
@@ -417,7 +552,12 @@
     "fw": "短期以平穩為主，重點是建立牠平常狀態的基準。",
     "sa": "照常陪伴並簡單記錄，不必把每個小動作解讀成預兆。接住眼前的好，腳步也放踏實。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "pet_routine",
+    "sceneLabel": "喜歡固定日常",
+    "iconKey": "pet-home-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 129,
@@ -432,7 +572,12 @@
     "fw": "再觀察幾天後趨勢會更清楚；持續異常則需專業評估。",
     "sa": "記錄食慾、精神、排泄與活動，設定明確的就醫條件。看不到回應時，停下來並不是失敗。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "pet_more_clingy",
+    "sceneLabel": "最近比較黏",
+    "iconKey": "pet-play-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 130,
@@ -447,7 +592,12 @@
     "fw": "走向屬於先緊張後安定，但過程中仍要排除身體不適。",
     "sa": "降低刺激、提供安全角落，持續異常就詢問獸醫。撐與放都行，只是別再假裝沒看見。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "pet_own_space",
+    "sceneLabel": "需要自己的空間",
+    "iconKey": "pet-moon-bed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 131,
@@ -462,7 +612,12 @@
     "fw": "好轉值得珍惜，但仍要確認是否能穩定維持。",
     "sa": "記錄三天變化；若曾有不適，仍依獸醫建議追蹤。把握這股順勢，同時替自己留一手。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "pet_sensitive",
+    "sceneLabel": "環境變化敏感",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 132,
@@ -477,7 +632,12 @@
     "fw": "整體走向偏正面，但需要耐心與一致照顧。",
     "sa": "維持環境穩定，一次只調整一個照顧變因。順的時候更要穩住，好局面才走得長。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "pet_discomfort",
+    "sceneLabel": "不舒服的訊號",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 133,
@@ -492,7 +652,12 @@
     "fw": "短期以平穩為主，重點是建立牠平常狀態的基準。",
     "sa": "照常陪伴並簡單記錄，不必把每個小動作解讀成預兆。接住眼前的好，腳步也放踏實。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "pet_sensitive",
+    "sceneLabel": "環境變化敏感",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 134,
@@ -507,7 +672,12 @@
     "fw": "再觀察幾天後趨勢會更清楚；持續異常則需專業評估。",
     "sa": "記錄食慾、精神、排泄與活動，設定明確的就醫條件。看不到回應時，停下來並不是失敗。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "pet_rest_nearby",
+    "sceneLabel": "想靠近也想休息",
+    "iconKey": "pet-moon-bed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 135,
@@ -522,7 +692,12 @@
     "fw": "走向屬於先緊張後安定，但過程中仍要排除身體不適。",
     "sa": "降低刺激、提供安全角落，持續異常就詢問獸醫。撐與放都行，只是別再假裝沒看見。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "pet_feels_anxiety",
+    "sceneLabel": "感受到你的緊張",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 136,
@@ -537,7 +712,12 @@
     "fw": "狀況若持續或加重，拖延可能增加風險。",
     "sa": "優先安排獸醫評估，並帶上完整的變化紀錄。若情勢始終沒變，收手也是一種答案。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "pet_sensitive",
+    "sceneLabel": "環境變化敏感",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 137,
@@ -552,7 +732,12 @@
     "fw": "停止勉強後，牠才有機會建立新的安全感。",
     "sa": "撤掉造成壓力的因素，重新以牠的反應規劃照顧方式。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "pet_discomfort",
+    "sceneLabel": "不舒服的訊號",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 138,
@@ -567,7 +752,12 @@
     "fw": "只要維持熟悉節奏，這份安心感會繼續累積。",
     "sa": "延續牠喜歡的日常，讓牠主動決定互動距離。接住眼前的好，腳步也放踏實。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "pet_sensitive",
+    "sceneLabel": "環境變化敏感",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 139,
@@ -582,7 +772,12 @@
     "fw": "好轉值得珍惜，但仍要確認是否能穩定維持。",
     "sa": "記錄三天變化；若曾有不適，仍依獸醫建議追蹤。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "pet_rest_nearby",
+    "sceneLabel": "想靠近也想休息",
+    "iconKey": "pet-moon-bed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 140,
@@ -597,7 +792,12 @@
     "fw": "整體走向偏正面，但需要耐心與一致照顧。",
     "sa": "維持環境穩定，一次只調整一個照顧變因。好的時候多做一點，往後就少一點勉強。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "pet_feels_anxiety",
+    "sceneLabel": "感受到你的緊張",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 141,
@@ -612,7 +812,12 @@
     "fw": "短期以平穩為主，重點是建立牠平常狀態的基準。",
     "sa": "照常陪伴並簡單記錄，不必把每個小動作解讀成預兆。把握這股順勢，同時替自己留一手。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "pet_sensitive",
+    "sceneLabel": "環境變化敏感",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 142,
@@ -627,7 +832,12 @@
     "fw": "再觀察幾天後趨勢會更清楚；持續異常則需專業評估。",
     "sa": "記錄食慾、精神、排泄與活動，設定明確的就醫條件。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "pet_discomfort",
+    "sceneLabel": "不舒服的訊號",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 143,
@@ -642,7 +852,12 @@
     "fw": "走向屬於先緊張後安定，但過程中仍要排除身體不適。",
     "sa": "降低刺激、提供安全角落，持續異常就詢問獸醫。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "pet_sensitive",
+    "sceneLabel": "環境變化敏感",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 144,
@@ -657,7 +872,12 @@
     "fw": "狀況若持續或加重，拖延可能增加風險。",
     "sa": "優先安排獸醫評估，並帶上完整的變化紀錄。看不到回應時，停下來並不是失敗。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "pet_rest_nearby",
+    "sceneLabel": "想靠近也想休息",
+    "iconKey": "pet-moon-bed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 145,
@@ -672,7 +892,12 @@
     "fw": "停止勉強後，牠才有機會建立新的安全感。",
     "sa": "撤掉造成壓力的因素，重新以牠的反應規劃照顧方式。撐與放都行，只是別再假裝沒看見。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "pet_feels_anxiety",
+    "sceneLabel": "感受到你的緊張",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 146,
@@ -687,7 +912,12 @@
     "fw": "只要維持熟悉節奏，這份安心感會繼續累積。",
     "sa": "延續牠喜歡的日常，讓牠主動決定互動距離。把握這股順勢，同時替自己留一手。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "pet_sensitive",
+    "sceneLabel": "環境變化敏感",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 147,
@@ -702,7 +932,12 @@
     "fw": "好轉值得珍惜，但仍要確認是否能穩定維持。",
     "sa": "記錄三天變化；若曾有不適，仍依獸醫建議追蹤。順的時候更要穩住，好局面才走得長。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "pet_discomfort",
+    "sceneLabel": "不舒服的訊號",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 148,
@@ -717,7 +952,12 @@
     "fw": "整體走向偏正面，但需要耐心與一致照顧。",
     "sa": "維持環境穩定，一次只調整一個照顧變因。接住眼前的好，腳步也放踏實。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "pet_sensitive",
+    "sceneLabel": "環境變化敏感",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 149,
@@ -732,7 +972,12 @@
     "fw": "短期以平穩為主，重點是建立牠平常狀態的基準。",
     "sa": "照常陪伴並簡單記錄，不必把每個小動作解讀成預兆。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "pet_rest_nearby",
+    "sceneLabel": "想靠近也想休息",
+    "iconKey": "pet-moon-bed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 150,
@@ -747,7 +992,12 @@
     "fw": "再觀察幾天後趨勢會更清楚；持續異常則需專業評估。",
     "sa": "記錄食慾、精神、排泄與活動，設定明確的就醫條件。撐與放都行，只是別再假裝沒看見。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "pet_feels_anxiety",
+    "sceneLabel": "感受到你的緊張",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 151,
@@ -762,7 +1012,12 @@
     "fw": "走向屬於先緊張後安定，但過程中仍要排除身體不適。",
     "sa": "降低刺激、提供安全角落，持續異常就詢問獸醫。若情勢始終沒變，收手也是一種答案。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "pet_sensitive",
+    "sceneLabel": "環境變化敏感",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 152,
@@ -777,7 +1032,12 @@
     "fw": "狀況若持續或加重，拖延可能增加風險。",
     "sa": "優先安排獸醫評估，並帶上完整的變化紀錄。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "pet_discomfort",
+    "sceneLabel": "不舒服的訊號",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 153,
@@ -792,7 +1052,12 @@
     "fw": "停止勉強後，牠才有機會建立新的安全感。",
     "sa": "撤掉造成壓力的因素，重新以牠的反應規劃照顧方式。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "pet_sensitive",
+    "sceneLabel": "環境變化敏感",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 154,
@@ -807,7 +1072,12 @@
     "fw": "只要維持熟悉節奏，這份安心感會繼續累積。",
     "sa": "延續牠喜歡的日常，讓牠主動決定互動距離。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "pet_rest_nearby",
+    "sceneLabel": "想靠近也想休息",
+    "iconKey": "pet-moon-bed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 155,
@@ -822,7 +1092,12 @@
     "fw": "好轉值得珍惜，但仍要確認是否能穩定維持。",
     "sa": "記錄三天變化；若曾有不適，仍依獸醫建議追蹤。好的時候多做一點，往後就少一點勉強。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "pet_feels_anxiety",
+    "sceneLabel": "感受到你的緊張",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 156,
@@ -837,7 +1112,12 @@
     "fw": "整體走向偏正面，但需要耐心與一致照顧。",
     "sa": "維持環境穩定，一次只調整一個照顧變因。把握這股順勢，同時替自己留一手。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "pet_sensitive",
+    "sceneLabel": "環境變化敏感",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 157,
@@ -852,7 +1132,12 @@
     "fw": "短期以平穩為主，重點是建立牠平常狀態的基準。",
     "sa": "照常陪伴並簡單記錄，不必把每個小動作解讀成預兆。順的時候更要穩住，好局面才走得長。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "pet_discomfort",
+    "sceneLabel": "不舒服的訊號",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 158,
@@ -867,7 +1152,12 @@
     "fw": "再觀察幾天後趨勢會更清楚；持續異常則需專業評估。",
     "sa": "記錄食慾、精神、排泄與活動，設定明確的就醫條件。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "pet_sensitive",
+    "sceneLabel": "環境變化敏感",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 159,
@@ -882,7 +1172,12 @@
     "fw": "走向屬於先緊張後安定，但過程中仍要排除身體不適。",
     "sa": "降低刺激、提供安全角落，持續異常就詢問獸醫。看不到回應時，停下來並不是失敗。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "pet_rest_nearby",
+    "sceneLabel": "想靠近也想休息",
+    "iconKey": "pet-moon-bed",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 160,
@@ -897,7 +1192,12 @@
     "fw": "狀況若持續或加重，拖延可能增加風險。",
     "sa": "優先安排獸醫評估，並帶上完整的變化紀錄。撐與放都行，只是別再假裝沒看見。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "pet_feels_anxiety",
+    "sceneLabel": "感受到你的緊張",
+    "iconKey": "pet-warning-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 161,
@@ -912,7 +1212,12 @@
     "fw": "療癒會反覆前進與後退，整體仍在慢慢變得可承受。",
     "sa": "依自己的速度整理照片或寫信，不必要求一次完成告別。把握這股順勢，同時替自己留一手。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "pet_missing_you",
+    "sceneLabel": "記得你的氣味聲音",
+    "iconKey": "pet-distance-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 162,
@@ -927,7 +1232,12 @@
     "fw": "短期內不需要強迫自己改變，穩穩生活就是一種療癒。",
     "sa": "保留一個想念牠的位置，也照顧好今天的吃飯與睡眠。順的時候更要穩住，好局面才走得長。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "pet_waiting_place",
+    "sceneLabel": "在固定位置等你",
+    "iconKey": "pet-distance-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 163,
@@ -942,7 +1252,12 @@
     "fw": "答案未必很快出現，但時間會幫助你理解自己真正想確認的是什麼。",
     "sa": "把想問牠的話寫下來，先不用逼自己立刻得到回應。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "pet_missing_you",
+    "sceneLabel": "記得你的氣味聲音",
+    "iconKey": "pet-distance-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 164,
@@ -957,7 +1272,12 @@
     "fw": "這段過程先痛後鬆，會讓愛與自責慢慢分開。",
     "sa": "在安全的時間整理一小部分回憶，情緒太滿時就停下。看不到回應時，停下來並不是失敗。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "pet_reunion_clingy",
+    "sceneLabel": "重逢後特別黏",
+    "iconKey": "pet-reunion",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 165,
@@ -972,7 +1292,12 @@
     "fw": "繼續獨自承受可能讓睡眠與日常受到更大影響。",
     "sa": "向可信任的人或悲傷支持資源求助，不必一個人證明自己撐得住。撐與放都行，只是別再假裝沒看見。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "pet_reunion_calm",
+    "sceneLabel": "重逢反應平淡",
+    "iconKey": "pet-reunion",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 166,
@@ -987,7 +1312,12 @@
     "fw": "放下求證後，牠仍會留在回憶裡，而你可以重新走向生活。",
     "sa": "完成一個告別儀式，對牠也對自己說出一直沒有說完的話。若情勢始終沒變，收手也是一種答案。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "pet_missing_you",
+    "sceneLabel": "記得你的氣味聲音",
+    "iconKey": "pet-distance-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 167,
@@ -1002,7 +1332,12 @@
     "fw": "未來想起牠時，溫暖會逐漸多於自責。",
     "sa": "留下一個小紀念，允許自己同時想念與繼續生活。順的時候更要穩住，好局面才走得長。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "pet_waiting_place",
+    "sceneLabel": "在固定位置等你",
+    "iconKey": "pet-distance-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 168,
@@ -1017,7 +1352,12 @@
     "fw": "這份安慰會成為悲傷轉化的起點。",
     "sa": "把那個時刻寫下來，珍惜感受，不必勉強說服任何人。接住眼前的好，腳步也放踏實。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "pet_missing_you",
+    "sceneLabel": "記得你的氣味聲音",
+    "iconKey": "pet-distance-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 169,
@@ -1032,7 +1372,12 @@
     "fw": "療癒會反覆前進與後退，整體仍在慢慢變得可承受。",
     "sa": "依自己的速度整理照片或寫信，不必要求一次完成告別。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "pet_reunion_clingy",
+    "sceneLabel": "重逢後特別黏",
+    "iconKey": "pet-reunion",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 170,
@@ -1047,7 +1392,12 @@
     "fw": "短期內不需要強迫自己改變，穩穩生活就是一種療癒。",
     "sa": "保留一個想念牠的位置，也照顧好今天的吃飯與睡眠。好的時候多做一點，往後就少一點勉強。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "pet_reunion_calm",
+    "sceneLabel": "重逢反應平淡",
+    "iconKey": "pet-reunion",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 171,
@@ -1062,7 +1412,12 @@
     "fw": "答案未必很快出現，但時間會幫助你理解自己真正想確認的是什麼。",
     "sa": "把想問牠的話寫下來，先不用逼自己立刻得到回應。若情勢始終沒變，收手也是一種答案。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "pet_missing_you",
+    "sceneLabel": "記得你的氣味聲音",
+    "iconKey": "pet-distance-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 172,
@@ -1077,7 +1432,12 @@
     "fw": "這段過程先痛後鬆，會讓愛與自責慢慢分開。",
     "sa": "在安全的時間整理一小部分回憶，情緒太滿時就停下。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "pet_waiting_place",
+    "sceneLabel": "在固定位置等你",
+    "iconKey": "pet-distance-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 173,
@@ -1092,7 +1452,12 @@
     "fw": "繼續獨自承受可能讓睡眠與日常受到更大影響。",
     "sa": "向可信任的人或悲傷支持資源求助，不必一個人證明自己撐得住。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "pet_missing_you",
+    "sceneLabel": "記得你的氣味聲音",
+    "iconKey": "pet-distance-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 174,
@@ -1107,7 +1472,12 @@
     "fw": "放下求證後，牠仍會留在回憶裡，而你可以重新走向生活。",
     "sa": "完成一個告別儀式，對牠也對自己說出一直沒有說完的話。看不到回應時，停下來並不是失敗。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "pet_reunion_clingy",
+    "sceneLabel": "重逢後特別黏",
+    "iconKey": "pet-reunion",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 175,
@@ -1122,7 +1492,12 @@
     "fw": "未來想起牠時，溫暖會逐漸多於自責。",
     "sa": "留下一個小紀念，允許自己同時想念與繼續生活。好的時候多做一點，往後就少一點勉強。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "pet_reunion_calm",
+    "sceneLabel": "重逢反應平淡",
+    "iconKey": "pet-reunion",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 176,
@@ -1137,7 +1512,12 @@
     "fw": "這份安慰會成為悲傷轉化的起點。",
     "sa": "把那個時刻寫下來，珍惜感受，不必勉強說服任何人。把握這股順勢，同時替自己留一手。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "pet_missing_you",
+    "sceneLabel": "記得你的氣味聲音",
+    "iconKey": "pet-distance-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 177,
@@ -1152,7 +1532,12 @@
     "fw": "療癒會反覆前進與後退，整體仍在慢慢變得可承受。",
     "sa": "依自己的速度整理照片或寫信，不必要求一次完成告別。順的時候更要穩住，好局面才走得長。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "pet_waiting_place",
+    "sceneLabel": "在固定位置等你",
+    "iconKey": "pet-distance-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 178,
@@ -1167,7 +1552,12 @@
     "fw": "短期內不需要強迫自己改變，穩穩生活就是一種療癒。",
     "sa": "保留一個想念牠的位置，也照顧好今天的吃飯與睡眠。接住眼前的好，腳步也放踏實。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "pet_missing_you",
+    "sceneLabel": "記得你的氣味聲音",
+    "iconKey": "pet-distance-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 179,
@@ -1182,7 +1572,12 @@
     "fw": "答案未必很快出現，但時間會幫助你理解自己真正想確認的是什麼。",
     "sa": "把想問牠的話寫下來，先不用逼自己立刻得到回應。看不到回應時，停下來並不是失敗。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "pet_reunion_clingy",
+    "sceneLabel": "重逢後特別黏",
+    "iconKey": "pet-reunion",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 180,
@@ -1197,7 +1592,12 @@
     "fw": "這段過程先痛後鬆，會讓愛與自責慢慢分開。",
     "sa": "在安全的時間整理一小部分回憶，情緒太滿時就停下。撐與放都行，只是別再假裝沒看見。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "pet_reunion_calm",
+    "sceneLabel": "重逢反應平淡",
+    "iconKey": "pet-reunion",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 181,
@@ -1212,7 +1612,12 @@
     "fw": "繼續獨自承受可能讓睡眠與日常受到更大影響。",
     "sa": "向可信任的人或悲傷支持資源求助，不必一個人證明自己撐得住。若情勢始終沒變，收手也是一種答案。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "pet_missing_you",
+    "sceneLabel": "記得你的氣味聲音",
+    "iconKey": "pet-distance-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 182,
@@ -1227,7 +1632,12 @@
     "fw": "放下求證後，牠仍會留在回憶裡，而你可以重新走向生活。",
     "sa": "完成一個告別儀式，對牠也對自己說出一直沒有說完的話。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "pet_waiting_place",
+    "sceneLabel": "在固定位置等你",
+    "iconKey": "pet-distance-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 183,
@@ -1242,7 +1652,12 @@
     "fw": "未來想起牠時，溫暖會逐漸多於自責。",
     "sa": "留下一個小紀念，允許自己同時想念與繼續生活。接住眼前的好，腳步也放踏實。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "pet_missing_you",
+    "sceneLabel": "記得你的氣味聲音",
+    "iconKey": "pet-distance-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 184,
@@ -1257,7 +1672,12 @@
     "fw": "這份安慰會成為悲傷轉化的起點。",
     "sa": "把那個時刻寫下來，珍惜感受，不必勉強說服任何人。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "pet_reunion_clingy",
+    "sceneLabel": "重逢後特別黏",
+    "iconKey": "pet-reunion",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 185,
@@ -1272,7 +1692,12 @@
     "fw": "療癒會反覆前進與後退，整體仍在慢慢變得可承受。",
     "sa": "依自己的速度整理照片或寫信，不必要求一次完成告別。好的時候多做一點，往後就少一點勉強。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "pet_reunion_calm",
+    "sceneLabel": "重逢反應平淡",
+    "iconKey": "pet-reunion",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 186,
@@ -1287,7 +1712,12 @@
     "fw": "短期內不需要強迫自己改變，穩穩生活就是一種療癒。",
     "sa": "保留一個想念牠的位置，也照顧好今天的吃飯與睡眠。把握這股順勢，同時替自己留一手。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "pet_missing_you",
+    "sceneLabel": "記得你的氣味聲音",
+    "iconKey": "pet-distance-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 187,
@@ -1302,7 +1732,12 @@
     "fw": "答案未必很快出現，但時間會幫助你理解自己真正想確認的是什麼。",
     "sa": "把想問牠的話寫下來，先不用逼自己立刻得到回應。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "pet_waiting_place",
+    "sceneLabel": "在固定位置等你",
+    "iconKey": "pet-distance-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 188,
@@ -1317,7 +1752,12 @@
     "fw": "這段過程先痛後鬆，會讓愛與自責慢慢分開。",
     "sa": "在安全的時間整理一小部分回憶，情緒太滿時就停下。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "pet_missing_you",
+    "sceneLabel": "記得你的氣味聲音",
+    "iconKey": "pet-distance-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 189,
@@ -1332,7 +1772,12 @@
     "fw": "繼續獨自承受可能讓睡眠與日常受到更大影響。",
     "sa": "向可信任的人或悲傷支持資源求助，不必一個人證明自己撐得住。看不到回應時，停下來並不是失敗。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "pet_reunion_clingy",
+    "sceneLabel": "重逢後特別黏",
+    "iconKey": "pet-reunion",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 190,
@@ -1347,7 +1792,12 @@
     "fw": "放下求證後，牠仍會留在回憶裡，而你可以重新走向生活。",
     "sa": "完成一個告別儀式，對牠也對自己說出一直沒有說完的話。撐與放都行，只是別再假裝沒看見。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "pet_reunion_calm",
+    "sceneLabel": "重逢反應平淡",
+    "iconKey": "pet-reunion",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 191,
@@ -1362,7 +1812,12 @@
     "fw": "短期內不需要強迫自己改變，穩穩生活就是一種療癒。",
     "sa": "保留一個想念牠的位置，也照顧好今天的吃飯與睡眠。把握這股順勢，同時替自己留一手。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "pet_dream_visit",
+    "sceneLabel": "夢裡重逢／健康",
+    "iconKey": "pet-dream-moon",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 192,
@@ -1377,7 +1832,12 @@
     "fw": "答案未必很快出現，但時間會幫助你理解自己真正想確認的是什麼。",
     "sa": "把想問牠的話寫下來，先不用逼自己立刻得到回應。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "pet_sign_visit",
+    "sceneLabel": "像回來看你",
+    "iconKey": "pet-stardust-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 193,
@@ -1392,7 +1852,12 @@
     "fw": "這段過程先痛後鬆，會讓愛與自責慢慢分開。",
     "sa": "在安全的時間整理一小部分回憶，情緒太滿時就停下。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "pet_sign_visit",
+    "sceneLabel": "像回來看你",
+    "iconKey": "pet-stardust-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 194,
@@ -1407,7 +1872,12 @@
     "fw": "繼續獨自承受可能讓睡眠與日常受到更大影響。",
     "sa": "向可信任的人或悲傷支持資源求助，不必一個人證明自己撐得住。看不到回應時，停下來並不是失敗。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "pet_dream_visit",
+    "sceneLabel": "夢裡重逢／健康",
+    "iconKey": "pet-dream-moon",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 195,
@@ -1422,7 +1892,12 @@
     "fw": "放下求證後，牠仍會留在回憶裡，而你可以重新走向生活。",
     "sa": "完成一個告別儀式，對牠也對自己說出一直沒有說完的話。撐與放都行，只是別再假裝沒看見。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "pet_grief_memory",
+    "sceneLabel": "日常觸景思念",
+    "iconKey": "pet-memory-frame",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 196,
@@ -1437,7 +1912,12 @@
     "fw": "未來想起牠時，溫暖會逐漸多於自責。",
     "sa": "留下一個小紀念，允許自己同時想念與繼續生活。把握這股順勢，同時替自己留一手。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "pet_release_items",
+    "sceneLabel": "捨不得收用品",
+    "iconKey": "pet-memory-frame",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 197,
@@ -1452,7 +1932,12 @@
     "fw": "這份安慰會成為悲傷轉化的起點。",
     "sa": "把那個時刻寫下來，珍惜感受，不必勉強說服任何人。順的時候更要穩住，好局面才走得長。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "pet_guilt_goodbye",
+    "sceneLabel": "對離開／最後一天愧疚",
+    "iconKey": "pet-wing-heart",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 198,
@@ -1467,7 +1952,12 @@
     "fw": "療癒會反覆前進與後退，整體仍在慢慢變得可承受。",
     "sa": "依自己的速度整理照片或寫信，不必要求一次完成告別。接住眼前的好，腳步也放踏實。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "pet_guilt_goodbye",
+    "sceneLabel": "對離開／最後一天愧疚",
+    "iconKey": "pet-wing-heart",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 199,
@@ -1482,7 +1972,12 @@
     "fw": "短期內不需要強迫自己改變，穩穩生活就是一種療癒。",
     "sa": "保留一個想念牠的位置，也照顧好今天的吃飯與睡眠。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "pet_grief_memory",
+    "sceneLabel": "日常觸景思念",
+    "iconKey": "pet-memory-frame",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 200,
@@ -1497,7 +1992,12 @@
     "fw": "答案未必很快出現，但時間會幫助你理解自己真正想確認的是什麼。",
     "sa": "把想問牠的話寫下來，先不用逼自己立刻得到回應。撐與放都行，只是別再假裝沒看見。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "pet_grief_memory",
+    "sceneLabel": "日常觸景思念",
+    "iconKey": "pet-memory-frame",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 201,
@@ -1512,7 +2012,12 @@
     "fw": "這段過程先痛後鬆，會讓愛與自責慢慢分開。",
     "sa": "在安全的時間整理一小部分回憶，情緒太滿時就停下。若情勢始終沒變，收手也是一種答案。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "pet_sign_visit",
+    "sceneLabel": "像回來看你",
+    "iconKey": "pet-stardust-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 202,
@@ -1527,7 +2032,12 @@
     "fw": "繼續獨自承受可能讓睡眠與日常受到更大影響。",
     "sa": "向可信任的人或悲傷支持資源求助，不必一個人證明自己撐得住。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "pet_guilt_goodbye",
+    "sceneLabel": "對離開／最後一天愧疚",
+    "iconKey": "pet-wing-heart",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 203,
@@ -1542,7 +2052,12 @@
     "fw": "放下求證後，牠仍會留在回憶裡，而你可以重新走向生活。",
     "sa": "完成一個告別儀式，對牠也對自己說出一直沒有說完的話。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "pet_grief_memory",
+    "sceneLabel": "日常觸景思念",
+    "iconKey": "pet-memory-frame",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 204,
@@ -1557,7 +2072,12 @@
     "fw": "未來想起牠時，溫暖會逐漸多於自責。",
     "sa": "留下一個小紀念，允許自己同時想念與繼續生活。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "pet_grief_memory",
+    "sceneLabel": "日常觸景思念",
+    "iconKey": "pet-memory-frame",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 205,
@@ -1572,7 +2092,12 @@
     "fw": "這份安慰會成為悲傷轉化的起點。",
     "sa": "把那個時刻寫下來，珍惜感受，不必勉強說服任何人。好的時候多做一點，往後就少一點勉強。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "pet_healing",
+    "sceneLabel": "開始能笑著想牠",
+    "iconKey": "pet-bloom-memory",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 206,
@@ -1587,7 +2112,12 @@
     "fw": "療癒會反覆前進與後退，整體仍在慢慢變得可承受。",
     "sa": "依自己的速度整理照片或寫信，不必要求一次完成告別。把握這股順勢，同時替自己留一手。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "pet_grief_memory",
+    "sceneLabel": "日常觸景思念",
+    "iconKey": "pet-memory-frame",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 207,
@@ -1602,7 +2132,12 @@
     "fw": "短期內不需要強迫自己改變，穩穩生活就是一種療癒。",
     "sa": "保留一個想念牠的位置，也照顧好今天的吃飯與睡眠。順的時候更要穩住，好局面才走得長。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "pet_sign_visit",
+    "sceneLabel": "像回來看你",
+    "iconKey": "pet-stardust-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 208,
@@ -1617,7 +2152,12 @@
     "fw": "答案未必很快出現，但時間會幫助你理解自己真正想確認的是什麼。",
     "sa": "把想問牠的話寫下來，先不用逼自己立刻得到回應。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "pet_other_pet_grief",
+    "sceneLabel": "其他毛孩也在找牠",
+    "iconKey": "pet-two-paws",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 209,
@@ -1632,7 +2172,12 @@
     "fw": "這段過程先痛後鬆，會讓愛與自責慢慢分開。",
     "sa": "在安全的時間整理一小部分回憶，情緒太滿時就停下。看不到回應時，停下來並不是失敗。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "pet_peace_now",
+    "sceneLabel": "想知道牠好不好",
+    "iconKey": "pet-cloud-peace",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 210,
@@ -1647,7 +2192,12 @@
     "fw": "繼續獨自承受可能讓睡眠與日常受到更大影響。",
     "sa": "向可信任的人或悲傷支持資源求助，不必一個人證明自己撐得住。撐與放都行，只是別再假裝沒看見。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "pet_fear_forget",
+    "sceneLabel": "害怕忘記牠",
+    "iconKey": "pet-memory-frame",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 211,
@@ -1662,7 +2212,12 @@
     "fw": "放下求證後，牠仍會留在回憶裡，而你可以重新走向生活。",
     "sa": "完成一個告別儀式，對牠也對自己說出一直沒有說完的話。若情勢始終沒變，收手也是一種答案。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "pet_dream_visit",
+    "sceneLabel": "夢裡重逢／健康",
+    "iconKey": "pet-dream-moon",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 212,
@@ -1677,7 +2232,12 @@
     "fw": "未來想起牠時，溫暖會逐漸多於自責。",
     "sa": "留下一個小紀念，允許自己同時想念與繼續生活。順的時候更要穩住，好局面才走得長。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "pet_dream_visit",
+    "sceneLabel": "夢裡重逢／健康",
+    "iconKey": "pet-dream-moon",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 213,
@@ -1692,7 +2252,12 @@
     "fw": "這份安慰會成為悲傷轉化的起點。",
     "sa": "把那個時刻寫下來，珍惜感受，不必勉強說服任何人。接住眼前的好，腳步也放踏實。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "pet_sign_visit",
+    "sceneLabel": "像回來看你",
+    "iconKey": "pet-stardust-paw",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 214,
@@ -1707,7 +2272,12 @@
     "fw": "療癒會反覆前進與後退，整體仍在慢慢變得可承受。",
     "sa": "依自己的速度整理照片或寫信，不必要求一次完成告別。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "pet_guilt_goodbye",
+    "sceneLabel": "對離開／最後一天愧疚",
+    "iconKey": "pet-wing-heart",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 215,
@@ -1722,7 +2292,12 @@
     "fw": "短期內不需要強迫自己改變，穩穩生活就是一種療癒。",
     "sa": "保留一個想念牠的位置，也照顧好今天的吃飯與睡眠。好的時候多做一點，往後就少一點勉強。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "pet_grief_memory",
+    "sceneLabel": "日常觸景思念",
+    "iconKey": "pet-memory-frame",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 216,
@@ -1737,7 +2312,12 @@
     "fw": "答案未必很快出現，但時間會幫助你理解自己真正想確認的是什麼。",
     "sa": "把想問牠的話寫下來，先不用逼自己立刻得到回應。若情勢始終沒變，收手也是一種答案。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "pet_guilt_goodbye",
+    "sceneLabel": "對離開／最後一天愧疚",
+    "iconKey": "pet-wing-heart",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 217,
@@ -1752,7 +2332,12 @@
     "fw": "這段過程先痛後鬆，會讓愛與自責慢慢分開。",
     "sa": "在安全的時間整理一小部分回憶，情緒太滿時就停下。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "pet_love_forward",
+    "sceneLabel": "把愛延續出去",
+    "iconKey": "pet-bloom-memory",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 218,
@@ -1767,7 +2352,12 @@
     "fw": "繼續獨自承受可能讓睡眠與日常受到更大影響。",
     "sa": "向可信任的人或悲傷支持資源求助，不必一個人證明自己撐得住。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "pet_love_forward",
+    "sceneLabel": "把愛延續出去",
+    "iconKey": "pet-bloom-memory",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 219,
@@ -1782,7 +2372,12 @@
     "fw": "放下求證後，牠仍會留在回憶裡，而你可以重新走向生活。",
     "sa": "完成一個告別儀式，對牠也對自己說出一直沒有說完的話。看不到回應時，停下來並不是失敗。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "pet_grief_memory",
+    "sceneLabel": "日常觸景思念",
+    "iconKey": "pet-memory-frame",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 220,
@@ -1797,7 +2392,12 @@
     "fw": "未來想起牠時，溫暖會逐漸多於自責。",
     "sa": "留下一個小紀念，允許自己同時想念與繼續生活。好的時候多做一點，往後就少一點勉強。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "pet_healing",
+    "sceneLabel": "開始能笑著想牠",
+    "iconKey": "pet-bloom-memory",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 221,
@@ -1812,7 +2412,12 @@
     "adv": "把那個時刻寫下來，珍惜感受，不必勉強說服任何人。",
     "jie": "這支籤象徵牠正在準備一段與你更深的新緣分。近期可能出現一個讓你感到被安慰的夢境、巧合或消息。你可能開始夢見嬰兒、聽見孩子的笑聲，或對成為父母這件事產生比以往更深的感受。它未必能證明離世後的世界，卻可能讓你的心暫時安定。這份安慰會成為悲傷轉化的起點。把那個時刻寫下來，珍惜感受，不必勉強說服任何人。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "pet_rebirth_preparing",
+    "sceneLabel": "準備投胎",
+    "iconKey": "pet-rebirth-sprout",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 222,
@@ -1827,7 +2432,12 @@
     "adv": "依自己的速度整理照片或寫信，不必要求一次完成告別。",
     "jie": "牠可能還在等待適合的時間，不急著開始下一段生命。你仍很想牠，但悲傷已在緩慢改變形狀。近期可能沒有明顯的夢或巧合，反而是一段安靜期。有些日子依然很痛，有些日子則能帶著微笑想起牠。療癒會反覆前進與後退，整體仍在慢慢變得可承受。依自己的速度整理照片或寫信，不必要求一次完成告別。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "pet_rebirth_not_yet",
+    "sceneLabel": "尚未投胎／休息等待",
+    "iconKey": "pet-rebirth-sprout",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 223,
@@ -1842,7 +2452,12 @@
     "adv": "保留一個想念牠的位置，也照顧好今天的吃飯與睡眠。",
     "jie": "這支籤象徵牠可能以另一隻毛孩的身分，重新走進你的生活。這份思念暫時維持原來的重量，沒有明顯變輕或加重。你可能遇見一隻對你特別有反應的動物，或新毛孩出現和牠相似的小習慣。你仍會在固定的時刻想起牠，這是共同生活留下的習慣。短期內不需要強迫自己改變，穩穩生活就是一種療癒。保留一個想念牠的位置，也照顧好今天的吃飯與睡眠。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "pet_rebirth_pet",
+    "sceneLabel": "投胎成另一隻毛孩",
+    "iconKey": "pet-new-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 224,
@@ -1857,7 +2472,12 @@
     "adv": "把想問牠的話寫下來，先不用逼自己立刻得到回應。",
     "jie": "牠可能準備透過一次收養、救援或偶然相遇，把新的緣分帶到你門前。你還在等待一個能讓自己真正放心的答案。你可能突然看見送養訊息、在路上遇到動物，或被朋友詢問是否願意照顧一個新生命。夢境與巧合可能忽有忽無，無法替離世後的狀態作出證明。答案未必很快出現，但時間會幫助你理解自己真正想確認的是什麼。把想問牠的話寫下來，先不用逼自己立刻得到回應。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "pet_rebirth_encounter",
+    "sceneLabel": "尚未相遇／偶然相遇",
+    "iconKey": "pet-crossing-paths",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 225,
@@ -1872,7 +2492,12 @@
     "adv": "在安全的時間整理一小部分回憶，情緒太滿時就停下。",
     "jie": "這支籤象徵牠可能投胎成家人或親友的孩子，繼續靠近熟悉的家庭。一次強烈的想念或夢境可能先勾起痛苦，之後帶來新的理解。家族中可能傳來懷孕、新生兒或領養孩子的消息，讓你無端想起牠，甚至感到一種難以解釋的親近。你也許會重新面對照片、遺物或當時不敢碰觸的回憶。這段過程先痛後鬆，會讓愛與自責慢慢分開。在安全的時間整理一小部分回憶，情緒太滿時就停下。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "pet_rebirth_child",
+    "sceneLabel": "投胎成孩子／家人孩子",
+    "iconKey": "pet-cradle-star",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 226,
@@ -1887,7 +2512,12 @@
     "adv": "向可信任的人或悲傷支持資源求助，不必一個人證明自己撐得住。",
     "jie": "牠可能已經以新的生命開始旅程，而你們尚未正式相遇。你可能被自責、反覆求證或無法停止的想像困住。你可能對某個陌生孩子或動物的反應格外在意，尤其是牠聽見你的聲音後，出現讓你熟悉的眼神或動作。若每個巧合都讓你更焦慮，而不是得到安慰，代表悲傷正在消耗生活。繼續獨自承受可能讓睡眠與日常受到更大影響。向可信任的人或悲傷支持資源求助，不必一個人證明自己撐得住。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "pet_rebirth_encounter",
+    "sceneLabel": "尚未相遇／偶然相遇",
+    "iconKey": "pet-crossing-paths",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 227,
@@ -1902,7 +2532,12 @@
     "adv": "完成一個告別儀式，對牠也對自己說出一直沒有說完的話。",
     "jie": "這支籤象徵牠可能已在另一個家庭展開新的生命。你需要告別的不是對牠的愛，而是某個讓你無法前進的自責。你可能夢見牠在陌生但明亮的地方，身邊有人照顧；醒來後，比起悲傷，心裡反而多了一點放心。你可能逐漸承認，有些答案永遠無法被證實，也無法改寫當時。放下求證後，牠仍會留在回憶裡，而你可以重新走向生活。完成一個告別儀式，對牠也對自己說出一直沒有說完的話。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "pet_rebirth_elsewhere",
+    "sceneLabel": "在別處展開新生命",
+    "iconKey": "pet-far-home-star",
+    "icon": "/assets/oracle-icons/oracle-direction.webp",
+    "oracleSymbol": "direction"
   },
   {
     "n": 228,
@@ -1917,7 +2552,12 @@
     "adv": "留下一個小紀念，允許自己同時想念與繼續生活。",
     "jie": "牠可能仍偏愛以毛孩的身分回來，延續熟悉的陪伴方式。這份思念正在從刺痛慢慢轉成溫柔的陪伴。未來出現的新毛孩，可能在睡姿、撒嬌方式、喜歡的位置或某個小脾氣上，讓你突然鼻酸。你可能夢見牠安穩的樣子，或在回憶中重新感到被愛。未來想起牠時，溫暖會逐漸多於自責。留下一個小紀念，允許自己同時想念與繼續生活。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "pet_rebirth_pet",
+    "sceneLabel": "投胎成另一隻毛孩",
+    "iconKey": "pet-new-paw",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 229,
@@ -1932,7 +2572,12 @@
     "adv": "把那個時刻寫下來，珍惜感受，不必勉強說服任何人。",
     "jie": "這支籤象徵牠已經準備告別舊身分，迎接下一段生命。近期可能出現一個讓你感到被安慰的夢境、巧合或消息。你可能夢見牠走向門、光、階梯或陌生遠方；夢裡的氣氛若平靜，常反映你的心正在接受牠繼續前進。它未必能證明離世後的世界，卻可能讓你的心暫時安定。這份安慰會成為悲傷轉化的起點。把那個時刻寫下來，珍惜感受，不必勉強說服任何人。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "pet_rebirth_preparing",
+    "sceneLabel": "準備投胎",
+    "iconKey": "pet-rebirth-sprout",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 230,
@@ -1947,7 +2592,12 @@
     "adv": "依自己的速度整理照片或寫信，不必要求一次完成告別。",
     "jie": "日期、時間或數字的巧合，可能讓你聯想到牠已用新的身分回來。你仍很想牠，但悲傷已在緩慢改變形狀。新生命的生日、相遇日或重要數字，可能和牠的紀念日出現巧合，讓你感到震動。有些日子依然很痛，有些日子則能帶著微笑想起牠。療癒會反覆前進與後退，整體仍在慢慢變得可承受。依自己的速度整理照片或寫信，不必要求一次完成告別。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "pet_identity_sign",
+    "sceneLabel": "新生命出現熟悉習慣／數字巧合",
+    "iconKey": "pet-crossing-paths",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 231,
@@ -1962,7 +2612,12 @@
     "adv": "保留一個想念牠的位置，也照顧好今天的吃飯與睡眠。",
     "jie": "新生命身上出現熟悉習慣，可能讓你感到牠以某種方式延續了緣分。這份思念暫時維持原來的重量，沒有明顯變輕或加重。你可能在孩子或新毛孩身上，看見相似的睡姿、偏好、表情或安慰你的方式。你仍會在固定的時刻想起牠，這是共同生活留下的習慣。短期內不需要強迫自己改變，穩穩生活就是一種療癒。保留一個想念牠的位置，也照顧好今天的吃飯與睡眠。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "pet_identity_sign",
+    "sceneLabel": "新生命出現熟悉習慣／數字巧合",
+    "iconKey": "pet-crossing-paths",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 232,
@@ -1977,7 +2632,12 @@
     "adv": "把想問牠的話寫下來，先不用逼自己立刻得到回應。",
     "jie": "牠可能還沒有準備投胎，象徵性的陪伴仍停留在你的記憶與日常裡。你還在等待一個能讓自己真正放心的答案。你可能常在熟悉的位置感到牠的存在、夢見牠待在原來的家，或下意識保留牠的生活習慣。夢境與巧合可能忽有忽無，無法替離世後的狀態作出證明。答案未必很快出現，但時間會幫助你理解自己真正想確認的是什麼。把想問牠的話寫下來，先不用逼自己立刻得到回應。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "pet_rebirth_preparing",
+    "sceneLabel": "準備投胎",
+    "iconKey": "pet-rebirth-sprout",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 233,
@@ -1992,7 +2652,12 @@
     "adv": "在安全的時間整理一小部分回憶，情緒太滿時就停下。",
     "jie": "牠可能象徵性地進入一段自由休息的旅程，暫時沒有投胎計畫。一次強烈的想念或夢境可能先勾起痛苦，之後帶來新的理解。夢裡的牠可能在奔跑、草地、海邊或開闊空間，看起來比生病時更輕鬆。你也許會重新面對照片、遺物或當時不敢碰觸的回憶。這段過程先痛後鬆，會讓愛與自責慢慢分開。在安全的時間整理一小部分回憶，情緒太滿時就停下。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "pet_rebirth_not_yet",
+    "sceneLabel": "尚未投胎／休息等待",
+    "iconKey": "pet-rebirth-sprout",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 234,
@@ -2007,7 +2672,12 @@
     "adv": "向可信任的人或悲傷支持資源求助，不必一個人證明自己撐得住。",
     "jie": "這支籤象徵牠可能投胎成你的孩子，讓彼此的照顧關係換一種方向繼續。你可能被自責、反覆求證或無法停止的想像困住。你可能夢見牠變成孩子、抱著嬰兒，或在想到未來家庭時，突然感覺牠也在那幅畫面裡。若每個巧合都讓你更焦慮，而不是得到安慰，代表悲傷正在消耗生活。繼續獨自承受可能讓睡眠與日常受到更大影響。向可信任的人或悲傷支持資源求助，不必一個人證明自己撐得住。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "pet_rebirth_child",
+    "sceneLabel": "投胎成孩子／家人孩子",
+    "iconKey": "pet-cradle-star",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 235,
@@ -2022,7 +2692,12 @@
     "adv": "完成一個告別儀式，對牠也對自己說出一直沒有說完的話。",
     "jie": "牠可能已投胎成你生命之外的孩子，你們只會短暫相遇。你需要告別的不是對牠的愛，而是某個讓你無法前進的自責。你可能遇見一個陌生孩子對你微笑、靠近，或用熟悉的眼神看你，讓你在沒有理由的情況下想起牠。你可能逐漸承認，有些答案永遠無法被證實，也無法改寫當時。放下求證後，牠仍會留在回憶裡，而你可以重新走向生活。完成一個告別儀式，對牠也對自己說出一直沒有說完的話。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "pet_grief_memory",
+    "sceneLabel": "日常觸景思念",
+    "iconKey": "pet-memory-frame",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 236,
@@ -2037,7 +2712,12 @@
     "adv": "留下一個小紀念，允許自己同時想念與繼續生活。",
     "jie": "新的孩子或毛孩可能比你更早表現出親近，帶來被認出的感覺。這份思念正在從刺痛慢慢轉成溫柔的陪伴。第一次見面時，對方可能主動靠近、依偎、安靜凝視，或對你的聲音有特別明顯的反應。你可能夢見牠安穩的樣子，或在回憶中重新感到被愛。未來想起牠時，溫暖會逐漸多於自責。留下一個小紀念，允許自己同時想念與繼續生活。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "pet_identity_sign",
+    "sceneLabel": "新生命出現熟悉習慣／數字巧合",
+    "iconKey": "pet-crossing-paths",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 237,
@@ -2052,7 +2732,12 @@
     "adv": "把那個時刻寫下來，珍惜感受，不必勉強說服任何人。",
     "jie": "牠可能已經準備投胎，而你真心的祝福能幫助自己放下牽掛。近期可能出現一個讓你感到被安慰的夢境、巧合或消息。你可能在告別、祭拜或寫信後，夢見牠轉身離開；醒來雖然會哭，心裡卻比以前平靜。它未必能證明離世後的世界，卻可能讓你的心暫時安定。這份安慰會成為悲傷轉化的起點。把那個時刻寫下來，珍惜感受，不必勉強說服任何人。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "pet_rebirth_preparing",
+    "sceneLabel": "準備投胎",
+    "iconKey": "pet-rebirth-sprout",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 238,
@@ -2067,7 +2752,12 @@
     "adv": "依自己的速度整理照片或寫信，不必要求一次完成告別。",
     "jie": "這支籤提醒你，投胎重逢與尋找替代品是兩件不同的事。你仍很想牠，但悲傷已在緩慢改變形狀。新孩子或毛孩可能既有熟悉之處，也有完全不同的個性；不同不代表緣分是假的。有些日子依然很痛，有些日子則能帶著微笑想起牠。療癒會反覆前進與後退，整體仍在慢慢變得可承受。依自己的速度整理照片或寫信，不必要求一次完成告別。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "pet_grief_memory",
+    "sceneLabel": "日常觸景思念",
+    "iconKey": "pet-memory-frame",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 239,
@@ -2082,7 +2772,12 @@
     "adv": "保留一個想念牠的位置，也照顧好今天的吃飯與睡眠。",
     "jie": "牠可能透過告別夢，象徵自己即將走向投胎或新的旅程。這份思念暫時維持原來的重量，沒有明顯變輕或加重。夢境可能特別清楚、平靜，牠看起來健康，甚至像在道別；醒來後常會同時感到難過與安心。你仍會在固定的時刻想起牠，這是共同生活留下的習慣。短期內不需要強迫自己改變，穩穩生活就是一種療癒。保留一個想念牠的位置，也照顧好今天的吃飯與睡眠。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "pet_rebirth_preparing",
+    "sceneLabel": "準備投胎",
+    "iconKey": "pet-rebirth-sprout",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 240,
@@ -2097,6 +2792,11 @@
     "adv": "把想問牠的話寫下來，先不用逼自己立刻得到回應。",
     "jie": "這支籤象徵你和牠的緣分可能跨過不同身分，在未來重新開始。你還在等待一個能讓自己真正放心的答案。未來某段關係可能帶來沒有來由的熟悉、信任與心疼，像是你們不需要很久就知道如何陪伴彼此。夢境與巧合可能忽有忽無，無法替離世後的狀態作出證明。答案未必很快出現，但時間會幫助你理解自己真正想確認的是什麼。把想問牠的話寫下來，先不用逼自己立刻得到回應。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "pet_identity_sign",
+    "sceneLabel": "新生命出現熟悉習慣／數字巧合",
+    "iconKey": "pet-crossing-paths",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   }
 ]

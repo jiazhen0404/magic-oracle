@@ -12,7 +12,12 @@
     "fw": "若雙方都願意誠實溝通，這段關係可望進入更確定的位置。",
     "sa": "接受對方的靠近，但仍要確認承諾與行動是否一致。把握這股順勢，同時替自己留一手。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "love_attachment",
+    "sceneLabel": "仍有牽掛",
+    "iconKey": "love-red-thread",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 2,
@@ -27,7 +32,12 @@
     "fw": "近期有一次令人振奮的轉折，但仍需透過後續相處確認它能否延續。",
     "sa": "先自然回應，不必因為一個好消息立刻把所有期待壓回關係裡。順的時候更要穩住，好局面才走得長。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "love_regret",
+    "sceneLabel": "後悔與害怕重來",
+    "iconKey": "love-red-thread",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 3,
@@ -42,7 +52,12 @@
     "fw": "關係有望慢慢變好，但不會一夜之間回到你理想的狀態。",
     "sa": "給彼此空間，同時設定自己願意等待的期限。接住眼前的好，腳步也放踏實。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "love_move_on",
+    "sceneLabel": "正在放下",
+    "iconKey": "love-release",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 4,
@@ -57,7 +72,12 @@
     "fw": "未來一段時間以平穩互動為主，結果取決於日常是否舒服而真誠。",
     "sa": "不必刻意製造進展，先看這種相處是否真的符合你的需要。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "love_lonely_contact",
+    "sceneLabel": "寂寞才靠近",
+    "iconKey": "love-midnight-message",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 5,
@@ -72,7 +92,12 @@
     "fw": "短期內不容易定案，至少還需要一段沉澱與觀察。",
     "sa": "暫停追問，替等待設定期限，期間把生活重心放回自己。撐與放都行，只是別再假裝沒看見。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "love_defensive",
+    "sceneLabel": "生氣與防衛",
+    "iconKey": "love-thorns",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 6,
@@ -87,7 +112,12 @@
     "fw": "關係會先經歷不安，再決定是重新靠近還是更成熟地告別。",
     "sa": "不要逃避關鍵問題，語氣可以溫柔，但界線必須清楚。若情勢始終沒變，收手也是一種答案。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "love_friendzone",
+    "sceneLabel": "只想當朋友",
+    "iconKey": "love-friends",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 7,
@@ -102,7 +132,12 @@
     "fw": "若模式沒有改變，未來仍可能重複期待與失望的循環。",
     "sa": "停止替對方找理由，只根據持續行動判斷是否值得留下。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "love_wait_you",
+    "sceneLabel": "等你先開口",
+    "iconKey": "love-unsent-letter",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 8,
@@ -117,7 +152,12 @@
     "fw": "短期內復合或進一步發展的機會偏低，但離開會替新關係騰出空間。",
     "sa": "允許自己難過，逐步減少關注與聯絡，把未完成的期待收回來。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "love_guilt",
+    "sceneLabel": "愧疚但未必復合",
+    "iconKey": "love-fallen-rose",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 9,
@@ -132,7 +172,12 @@
     "fw": "若雙方都願意誠實溝通，這段關係可望進入更確定的位置。",
     "sa": "接受對方的靠近，但仍要確認承諾與行動是否一致。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "love_reality_block",
+    "sceneLabel": "現實阻礙",
+    "iconKey": "love-wall",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 10,
@@ -147,7 +192,12 @@
     "fw": "近期有一次令人振奮的轉折，但仍需透過後續相處確認它能否延續。",
     "sa": "先自然回應，不必因為一個好消息立刻把所有期待壓回關係裡。好的時候多做一點，往後就少一點勉強。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "love_move_on",
+    "sceneLabel": "正在放下",
+    "iconKey": "love-release",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 11,
@@ -162,7 +212,12 @@
     "fw": "關係有望慢慢變好，但不會一夜之間回到你理想的狀態。",
     "sa": "給彼此空間，同時設定自己願意等待的期限。把握這股順勢，同時替自己留一手。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "love_attachment",
+    "sceneLabel": "仍有牽掛",
+    "iconKey": "love-red-thread",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 12,
@@ -177,7 +232,12 @@
     "fw": "未來一段時間以平穩互動為主，結果取決於日常是否舒服而真誠。",
     "sa": "不必刻意製造進展，先看這種相處是否真的符合你的需要。順的時候更要穩住，好局面才走得長。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "love_regret",
+    "sceneLabel": "後悔與害怕重來",
+    "iconKey": "love-red-thread",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 13,
@@ -192,7 +252,12 @@
     "fw": "短期內不容易定案，至少還需要一段沉澱與觀察。",
     "sa": "暫停追問，替等待設定期限，期間把生活重心放回自己。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "love_move_on",
+    "sceneLabel": "正在放下",
+    "iconKey": "love-release",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 51,
@@ -207,7 +272,12 @@
     "fw": "關係會先經歷不安，再決定是重新靠近還是更成熟地告別。",
     "sa": "不要逃避關鍵問題，語氣可以溫柔，但界線必須清楚。看不到回應時，停下來並不是失敗。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "love_lonely_contact",
+    "sceneLabel": "寂寞才靠近",
+    "iconKey": "love-midnight-message",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 52,
@@ -222,7 +292,12 @@
     "fw": "若模式沒有改變，未來仍可能重複期待與失望的循環。",
     "sa": "停止替對方找理由，只根據持續行動判斷是否值得留下。撐與放都行，只是別再假裝沒看見。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "love_defensive",
+    "sceneLabel": "生氣與防衛",
+    "iconKey": "love-thorns",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 53,
@@ -237,7 +312,12 @@
     "fw": "短期內復合或進一步發展的機會偏低，但離開會替新關係騰出空間。",
     "sa": "允許自己難過，逐步減少關注與聯絡，把未完成的期待收回來。若情勢始終沒變，收手也是一種答案。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "love_friendzone",
+    "sceneLabel": "只想當朋友",
+    "iconKey": "love-friends",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 54,
@@ -252,7 +332,12 @@
     "fw": "若雙方都願意誠實溝通，這段關係可望進入更確定的位置。",
     "sa": "接受對方的靠近，但仍要確認承諾與行動是否一致。順的時候更要穩住，好局面才走得長。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "love_wait_you",
+    "sceneLabel": "等你先開口",
+    "iconKey": "love-unsent-letter",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 55,
@@ -267,7 +352,12 @@
     "fw": "近期有一次令人振奮的轉折，但仍需透過後續相處確認它能否延續。",
     "sa": "先自然回應，不必因為一個好消息立刻把所有期待壓回關係裡。接住眼前的好，腳步也放踏實。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "love_guilt",
+    "sceneLabel": "愧疚但未必復合",
+    "iconKey": "love-fallen-rose",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 56,
@@ -282,7 +372,12 @@
     "fw": "關係有望慢慢變好，但不會一夜之間回到你理想的狀態。",
     "sa": "給彼此空間，同時設定自己願意等待的期限。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "love_reality_block",
+    "sceneLabel": "現實阻礙",
+    "iconKey": "love-wall",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 57,
@@ -297,7 +392,12 @@
     "fw": "未來一段時間以平穩互動為主，結果取決於日常是否舒服而真誠。",
     "sa": "不必刻意製造進展，先看這種相處是否真的符合你的需要。好的時候多做一點，往後就少一點勉強。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "love_move_on",
+    "sceneLabel": "正在放下",
+    "iconKey": "love-release",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 58,
@@ -312,7 +412,12 @@
     "fw": "短期內不容易定案，至少還需要一段沉澱與觀察。",
     "sa": "暫停追問，替等待設定期限，期間把生活重心放回自己。若情勢始終沒變，收手也是一種答案。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "love_attachment",
+    "sceneLabel": "仍有牽掛",
+    "iconKey": "love-red-thread",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 59,
@@ -327,7 +432,12 @@
     "fw": "關係會先經歷不安，再決定是重新靠近還是更成熟地告別。",
     "sa": "不要逃避關鍵問題，語氣可以溫柔，但界線必須清楚。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "love_regret",
+    "sceneLabel": "後悔與害怕重來",
+    "iconKey": "love-red-thread",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 60,
@@ -342,7 +452,12 @@
     "fw": "若模式沒有改變，未來仍可能重複期待與失望的循環。",
     "sa": "停止替對方找理由，只根據持續行動判斷是否值得留下。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "love_move_on",
+    "sceneLabel": "正在放下",
+    "iconKey": "love-release",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 61,
@@ -357,7 +472,12 @@
     "fw": "短期內復合或進一步發展的機會偏低，但離開會替新關係騰出空間。",
     "sa": "允許自己難過，逐步減少關注與聯絡，把未完成的期待收回來。看不到回應時，停下來並不是失敗。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "love_lonely_contact",
+    "sceneLabel": "寂寞才靠近",
+    "iconKey": "love-midnight-message",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 62,
@@ -372,7 +492,12 @@
     "fw": "若雙方都願意誠實溝通，這段關係可望進入更確定的位置。",
     "sa": "接受對方的靠近，但仍要確認承諾與行動是否一致。好的時候多做一點，往後就少一點勉強。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "love_defensive",
+    "sceneLabel": "生氣與防衛",
+    "iconKey": "love-thorns",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 1,
@@ -387,7 +512,12 @@
     "fw": "短期內不容易定案，至少還需要一段沉澱與觀察。",
     "sa": "暫停追問，替等待設定期限，期間把生活重心放回自己。若情勢始終沒變，收手也是一種答案。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "love_mutual_testing",
+    "sceneLabel": "雙向好感互相試探",
+    "iconKey": "love-double-stars",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 2,
@@ -402,7 +532,12 @@
     "fw": "關係會先經歷不安，再決定是重新靠近還是更成熟地告別。",
     "sa": "不要逃避關鍵問題，語氣可以溫柔，但界線必須清楚。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "love_observing",
+    "sceneLabel": "有好感仍觀察",
+    "iconKey": "love-eye-rose",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 3,
@@ -417,7 +552,12 @@
     "fw": "若模式沒有改變，未來仍可能重複期待與失望的循環。",
     "sa": "停止替對方找理由，只根據持續行動判斷是否值得留下。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "love_no_commitment",
+    "sceneLabel": "享受曖昧不承諾",
+    "iconKey": "love-half-open-rose",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 4,
@@ -432,7 +572,12 @@
     "fw": "短期內復合或進一步發展的機會偏低，但離開會替新關係騰出空間。",
     "sa": "允許自己難過，逐步減少關注與聯絡，把未完成的期待收回來。看不到回應時，停下來並不是失敗。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "love_friendzone",
+    "sceneLabel": "只想當朋友",
+    "iconKey": "love-friends",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 5,
@@ -447,7 +592,12 @@
     "fw": "若雙方都願意誠實溝通，這段關係可望進入更確定的位置。",
     "sa": "接受對方的靠近，但仍要確認承諾與行動是否一致。好的時候多做一點，往後就少一點勉強。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "love_slow_serious",
+    "sceneLabel": "慢熱認真",
+    "iconKey": "love-crystal-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 6,
@@ -462,7 +612,12 @@
     "fw": "近期有一次令人振奮的轉折，但仍需透過後續相處確認它能否延續。",
     "sa": "先自然回應，不必因為一個好消息立刻把所有期待壓回關係裡。把握這股順勢，同時替自己留一手。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "love_fear_rejection",
+    "sceneLabel": "害怕被拒絕",
+    "iconKey": "love-unsent-letter",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 7,
@@ -477,7 +632,12 @@
     "fw": "關係有望慢慢變好，但不會一夜之間回到你理想的狀態。",
     "sa": "給彼此空間，同時設定自己願意等待的期限。順的時候更要穩住，好局面才走得長。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "love_triangle",
+    "sceneLabel": "第三者／多方選擇",
+    "iconKey": "love-three-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 8,
@@ -492,7 +652,12 @@
     "fw": "未來一段時間以平穩互動為主，結果取決於日常是否舒服而真誠。",
     "sa": "不必刻意製造進展，先看這種相處是否真的符合你的需要。接住眼前的好，腳步也放踏實。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "love_ex_still_present",
+    "sceneLabel": "前任影響未退",
+    "iconKey": "love-old-moon",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 9,
@@ -507,7 +672,12 @@
     "fw": "短期內不容易定案，至少還需要一段沉澱與觀察。",
     "sa": "暫停追問，替等待設定期限，期間把生活重心放回自己。看不到回應時，停下來並不是失敗。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "love_heat_up",
+    "sceneLabel": "關係升溫",
+    "iconKey": "love-warming-stars",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 10,
@@ -522,7 +692,12 @@
     "fw": "關係會先經歷不安，再決定是重新靠近還是更成熟地告別。",
     "sa": "不要逃避關鍵問題，語氣可以溫柔，但界線必須清楚。撐與放都行，只是別再假裝沒看見。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "love_heat_down",
+    "sceneLabel": "關係降溫",
+    "iconKey": "love-fading-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 11,
@@ -537,7 +712,12 @@
     "fw": "若模式沒有改變，未來仍可能重複期待與失望的循環。",
     "sa": "停止替對方找理由，只根據持續行動判斷是否值得留下。若情勢始終沒變，收手也是一種答案。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "love_mutual_testing",
+    "sceneLabel": "雙向好感互相試探",
+    "iconKey": "love-double-stars",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 12,
@@ -552,7 +732,12 @@
     "fw": "短期內復合或進一步發展的機會偏低，但離開會替新關係騰出空間。",
     "sa": "允許自己難過，逐步減少關注與聯絡，把未完成的期待收回來。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "love_observing",
+    "sceneLabel": "有好感仍觀察",
+    "iconKey": "love-eye-rose",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 13,
@@ -567,7 +752,12 @@
     "fw": "若雙方都願意誠實溝通，這段關係可望進入更確定的位置。",
     "sa": "接受對方的靠近，但仍要確認承諾與行動是否一致。接住眼前的好，腳步也放踏實。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "love_no_commitment",
+    "sceneLabel": "享受曖昧不承諾",
+    "iconKey": "love-half-open-rose",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 51,
@@ -582,7 +772,12 @@
     "fw": "近期有一次令人振奮的轉折，但仍需透過後續相處確認它能否延續。",
     "sa": "先自然回應，不必因為一個好消息立刻把所有期待壓回關係裡。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "love_friendzone",
+    "sceneLabel": "只想當朋友",
+    "iconKey": "love-friends",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 52,
@@ -597,7 +792,12 @@
     "fw": "關係有望慢慢變好，但不會一夜之間回到你理想的狀態。",
     "sa": "給彼此空間，同時設定自己願意等待的期限。好的時候多做一點，往後就少一點勉強。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "love_slow_serious",
+    "sceneLabel": "慢熱認真",
+    "iconKey": "love-crystal-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 53,
@@ -612,7 +812,12 @@
     "fw": "未來一段時間以平穩互動為主，結果取決於日常是否舒服而真誠。",
     "sa": "不必刻意製造進展，先看這種相處是否真的符合你的需要。把握這股順勢，同時替自己留一手。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "love_fear_rejection",
+    "sceneLabel": "害怕被拒絕",
+    "iconKey": "love-unsent-letter",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 54,
@@ -627,7 +832,12 @@
     "fw": "短期內不容易定案，至少還需要一段沉澱與觀察。",
     "sa": "暫停追問，替等待設定期限，期間把生活重心放回自己。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "love_triangle",
+    "sceneLabel": "第三者／多方選擇",
+    "iconKey": "love-three-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 55,
@@ -642,7 +852,12 @@
     "fw": "關係會先經歷不安，再決定是重新靠近還是更成熟地告別。",
     "sa": "不要逃避關鍵問題，語氣可以溫柔，但界線必須清楚。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "love_ex_still_present",
+    "sceneLabel": "前任影響未退",
+    "iconKey": "love-old-moon",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 56,
@@ -657,7 +872,12 @@
     "fw": "若模式沒有改變，未來仍可能重複期待與失望的循環。",
     "sa": "停止替對方找理由，只根據持續行動判斷是否值得留下。看不到回應時，停下來並不是失敗。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "love_heat_up",
+    "sceneLabel": "關係升溫",
+    "iconKey": "love-warming-stars",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 57,
@@ -672,7 +892,12 @@
     "fw": "短期內復合或進一步發展的機會偏低，但離開會替新關係騰出空間。",
     "sa": "允許自己難過，逐步減少關注與聯絡，把未完成的期待收回來。撐與放都行，只是別再假裝沒看見。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "love_heat_down",
+    "sceneLabel": "關係降溫",
+    "iconKey": "love-fading-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 58,
@@ -687,7 +912,12 @@
     "fw": "若雙方都願意誠實溝通，這段關係可望進入更確定的位置。",
     "sa": "接受對方的靠近，但仍要確認承諾與行動是否一致。把握這股順勢，同時替自己留一手。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "love_mutual_testing",
+    "sceneLabel": "雙向好感互相試探",
+    "iconKey": "love-double-stars",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 59,
@@ -702,7 +932,12 @@
     "fw": "近期有一次令人振奮的轉折，但仍需透過後續相處確認它能否延續。",
     "sa": "先自然回應，不必因為一個好消息立刻把所有期待壓回關係裡。順的時候更要穩住，好局面才走得長。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "love_observing",
+    "sceneLabel": "有好感仍觀察",
+    "iconKey": "love-eye-rose",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 60,
@@ -717,7 +952,12 @@
     "fw": "關係有望慢慢變好，但不會一夜之間回到你理想的狀態。",
     "sa": "給彼此空間，同時設定自己願意等待的期限。接住眼前的好，腳步也放踏實。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "love_no_commitment",
+    "sceneLabel": "享受曖昧不承諾",
+    "iconKey": "love-half-open-rose",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 61,
@@ -732,7 +972,12 @@
     "fw": "未來一段時間以平穩互動為主，結果取決於日常是否舒服而真誠。",
     "sa": "不必刻意製造進展，先看這種相處是否真的符合你的需要。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "love_friendzone",
+    "sceneLabel": "只想當朋友",
+    "iconKey": "love-friends",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 62,
@@ -747,7 +992,12 @@
     "fw": "短期內不容易定案，至少還需要一段沉澱與觀察。",
     "sa": "暫停追問，替等待設定期限，期間把生活重心放回自己。撐與放都行，只是別再假裝沒看見。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "love_slow_serious",
+    "sceneLabel": "慢熱認真",
+    "iconKey": "love-crystal-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 1,
@@ -762,7 +1012,12 @@
     "fw": "若雙方都願意誠實溝通，這段關係可望進入更確定的位置。",
     "sa": "接受對方的靠近，但仍要確認承諾與行動是否一致。把握這股順勢，同時替自己留一手。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "love_safe_but_tired",
+    "sceneLabel": "相愛但疲憊",
+    "iconKey": "love-embrace-heart",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 2,
@@ -777,7 +1032,12 @@
     "fw": "近期有一次令人振奮的轉折，但仍需透過後續相處確認它能否延續。",
     "sa": "先自然回應，不必因為一個好消息立刻把所有期待壓回關係裡。順的時候更要穩住，好局面才走得長。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "love_need_security",
+    "sceneLabel": "需要安全感",
+    "iconKey": "love-embrace-heart",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 3,
@@ -792,7 +1052,12 @@
     "fw": "關係有望慢慢變好，但不會一夜之間回到你理想的狀態。",
     "sa": "給彼此空間，同時設定自己願意等待的期限。接住眼前的好，腳步也放踏實。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "love_need_space",
+    "sceneLabel": "需要空間",
+    "iconKey": "love-space-moon",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 4,
@@ -807,7 +1072,12 @@
     "fw": "未來一段時間以平穩互動為主，結果取決於日常是否舒服而真誠。",
     "sa": "不必刻意製造進展，先看這種相處是否真的符合你的需要。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "love_future_plan",
+    "sceneLabel": "考慮長期未來",
+    "iconKey": "love-rings-home",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 5,
@@ -822,7 +1092,12 @@
     "fw": "短期內不容易定案，至少還需要一段沉澱與觀察。",
     "sa": "暫停追問，替等待設定期限，期間把生活重心放回自己。撐與放都行，只是別再假裝沒看見。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "love_old_wound",
+    "sceneLabel": "舊傷反覆",
+    "iconKey": "love-thorns",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 6,
@@ -837,7 +1112,12 @@
     "fw": "關係會先經歷不安，再決定是重新靠近還是更成熟地告別。",
     "sa": "不要逃避關鍵問題，語氣可以溫柔，但界線必須清楚。若情勢始終沒變，收手也是一種答案。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "love_imbalance",
+    "sceneLabel": "投入失衡",
+    "iconKey": "love-balance",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 7,
@@ -852,7 +1132,12 @@
     "fw": "若模式沒有改變，未來仍可能重複期待與失望的循環。",
     "sa": "停止替對方找理由，只根據持續行動判斷是否值得留下。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "love_external_pressure",
+    "sceneLabel": "外部壓力",
+    "iconKey": "love-cloud-chain",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 8,
@@ -867,7 +1152,12 @@
     "fw": "短期內復合或進一步發展的機會偏低，但離開會替新關係騰出空間。",
     "sa": "允許自己難過，逐步減少關注與聯絡，把未完成的期待收回來。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "love_trust_repair",
+    "sceneLabel": "信任修復",
+    "iconKey": "love-mended-heart",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 9,
@@ -882,7 +1172,12 @@
     "fw": "若雙方都願意誠實溝通，這段關係可望進入更確定的位置。",
     "sa": "接受對方的靠近，但仍要確認承諾與行動是否一致。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "love_withdrawal",
+    "sceneLabel": "對方抽離",
+    "iconKey": "love-flying-butterfly",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 10,
@@ -897,7 +1192,12 @@
     "fw": "近期有一次令人振奮的轉折，但仍需透過後續相處確認它能否延續。",
     "sa": "先自然回應，不必因為一個好消息立刻把所有期待壓回關係裡。好的時候多做一點，往後就少一點勉強。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "love_new_stage",
+    "sceneLabel": "關係新階段",
+    "iconKey": "love-rings-home",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 11,
@@ -912,7 +1212,12 @@
     "fw": "關係有望慢慢變好，但不會一夜之間回到你理想的狀態。",
     "sa": "給彼此空間，同時設定自己願意等待的期限。把握這股順勢，同時替自己留一手。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "love_safe_but_tired",
+    "sceneLabel": "相愛但疲憊",
+    "iconKey": "love-embrace-heart",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 12,
@@ -927,7 +1232,12 @@
     "fw": "未來一段時間以平穩互動為主，結果取決於日常是否舒服而真誠。",
     "sa": "不必刻意製造進展，先看這種相處是否真的符合你的需要。順的時候更要穩住，好局面才走得長。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "love_need_security",
+    "sceneLabel": "需要安全感",
+    "iconKey": "love-embrace-heart",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 13,
@@ -942,7 +1252,12 @@
     "fw": "短期內不容易定案，至少還需要一段沉澱與觀察。",
     "sa": "暫停追問，替等待設定期限，期間把生活重心放回自己。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "love_need_space",
+    "sceneLabel": "需要空間",
+    "iconKey": "love-space-moon",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 51,
@@ -957,7 +1272,12 @@
     "fw": "關係會先經歷不安，再決定是重新靠近還是更成熟地告別。",
     "sa": "不要逃避關鍵問題，語氣可以溫柔，但界線必須清楚。看不到回應時，停下來並不是失敗。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "love_future_plan",
+    "sceneLabel": "考慮長期未來",
+    "iconKey": "love-rings-home",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 52,
@@ -972,7 +1292,12 @@
     "fw": "若模式沒有改變，未來仍可能重複期待與失望的循環。",
     "sa": "停止替對方找理由，只根據持續行動判斷是否值得留下。撐與放都行，只是別再假裝沒看見。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "love_old_wound",
+    "sceneLabel": "舊傷反覆",
+    "iconKey": "love-thorns",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 53,
@@ -987,7 +1312,12 @@
     "fw": "短期內復合或進一步發展的機會偏低，但離開會替新關係騰出空間。",
     "sa": "允許自己難過，逐步減少關注與聯絡，把未完成的期待收回來。若情勢始終沒變，收手也是一種答案。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "love_imbalance",
+    "sceneLabel": "投入失衡",
+    "iconKey": "love-balance",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 54,
@@ -1002,7 +1332,12 @@
     "fw": "若雙方都願意誠實溝通，這段關係可望進入更確定的位置。",
     "sa": "接受對方的靠近，但仍要確認承諾與行動是否一致。順的時候更要穩住，好局面才走得長。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "love_external_pressure",
+    "sceneLabel": "外部壓力",
+    "iconKey": "love-cloud-chain",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 55,
@@ -1017,7 +1352,12 @@
     "fw": "近期有一次令人振奮的轉折，但仍需透過後續相處確認它能否延續。",
     "sa": "先自然回應，不必因為一個好消息立刻把所有期待壓回關係裡。接住眼前的好，腳步也放踏實。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "love_trust_repair",
+    "sceneLabel": "信任修復",
+    "iconKey": "love-mended-heart",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 56,
@@ -1032,7 +1372,12 @@
     "fw": "關係有望慢慢變好，但不會一夜之間回到你理想的狀態。",
     "sa": "給彼此空間，同時設定自己願意等待的期限。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "love_withdrawal",
+    "sceneLabel": "對方抽離",
+    "iconKey": "love-flying-butterfly",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 57,
@@ -1047,7 +1392,12 @@
     "fw": "未來一段時間以平穩互動為主，結果取決於日常是否舒服而真誠。",
     "sa": "不必刻意製造進展，先看這種相處是否真的符合你的需要。好的時候多做一點，往後就少一點勉強。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "love_new_stage",
+    "sceneLabel": "關係新階段",
+    "iconKey": "love-rings-home",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 58,
@@ -1062,7 +1412,12 @@
     "fw": "短期內不容易定案，至少還需要一段沉澱與觀察。",
     "sa": "暫停追問，替等待設定期限，期間把生活重心放回自己。若情勢始終沒變，收手也是一種答案。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "love_safe_but_tired",
+    "sceneLabel": "相愛但疲憊",
+    "iconKey": "love-embrace-heart",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 59,
@@ -1077,7 +1432,12 @@
     "fw": "關係會先經歷不安，再決定是重新靠近還是更成熟地告別。",
     "sa": "不要逃避關鍵問題，語氣可以溫柔，但界線必須清楚。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "love_need_security",
+    "sceneLabel": "需要安全感",
+    "iconKey": "love-embrace-heart",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 60,
@@ -1092,7 +1452,12 @@
     "fw": "若模式沒有改變，未來仍可能重複期待與失望的循環。",
     "sa": "停止替對方找理由，只根據持續行動判斷是否值得留下。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "love_need_space",
+    "sceneLabel": "需要空間",
+    "iconKey": "love-space-moon",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 61,
@@ -1107,7 +1472,12 @@
     "fw": "短期內復合或進一步發展的機會偏低，但離開會替新關係騰出空間。",
     "sa": "允許自己難過，逐步減少關注與聯絡，把未完成的期待收回來。看不到回應時，停下來並不是失敗。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "love_future_plan",
+    "sceneLabel": "考慮長期未來",
+    "iconKey": "love-rings-home",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 62,
@@ -1122,7 +1492,12 @@
     "fw": "若雙方都願意誠實溝通，這段關係可望進入更確定的位置。",
     "sa": "接受對方的靠近，但仍要確認承諾與行動是否一致。好的時候多做一點，往後就少一點勉強。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "love_old_wound",
+    "sceneLabel": "舊傷反覆",
+    "iconKey": "love-thorns",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 1,
@@ -1137,7 +1512,12 @@
     "fw": "短期內不容易定案，至少還需要一段沉澱與觀察。",
     "sa": "暫停追問，替等待設定期限，期間把生活重心放回自己。若情勢始終沒變，收手也是一種答案。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "love_secret_admirer",
+    "sceneLabel": "有人默默注意",
+    "iconKey": "love-eye-rose",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 2,
@@ -1152,7 +1532,12 @@
     "fw": "關係會先經歷不安，再決定是重新靠近還是更成熟地告別。",
     "sa": "不要逃避關鍵問題，語氣可以溫柔，但界線必須清楚。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "love_old_person_returns",
+    "sceneLabel": "舊人再出現",
+    "iconKey": "love-old-moon",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 3,
@@ -1167,7 +1552,12 @@
     "fw": "若模式沒有改變，未來仍可能重複期待與失望的循環。",
     "sa": "停止替對方找理由，只根據持續行動判斷是否值得留下。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "love_single_self_focus",
+    "sceneLabel": "目前重心不在戀愛",
+    "iconKey": "love-space-moon",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 4,
@@ -1182,7 +1572,12 @@
     "fw": "短期內復合或進一步發展的機會偏低，但離開會替新關係騰出空間。",
     "sa": "允許自己難過，逐步減少關注與聯絡，把未完成的期待收回來。看不到回應時，停下來並不是失敗。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "love_social_chance",
+    "sceneLabel": "社交桃花增加",
+    "iconKey": "love-social-stars",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 5,
@@ -1197,7 +1592,12 @@
     "fw": "若雙方都願意誠實溝通，這段關係可望進入更確定的位置。",
     "sa": "接受對方的靠近，但仍要確認承諾與行動是否一致。好的時候多做一點，往後就少一點勉強。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 6,
@@ -1212,7 +1612,12 @@
     "fw": "近期有一次令人振奮的轉折，但仍需透過後續相處確認它能否延續。",
     "sa": "先自然回應，不必因為一個好消息立刻把所有期待壓回關係裡。把握這股順勢，同時替自己留一手。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "love_friend_to_love",
+    "sceneLabel": "朋友發展成戀人",
+    "iconKey": "love-social-stars",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 7,
@@ -1227,7 +1632,12 @@
     "fw": "關係有望慢慢變好，但不會一夜之間回到你理想的狀態。",
     "sa": "給彼此空間，同時設定自己願意等待的期限。順的時候更要穩住，好局面才走得長。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "love_single_self_focus",
+    "sceneLabel": "目前重心不在戀愛",
+    "iconKey": "love-space-moon",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 8,
@@ -1242,7 +1652,12 @@
     "fw": "未來一段時間以平穩互動為主，結果取決於日常是否舒服而真誠。",
     "sa": "不必刻意製造進展，先看這種相處是否真的符合你的需要。接住眼前的好，腳步也放踏實。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "love_single_self_focus",
+    "sceneLabel": "目前重心不在戀愛",
+    "iconKey": "love-space-moon",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 9,
@@ -1257,7 +1672,12 @@
     "fw": "短期內不容易定案，至少還需要一段沉澱與觀察。",
     "sa": "暫停追問，替等待設定期限，期間把生活重心放回自己。看不到回應時，停下來並不是失敗。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "love_triangle",
+    "sceneLabel": "第三者／多方選擇",
+    "iconKey": "love-three-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 10,
@@ -1272,7 +1692,12 @@
     "fw": "關係會先經歷不安，再決定是重新靠近還是更成熟地告別。",
     "sa": "不要逃避關鍵問題，語氣可以溫柔，但界線必須清楚。撐與放都行，只是別再假裝沒看見。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 11,
@@ -1287,7 +1712,12 @@
     "fw": "若模式沒有改變，未來仍可能重複期待與失望的循環。",
     "sa": "停止替對方找理由，只根據持續行動判斷是否值得留下。若情勢始終沒變，收手也是一種答案。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "love_secret_admirer",
+    "sceneLabel": "有人默默注意",
+    "iconKey": "love-eye-rose",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 12,
@@ -1302,7 +1732,12 @@
     "fw": "短期內復合或進一步發展的機會偏低，但離開會替新關係騰出空間。",
     "sa": "允許自己難過，逐步減少關注與聯絡，把未完成的期待收回來。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "love_old_person_returns",
+    "sceneLabel": "舊人再出現",
+    "iconKey": "love-old-moon",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 13,
@@ -1317,7 +1752,12 @@
     "fw": "若雙方都願意誠實溝通，這段關係可望進入更確定的位置。",
     "sa": "接受對方的靠近，但仍要確認承諾與行動是否一致。接住眼前的好，腳步也放踏實。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "love_single_self_focus",
+    "sceneLabel": "目前重心不在戀愛",
+    "iconKey": "love-space-moon",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 51,
@@ -1332,7 +1772,12 @@
     "fw": "近期有一次令人振奮的轉折，但仍需透過後續相處確認它能否延續。",
     "sa": "先自然回應，不必因為一個好消息立刻把所有期待壓回關係裡。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "love_social_chance",
+    "sceneLabel": "社交桃花增加",
+    "iconKey": "love-social-stars",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 52,
@@ -1347,7 +1792,12 @@
     "fw": "關係有望慢慢變好，但不會一夜之間回到你理想的狀態。",
     "sa": "給彼此空間，同時設定自己願意等待的期限。好的時候多做一點，往後就少一點勉強。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 53,
@@ -1362,7 +1812,12 @@
     "fw": "未來一段時間以平穩互動為主，結果取決於日常是否舒服而真誠。",
     "sa": "不必刻意製造進展，先看這種相處是否真的符合你的需要。把握這股順勢，同時替自己留一手。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "love_friend_to_love",
+    "sceneLabel": "朋友發展成戀人",
+    "iconKey": "love-social-stars",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 54,
@@ -1377,7 +1832,12 @@
     "fw": "短期內不容易定案，至少還需要一段沉澱與觀察。",
     "sa": "暫停追問，替等待設定期限，期間把生活重心放回自己。抱著希望，也別鬆開健康、尊嚴與底線。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "love_single_self_focus",
+    "sceneLabel": "目前重心不在戀愛",
+    "iconKey": "love-space-moon",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 55,
@@ -1392,7 +1852,12 @@
     "fw": "關係會先經歷不安，再決定是重新靠近還是更成熟地告別。",
     "sa": "不要逃避關鍵問題，語氣可以溫柔，但界線必須清楚。願意回頭重新衡量，不是不堅定，是清醒。",
     "outcome": "turning",
-    "outcomeLabel": "先難後易"
+    "outcomeLabel": "先難後易",
+    "scene": "love_single_self_focus",
+    "sceneLabel": "目前重心不在戀愛",
+    "iconKey": "love-space-moon",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 56,
@@ -1407,7 +1872,12 @@
     "fw": "若模式沒有改變，未來仍可能重複期待與失望的循環。",
     "sa": "停止替對方找理由，只根據持續行動判斷是否值得留下。看不到回應時，停下來並不是失敗。",
     "outcome": "warning",
-    "outcomeLabel": "阻礙提醒"
+    "outcomeLabel": "阻礙提醒",
+    "scene": "love_triangle",
+    "sceneLabel": "第三者／多方選擇",
+    "iconKey": "love-three-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 57,
@@ -1422,7 +1892,12 @@
     "fw": "短期內復合或進一步發展的機會偏低，但離開會替新關係騰出空間。",
     "sa": "允許自己難過，逐步減少關注與聯絡，把未完成的期待收回來。撐與放都行，只是別再假裝沒看見。",
     "outcome": "closure",
-    "outcomeLabel": "結束與轉向"
+    "outcomeLabel": "結束與轉向",
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 58,
@@ -1437,7 +1912,12 @@
     "fw": "若雙方都願意誠實溝通，這段關係可望進入更確定的位置。",
     "sa": "接受對方的靠近，但仍要確認承諾與行動是否一致。把握這股順勢，同時替自己留一手。",
     "outcome": "clear_good",
-    "outcomeLabel": "順勢而成"
+    "outcomeLabel": "順勢而成",
+    "scene": "love_secret_admirer",
+    "sceneLabel": "有人默默注意",
+    "iconKey": "love-eye-rose",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 59,
@@ -1452,7 +1932,12 @@
     "fw": "近期有一次令人振奮的轉折，但仍需透過後續相處確認它能否延續。",
     "sa": "先自然回應，不必因為一個好消息立刻把所有期待壓回關係裡。順的時候更要穩住，好局面才走得長。",
     "outcome": "good_news",
-    "outcomeLabel": "好消息將近"
+    "outcomeLabel": "好消息將近",
+    "scene": "love_old_person_returns",
+    "sceneLabel": "舊人再出現",
+    "iconKey": "love-old-moon",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 60,
@@ -1467,7 +1952,12 @@
     "fw": "關係有望慢慢變好，但不會一夜之間回到你理想的狀態。",
     "sa": "給彼此空間，同時設定自己願意等待的期限。接住眼前的好，腳步也放踏實。",
     "outcome": "slow_good",
-    "outcomeLabel": "緩慢轉好"
+    "outcomeLabel": "緩慢轉好",
+    "scene": "love_single_self_focus",
+    "sceneLabel": "目前重心不在戀愛",
+    "iconKey": "love-space-moon",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 61,
@@ -1482,7 +1972,12 @@
     "fw": "未來一段時間以平穩互動為主，結果取決於日常是否舒服而真誠。",
     "sa": "不必刻意製造進展，先看這種相處是否真的符合你的需要。趁勢把事做成，也別忘了留餘裕。",
     "outcome": "steady",
-    "outcomeLabel": "平穩維持"
+    "outcomeLabel": "平穩維持",
+    "scene": "love_social_chance",
+    "sceneLabel": "社交桃花增加",
+    "iconKey": "love-social-stars",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 62,
@@ -1497,7 +1992,12 @@
     "fw": "短期內不容易定案，至少還需要一段沉澱與觀察。",
     "sa": "暫停追問，替等待設定期限，期間把生活重心放回自己。撐與放都行，只是別再假裝沒看見。",
     "outcome": "waiting",
-    "outcomeLabel": "等待期"
+    "outcomeLabel": "等待期",
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 101,
@@ -1512,7 +2012,12 @@
     "fw": "近期有機會從認識快速進入約會期，桃花屬於偏旺而且能落地的類型。",
     "sa": "別因為選擇變多就只看最會說話的人，穩定與一致更值得留下。",
     "outcome": "clear_good",
-    "outcomeLabel": "桃花盛開"
+    "outcomeLabel": "桃花盛開",
+    "scene": "love_rising_tide",
+    "sceneLabel": "桃花回升",
+    "iconKey": "love-warming-stars",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 102,
@@ -1527,7 +2032,12 @@
     "fw": "短期選擇很多，但真正能走久的未必是最先讓你心跳加速的人。",
     "sa": "不用急著定義關係，給自己兩三次相處去看誰的行動最穩。",
     "outcome": "good_news",
-    "outcomeLabel": "雙桃花"
+    "outcomeLabel": "雙桃花",
+    "scene": "love_triangle",
+    "sceneLabel": "第三者／多方選擇",
+    "iconKey": "love-three-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 103,
@@ -1542,7 +2052,12 @@
     "fw": "若你也有好感，這段關係有機會從熟悉自然轉成曖昧。",
     "sa": "別因為太熟就自動把對方放進朋友區，先看看互動是不是已經變了。",
     "outcome": "clear_good",
-    "outcomeLabel": "熟人桃花"
+    "outcomeLabel": "熟人桃花",
+    "scene": "love_friend_to_love",
+    "sceneLabel": "朋友發展成戀人",
+    "iconKey": "love-social-stars",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 104,
@@ -1557,7 +2072,12 @@
     "fw": "有發展可能，但能不能成真取決於是否願意從線上走到現實見面。",
     "sa": "聊得來之後要安排真實相處，別只用訊息裡的想像判斷適不適合。",
     "outcome": "waiting",
-    "outcomeLabel": "遠距緣分"
+    "outcomeLabel": "遠距緣分",
+    "scene": "love_online_distance",
+    "sceneLabel": "網路／遠距桃花",
+    "iconKey": "love-distance-message",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 105,
@@ -1572,7 +2092,12 @@
     "fw": "屬於越相處越有感覺的桃花，短期不刺激，長期反而比較穩。",
     "sa": "不要因為第一眼沒有火花就立刻淘汰，給舒服的人多一次相處機會。",
     "outcome": "waiting",
-    "outcomeLabel": "慢熱桃花"
+    "outcomeLabel": "慢熱桃花",
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 106,
@@ -1587,7 +2112,12 @@
     "fw": "這段桃花熱度高但穩定度不足，後續可能因生活節奏或新鮮感下降而變淡。",
     "sa": "享受心動可以，但先別因為幾天的熱烈就交出全部期待。",
     "outcome": "mixed",
-    "outcomeLabel": "短暫熱戀"
+    "outcomeLabel": "短暫熱戀",
+    "scene": "love_fast_chemistry",
+    "sceneLabel": "強烈快速吸引",
+    "iconKey": "love-shooting-heart",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 107,
@@ -1602,7 +2132,12 @@
     "fw": "短期不太像會快速進入關係，這是一段感情空窗期。",
     "sa": "不用為了證明自己有人愛而接受不適合的人，空窗也有它的價值。",
     "outcome": "clear_bad",
-    "outcomeLabel": "桃花低潮"
+    "outcomeLabel": "桃花低潮",
+    "scene": "love_low_tide",
+    "sceneLabel": "桃花低潮",
+    "iconKey": "love-fading-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 108,
@@ -1617,7 +2152,12 @@
     "fw": "短期感情不會是生活主線，除非遇到非常契合的人，否則你更想維持自由。",
     "sa": "無欲無求不是問題，不需要因為別人都在談戀愛就逼自己心動。",
     "outcome": "neutral",
-    "outcomeLabel": "無欲無求"
+    "outcomeLabel": "無欲無求",
+    "scene": "love_single_self_focus",
+    "sceneLabel": "目前重心不在戀愛",
+    "iconKey": "love-space-moon",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 109,
@@ -1632,7 +2172,12 @@
     "fw": "有重新互動的機會，但是否值得重來，要看舊問題有沒有真的改變。",
     "sa": "不要只因熟悉感就把它當命中注定，先看對方帶來的是新行動還是舊循環。",
     "outcome": "mixed",
-    "outcomeLabel": "舊緣回返"
+    "outcomeLabel": "舊緣回返",
+    "scene": "love_old_person_returns",
+    "sceneLabel": "舊人再出現",
+    "iconKey": "love-old-moon",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 110,
@@ -1647,7 +2192,12 @@
     "fw": "若繼續投入，可能變成消耗型關係，甚至捲入三角或不對等局面。",
     "sa": "先確認對方是否單身、是否願意公開且一致地靠近你。",
     "outcome": "clear_bad",
-    "outcomeLabel": "爛桃花警示"
+    "outcomeLabel": "爛桃花警示",
+    "scene": "love_unavailable_person",
+    "sceneLabel": "對方已有關係／界線不清",
+    "iconKey": "love-three-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 111,
@@ -1662,7 +2212,12 @@
     "fw": "這段桃花有從欣賞轉成感情的可能，但需要時間確認彼此是否能把工作與私人界線分開。",
     "sa": "先把事情做好，讓關係自然長出來，不必急著在職場裡製造曖昧。",
     "outcome": "good_news",
-    "outcomeLabel": "職場桃花"
+    "outcomeLabel": "職場桃花",
+    "scene": "love_social_chance",
+    "sceneLabel": "社交桃花增加",
+    "iconKey": "love-social-stars",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 112,
@@ -1677,7 +2232,12 @@
     "fw": "若願意出門，近期很可能出現值得繼續約第二次的人。",
     "sa": "別一聽「介紹對象」就先拒絕，這次可以把門開一點。",
     "outcome": "clear_good",
-    "outcomeLabel": "介紹桃花"
+    "outcomeLabel": "介紹桃花",
+    "scene": "love_social_chance",
+    "sceneLabel": "社交桃花增加",
+    "iconKey": "love-social-stars",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 113,
@@ -1692,7 +2252,12 @@
     "fw": "若後續價值觀也合，這是一支很有機會快速發展的好桃花。",
     "sa": "可以主動給回應，不必故意冷淡測試對方。",
     "outcome": "clear_good",
-    "outcomeLabel": "一見鍾情"
+    "outcomeLabel": "一見鍾情",
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 114,
@@ -1707,7 +2272,12 @@
     "fw": "不是完全沒可能，只是短期很難順利進入穩定關係。",
     "sa": "不要用等待證明感情，若時機真的成熟，對方也需要往你這裡走。",
     "outcome": "waiting",
-    "outcomeLabel": "時機未到"
+    "outcomeLabel": "時機未到",
+    "scene": "love_bad_timing",
+    "sceneLabel": "有好感但時機不對",
+    "iconKey": "love-wall",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 115,
@@ -1722,7 +2292,12 @@
     "fw": "這段桃花需要經過真實相處才能知道是不是只愛想像。",
     "sa": "別急著扮演對方喜歡的樣子，越早做自己，越快篩掉不合的人。",
     "outcome": "mixed",
-    "outcomeLabel": "投射型桃花"
+    "outcomeLabel": "投射型桃花",
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 116,
@@ -1737,7 +2312,12 @@
     "fw": "若你給出友善訊號，這段桃花有機會慢慢浮上檯面。",
     "sa": "留意那些「一直都在」的人，也可以適度讓別人知道你願意認識新對象。",
     "outcome": "good_news",
-    "outcomeLabel": "暗桃花"
+    "outcomeLabel": "暗桃花",
+    "scene": "love_secret_admirer",
+    "sceneLabel": "有人默默注意",
+    "iconKey": "love-eye-rose",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 117,
@@ -1752,7 +2332,12 @@
     "fw": "近期桃花靠「流動」而來，宅著會明顯降低它發生的機率。",
     "sa": "答應一兩個原本想拒絕的邀約，讓生活多一點偶然。",
     "outcome": "good_news",
-    "outcomeLabel": "社交桃花"
+    "outcomeLabel": "社交桃花",
+    "scene": "love_social_chance",
+    "sceneLabel": "社交桃花增加",
+    "iconKey": "love-social-stars",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 118,
@@ -1767,7 +2352,12 @@
     "fw": "短期更像療傷期，桃花品質不是最大問題，能不能接住才是關鍵。",
     "sa": "先處理自己的疲憊，不必用下一段感情證明上一段已經過去。",
     "outcome": "neutral",
-    "outcomeLabel": "療傷空窗"
+    "outcomeLabel": "療傷空窗",
+    "scene": "love_single_self_focus",
+    "sceneLabel": "目前重心不在戀愛",
+    "iconKey": "love-space-moon",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 119,
@@ -1782,7 +2372,12 @@
     "fw": "這支偏爛桃花，若沒有一致行動，熱情很可能只是短期刺激。",
     "sa": "把觀察期拉長，不要因為對方說得好聽就提前投入。",
     "outcome": "clear_bad",
-    "outcomeLabel": "甜蜜陷阱"
+    "outcomeLabel": "甜蜜陷阱",
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 120,
@@ -1797,7 +2392,12 @@
     "fw": "短期維持單身的機率高，但這不是壞籤，而是一段乾淨的留白。",
     "sa": "把「沒人愛」和「目前沒有戀愛事件」分開；你的價值不由桃花數量決定。",
     "outcome": "neutral",
-    "outcomeLabel": "純粹空窗"
+    "outcomeLabel": "純粹空窗",
+    "scene": "love_low_tide",
+    "sceneLabel": "桃花低潮",
+    "iconKey": "love-fading-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 121,
@@ -1812,7 +2412,12 @@
     "fw": "近期很有機會從朋友或曖昧進入明確約會，甚至確認關係。",
     "sa": "如果你也喜歡，不需要一直裝作沒看懂；適度回應會讓關係往前。",
     "outcome": "clear_good",
-    "outcomeLabel": "即將成局"
+    "outcomeLabel": "即將成局",
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 122,
@@ -1827,7 +2432,12 @@
     "fw": "短期桃花量可能有，品質卻偏弱，不適合把每一段都看得太重。",
     "sa": "快速篩選、不要追著消失的人跑，把時間留給願意持續出現的人。",
     "outcome": "clear_bad",
-    "outcomeLabel": "有量無質"
+    "outcomeLabel": "有量無質",
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 123,
@@ -1842,7 +2452,12 @@
     "fw": "桃花需要你釋放一點可接近訊號，否則容易停在暗處。",
     "sa": "如果你其實想戀愛，可以多笑、多回應邀約，也讓朋友知道你目前單身。",
     "outcome": "waiting",
-    "outcomeLabel": "高冷阻桃花"
+    "outcomeLabel": "高冷阻桃花",
+    "scene": "love_secret_admirer",
+    "sceneLabel": "有人默默注意",
+    "iconKey": "love-eye-rose",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 124,
@@ -1857,7 +2472,12 @@
     "fw": "這是一段重新學會心動的桃花，發展速度不快，但方向偏正面。",
     "sa": "不要要求自己立刻愛上誰，只要允許新的可能存在就夠了。",
     "outcome": "good_news",
-    "outcomeLabel": "桃花回升"
+    "outcomeLabel": "桃花回升",
+    "scene": "love_rising_tide",
+    "sceneLabel": "桃花回升",
+    "iconKey": "love-warming-stars",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 125,
@@ -1872,7 +2492,12 @@
     "fw": "近期維持單身反而是你最舒服的走向，除非出現真正尊重空間的人。",
     "sa": "不需要把「想一個人」修正成「我是不是沒桃花」，你只是現在更喜歡自己的人生。",
     "outcome": "neutral",
-    "outcomeLabel": "自在單身"
+    "outcomeLabel": "自在單身",
+    "scene": "love_single_self_focus",
+    "sceneLabel": "目前重心不在戀愛",
+    "iconKey": "love-space-moon",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   },
   {
     "n": 126,
@@ -1887,7 +2512,12 @@
     "fw": "有機會遇到合適對象，但前提是你願意淘汰不一致的人，而不是全部留著觀察。",
     "sa": "先寫清楚自己不能接受的三件事，桃花旺時界線比魅力更重要。",
     "outcome": "mixed",
-    "outcomeLabel": "旺中有雜"
+    "outcomeLabel": "旺中有雜",
+    "scene": "love_triangle",
+    "sceneLabel": "第三者／多方選擇",
+    "iconKey": "love-three-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 127,
@@ -1902,7 +2532,12 @@
     "fw": "短期硬衝戀愛容易挫折，等生活圈或節奏變化後才比較有轉機。",
     "sa": "先停止用每一次沒結果否定自己，這一季適合擴圈，不適合逼結果。",
     "outcome": "clear_bad",
-    "outcomeLabel": "桃花寒冬"
+    "outcomeLabel": "桃花寒冬",
+    "scene": "love_low_tide",
+    "sceneLabel": "桃花低潮",
+    "iconKey": "love-fading-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 128,
@@ -1917,7 +2552,12 @@
     "fw": "如果不急著用舊標準淘汰，這段關係可能帶來新的感情體驗。",
     "sa": "把「不是我以前會喜歡的類型」當成觀察，而不是拒絕理由。",
     "outcome": "good_news",
-    "outcomeLabel": "意外桃花"
+    "outcomeLabel": "意外桃花",
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 129,
@@ -1932,7 +2572,12 @@
     "fw": "不是立刻脫單的籤，但比現在更有希望；桃花正在從零走向一。",
     "sa": "別因為現在安靜就認定未來也一樣，先讓自己回到願意認識人的狀態。",
     "outcome": "waiting",
-    "outcomeLabel": "低谷回升"
+    "outcomeLabel": "低谷回升",
+    "scene": "love_low_tide",
+    "sceneLabel": "桃花低潮",
+    "iconKey": "love-fading-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 130,
@@ -1947,7 +2592,12 @@
     "fw": "這支屬於少而精的好桃花，有機會發展成穩定關係。",
     "sa": "不用刻意表現完美，讓對方認識真實的你，反而更容易走長。",
     "outcome": "clear_good",
-    "outcomeLabel": "正緣型桃花"
+    "outcomeLabel": "正緣型桃花",
+    "scene": "love_quality_over_quantity",
+    "sceneLabel": "少而穩的桃花",
+    "iconKey": "love-crystal-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 63,
@@ -1963,7 +2613,12 @@
     "sa": "先看他是否願意做出清楚選擇，不要只因為他回頭就把那當成復合。",
     "outcome": "waiting",
     "outcomeLabel": "尚待選擇",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_triangle",
+    "sceneLabel": "第三者／多方選擇",
+    "iconKey": "love-three-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 64,
@@ -1979,7 +2634,12 @@
     "sa": "可以聽他說，但要確認他已把其他關係處理乾淨，再談重新開始。",
     "outcome": "clear_good",
     "outcomeLabel": "回頭有望",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_rechoose_you",
+    "sceneLabel": "比較後重新看見你",
+    "iconKey": "love-return-choice",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 65,
@@ -1995,7 +2655,12 @@
     "sa": "不要把自己放進比較賽。先接受目前的重心已改變，再決定你還要不要等。",
     "outcome": "clear_bad",
     "outcomeLabel": "緣分轉向",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_attachment",
+    "sceneLabel": "仍有牽掛",
+    "iconKey": "love-red-thread",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 66,
@@ -2011,7 +2676,12 @@
     "sa": "只根據能確認的事實行動，不要用想像折磨自己。",
     "outcome": "unclear",
     "outcomeLabel": "疑影未明",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_triangle",
+    "sceneLabel": "第三者／多方選擇",
+    "iconKey": "love-three-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 67,
@@ -2027,7 +2697,12 @@
     "sa": "把「不選擇」也視為一種選擇。你不需要無限期等待他決定。",
     "outcome": "clear_bad",
     "outcomeLabel": "反覆消耗",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 68,
@@ -2043,7 +2718,12 @@
     "sa": "不要把「被選回來」當勝利，真正重要的是回來後能否建立新的相處方式。",
     "outcome": "turning",
     "outcomeLabel": "局勢回轉",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_rechoose_you",
+    "sceneLabel": "比較後重新看見你",
+    "iconKey": "love-return-choice",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 69,
@@ -2059,7 +2739,12 @@
     "sa": "替等待設期限，不要讓他的猶豫決定你的生活節奏。",
     "outcome": "waiting",
     "outcomeLabel": "等待定局",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 70,
@@ -2075,7 +2760,12 @@
     "sa": "不要只聽「我還是在乎你」，看他是否真的完成上一段關係並承擔選擇。",
     "outcome": "clear_bad",
     "outcomeLabel": "位置未定",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 71,
@@ -2091,7 +2781,12 @@
     "sa": "不要急著搶最後的位置；先讓混亂真正退場。",
     "outcome": "turning",
     "outcomeLabel": "混亂將止",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_move_on",
+    "sceneLabel": "正在放下",
+    "iconKey": "love-release",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 72,
@@ -2107,7 +2802,12 @@
     "sa": "別只問他選不選你，也問自己：現在的你還選不選他。",
     "outcome": "good_news",
     "outcomeLabel": "新局將開",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_triangle",
+    "sceneLabel": "第三者／多方選擇",
+    "iconKey": "love-three-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 63,
@@ -2123,7 +2823,12 @@
     "sa": "不要急著證明自己比較好；看他是否願意主動增加對你的投入。",
     "outcome": "waiting",
     "outcomeLabel": "仍在比較",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 64,
@@ -2139,7 +2844,12 @@
     "sa": "不用和別人比，讓他的持續行動證明選擇。",
     "outcome": "clear_good",
     "outcomeLabel": "心意偏向",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 65,
@@ -2155,7 +2865,12 @@
     "sa": "不要用更多付出換名分。直接觀察他是否願意排除其他曖昧。",
     "outcome": "clear_bad",
     "outcomeLabel": "多線曖昧",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_triangle",
+    "sceneLabel": "第三者／多方選擇",
+    "iconKey": "love-three-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 66,
@@ -2171,7 +2886,12 @@
     "sa": "別把自己當成療傷替代品；讓他先證明自己真的能往前。",
     "outcome": "waiting",
     "outcomeLabel": "舊情牽制",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_ex_still_present",
+    "sceneLabel": "前任影響未退",
+    "iconKey": "love-old-moon",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 67,
@@ -2187,7 +2907,12 @@
     "sa": "先問關係定位，不要先審問不存在的第三者。",
     "outcome": "unclear",
     "outcomeLabel": "未見實證",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 68,
@@ -2203,7 +2928,12 @@
     "sa": "不要急著逼他宣布答案；讓偏向持續變成實際選擇。",
     "outcome": "good_news",
     "outcomeLabel": "後勢看好",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_triangle",
+    "sceneLabel": "第三者／多方選擇",
+    "iconKey": "love-three-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 69,
@@ -2219,7 +2949,12 @@
     "sa": "把失落當成資訊，不要把「沒被選」解讀成自己不值得被愛。",
     "outcome": "clear_bad",
     "outcomeLabel": "緣分止步",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_triangle",
+    "sceneLabel": "第三者／多方選擇",
+    "iconKey": "love-three-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 70,
@@ -2235,7 +2970,12 @@
     "sa": "準備好接受清楚答案，比繼續享受模糊更重要。",
     "outcome": "turning",
     "outcomeLabel": "即將明朗",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_triangle",
+    "sceneLabel": "第三者／多方選擇",
+    "iconKey": "love-three-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 71,
@@ -2251,7 +2991,12 @@
     "sa": "不要讓兩個人替你承擔你的猶豫，先誠實面對自己的需求。",
     "outcome": "turning",
     "outcomeLabel": "心意待明",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_fast_chemistry",
+    "sceneLabel": "強烈快速吸引",
+    "iconKey": "love-shooting-heart",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 72,
@@ -2267,7 +3012,12 @@
     "sa": "你不是一定要贏；有時候離開比被選中更接近你真正想要的愛。",
     "outcome": "good_news",
     "outcomeLabel": "主動離局",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_triangle",
+    "sceneLabel": "第三者／多方選擇",
+    "iconKey": "love-three-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 63,
@@ -2283,7 +3033,12 @@
     "sa": "先談你觀察到的具體改變，不要直接用「你是不是劈腿」開始對話。",
     "outcome": "turning",
     "outcomeLabel": "界線需修",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_triangle",
+    "sceneLabel": "第三者／多方選擇",
+    "iconKey": "love-three-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 64,
@@ -2299,7 +3054,12 @@
     "sa": "可以談界線，但不必把一次誘惑直接判成背叛。",
     "outcome": "clear_good",
     "outcomeLabel": "守住承諾",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 65,
@@ -2315,7 +3075,12 @@
     "sa": "保護自己並要求清楚界線；不要靠更討好來搶回注意力。",
     "outcome": "clear_bad",
     "outcomeLabel": "情感偏移",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_triangle",
+    "sceneLabel": "第三者／多方選擇",
+    "iconKey": "love-three-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 66,
@@ -2331,7 +3096,12 @@
     "sa": "不要和前任競爭歷史；你真正要看的，是伴侶現在如何選擇。",
     "outcome": "waiting",
     "outcomeLabel": "舊情試煉",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_ex_still_present",
+    "sceneLabel": "前任影響未退",
+    "iconKey": "love-old-moon",
+    "icon": "/assets/oracle-icons/oracle-thought.webp",
+    "oracleSymbol": "thought"
   },
   {
     "n": 67,
@@ -2347,7 +3117,12 @@
     "sa": "不要把籤當成抓姦證據；只針對可確認的行為談界線。",
     "outcome": "unclear",
     "outcomeLabel": "先查事實",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_withdrawal",
+    "sceneLabel": "對方抽離",
+    "iconKey": "love-flying-butterfly",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 68,
@@ -2363,7 +3138,12 @@
     "sa": "先確認事實，再決定修復或離開；不要在情緒最高點做報復性決定。",
     "outcome": "turning",
     "outcomeLabel": "真相將明",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_triangle",
+    "sceneLabel": "第三者／多方選擇",
+    "iconKey": "love-three-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 69,
@@ -2379,7 +3159,12 @@
     "sa": "原諒可以慢，但修復必須有可觀察的行動。",
     "outcome": "good_news",
     "outcomeLabel": "修復有望",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_trust_repair",
+    "sceneLabel": "信任修復",
+    "iconKey": "love-mended-heart",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 70,
@@ -2395,7 +3180,12 @@
     "sa": "界線要有後果。你不必接受一段永遠靠你忍耐才能維持的關係。",
     "outcome": "clear_bad",
     "outcomeLabel": "貪戀兩端",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 71,
@@ -2411,7 +3201,12 @@
     "sa": "別只把所有責任丟給外人；先確認這段關係本身還願不願意一起修。",
     "outcome": "turning",
     "outcomeLabel": "回看根源",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 72,
@@ -2427,7 +3222,12 @@
     "sa": "先問自己缺的是什麼，再決定修復原關係或結束後重新開始，不要同時拖著兩段。",
     "outcome": "turning",
     "outcomeLabel": "心向外移",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 63,
@@ -2443,7 +3243,12 @@
     "sa": "不用急著選最心動的，先看誰讓你不需要猜。",
     "outcome": "good_news",
     "outcomeLabel": "雙緣並至",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_triangle",
+    "sceneLabel": "第三者／多方選擇",
+    "iconKey": "love-three-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 64,
@@ -2459,7 +3264,12 @@
     "sa": "在投入以前先確認對方是否真正單身；模糊回答本身就是訊號。",
     "outcome": "clear_bad",
     "outcomeLabel": "複雜桃花",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_unavailable_person",
+    "sceneLabel": "對方已有關係／界線不清",
+    "iconKey": "love-three-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 65,
@@ -2475,7 +3285,12 @@
     "sa": "不要替隱瞞者承擔羞愧；先把自己的界線放回來。",
     "outcome": "clear_bad",
     "outcomeLabel": "真相後至",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_unavailable_person",
+    "sceneLabel": "對方已有關係／界線不清",
+    "iconKey": "love-three-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 66,
@@ -2491,7 +3306,12 @@
     "sa": "不要參加一場沒人要求你參加的比賽。",
     "outcome": "waiting",
     "outcomeLabel": "無須競逐",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 67,
@@ -2507,7 +3327,12 @@
     "sa": "先弄清楚你想要的關係，再誠實處理彼此期待。",
     "outcome": "turning",
     "outcomeLabel": "選擇在你",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_triangle",
+    "sceneLabel": "第三者／多方選擇",
+    "iconKey": "love-three-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 68,
@@ -2523,7 +3348,12 @@
     "sa": "不用為了「有人愛」而硬把普通關係變成戀愛。",
     "outcome": "neutral",
     "outcomeLabel": "感情清靜",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 69,
@@ -2539,7 +3369,12 @@
     "sa": "不要利用另一個人刺激真正喜歡的人，越簡單越好。",
     "outcome": "turning",
     "outcomeLabel": "友情生變",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 70,
@@ -2555,7 +3390,12 @@
     "sa": "把穩定當成吸引力的一部分，不要只追逐最讓你焦慮的人。",
     "outcome": "clear_good",
     "outcomeLabel": "良緣可辨",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_new_chance",
+    "sceneLabel": "新緣接近",
+    "iconKey": "love-new-moon-rose",
+    "icon": "/assets/oracle-icons/oracle-bond.webp",
+    "oracleSymbol": "bond"
   },
   {
     "n": 71,
@@ -2571,7 +3411,12 @@
     "sa": "不要因為歷史比較長就自動把舊人排第一。",
     "outcome": "turning",
     "outcomeLabel": "新舊交會",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_triangle",
+    "sceneLabel": "第三者／多方選擇",
+    "iconKey": "love-three-stars",
+    "icon": "/assets/oracle-icons/oracle-block.webp",
+    "oracleSymbol": "block"
   },
   {
     "n": 72,
@@ -2587,6 +3432,11 @@
     "sa": "不需要因為「條件不錯」就逼自己心動。無欲無求也是一種答案。",
     "outcome": "neutral",
     "outcomeLabel": "自在無求",
-    "triangleV1": true
+    "triangleV1": true,
+    "scene": "love_single_self_focus",
+    "sceneLabel": "目前重心不在戀愛",
+    "iconKey": "love-space-moon",
+    "icon": "/assets/oracle-icons/oracle-timing.webp",
+    "oracleSymbol": "timing"
   }
 ]

@@ -1,0 +1,1458 @@
+[
+  {
+    "scene": "path_external_noise",
+    "name": "外界聲音太多",
+    "visual": "中央羅盤被多個對話星環繞",
+    "world": "人生／選擇",
+    "count": 35,
+    "examples": [
+      "life｜迷茫中｜留白",
+      "life｜迷茫中｜風鈴",
+      "life｜迷茫中｜小獸入夢",
+      "life｜迷茫中｜庭院"
+    ],
+    "asset": "/assets/oracle-icons/path_external_noise.webp",
+    "iconKey": "path_external_noise"
+  },
+  {
+    "scene": "path_inner_preference",
+    "name": "其實已有偏向",
+    "visual": "羅盤指向其中一條發光路",
+    "world": "人生／選擇",
+    "count": 35,
+    "examples": [
+      "life｜迷茫中｜雨後",
+      "life｜迷茫中｜山泉",
+      "life｜迷茫中｜新的頁面",
+      "life｜迷茫中｜星屑口袋"
+    ],
+    "asset": "/assets/oracle-icons/path_inner_preference.webp",
+    "iconKey": "path_inner_preference"
+  },
+  {
+    "scene": "path_narrow_problem",
+    "name": "先縮小問題",
+    "visual": "多條路收束成一道光",
+    "world": "人生／選擇",
+    "count": 35,
+    "examples": [
+      "life｜迷茫中｜夜航",
+      "life｜迷茫中｜慢慢亮",
+      "life｜迷茫中｜窗邊的風",
+      "life｜迷茫中｜舊外套"
+    ],
+    "asset": "/assets/oracle-icons/path_narrow_problem.webp",
+    "iconKey": "path_narrow_problem"
+  },
+  {
+    "scene": "path_not_revealed",
+    "name": "答案尚未顯現",
+    "visual": "霧中岔路、半月",
+    "world": "人生／選擇",
+    "count": 35,
+    "examples": [
+      "life｜迷茫中｜溫柔的力量",
+      "life｜迷茫中｜落葉",
+      "life｜迷茫中｜星河",
+      "life｜迷茫中｜午後鐘聲"
+    ],
+    "asset": "/assets/oracle-icons/path_not_revealed.webp",
+    "iconKey": "path_not_revealed"
+  },
+  {
+    "scene": "path_small_test",
+    "name": "先小規模試驗",
+    "visual": "小船試航、近岸星光",
+    "world": "人生／選擇",
+    "count": 35,
+    "examples": [
+      "life｜迷茫中｜微光",
+      "life｜迷茫中｜歸途",
+      "life｜迷茫中｜月光洗塵",
+      "life｜迷茫中｜雨聲書頁"
+    ],
+    "asset": "/assets/oracle-icons/path_small_test.webp",
+    "iconKey": "path_small_test"
+  },
+  {
+    "scene": "work_burnout",
+    "name": "短期倦怠",
+    "visual": "低電量星火、休息月",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜迷惘中｜門縫有光",
+      "work｜迷惘中｜渡口",
+      "work｜迷惘中｜磨亮的刃",
+      "work｜迷惘中｜退潮見礁"
+    ],
+    "asset": "/assets/oracle-icons/work-rest.webp",
+    "iconKey": "work-rest"
+  },
+  {
+    "scene": "work_collab",
+    "name": "合作機會",
+    "visual": "兩把鑰匙交會、握手星",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜創業中｜逆風之帆",
+      "work｜創業中｜石中之玉",
+      "work｜創業中｜北星",
+      "work｜創業中｜種子庫"
+    ],
+    "asset": "/assets/oracle-icons/work-handshake.webp",
+    "iconKey": "work-handshake"
+  },
+  {
+    "scene": "work_conflict",
+    "name": "衝突浮現",
+    "visual": "交叉閃電、裂開對話框",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜職場中｜山不催人",
+      "work｜職場中｜慢火",
+      "work｜職場中｜暗潮",
+      "work｜職場中｜新枝"
+    ],
+    "asset": "/assets/oracle-icons/work-lightning.webp",
+    "iconKey": "work-lightning"
+  },
+  {
+    "scene": "work_conversion",
+    "name": "有曝光沒成交",
+    "visual": "很多星光流向關閉錢袋",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜創業中｜星火",
+      "work｜創業中｜鐘聲將響",
+      "work｜創業中｜留下痕跡",
+      "work｜創業中｜高塔之窗"
+    ],
+    "asset": "/assets/oracle-icons/work-focus.webp",
+    "iconKey": "work-focus"
+  },
+  {
+    "scene": "work_culture_risk",
+    "name": "文化適配風險",
+    "visual": "拼圖缺口、辦公室門",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜求職中｜山不催人",
+      "work｜求職中｜慢火",
+      "work｜求職中｜暗潮",
+      "work｜求職中｜新枝"
+    ],
+    "asset": "/assets/oracle-icons/work-puzzle.webp",
+    "iconKey": "work-puzzle"
+  },
+  {
+    "scene": "work_environment_block",
+    "name": "環境才是阻礙",
+    "visual": "被牆擋住的發光種子",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜迷惘中｜星火",
+      "work｜迷惘中｜鐘聲將響",
+      "work｜迷惘中｜留下痕跡",
+      "work｜迷惘中｜高塔之窗"
+    ],
+    "asset": "/assets/oracle-icons/work-ceiling.webp",
+    "iconKey": "work-ceiling"
+  },
+  {
+    "scene": "work_external_move",
+    "name": "外部機會更好",
+    "visual": "打開的外門、遠方星光",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜轉職中｜星火",
+      "work｜轉職中｜鐘聲將響",
+      "work｜轉職中｜留下痕跡",
+      "work｜轉職中｜高塔之窗"
+    ],
+    "asset": "/assets/oracle-icons/work-open-door.webp",
+    "iconKey": "work-open-door"
+  },
+  {
+    "scene": "work_internal_move",
+    "name": "內轉更順",
+    "visual": "建築內部上行階梯",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜轉職中｜逆風之帆",
+      "work｜轉職中｜石中之玉",
+      "work｜轉職中｜北星",
+      "work｜轉職中｜種子庫"
+    ],
+    "asset": "/assets/oracle-icons/work-keys.webp",
+    "iconKey": "work-keys"
+  },
+  {
+    "scene": "work_interview_strength",
+    "name": "面試比履歷強",
+    "visual": "麥克風星光、發亮履歷",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜求職中｜星火",
+      "work｜求職中｜鐘聲將響",
+      "work｜求職中｜留下痕跡",
+      "work｜求職中｜高塔之窗"
+    ],
+    "asset": "/assets/oracle-icons/work-resume.webp",
+    "iconKey": "work-resume"
+  },
+  {
+    "scene": "work_learning_ceiling",
+    "name": "現職學習到頂",
+    "visual": "階梯碰到天花板、旁邊新門",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜迷惘中｜霧裡的燈",
+      "work｜迷惘中｜換一扇窗",
+      "work｜迷惘中｜風起之前",
+      "work｜迷惘中｜借風"
+    ],
+    "asset": "/assets/oracle-icons/work-ceiling.webp",
+    "iconKey": "work-ceiling"
+  },
+  {
+    "scene": "work_long_process",
+    "name": "流程拉長",
+    "visual": "沙漏、文件與時鐘",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜求職中｜逆風之帆",
+      "work｜求職中｜石中之玉",
+      "work｜求職中｜北星",
+      "work｜求職中｜種子庫"
+    ],
+    "asset": "/assets/oracle-icons/work-hourglass.webp",
+    "iconKey": "work-hourglass"
+  },
+  {
+    "scene": "work_manager_watch",
+    "name": "主管觀察",
+    "visual": "眼眸星、文件夾",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜職場中｜霧裡的燈",
+      "work｜職場中｜換一扇窗",
+      "work｜職場中｜風起之前",
+      "work｜職場中｜借風"
+    ],
+    "asset": "/assets/oracle-icons/work-eye-file.webp",
+    "iconKey": "work-eye-file"
+  },
+  {
+    "scene": "work_market_focus",
+    "name": "市場有需求但定位太寬",
+    "visual": "聚焦鏡對準星群",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜創業中｜霧裡的燈",
+      "work｜創業中｜換一扇窗",
+      "work｜創業中｜風起之前",
+      "work｜創業中｜借風"
+    ],
+    "asset": "/assets/oracle-icons/work-focus.webp",
+    "iconKey": "work-focus"
+  },
+  {
+    "scene": "work_offer_choice",
+    "name": "第一個機會未必最好",
+    "visual": "兩封 offer 信、一明一暗",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜求職中｜門縫有光",
+      "work｜求職中｜渡口",
+      "work｜求職中｜磨亮的刃",
+      "work｜求職中｜退潮見礁"
+    ],
+    "asset": "/assets/oracle-icons/work-two-offers.webp",
+    "iconKey": "work-two-offers"
+  },
+  {
+    "scene": "work_product_iteration",
+    "name": "產品需再調整",
+    "visual": "水晶齒輪、第二圈星環",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜創業中｜門縫有光",
+      "work｜創業中｜渡口",
+      "work｜創業中｜磨亮的刃",
+      "work｜創業中｜退潮見礁"
+    ],
+    "asset": "/assets/oracle-icons/work-gear.webp",
+    "iconKey": "work-gear"
+  },
+  {
+    "scene": "work_resume_focus",
+    "name": "履歷定位不集中",
+    "visual": "散頁履歷收束成一張星圖",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜求職中｜霧裡的燈",
+      "work｜求職中｜換一扇窗",
+      "work｜求職中｜風起之前",
+      "work｜求職中｜借風"
+    ],
+    "asset": "/assets/oracle-icons/work-resume.webp",
+    "iconKey": "work-resume"
+  },
+  {
+    "scene": "work_salary_later",
+    "name": "薪資先平後升",
+    "visual": "平緩後上升的金幣星軌",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜轉職中｜門縫有光",
+      "work｜轉職中｜渡口",
+      "work｜轉職中｜磨亮的刃",
+      "work｜轉職中｜退潮見礁"
+    ],
+    "asset": "/assets/oracle-icons/work-coins-up.webp",
+    "iconKey": "work-coins-up"
+  },
+  {
+    "scene": "work_scattered_goal",
+    "name": "目標太散",
+    "visual": "多支箭頭、中央羅盤",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜迷惘中｜逆風之帆",
+      "work｜迷惘中｜石中之玉",
+      "work｜迷惘中｜北星",
+      "work｜迷惘中｜種子庫"
+    ],
+    "asset": "/assets/oracle-icons/work-compass.webp",
+    "iconKey": "work-compass"
+  },
+  {
+    "scene": "work_slow_growth",
+    "name": "成長慢",
+    "visual": "嫩芽沿階梯慢慢長高",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜創業中｜山不催人",
+      "work｜創業中｜慢火",
+      "work｜創業中｜暗潮",
+      "work｜創業中｜新枝"
+    ],
+    "asset": "/assets/oracle-icons/work-coins-up.webp",
+    "iconKey": "work-coins-up"
+  },
+  {
+    "scene": "work_team_change",
+    "name": "團隊變動",
+    "visual": "移動的棋子與星圖",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜職場中｜逆風之帆",
+      "work｜職場中｜石中之玉",
+      "work｜職場中｜北星",
+      "work｜職場中｜種子庫"
+    ],
+    "asset": "/assets/oracle-icons/work-chess.webp",
+    "iconKey": "work-chess"
+  },
+  {
+    "scene": "work_team_reserve",
+    "name": "同事合作保留",
+    "visual": "兩隻手尚未相握、薄霧",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜職場中｜門縫有光",
+      "work｜職場中｜渡口",
+      "work｜職場中｜磨亮的刃",
+      "work｜職場中｜退潮見礁"
+    ],
+    "asset": "/assets/oracle-icons/work-puzzle.webp",
+    "iconKey": "work-puzzle"
+  },
+  {
+    "scene": "work_timing_not_yet",
+    "name": "方向對但時間未到",
+    "visual": "羅盤指向正確、前方沙漏",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜轉職中｜霧裡的燈",
+      "work｜轉職中｜換一扇窗",
+      "work｜轉職中｜風起之前",
+      "work｜轉職中｜借風"
+    ],
+    "asset": "/assets/oracle-icons/work-compass.webp",
+    "iconKey": "work-compass"
+  },
+  {
+    "scene": "work_transferable_skill",
+    "name": "能力可轉移",
+    "visual": "工具箱變成多把鑰匙",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜迷惘中｜山不催人",
+      "work｜迷惘中｜慢火",
+      "work｜迷惘中｜暗潮",
+      "work｜迷惘中｜新枝"
+    ],
+    "asset": "/assets/oracle-icons/work-keys.webp",
+    "iconKey": "work-keys"
+  },
+  {
+    "scene": "work_undervalued",
+    "name": "成果被低估",
+    "visual": "被陰影遮住的獎章",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜職場中｜星火",
+      "work｜職場中｜鐘聲將響",
+      "work｜職場中｜留下痕跡",
+      "work｜職場中｜高塔之窗"
+    ],
+    "asset": "/assets/oracle-icons/work-eye-file.webp",
+    "iconKey": "work-eye-file"
+  },
+  {
+    "scene": "work_wrong_offer_first",
+    "name": "先遇到不合適機會",
+    "visual": "錯誤鑰匙與真正發光鑰匙",
+    "world": "工作",
+    "count": 5,
+    "examples": [
+      "work｜轉職中｜山不催人",
+      "work｜轉職中｜慢火",
+      "work｜轉職中｜暗潮",
+      "work｜轉職中｜新枝"
+    ],
+    "asset": "/assets/oracle-icons/work-two-offers.webp",
+    "iconKey": "work-two-offers"
+  },
+  {
+    "scene": "love_attachment",
+    "name": "仍有牽掛",
+    "visual": "彎月、未斷紅線、兩顆相望星",
+    "world": "愛情",
+    "count": 4,
+    "examples": [
+      "love｜失戀中｜月影未央",
+      "love｜失戀中｜春信",
+      "love｜失戀中｜潮汐相認",
+      "love｜失戀中｜新枝已長"
+    ],
+    "asset": "/assets/oracle-icons/love-red-thread.webp",
+    "iconKey": "love-red-thread"
+  },
+  {
+    "scene": "love_bad_timing",
+    "name": "有好感但時機不對",
+    "visual": "沙漏、含苞玫瑰",
+    "world": "愛情",
+    "count": 1,
+    "examples": [
+      "love｜桃花運勢｜錯季的花"
+    ],
+    "asset": "/assets/oracle-icons/love-wall.webp",
+    "iconKey": "love-wall"
+  },
+  {
+    "scene": "love_defensive",
+    "name": "生氣與防衛",
+    "visual": "荊棘愛心、半閉的門",
+    "world": "愛情",
+    "count": 3,
+    "examples": [
+      "love｜失戀中｜風向轉了",
+      "love｜失戀中｜未寄的信",
+      "love｜失戀中｜星光有期"
+    ],
+    "asset": "/assets/oracle-icons/love-thorns.webp",
+    "iconKey": "love-thorns"
+  },
+  {
+    "scene": "love_ex_still_present",
+    "name": "前任影響未退",
+    "visual": "舊月影覆在新玫瑰後",
+    "world": "愛情",
+    "count": 4,
+    "examples": [
+      "love｜曖昧中｜雲後有月",
+      "love｜曖昧中｜雨中共傘",
+      "love｜曖昧中｜舊人插隊",
+      "love｜關係中｜舊愛回潮"
+    ],
+    "asset": "/assets/oracle-icons/love-old-moon.webp",
+    "iconKey": "love-old-moon"
+  },
+  {
+    "scene": "love_external_pressure",
+    "name": "外部壓力",
+    "visual": "雙心外圍被雲霧與鎖鏈包圍",
+    "world": "愛情",
+    "count": 2,
+    "examples": [
+      "love｜關係中｜兩岸之間",
+      "love｜關係中｜蝶停掌心"
+    ],
+    "asset": "/assets/oracle-icons/love-cloud-chain.webp",
+    "iconKey": "love-cloud-chain"
+  },
+  {
+    "scene": "love_fast_chemistry",
+    "name": "強烈快速吸引",
+    "visual": "燃燒流星心、火花",
+    "world": "愛情",
+    "count": 2,
+    "examples": [
+      "love｜桃花運勢｜盛夏煙火",
+      "love｜曖昧中｜你有兩心"
+    ],
+    "asset": "/assets/oracle-icons/love-shooting-heart.webp",
+    "iconKey": "love-shooting-heart"
+  },
+  {
+    "scene": "love_fear_rejection",
+    "name": "害怕被拒絕",
+    "visual": "封口信、躲在月後的心",
+    "world": "愛情",
+    "count": 2,
+    "examples": [
+      "love｜曖昧中｜燈還亮著",
+      "love｜曖昧中｜並肩的路"
+    ],
+    "asset": "/assets/oracle-icons/love-unsent-letter.webp",
+    "iconKey": "love-unsent-letter"
+  },
+  {
+    "scene": "love_friend_to_love",
+    "name": "朋友發展成戀人",
+    "visual": "並肩雙星逐漸連上紅線",
+    "world": "愛情",
+    "count": 3,
+    "examples": [
+      "love｜單身中｜燈還亮著",
+      "love｜單身中｜並肩的路",
+      "love｜桃花運勢｜紅線靠岸"
+    ],
+    "asset": "/assets/oracle-icons/love-social-stars.webp",
+    "iconKey": "love-social-stars"
+  },
+  {
+    "scene": "love_friendzone",
+    "name": "只想當朋友",
+    "visual": "並排但分開的雙星、淡色紅線",
+    "world": "愛情",
+    "count": 5,
+    "examples": [
+      "love｜失戀中｜燈還亮著",
+      "love｜失戀中｜並肩的路",
+      "love｜曖昧中｜星落於你",
+      "love｜曖昧中｜晨霧散去"
+    ],
+    "asset": "/assets/oracle-icons/love-friends.webp",
+    "iconKey": "love-friends"
+  },
+  {
+    "scene": "love_future_plan",
+    "name": "考慮長期未來",
+    "visual": "雙環、房屋星光、長紅線",
+    "world": "愛情",
+    "count": 3,
+    "examples": [
+      "love｜關係中｜星落於你",
+      "love｜關係中｜晨霧散去",
+      "love｜關係中｜花開兩處"
+    ],
+    "asset": "/assets/oracle-icons/love-rings-home.webp",
+    "iconKey": "love-rings-home"
+  },
+  {
+    "scene": "love_guilt",
+    "name": "愧疚但未必復合",
+    "visual": "垂落玫瑰、道歉信",
+    "world": "愛情",
+    "count": 2,
+    "examples": [
+      "love｜失戀中｜雲後有月",
+      "love｜失戀中｜雨中共傘"
+    ],
+    "asset": "/assets/oracle-icons/love-fallen-rose.webp",
+    "iconKey": "love-fallen-rose"
+  },
+  {
+    "scene": "love_heat_down",
+    "name": "關係降溫",
+    "visual": "遠離雙星、落下花瓣",
+    "world": "愛情",
+    "count": 2,
+    "examples": [
+      "love｜曖昧中｜鬆開掌心",
+      "love｜曖昧中｜月下來客"
+    ],
+    "asset": "/assets/oracle-icons/love-fading-stars.webp",
+    "iconKey": "love-fading-stars"
+  },
+  {
+    "scene": "love_heat_up",
+    "name": "關係升溫",
+    "visual": "雙星交會、盛開玫瑰",
+    "world": "愛情",
+    "count": 2,
+    "examples": [
+      "love｜曖昧中｜回聲",
+      "love｜曖昧中｜紅線鬆結"
+    ],
+    "asset": "/assets/oracle-icons/love-warming-stars.webp",
+    "iconKey": "love-warming-stars"
+  },
+  {
+    "scene": "love_imbalance",
+    "name": "投入失衡",
+    "visual": "不平衡天秤、大小不一雙心",
+    "world": "愛情",
+    "count": 2,
+    "examples": [
+      "love｜關係中｜燈還亮著",
+      "love｜關係中｜並肩的路"
+    ],
+    "asset": "/assets/oracle-icons/love-balance.webp",
+    "iconKey": "love-balance"
+  },
+  {
+    "scene": "love_lonely_contact",
+    "name": "寂寞才靠近",
+    "visual": "午夜月、忽明忽暗的信封",
+    "world": "愛情",
+    "count": 3,
+    "examples": [
+      "love｜失戀中｜星落於你",
+      "love｜失戀中｜晨霧散去",
+      "love｜失戀中｜花開兩處"
+    ],
+    "asset": "/assets/oracle-icons/love-midnight-message.webp",
+    "iconKey": "love-midnight-message"
+  },
+  {
+    "scene": "love_low_tide",
+    "name": "桃花低潮",
+    "visual": "新月、沉睡花苞",
+    "world": "愛情",
+    "count": 4,
+    "examples": [
+      "love｜桃花運勢｜空椅無人",
+      "love｜桃花運勢｜白紙一頁",
+      "love｜桃花運勢｜逆風無花",
+      "love｜桃花運勢｜長夜有晨"
+    ],
+    "asset": "/assets/oracle-icons/love-fading-stars.webp",
+    "iconKey": "love-fading-stars"
+  },
+  {
+    "scene": "love_move_on",
+    "name": "正在放下",
+    "visual": "鬆開的紅線、向前飛的蝴蝶",
+    "world": "愛情",
+    "count": 6,
+    "examples": [
+      "love｜失戀中｜潮聲未止",
+      "love｜失戀中｜鬆開掌心",
+      "love｜失戀中｜心有歸處",
+      "love｜失戀中｜月下來客"
+    ],
+    "asset": "/assets/oracle-icons/love-release.webp",
+    "iconKey": "love-release"
+  },
+  {
+    "scene": "love_mutual_testing",
+    "name": "雙向好感互相試探",
+    "visual": "兩隻靠近的蝴蝶、雙星",
+    "world": "愛情",
+    "count": 3,
+    "examples": [
+      "love｜曖昧中｜月影未央",
+      "love｜曖昧中｜春信",
+      "love｜曖昧中｜潮汐相認"
+    ],
+    "asset": "/assets/oracle-icons/love-double-stars.webp",
+    "iconKey": "love-double-stars"
+  },
+  {
+    "scene": "love_need_security",
+    "name": "需要安全感",
+    "visual": "被雙手包覆的心形水晶",
+    "world": "愛情",
+    "count": 3,
+    "examples": [
+      "love｜關係中｜花未眠",
+      "love｜關係中｜舊夢醒時",
+      "love｜關係中｜鏡中花"
+    ],
+    "asset": "/assets/oracle-icons/love-embrace-heart.webp",
+    "iconKey": "love-embrace-heart"
+  },
+  {
+    "scene": "love_need_space",
+    "name": "需要空間",
+    "visual": "月亮與獨立小星、留白紅線",
+    "world": "愛情",
+    "count": 3,
+    "examples": [
+      "love｜關係中｜潮聲未止",
+      "love｜關係中｜心有歸處",
+      "love｜關係中｜暖燈"
+    ],
+    "asset": "/assets/oracle-icons/love-space-moon.webp",
+    "iconKey": "love-space-moon"
+  },
+  {
+    "scene": "love_new_chance",
+    "name": "新緣接近",
+    "visual": "新月、初開玫瑰、流星",
+    "world": "愛情",
+    "count": 92,
+    "examples": [
+      "love｜單身中｜風向轉了",
+      "love｜單身中｜鬆開掌心",
+      "love｜單身中｜未寄的信",
+      "love｜單身中｜月下來客"
+    ],
+    "asset": "/assets/oracle-icons/love-new-moon-rose.webp",
+    "iconKey": "love-new-moon-rose"
+  },
+  {
+    "scene": "love_new_stage",
+    "name": "關係新階段",
+    "visual": "打開的金門、雙星穿越",
+    "world": "愛情",
+    "count": 2,
+    "examples": [
+      "love｜關係中｜鬆開掌心",
+      "love｜關係中｜月下來客"
+    ],
+    "asset": "/assets/oracle-icons/love-rings-home.webp",
+    "iconKey": "love-rings-home"
+  },
+  {
+    "scene": "love_no_commitment",
+    "name": "享受曖昧不承諾",
+    "visual": "半開玫瑰、鬆散紅線",
+    "world": "愛情",
+    "count": 3,
+    "examples": [
+      "love｜曖昧中｜潮聲未止",
+      "love｜曖昧中｜心有歸處",
+      "love｜曖昧中｜暖燈"
+    ],
+    "asset": "/assets/oracle-icons/love-half-open-rose.webp",
+    "iconKey": "love-half-open-rose"
+  },
+  {
+    "scene": "love_observing",
+    "name": "有好感仍觀察",
+    "visual": "眼眸星、含苞玫瑰",
+    "world": "愛情",
+    "count": 3,
+    "examples": [
+      "love｜曖昧中｜花未眠",
+      "love｜曖昧中｜舊夢醒時",
+      "love｜曖昧中｜鏡中花"
+    ],
+    "asset": "/assets/oracle-icons/love-eye-rose.webp",
+    "iconKey": "love-eye-rose"
+  },
+  {
+    "scene": "love_old_person_returns",
+    "name": "舊人再出現",
+    "visual": "回返流星、舊信封",
+    "world": "愛情",
+    "count": 4,
+    "examples": [
+      "love｜單身中｜花未眠",
+      "love｜單身中｜舊夢醒時",
+      "love｜單身中｜鏡中花",
+      "love｜桃花運勢｜舊花回春"
+    ],
+    "asset": "/assets/oracle-icons/love-old-moon.webp",
+    "iconKey": "love-old-moon"
+  },
+  {
+    "scene": "love_old_wound",
+    "name": "舊傷反覆",
+    "visual": "裂痕愛心、循環月相",
+    "world": "愛情",
+    "count": 3,
+    "examples": [
+      "love｜關係中｜風向轉了",
+      "love｜關係中｜未寄的信",
+      "love｜關係中｜星光有期"
+    ],
+    "asset": "/assets/oracle-icons/love-thorns.webp",
+    "iconKey": "love-thorns"
+  },
+  {
+    "scene": "love_online_distance",
+    "name": "網路／遠距桃花",
+    "visual": "兩端星球、訊息光線",
+    "world": "愛情",
+    "count": 1,
+    "examples": [
+      "love｜桃花運勢｜遠方來信"
+    ],
+    "asset": "/assets/oracle-icons/love-distance-message.webp",
+    "iconKey": "love-distance-message"
+  },
+  {
+    "scene": "love_quality_over_quantity",
+    "name": "少而穩的桃花",
+    "visual": "單朵水晶玫瑰、穩定星環",
+    "world": "愛情",
+    "count": 1,
+    "examples": [
+      "love｜桃花運勢｜願者自來"
+    ],
+    "asset": "/assets/oracle-icons/love-crystal-rose.webp",
+    "iconKey": "love-crystal-rose"
+  },
+  {
+    "scene": "love_reality_block",
+    "name": "現實阻礙",
+    "visual": "紅線穿過高牆、遠距雙星",
+    "world": "愛情",
+    "count": 5,
+    "examples": [
+      "love｜失戀中｜回聲",
+      "love｜失戀中｜紅線鬆結",
+      "monthly｜需要繼續等他嗎｜隔海的燈",
+      "monthly｜需要繼續等他嗎｜時差"
+    ],
+    "asset": "/assets/oracle-icons/love-wall.webp",
+    "iconKey": "love-wall"
+  },
+  {
+    "scene": "love_rechoose_you",
+    "name": "比較後重新看見你",
+    "visual": "三星彩光收束成雙星",
+    "world": "愛情",
+    "count": 2,
+    "examples": [
+      "love｜失戀中｜回身有岸",
+      "love｜失戀中｜舊愛勝出"
+    ],
+    "asset": "/assets/oracle-icons/love-return-choice.webp",
+    "iconKey": "love-return-choice"
+  },
+  {
+    "scene": "love_regret",
+    "name": "後悔與害怕重來",
+    "visual": "裂痕修補中的愛心水晶、回望月",
+    "world": "愛情",
+    "count": 3,
+    "examples": [
+      "love｜失戀中｜花未眠",
+      "love｜失戀中｜舊夢醒時",
+      "love｜失戀中｜鏡中花"
+    ],
+    "asset": "/assets/oracle-icons/love-red-thread.webp",
+    "iconKey": "love-red-thread"
+  },
+  {
+    "scene": "love_rising_tide",
+    "name": "桃花回升",
+    "visual": "上弦月、逐漸亮起的玫瑰",
+    "world": "愛情",
+    "count": 2,
+    "examples": [
+      "love｜桃花運勢｜花門大開",
+      "love｜桃花運勢｜心門重開"
+    ],
+    "asset": "/assets/oracle-icons/love-warming-stars.webp",
+    "iconKey": "love-warming-stars"
+  },
+  {
+    "scene": "love_safe_but_tired",
+    "name": "相愛但疲憊",
+    "visual": "相依雙心、低垂月光",
+    "world": "愛情",
+    "count": 3,
+    "examples": [
+      "love｜關係中｜月影未央",
+      "love｜關係中｜春信",
+      "love｜關係中｜潮汐相認"
+    ],
+    "asset": "/assets/oracle-icons/love-embrace-heart.webp",
+    "iconKey": "love-embrace-heart"
+  },
+  {
+    "scene": "love_secret_admirer",
+    "name": "有人默默注意",
+    "visual": "眼眸星、藏在雲後的小心",
+    "world": "愛情",
+    "count": 5,
+    "examples": [
+      "love｜單身中｜月影未央",
+      "love｜單身中｜春信",
+      "love｜單身中｜潮汐相認",
+      "love｜桃花運勢｜靜水有人"
+    ],
+    "asset": "/assets/oracle-icons/love-eye-rose.webp",
+    "iconKey": "love-eye-rose"
+  },
+  {
+    "scene": "love_single_self_focus",
+    "name": "目前重心不在戀愛",
+    "visual": "獨立月亮、皇冠小星",
+    "world": "愛情",
+    "count": 11,
+    "examples": [
+      "love｜單身中｜潮聲未止",
+      "love｜單身中｜兩岸之間",
+      "love｜單身中｜雲後有月",
+      "love｜單身中｜心有歸處"
+    ],
+    "asset": "/assets/oracle-icons/love-space-moon.webp",
+    "iconKey": "love-space-moon"
+  },
+  {
+    "scene": "love_slow_serious",
+    "name": "慢熱認真",
+    "visual": "緩慢盛開的水晶玫瑰",
+    "world": "愛情",
+    "count": 3,
+    "examples": [
+      "love｜曖昧中｜風向轉了",
+      "love｜曖昧中｜未寄的信",
+      "love｜曖昧中｜星光有期"
+    ],
+    "asset": "/assets/oracle-icons/love-crystal-rose.webp",
+    "iconKey": "love-crystal-rose"
+  },
+  {
+    "scene": "love_social_chance",
+    "name": "社交桃花增加",
+    "visual": "星群、舞會緞帶、玫瑰",
+    "world": "愛情",
+    "count": 6,
+    "examples": [
+      "love｜單身中｜星落於你",
+      "love｜單身中｜晨霧散去",
+      "love｜單身中｜花開兩處",
+      "love｜桃花運勢｜金風送緣"
+    ],
+    "asset": "/assets/oracle-icons/love-social-stars.webp",
+    "iconKey": "love-social-stars"
+  },
+  {
+    "scene": "love_triangle",
+    "name": "第三者／多方選擇",
+    "visual": "三顆星、交錯紅線、荊棘",
+    "world": "愛情",
+    "count": 20,
+    "examples": [
+      "love｜曖昧中｜兩岸之間",
+      "love｜曖昧中｜蝶停掌心",
+      "love｜單身中｜回聲",
+      "love｜單身中｜紅線鬆結"
+    ],
+    "asset": "/assets/oracle-icons/love-three-stars.webp",
+    "iconKey": "love-three-stars"
+  },
+  {
+    "scene": "love_trust_repair",
+    "name": "信任修復",
+    "visual": "金線縫合的水晶心",
+    "world": "愛情",
+    "count": 3,
+    "examples": [
+      "love｜關係中｜雲後有月",
+      "love｜關係中｜雨中共傘",
+      "love｜關係中｜回到彼此"
+    ],
+    "asset": "/assets/oracle-icons/love-mended-heart.webp",
+    "iconKey": "love-mended-heart"
+  },
+  {
+    "scene": "love_unavailable_person",
+    "name": "對方已有關係／界線不清",
+    "visual": "被鎖住的心、第三顆暗星",
+    "world": "愛情",
+    "count": 3,
+    "examples": [
+      "love｜桃花運勢｜花影有刺",
+      "love｜單身中｜有主之花",
+      "love｜單身中｜後來才知"
+    ],
+    "asset": "/assets/oracle-icons/love-three-stars.webp",
+    "iconKey": "love-three-stars"
+  },
+  {
+    "scene": "love_wait_you",
+    "name": "等你先開口",
+    "visual": "未寄信封、停在唇邊的小星",
+    "world": "愛情",
+    "count": 2,
+    "examples": [
+      "love｜失戀中｜兩岸之間",
+      "love｜失戀中｜蝶停掌心"
+    ],
+    "asset": "/assets/oracle-icons/love-unsent-letter.webp",
+    "iconKey": "love-unsent-letter"
+  },
+  {
+    "scene": "love_withdrawal",
+    "name": "對方抽離",
+    "visual": "飛遠蝴蝶、斷續星線",
+    "world": "愛情",
+    "count": 3,
+    "examples": [
+      "love｜關係中｜回聲",
+      "love｜關係中｜紅線鬆結",
+      "love｜關係中｜疑雲無證"
+    ],
+    "asset": "/assets/oracle-icons/love-flying-butterfly.webp",
+    "iconKey": "love-flying-butterfly"
+  },
+  {
+    "scene": "pet_discomfort",
+    "name": "不舒服的訊號",
+    "visual": "肉球旁微弱警示星與月",
+    "world": "毛孩",
+    "count": 6,
+    "examples": [
+      "pet｜擔心中｜門邊的小影子",
+      "pet｜擔心中｜柔軟的名字",
+      "pet｜擔心中｜沙發的一角",
+      "pet｜擔心中｜星星落在毛上"
+    ],
+    "asset": "/assets/oracle-icons/pet-warning-paw.webp",
+    "iconKey": "pet-warning-paw"
+  },
+  {
+    "scene": "pet_dream_visit",
+    "name": "夢裡重逢／健康",
+    "visual": "睡眠月、雲上肉球",
+    "world": "毛孩",
+    "count": 4,
+    "examples": [
+      "pet｜離別中｜掌心的溫度",
+      "pet｜離別中｜熟悉的腳步",
+      "pet｜離別中｜暖毯之下",
+      "pet｜離別中｜今天也在這裡"
+    ],
+    "asset": "/assets/oracle-icons/pet-dream-moon.webp",
+    "iconKey": "pet-dream-moon"
+  },
+  {
+    "scene": "pet_fear_forget",
+    "name": "害怕忘記牠",
+    "visual": "記憶瓶、羽毛與肉球",
+    "world": "毛孩",
+    "count": 1,
+    "examples": [
+      "pet｜離別中｜回頭的一眼"
+    ],
+    "asset": "/assets/oracle-icons/pet-memory-frame.webp",
+    "iconKey": "pet-memory-frame"
+  },
+  {
+    "scene": "pet_feels_anxiety",
+    "name": "感受到你的緊張",
+    "visual": "人心與肉球之間的波紋",
+    "world": "毛孩",
+    "count": 6,
+    "examples": [
+      "pet｜擔心中｜窗邊微光",
+      "pet｜擔心中｜安靜的靠近",
+      "pet｜擔心中｜小小守候",
+      "pet｜擔心中｜回頭的一眼"
+    ],
+    "asset": "/assets/oracle-icons/pet-warning-paw.webp",
+    "iconKey": "pet-warning-paw"
+  },
+  {
+    "scene": "pet_grief_memory",
+    "name": "日常觸景思念",
+    "visual": "相框、羽毛、星塵肉球",
+    "world": "毛孩",
+    "count": 10,
+    "examples": [
+      "pet｜離別中｜窗邊微光",
+      "pet｜離別中｜鼻尖的問候",
+      "pet｜離別中｜安靜的靠近",
+      "pet｜離別中｜晨光裡的眼睛"
+    ],
+    "asset": "/assets/oracle-icons/pet-memory-frame.webp",
+    "iconKey": "pet-memory-frame"
+  },
+  {
+    "scene": "pet_guilt_goodbye",
+    "name": "對離開／最後一天愧疚",
+    "visual": "被羽翼包住的裂心與肉球",
+    "world": "毛孩",
+    "count": 5,
+    "examples": [
+      "pet｜離別中｜柔軟的名字",
+      "pet｜離別中｜一起回家的路",
+      "pet｜離別中｜沙發的一角",
+      "pet｜離別中｜不說話的擁抱"
+    ],
+    "asset": "/assets/oracle-icons/pet-wing-heart.webp",
+    "iconKey": "pet-wing-heart"
+  },
+  {
+    "scene": "pet_healing",
+    "name": "開始能笑著想牠",
+    "visual": "相框旁重新盛開的小花",
+    "world": "毛孩",
+    "count": 2,
+    "examples": [
+      "pet｜離別中｜小小守候",
+      "pet｜離別中｜永遠的小房間"
+    ],
+    "asset": "/assets/oracle-icons/pet-bloom-memory.webp",
+    "iconKey": "pet-bloom-memory"
+  },
+  {
+    "scene": "pet_identity_sign",
+    "name": "新生命出現熟悉習慣／數字巧合",
+    "visual": "雙肉球疊影、數字星環",
+    "world": "毛孩",
+    "count": 4,
+    "examples": [
+      "pet｜離別中｜同一天的兩道光",
+      "pet｜離別中｜借一個小習慣回來",
+      "pet｜離別中｜比你更早認出的緣分",
+      "pet｜離別中｜我們還會再相愛一次"
+    ],
+    "asset": "/assets/oracle-icons/pet-crossing-paths.webp",
+    "iconKey": "pet-crossing-paths"
+  },
+  {
+    "scene": "pet_love_forward",
+    "name": "把愛延續出去",
+    "visual": "肉球化成星星飛向新生命",
+    "world": "毛孩",
+    "count": 2,
+    "examples": [
+      "pet｜離別中｜慢慢靠近",
+      "pet｜離別中｜日常的魔法"
+    ],
+    "asset": "/assets/oracle-icons/pet-bloom-memory.webp",
+    "iconKey": "pet-bloom-memory"
+  },
+  {
+    "scene": "pet_missing_you",
+    "name": "記得你的氣味聲音",
+    "visual": "遠方肉球、聲波與小心",
+    "world": "毛孩",
+    "count": 12,
+    "examples": [
+      "pet｜思念中｜掌心的溫度",
+      "pet｜思念中｜午後的呼吸",
+      "pet｜思念中｜碗裡的月亮",
+      "pet｜思念中｜一起回家的路"
+    ],
+    "asset": "/assets/oracle-icons/pet-distance-paw.webp",
+    "iconKey": "pet-distance-paw"
+  },
+  {
+    "scene": "pet_more_clingy",
+    "name": "最近比較黏",
+    "visual": "大肉球旁貼著小愛心",
+    "world": "毛孩",
+    "count": 6,
+    "examples": [
+      "pet｜陪伴中｜熟悉的腳步",
+      "pet｜陪伴中｜鼻尖的問候",
+      "pet｜陪伴中｜雨天的陪伴",
+      "pet｜陪伴中｜牽繩另一端"
+    ],
+    "asset": "/assets/oracle-icons/pet-play-paw.webp",
+    "iconKey": "pet-play-paw"
+  },
+  {
+    "scene": "pet_more_interaction",
+    "name": "想增加互動",
+    "visual": "兩個肉球碰觸、玩具星",
+    "world": "毛孩",
+    "count": 6,
+    "examples": [
+      "pet｜陪伴中｜門邊的小影子",
+      "pet｜陪伴中｜柔軟的名字",
+      "pet｜陪伴中｜沙發的一角",
+      "pet｜陪伴中｜星星落在毛上"
+    ],
+    "asset": "/assets/oracle-icons/pet-play-paw.webp",
+    "iconKey": "pet-play-paw"
+  },
+  {
+    "scene": "pet_other_pet_grief",
+    "name": "其他毛孩也在找牠",
+    "visual": "兩個肉球、一明一淡",
+    "world": "毛孩",
+    "count": 1,
+    "examples": [
+      "pet｜離別中｜睡夢的方向"
+    ],
+    "asset": "/assets/oracle-icons/pet-two-paws.webp",
+    "iconKey": "pet-two-paws"
+  },
+  {
+    "scene": "pet_own_space",
+    "name": "需要自己的空間",
+    "visual": "月亮小窩、獨立肉球",
+    "world": "毛孩",
+    "count": 6,
+    "examples": [
+      "pet｜陪伴中｜窗邊微光",
+      "pet｜陪伴中｜安靜的靠近",
+      "pet｜陪伴中｜小小守候",
+      "pet｜陪伴中｜回頭的一眼"
+    ],
+    "asset": "/assets/oracle-icons/pet-moon-bed.webp",
+    "iconKey": "pet-moon-bed"
+  },
+  {
+    "scene": "pet_peace_now",
+    "name": "想知道牠好不好",
+    "visual": "雲上安睡肉球、羽翼月",
+    "world": "毛孩",
+    "count": 1,
+    "examples": [
+      "pet｜離別中｜牽繩另一端"
+    ],
+    "asset": "/assets/oracle-icons/pet-cloud-peace.webp",
+    "iconKey": "pet-cloud-peace"
+  },
+  {
+    "scene": "pet_rebirth_child",
+    "name": "投胎成孩子／家人孩子",
+    "visual": "星光搖籃、肉球化成小星",
+    "world": "毛孩",
+    "count": 2,
+    "examples": [
+      "pet｜離別中｜家族裡的小星星",
+      "pet｜離別中｜成為守護你的孩子"
+    ],
+    "asset": "/assets/oracle-icons/pet-cradle-star.webp",
+    "iconKey": "pet-cradle-star"
+  },
+  {
+    "scene": "pet_rebirth_elsewhere",
+    "name": "在別處展開新生命",
+    "visual": "遠方小屋、升起的新星",
+    "world": "毛孩",
+    "count": 1,
+    "examples": [
+      "pet｜離別中｜另一個家的窗"
+    ],
+    "asset": "/assets/oracle-icons/pet-far-home-star.webp",
+    "iconKey": "pet-far-home-star"
+  },
+  {
+    "scene": "pet_rebirth_encounter",
+    "name": "尚未相遇／偶然相遇",
+    "visual": "兩條星路即將交會",
+    "world": "毛孩",
+    "count": 2,
+    "examples": [
+      "pet｜離別中｜門口的新腳步",
+      "pet｜離別中｜先認出你的聲音"
+    ],
+    "asset": "/assets/oracle-icons/pet-crossing-paths.webp",
+    "iconKey": "pet-crossing-paths"
+  },
+  {
+    "scene": "pet_rebirth_not_yet",
+    "name": "尚未投胎／休息等待",
+    "visual": "雲上肉球、沙漏與月",
+    "world": "毛孩",
+    "count": 2,
+    "examples": [
+      "pet｜離別中｜約定好的搖籃",
+      "pet｜離別中｜先去遠方旅行"
+    ],
+    "asset": "/assets/oracle-icons/pet-rebirth-sprout.webp",
+    "iconKey": "pet-rebirth-sprout"
+  },
+  {
+    "scene": "pet_rebirth_pet",
+    "name": "投胎成另一隻毛孩",
+    "visual": "舊肉球化光連到新肉球",
+    "world": "毛孩",
+    "count": 2,
+    "examples": [
+      "pet｜離別中｜換一雙眼睛看你",
+      "pet｜離別中｜還想再當你的毛孩"
+    ],
+    "asset": "/assets/oracle-icons/pet-new-paw.webp",
+    "iconKey": "pet-new-paw"
+  },
+  {
+    "scene": "pet_rebirth_preparing",
+    "name": "準備投胎",
+    "visual": "星蛋／新芽、羽翼肉球",
+    "world": "毛孩",
+    "count": 5,
+    "examples": [
+      "pet｜離別中｜掌心裡的新心跳",
+      "pet｜離別中｜夢裡選的新名字",
+      "pet｜離別中｜不急著離開的靈魂",
+      "pet｜離別中｜帶著祝福去下一站"
+    ],
+    "asset": "/assets/oracle-icons/pet-rebirth-sprout.webp",
+    "iconKey": "pet-rebirth-sprout"
+  },
+  {
+    "scene": "pet_release_items",
+    "name": "捨不得收用品",
+    "visual": "項圈、食碗與停留星光",
+    "world": "毛孩",
+    "count": 1,
+    "examples": [
+      "pet｜離別中｜碗裡的月亮"
+    ],
+    "asset": "/assets/oracle-icons/pet-memory-frame.webp",
+    "iconKey": "pet-memory-frame"
+  },
+  {
+    "scene": "pet_rest_nearby",
+    "name": "想靠近也想休息",
+    "visual": "月下靠近的肉球與軟墊",
+    "world": "毛孩",
+    "count": 6,
+    "examples": [
+      "pet｜擔心中｜熟悉的腳步",
+      "pet｜擔心中｜鼻尖的問候",
+      "pet｜擔心中｜雨天的陪伴",
+      "pet｜擔心中｜牽繩另一端"
+    ],
+    "asset": "/assets/oracle-icons/pet-moon-bed.webp",
+    "iconKey": "pet-moon-bed"
+  },
+  {
+    "scene": "pet_reunion_calm",
+    "name": "重逢反應平淡",
+    "visual": "安靜月亮、平穩肉球",
+    "world": "毛孩",
+    "count": 6,
+    "examples": [
+      "pet｜思念中｜窗邊微光",
+      "pet｜思念中｜安靜的靠近",
+      "pet｜思念中｜小小守候",
+      "pet｜思念中｜回頭的一眼"
+    ],
+    "asset": "/assets/oracle-icons/pet-reunion.webp",
+    "iconKey": "pet-reunion"
+  },
+  {
+    "scene": "pet_reunion_clingy",
+    "name": "重逢後特別黏",
+    "visual": "兩個相疊肉球、心光",
+    "world": "毛孩",
+    "count": 6,
+    "examples": [
+      "pet｜思念中｜熟悉的腳步",
+      "pet｜思念中｜鼻尖的問候",
+      "pet｜思念中｜雨天的陪伴",
+      "pet｜思念中｜牽繩另一端"
+    ],
+    "asset": "/assets/oracle-icons/pet-reunion.webp",
+    "iconKey": "pet-reunion"
+  },
+  {
+    "scene": "pet_routine",
+    "name": "喜歡固定日常",
+    "visual": "時鐘、食盆、肉球星環",
+    "world": "毛孩",
+    "count": 6,
+    "examples": [
+      "pet｜陪伴中｜午後的呼吸",
+      "pet｜陪伴中｜一起回家的路",
+      "pet｜陪伴中｜晨光裡的眼睛",
+      "pet｜陪伴中｜睡夢的方向"
+    ],
+    "asset": "/assets/oracle-icons/pet-home-paw.webp",
+    "iconKey": "pet-home-paw"
+  },
+  {
+    "scene": "pet_safe_base",
+    "name": "把你當安全基地",
+    "visual": "發光肉球停在小屋與心之間",
+    "world": "毛孩",
+    "count": 6,
+    "examples": [
+      "pet｜陪伴中｜掌心的溫度",
+      "pet｜陪伴中｜碗裡的月亮",
+      "pet｜陪伴中｜尾巴的答案",
+      "pet｜陪伴中｜被記住的聲音"
+    ],
+    "asset": "/assets/oracle-icons/pet-home-paw.webp",
+    "iconKey": "pet-home-paw"
+  },
+  {
+    "scene": "pet_sensitive",
+    "name": "環境變化敏感",
+    "visual": "豎耳剪影、波紋星光",
+    "world": "毛孩",
+    "count": 12,
+    "examples": [
+      "pet｜擔心中｜掌心的溫度",
+      "pet｜擔心中｜午後的呼吸",
+      "pet｜擔心中｜碗裡的月亮",
+      "pet｜擔心中｜一起回家的路"
+    ],
+    "asset": "/assets/oracle-icons/pet-warning-paw.webp",
+    "iconKey": "pet-warning-paw"
+  },
+  {
+    "scene": "pet_sign_visit",
+    "name": "像回來看你",
+    "visual": "星塵足跡、門邊微光",
+    "world": "毛孩",
+    "count": 5,
+    "examples": [
+      "pet｜離別中｜門邊的小影子",
+      "pet｜離別中｜午後的呼吸",
+      "pet｜離別中｜尾巴的答案",
+      "pet｜離別中｜星星落在毛上"
+    ],
+    "asset": "/assets/oracle-icons/pet-stardust-paw.webp",
+    "iconKey": "pet-stardust-paw"
+  },
+  {
+    "scene": "pet_waiting_place",
+    "name": "在固定位置等你",
+    "visual": "門邊肉球、守候月",
+    "world": "毛孩",
+    "count": 6,
+    "examples": [
+      "pet｜思念中｜門邊的小影子",
+      "pet｜思念中｜柔軟的名字",
+      "pet｜思念中｜沙發的一角",
+      "pet｜思念中｜星星落在毛上"
+    ],
+    "asset": "/assets/oracle-icons/pet-distance-paw.webp",
+    "iconKey": "pet-distance-paw"
+  }
+]
