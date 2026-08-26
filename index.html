@@ -845,6 +845,14 @@ body::after {
 }
 
 /* 漂浮斗內按鈕樣式已移除 */
+
+/* ── 版面置中加固 ──
+   .device 原本靠 margin:0 auto 置中，若版面寬度被任何元素撐開，
+   或 in-app 瀏覽器的 viewport 行為不同，就會整塊靠左。
+   改由父層 flex 強制置中，不再依賴 auto margin。 */
+html { overflow-x: hidden; }
+.app { align-items: center; }
+.device { margin-left: auto; margin-right: auto; }
 </style>
 
 <link rel="preload" href="/assets/embedded-eb456bf585b9.webp" as="image">
