@@ -709,6 +709,11 @@ function magicOraclePay(){
 .about-section-title::before{content:"✦";font-size:10px;opacity:.7}
 .about-body{color:var(--text-soft);font-size:14px;line-height:2.2;letter-spacing:.06em}
 .about-quote{border-left:2px solid var(--gold-line);padding:10px 16px;margin:14px 0;color:var(--text-soft);font-size:13.5px;line-height:2;font-style:normal;letter-spacing:.08em;background:rgba(122,103,172,.06);border-radius:0 8px 8px 0}
+.about-contact{padding:16px 18px;border:1px solid var(--gold-line);border-radius:12px;background:rgba(122,103,172,.08)}
+.about-contact-row{display:flex;align-items:flex-start;gap:10px;margin:7px 0;color:var(--text-soft);font-size:13.5px;line-height:1.8;letter-spacing:.04em}
+.about-contact-label{flex:0 0 66px;color:var(--gold);letter-spacing:.08em}
+.about-contact a{color:var(--text-soft);text-decoration:none;overflow-wrap:anywhere}
+.about-contact a:hover{color:var(--gold)}
 .about-footer{text-align:center;padding:18px 0 8px;color:var(--text-faint);font-size:11.5px;letter-spacing:.15em;line-height:2.2}
 </style>
 
@@ -1331,6 +1336,40 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
   }
 
   window.OracleCommerce = { viewPaywall: viewPaywall, beginCheckout: beginCheckout, purchase: purchase };
+})();
+</script>
+
+<script>
+// 在「介紹」頁補上可供付款服務審核核對的正式聯絡資訊。
+(function () {
+  function addContactInfo() {
+    var about = document.querySelector('.about-scroll');
+    if (!about || about.querySelector('.about-contact-section')) return;
+
+    var footer = about.querySelector('.about-footer');
+    if (!footer) return;
+
+    var divider = document.createElement('div');
+    divider.className = 'about-divider';
+
+    var section = document.createElement('div');
+    section.className = 'about-section about-contact-section';
+    section.innerHTML =
+      '<div class="about-section-title">聯絡資訊</div>' +
+      '<div class="about-contact">' +
+        '<div class="about-contact-row"><span class="about-contact-label">Email</span><a href="mailto:jiazhen0404@gmail.com">jiazhen0404@gmail.com</a></div>' +
+        '<div class="about-contact-row"><span class="about-contact-label">聯絡電話</span><a href="tel:0982028355">0982-028-355</a></div>' +
+      '</div>';
+
+    about.insertBefore(divider, footer);
+    about.insertBefore(section, footer);
+  }
+
+  addContactInfo();
+  new MutationObserver(addContactInfo).observe(document.getElementById('root'), {
+    childList: true,
+    subtree: true
+  });
 })();
 </script>
 
