@@ -844,61 +844,7 @@ body::after {
   }
 }
 
-/* ── 漂浮斗內按鈕 ── */
-.float-donate {
-  position: fixed;
-  right: 0;
-  /* 原本 top:50% 會壓在畫面正中央，剛好蓋住延伸解籤區的標題。
-     改貼齊下方，仍然隨手可及，但不擋內容。 */
-  top: auto;
-  bottom: 96px;
-  transform: none;
-  z-index: 999;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-  pointer-events: auto;
-}
-.float-donate-btn {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  background: linear-gradient(180deg, rgba(217,189,130,0.18) 0%, rgba(139,90,43,0.22) 100%);
-  border: 1px solid rgba(217,189,130,0.45);
-  border-right: none;
-  border-radius: 10px 0 0 10px;
-  color: var(--gold);
-  font-family: var(--serif);
-  font-size: 13px;
-  letter-spacing: 0.22em;
-  padding: 16px 8px;
-  cursor: pointer;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: -3px 0 20px rgba(217,189,130,0.12), inset 0 1px 0 rgba(255,255,255,0.06);
-  transition: background 0.25s, box-shadow 0.25s, transform 0.2s;
-  text-shadow: 0 0 12px rgba(217,189,130,0.6);
-  outline: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  line-height: 1;
-}
-.float-donate-btn:hover {
-  background: linear-gradient(180deg, rgba(217,189,130,0.28) 0%, rgba(139,90,43,0.35) 100%);
-  box-shadow: -4px 0 28px rgba(217,189,130,0.22), inset 0 1px 0 rgba(255,255,255,0.08);
-  transform: translateX(-3px);
-}
-.float-donate-btn:active {
-  transform: translateX(-1px);
-}
-.float-donate-icon {
-  font-size: 16px;
-  writing-mode: horizontal-tb;
-  line-height: 1;
-  margin-bottom: 4px;
-}
+/* 漂浮斗內按鈕樣式已移除 */
 </style>
 
 <link rel="preload" href="/assets/embedded-eb456bf585b9.webp" as="image">
@@ -1305,13 +1251,8 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
 </script>
 
 
-<!-- 漂浮斗內按鈕 -->
-<div class="float-donate">
-  <button class="float-donate-btn" onclick="openDonate('floating_button')" title="斗內支持未完籤所">
-    <span class="float-donate-icon">♥</span>
-    斗內支持
-  </button>
-</div>
+<!-- 漂浮斗內按鈕已移除：73 次瀏覽 0 筆轉換，且擋住延伸解籤區。
+     側邊選單的「斗內支持」保留，想支持的人仍找得到。 -->
 
 <!-- 未完籤所・付款漏斗追蹤模組 已整合 -->
 <!-- ===================================================================
