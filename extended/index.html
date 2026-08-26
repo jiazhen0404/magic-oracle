@@ -34,6 +34,8 @@ p{color:var(--soft);font-size:16px}
 .cta-line{display:inline-block;margin-top:14px;padding:13px 30px;border-radius:999px;text-decoration:none;background:linear-gradient(180deg,#7660a2,#4b3777);border:1px solid rgba(217,189,130,.62);box-shadow:0 0 24px rgba(121,92,170,.35);font-size:15px}
 .note{font-size:13px;color:var(--faint);margin-top:12px}
 .thanks{margin-top:14px;color:#e6c98f;font-size:13.5px;line-height:1.8}
+.fromline{margin:0 auto 18px;max-width:520px;padding:14px 18px;border:1px solid var(--line);border-radius:16px;background:rgba(35,24,62,.55);font-size:14px;color:var(--soft);line-height:1.8}
+.fromline b{color:#f1e5c8;font-size:17px;display:block;margin-top:4px;letter-spacing:.04em}
 .price{margin:26px 0 4px;color:#f1e5c8;font-size:15px}
 .price b{font-size:30px;letter-spacing:.02em}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:20px}
@@ -57,7 +59,8 @@ footer{text-align:center;color:var(--faint);font-size:12px;margin-top:56px}
 <section class="hero">
   <div class="brand">未 完 籤 所 · MAGIC ORACLE</div>
   <h1>延伸解籤</h1>
-  <p class="lead">有時候抽到的那支籤說中了，卻沒說完。<br>你知道它在講什麼，但不知道接下來該怎麼辦。</p>
+  <div class="fromline" id="fromline" hidden></div>
+  <p class="lead" id="lead">有時候抽到的那支籤說中了，卻沒說完。<br>你知道它在講什麼，但不知道接下來該怎麼辦。</p>
   <div class="price">NT$ <b>99</b> ／ 單次</div>
   <div class="pill">尚未開放</div>
   <div style="margin-top:22px">
@@ -109,6 +112,16 @@ footer{text-align:center;color:var(--faint);font-size:12px;margin-top:56px}
   var btn=document.getElementById("wait"), thanks=document.getElementById("thanks");
   var q=new URLSearchParams(location.search);
   var src=q.get("utm_source")||"direct", med=q.get("utm_medium")||"none";
+  var slip=q.get("slip")||"", theme=q.get("theme")||"", sub=q.get("sub")||"", n=q.get("n")||"";
+
+  // 從 LINE 帶著籤過來的，先接住那支籤，別讓他覺得跳到不相干的頁面
+  if(slip){
+    var box=document.getElementById("fromline");
+    box.innerHTML="你剛剛抽到的是"+(sub?"（"+sub+"）":"")+"<b>〈"+slip+"〉</b>";
+    box.hidden=false;
+    var lead=document.getElementById("lead");
+    if(lead) lead.innerHTML="這支籤說中了，卻沒說完。<br>延伸解籤會把它放回你現在的處境裡展開。";
+  }
 
   function done(){
     btn.textContent="✓ 已記下你";
@@ -123,7 +136,8 @@ footer{text-align:center;color:var(--faint);font-size:12px;margin-top:56px}
       localStorage.setItem(KEY,"1");
     }catch(e){}
     var p={button_location:"waitlist_page",interest_version:"waitlist_v1",
-           utm_source:src,utm_medium:med,price_shown:99};
+           utm_source:src,utm_medium:med,price_shown:99,
+           theme:theme,subtheme:sub,fortune_number:n,fortune_title:slip};
     gtag("event","extended_reading_interest",p);
     gtag("event","extended_waitlist_signup",p);
     done();
