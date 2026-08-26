@@ -848,8 +848,11 @@ body::after {
 .float-donate {
   position: fixed;
   right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  /* 原本 top:50% 會壓在畫面正中央，剛好蓋住延伸解籤區的標題。
+     改貼齊下方，仍然隨手可及，但不擋內容。 */
+  top: auto;
+  bottom: 96px;
+  transform: none;
   z-index: 999;
   display: flex;
   flex-direction: column;
@@ -1261,7 +1264,12 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
       if(theme!=="unknown")send("extended_interest_"+theme,params);
       showSent();
     });
-    frame.insertAdjacentElement("afterend",section);
+    // 付費區插在「具體建議」之後、「分享／再抽一次」之前。
+    // 那兩顆是結束動作，使用者看到就認為讀完了 —— 原本放在它們下面，
+    // 導致只有 27.5% 的人滑到付費區。移上來後，讀完解籤情緒還在時就會看到。
+    const actionsRow=frame.querySelector(".actions");
+    if(actionsRow){ actionsRow.insertAdjacentElement("beforebegin",section); }
+    else { frame.insertAdjacentElement("afterend",section); }
 
     // 解籤最後一頁：延伸預告下方補一個 LINE 入口
     if(!resultScroll.querySelector(".line-band")){
@@ -1279,7 +1287,7 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
         send("line_add_click",{theme:theme,theme_label:themeLabels[theme]||theme,subtheme:subtheme,
           fortune_number:fortuneNumber,fortune_title:title,button_location:"result_after_fortune"});
       });
-      section.insertAdjacentElement("afterend",lineBox);
+      frame.insertAdjacentElement("afterend",lineBox);
     }
       // 看到解鎖頁（延伸預告出現）→ 送付款漏斗第一層，每支籤每階段只送一次
       try{
