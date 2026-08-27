@@ -711,11 +711,21 @@ textarea::placeholder{color:#5E4E7E}
       </header>
       <div class="card">
         <div class="line"><dt>訂單編號</dt><dd class="oid" id="oid2">—</dd></div>
+        <div class="line"><dt>受理編號</dt><dd class="oid" id="refId">—</dd></div>
         <div class="line"><dt>指定老師</dt><dd id="sumS2">—</dd></div>
         <div class="line"><dt>預計寄達</dt><dd id="due2">—</dd></div>
         <div class="line"><dt>寄達信箱</dt><dd id="mail2">—</dd></div>
       </div>
-      <div class="note">老師接下案件後會再通知你一次。若 48 小時內未收到，請憑訂單編號與我們聯繫。</div>
+      <div class="note">
+        <p style="margin:0 0 8px">老師接下案件後會再通知你一次。</p>
+        <p class="fine" style="margin:0">
+          老師看過之後，如果覺得問法可以更精準，會寄信跟你確認調整後的問題。
+          沒有收到這封信就表示問題照原樣進行，不用特別回覆。
+        </p>
+        <p class="fine" style="margin:8px 0 0">
+          若三日內沒有收到解讀，請憑訂單編號與我們聯繫。
+        </p>
+      </div>
       <button class="go ghost" onclick="location.reload()">回到首頁</button>
     </div>
   </section>
@@ -1317,12 +1327,13 @@ function doRestart(){
 
 /* ════════ 時間 / 落點 選項 ════════ */
 const TF=['兩週內','一個月內','三個月內','半年內'];
-const IN=['會不會發生','什麼時候會發生','我可以做什麼'];
+const IN=['會不會發生','什麼時候會發生','我可以做什麼','他現在的想法或狀況'];
 
 const IN_HINT={
   '會不會發生':'問法像這樣：一個月內，他會不會主動回來找我？',
   '什麼時候會發生':'問法像這樣：半年內，他大概什麼時候會主動回來找我？時間邊界拉長一點，比較看得出落點。',
-  '我可以做什麼':'問法像這樣：一個月內，我可以做什麼讓他主動回來？'
+  '我可以做什麼':'問法像這樣：一個月內，我可以做什麼讓他主動回來？',
+  '他現在的想法或狀況':'問法像這樣：他現在怎麼看我們這段關係？這一類看的是當下，時間邊界可以填「當下」。'
 };
 
 /* 這兩個函式原本被呼叫卻沒有定義。
@@ -1366,6 +1377,10 @@ function fallbackResult(){
 function guessIntent(q){
   if(/什麼時候|甚麼時候|何時|多久之?後|哪時/.test(q))return '什麼時候會發生';
   if(/該不該|要不要|怎麼做|可以做什麼|該怎麼/.test(q))return '我可以做什麼';
+  /* 現況型要排在「會不會」前面。「他身邊有沒有其他人」問的是當下，
+     若先比對到「有沒有」就會被誤判成問未來。 */
+  if(/為什麼|為何|怎麼想|心裡|還愛|喜不喜歡|在意我|怎麼看|適不適合/.test(q))return '他現在的想法或狀況';
+  if(/目前|現在|身邊有|過得好/.test(q))return '他現在的想法或狀況';
   if(/會不會|有沒有|能不能|是否|機會|可能/.test(q))return '會不會發生';
   return null;
 }
@@ -1379,7 +1394,7 @@ function checkMatch(){
 
   const msgs=[];
   const tf=S.result.timeframe;
-  if(tf&&text.indexOf(tf)<0){
+  if(tf&&tf!=='當下'&&text.indexOf(tf)<0){
     const other=TF_WORDS.find(w=>w!==tf&&text.indexOf(w)>-1);
     msgs.push(other
       ? '問題句裡寫的是「'+other+'」，但時間邊界選的是「'+tf+'」。老師會以「'+tf+'」為準。'
@@ -1458,6 +1473,7 @@ function normIntent(v){
   if(IN.includes(v))return v;
   if(/時間點|何時|什麼時候|甚麼時候|時機/.test(v))return '什麼時候會發生';
   if(/行動|做什麼|怎麼做|該做/.test(v))return '我可以做什麼';
+  if(/想法|狀況|現況|心裡|關係狀態|為什麼/.test(v))return '他現在的想法或狀況';
   if(/結果|會不會|是否|發生/.test(v))return '會不會發生';
   return null;
 }
@@ -1591,6 +1607,38 @@ function syncPayBtn(){
 }
 
 /* ════════ 訂單 ════════ */
+/* 訂單成立後把受理單送進老師的待辦。
+   付款不等審查，老師收到之後才判斷問法要不要調整。 */
+async function submitForReview(){
+  if(S.submitted)return;                  // 只送一次
+  S.submitted=true;
+  try{
+    const r=await fetch(API_URL.replace('/api/guide','/api/submit'),{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        name:S.name,email:S.email||document.getElementById('mail')?.value||'',
+        seer:S.seer?S.seer.name:'',
+        main_question:S.result.main_question,timeframe:S.result.timeframe,
+        intent:S.result.intent,other_party:S.result.other_party,
+        background:S.result.background,extra:S.result.extra||[]
+      })
+    });
+    const d=await r.json();
+    if(!r.ok||!d.ok){
+      /* 建單失敗不擋使用者，錢已經收了。記下來讓人工補。 */
+      S.submitted=false;
+      console.error('submit failed', d);
+      return;
+    }
+    S.orderRef=d.id;
+    const el=document.getElementById('refId');
+    if(el)el.textContent=d.id;
+  }catch(e){
+    S.submitted=false;
+    console.error('submit error', e);
+  }
+}
+
 function toPay(){
   if(!S.oid){
     const d=new Date(),pad=n=>String(n).padStart(2,'0');
@@ -1630,6 +1678,9 @@ function pay(){
   document.getElementById('mail2').textContent=S.email;
   S.paid=true;
   go(7);
+  /* 訂單成立後才把受理單送進老師的待辦。
+     付款不等審查，老師收到之後才判斷問法要不要調整。 */
+  submitForReview();
 }
 
 function flash(id){
