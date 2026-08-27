@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>未完籤所 · 真人占卜</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght500;600;700&family=Noto+Sans+TC:wght300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0D0818;
+  --card:#1C1330;
+  --card-2:#241838;
+  --line:#3E2C5C;
+  --lit:#A855F7;
+  --gold:#D8B87E;
+  --gold-dim:#9A825C;
+  --text:#CBBBE4;
+  --dim:#8B7BA8;
+  --paper:#EFE9DC;
+  --seal:#C4553D;
+  --serif:"Noto Serif TC",'Songti TC','SimSun',serif;
+  --sans:"Noto Sans TC",-apple-system,'PingFang TC','Microsoft JhengHei',sans-serif;
+  --mono:ui-monospace,'SFMono-Regular',Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--sans);font-weight:300;color:var(--text);line-height:1.85;
+  background:var(--bg);min-height:100vh;padding-bottom:60px;
+  background-image:
+    radial-gradient(ellipse 80% 45% at 50% 0%,rgba(120,70,190,.2),transparent 70%),
+    radial-gradient(1px 1px at 8% 12%,rgba(230,215,255,.5),transparent),
+    radial-gradient(1px 1px at 92% 8%,rgba(230,215,255,.38),transparent),
+    radial-gradient(1.5px 1.5px at 20% 40%,rgba(230,215,255,.28),transparent),
+    radial-gradient(1px 1px at 76% 33%,rgba(230,215,255,.42),transparent),
+    radial-gradient(1px 1px at 45% 70%,rgba(230,215,255,.28),transparent),
+    radial-gradient(1.5px 1.5px at 88% 62%,rgba(230,215,255,.32),transparent),
+    radial-gradient(1px 1px at 14% 84%,rgba(230,215,255,.28),transparent);
+  background-attachment:fixed;
+}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+.narrow{max-width:620px;margin:0 auto}
+
+/* ── 頁首 ── */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 0 6px}
+.icon-btn{width:42px;height:42px;flex:0 0 42px;border-radius:50%;border:1px solid var(--line);
+  background:rgba(40,25,65,.5);color:var(--text);font-size:17px;display:flex;align-items:center;
+  justify-content:center;cursor:pointer;transition:border-color .2s,opacity .2s}
+.icon-btn:hover{border-color:var(--lit)}
+.icon-btn[hidden]{visibility:hidden;display:flex}
+.brand{font-family:var(--serif);font-size:clamp(19px,4.6vw,26px);font-weight:600;color:var(--gold);
+  letter-spacing:.14em;text-indent:.14em;white-space:nowrap}
+.brand em{font-style:normal;font-size:.62em;opacity:.75;margin:0 .3em}
+.pill-btn{border:1px solid var(--line);background:rgba(40,25,65,.5);color:var(--text);
+  border-radius:999px;padding:9px 15px;font-size:12.5px;font-family:var(--sans);cursor:pointer;
+  white-space:nowrap;transition:border-color .2s}
+.pill-btn:hover{border-color:var(--lit)}
+
+/* ── 步驟 ── */
+.steps{display:flex;align-items:center;gap:4px;overflow-x:auto;padding:16px 0 14px;
+  border-bottom:1px solid var(--line);scrollbar-width:none}
+.steps::-webkit-scrollbar{display:none}
+.stp{display:flex;align-items:center;gap:7px;padding:4px 8px;white-space:nowrap;flex:0 0 auto;
+  background:none;border:none;font-family:var(--sans);cursor:default}
+.stp.jump{cursor:pointer}
+.stp b{width:25px;height:25px;flex:0 0 25px;border-radius:50%;border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:400;
+  color:var(--dim);transition:.25s}
+.stp span{font-size:13px;color:var(--dim);transition:.25s}
+.stp.on b{background:var(--lit);border-color:var(--lit);color:#fff;box-shadow:0 0 14px rgba(168,85,247,.5)}
+.stp.on span{color:#E6DAF7}
+.stp.done b{border-color:#5C4380;color:#9B87BE}
+.stp.done span{color:#8574A6}
+.stp.jump:hover b{border-color:var(--lit);color:#E6DAF7}
+.stp.jump:hover span{color:#E6DAF7}
+
+/* ── 版塊 ── */
+.step{display:none}
+.step.live{display:block;animation:rise .5s cubic-bezier(.2,.7,.3,1) both}
+keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.hero{text-align:center;padding:34px 0 4px}
+.hero h1{font-family:var(--serif);font-size:clamp(25px,6.2vw,36px);font-weight:600;color:var(--gold);
+  letter-spacing:.09em;text-indent:.09em;display:inline-flex;align-items:center;gap:14px;line-height:1.5}
+.hero h1 i{font-style:normal;font-size:.48em;opacity:.55;color:#C9A9F0}
+.hero p{font-size:14.5px;color:var(--text);margin-top:14px;line-height:1.85;padding:0 6px}
+.badge{display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:9px 17px;
+  border:1px solid var(--line);border-radius:999px;font-size:12.5px;color:var(--dim);
+  background:rgba(40,25,65,.35)}
+
+h2{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--gold);margin:28px 0 12px;letter-spacing:.04em}
+p{font-size:14.5px;color:var(--text)}
+.fine{font-size:12.5px;color:var(--dim);line-height:1.8}
+
+.card{background:linear-gradient(170deg,var(--card-2),var(--card));border:1px solid var(--line);
+  border-radius:12px;padding:20px 18px;margin:20px 0}
+.line{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);font-size:14px}
+.line:last-child{border-bottom:none;padding-bottom:0}
+.line dt{color:var(--dim);flex:0 0 auto;font-size:13px}
+.line dd{text-align:right;color:var(--text)}
+.oid{font-family:var(--mono);font-size:12.5px;letter-spacing:.05em;color:var(--gold)}
+
+.rules{list-style:none;margin:4px 0 18px}
+.rules li{position:relative;padding-left:22px;font-size:14.5px;color:var(--text);margin-bottom:11px;line-height:1.75}
+.rules li::before{content:"";position:absolute;left:4px;top:12px;width:5px;height:5px;background:var(--gold-dim);border-radius:50%}
+.rules.no li::before{background:none;content:"✕";left:2px;top:0;font-size:11px;color:var(--seal);width:auto;height:auto}
+
+.note{border-left:2px solid var(--gold-dim);padding:2px 0 2px 15px;margin:20px 0;font-size:13px;color:var(--text);line-height:1.8}
+.note.warn{border-left-color:var(--seal)}
+.note.keep{border-left-color:var(--lit)}
+
+.agree{display:flex;gap:12px;align-items:flex-start;cursor:pointer;padding:16px;border:1px solid var(--line);
+  border-radius:10px;background:rgba(168,85,247,.05);margin:22px 0}
+.agree input{appearance:none;flex:0 0 18px;width:18px;height:18px;border:1px solid var(--lit);border-radius:3px;
+  margin-top:2px;cursor:pointer;position:relative;transition:background .2s}
+.agree input:checked{background:var(--lit)}
+.agree input:checked::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;
+  justify-content:center;color:#fff;font-size:12px}
+.agree input:focus-visible{outline:2px solid var(--lit);outline-offset:3px}
+.agree span{font-size:13.5px;color:var(--text);line-height:1.7}
+
+/* ── 按鈕 ── */
+.go{width:100%;margin-top:14px;padding:18px;border-radius:999px;border:1px solid var(--gold-dim);
+  background:linear-gradient(90deg,#3B2265,#6B3FA8 50%,#3B2265);color:#F2E8FF;
+  font-family:var(--serif);font-size:18px;font-weight:600;letter-spacing:.1em;cursor:pointer;
+  transition:opacity .2s,transform .12s,box-shadow .25s}
+.go:disabled{opacity:.3;cursor:not-allowed}
+.go:not(:disabled):hover{box-shadow:0 0 26px rgba(168,85,247,.36)}
+.go:not(:disabled):active{transform:scale(.99)}
+.go:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.go.ghost{background:none;border-color:var(--line);color:var(--text);font-size:15px;font-weight:500}
+.go.ghost:hover{border-color:#5C4380;box-shadow:none}
+.go.pay{background:linear-gradient(90deg,#5A2A28,#A8452F 50%,#5A2A28);border-color:#C4553D}
+.row{display:flex;gap:10px;margin-top:14px}
+.row .go{flex:1;margin-top:0}
+.foot{text-align:center;font-size:12.5px;color:var(--dim);margin-top:12px}
+.linkish{background:none;border:none;color:var(--lit);font-family:var(--sans);font-size:13px;
+  cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:6px}
+
+/* ── 角色卡 ── */
+.deck{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:26px 0 4px}
+media (max-width:800px){
+  .deck{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
+    padding:22px 0 12px;margin:0 -16px;padding-left:16px;padding-right:16px;scrollbar-width:none}
+  .deck::-webkit-scrollbar{display:none}
+  .seer{flex:0 0 82%;scroll-snap-align:center}
+}
+.seer{position:relative;background:linear-gradient(170deg,var(--card-2),var(--card));
+  border:1px solid var(--line);border-radius:14px;padding:16px 15px 18px;text-align:center;
+  cursor:pointer;font-family:var(--sans);color:inherit;transition:border-color .28s,box-shadow .28s,transform .2s}
+.seer:hover{border-color:#5C4380;transform:translateY(-2px)}
+.seer:focus-visible{outline:2px solid var(--lit);outline-offset:3px}
+.seer.pick{border-color:var(--lit);box-shadow:0 0 0 1px var(--lit),0 0 26px rgba(168,85,247,.34)}
+.tick{position:absolute;top:13px;right:13px;width:27px;height:27px;border-radius:50%;
+  border:1px solid var(--lit);background:rgba(168,85,247,.16);color:#E9D8FF;font-size:13px;
+  display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.6);transition:.28s}
+.seer.pick .tick{opacity:1;transform:scale(1)}
+.tag{display:inline-block;border:1px solid var(--gold-dim);border-radius:999px;
+  padding:4px 14px;font-size:12.5px;color:var(--gold);letter-spacing:.06em;margin-bottom:16px}
+.face{width:min(150px,60%);aspect-ratio:1;margin:0 auto 14px;border-radius:50%;
+  border:1px solid var(--gold-dim);overflow:hidden;position:relative;
+  background:radial-gradient(circle at 50% 35%,#3A2456,#1B1030)}
+.face img{width:100%;height:100%;object-fit:cover;display:block}
+.face .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:38px;opacity:.5}
+.seer h3{font-family:var(--serif);font-size:24px;font-weight:600;color:var(--gold);letter-spacing:.08em;margin-bottom:7px}
+.seer h3 em{font-style:normal;font-size:.72em;opacity:.8;margin-left:.15em}
+.motto{font-size:13.5px;color:var(--text);margin-bottom:15px}
+.hr{height:1px;background:linear-gradient(90deg,transparent,var(--line) 20%,var(--line) 80%,transparent);margin:0 0 14px}
+.lbl{font-size:12.5px;color:var(--gold-dim);margin-bottom:6px}
+.val{font-size:13px;color:var(--text);line-height:1.7;margin-bottom:14px}
+.desc{font-size:13px;color:var(--text);line-height:1.85}
+.stats{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:15px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:12px;color:var(--dim)}
+.chip .st{color:var(--gold)}
+.pips{display:none;justify-content:center;gap:7px;padding:2px 0 6px}
+media (max-width:800px){.pips{display:flex}}
+.pips i{width:6px;height:6px;border-radius:50%;background:var(--line);transition:.25s}
+.pips i.on{background:var(--lit);width:18px;border-radius:3px}
+
+.remind{display:flex;gap:15px;align-items:flex-start;margin-top:22px;padding:18px;
+  border:1px solid var(--line);border-radius:12px;background:rgba(30,18,52,.5)}
+.remind .orb{flex:0 0 46px;width:46px;height:46px;border-radius:50%;
+  background:radial-gradient(circle at 40% 32%,#C9A9F0,#5B3A8E 60%,#2A1848);
+  box-shadow:0 0 18px rgba(168,85,247,.3);display:flex;align-items:center;justify-content:center;font-size:20px}
+.remind h4{font-family:var(--sans);font-size:14px;font-weight:500;color:var(--gold);margin-bottom:7px}
+.remind p{font-size:13px;line-height:1.8}
+
+/* ── 對話 ── */
+.turns{margin:10px 0 20px}
+.turn{margin-bottom:20px;animation:rise .45s both}
+.who{font-size:10.5px;letter-spacing:.24em;color:var(--dim);margin-bottom:7px;text-indent:.24em;
+  display:flex;align-items:center;gap:12px}
+.edit-turn{background:none;border:none;color:var(--lit);font-family:var(--sans);font-size:11.5px;
+  letter-spacing:0;text-indent:0;cursor:pointer;text-decoration:underline;
+  text-underline-offset:2px;padding:0;opacity:.75;transition:opacity .2s}
+.edit-turn:hover{opacity:1}
+.edit-turn:focus-visible{outline:2px solid var(--lit);outline-offset:2px;opacity:1}
+.turn.me .bubble{background:var(--card-2);border-left:2px solid var(--line);padding:13px 16px;
+  font-size:14.5px;border-radius:0 6px 6px 0;color:var(--text);white-space:pre-wrap}
+.turn.sys .bubble{font-family:var(--serif);font-size:16.5px;line-height:1.8;color:#E2D6F5;padding-left:2px}
+.dots3 span{display:inline-block;width:4px;height:4px;background:var(--lit);border-radius:50%;
+  margin-right:5px;animation:blink 1.3s infinite}
+.dots3 span:nth-child(2){animation-delay:.18s}
+.dots3 span:nth-child(3){animation-delay:.36s}
+keyframes blink{0%,60%,100%{opacity:.2}30%{opacity:1}}
+
+textarea{width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;
+  color:var(--text);font-family:var(--sans);font-size:15px;font-weight:300;line-height:1.8;
+  padding:14px;resize:vertical;transition:border-color .2s}
+textarea:focus{outline:none;border-color:var(--lit)}
+textarea::placeholder{color:#5E4E7E}
+.meta{display:flex;justify-content:space-between;font-size:11.5px;color:var(--dim);margin-top:8px}
+.meta .over{color:var(--seal)}
+
+/* ── 籤紙 ── */
+.slip{position:relative;background:var(--paper);color:#241B14;border-radius:6px;
+  padding:34px 26px 30px;margin:24px 0 4px;box-shadow:0 18px 44px rgba(0,0,0,.55);
+  background-image:repeating-linear-gradient(0deg,rgba(140,120,90,.035) 0 1px,transparent 1px 4px)}
+.slip::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--seal);
+  opacity:.75;border-radius:6px 0 0 6px}
+.slip-tag{font-family:var(--serif);font-size:10.5px;letter-spacing:.4em;color:#9A7D5C;text-indent:.4em;margin-bottom:20px}
+.slip-lbl{font-size:10.5px;letter-spacing:.26em;color:#A08C6E;text-indent:.26em;margin-bottom:9px}
+.slip-q{font-family:var(--serif);font-size:22px;font-weight:600;line-height:1.62;color:#1F1810;letter-spacing:.02em}
+.slip-bg{font-size:14px;line-height:1.9;color:#42342A;white-space:pre-wrap}
+.slip-extra li{list-style:none;padding-left:14px;position:relative;font-size:13px;line-height:1.85;color:#6B5A48}
+.slip-extra li::before{content:"·";position:absolute;left:3px;color:#A08C6E}
+.slip-hr{height:1px;background:rgba(120,100,75,.22);margin:22px 0}
+.slip-foot{font-size:11.5px;line-height:1.85;color:#7A6752}
+.slip input[type=text]{width:100%;background:rgba(255,255,255,.55);border:1px dashed rgba(150,125,95,.55);
+  color:#241B14;border-radius:4px;font-family:var(--serif);font-size:18px;font-weight:600;
+  padding:11px 13px;line-height:1.6}
+.slip input[type=text]:focus{outline:none;border-color:var(--seal);border-style:solid}
+.slip textarea{background:rgba(255,255,255,.55);border:1px dashed rgba(150,125,95,.55);color:#241B14;border-radius:4px}
+.slip textarea:focus{border-color:var(--seal);border-style:solid}
+.slip .edit-q{font-family:var(--serif);font-size:19px;font-weight:600;line-height:1.6}
+.slip-tf{font-family:var(--serif);font-size:17px;font-weight:600;color:#3A2A1C;letter-spacing:.03em}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chips button{border:1px solid rgba(150,125,95,.55);background:rgba(255,255,255,.4);
+  border-radius:999px;padding:7px 15px;font-family:var(--sans);font-size:13px;color:#5A4736;
+  cursor:pointer;transition:.2s}
+.chips button:hover{border-color:var(--seal)}
+.chips button.on{background:var(--seal);border-color:var(--seal);color:#FBF4EA}
+.chips button:focus-visible{outline:2px solid var(--seal);outline-offset:2px}
+.slip-hint{font-size:11.5px;line-height:1.7;color:#8B7660;margin-top:9px}
+.tf-other{margin-top:9px;font-family:var(--sans)!important;font-size:15px!important;
+  font-weight:400!important;padding:10px 13px!important}
+
+.samples{border:1px solid var(--line);border-radius:12px;padding:15px 15px 12px;margin-bottom:14px;
+  background:rgba(30,18,52,.45)}
+.samp-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.samp-head span{font-size:12.5px;letter-spacing:.14em;color:var(--gold);text-indent:.14em}
+.samp-tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:12px;padding-bottom:2px}
+.samp-tabs::-webkit-scrollbar{display:none}
+.samp-tabs button{flex:0 0 auto;border:1px solid var(--line);background:none;border-radius:999px;
+  padding:6px 14px;font-family:var(--sans);font-size:12.5px;color:var(--dim);cursor:pointer;transition:.2s}
+.samp-tabs button.on{border-color:var(--lit);color:#E6DAF7;background:rgba(168,85,247,.12)}
+.samp-tabs button:focus-visible{outline:2px solid var(--lit);outline-offset:2px}
+.samp-list{display:flex;flex-direction:column;gap:1px}
+.samp-list button{text-align:left;border:none;background:none;padding:10px 2px;font-family:var(--sans);
+  font-size:14px;color:var(--text);cursor:pointer;border-bottom:1px solid rgba(62,44,92,.5);
+  line-height:1.6;transition:color .2s}
+.samp-list button:last-child{border-bottom:none}
+.samp-list button:hover{color:#EFE4FF}
+.samp-list button::before{content:"→ ";color:var(--gold-dim)}
+.samp-list button:focus-visible{outline:2px solid var(--lit);outline-offset:2px}
+.samp-note{font-size:11.5px;color:var(--dim);margin-top:10px;line-height:1.7}
+
+.mail{margin-top:20px}
+.mail-lbl{display:block;font-size:12.5px;letter-spacing:.14em;color:var(--gold);
+  text-indent:.14em;margin-bottom:10px}
+.mail input{width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;
+  color:var(--text);font-family:var(--sans);font-size:16px;font-weight:300;padding:15px 14px;
+  transition:border-color .2s}
+.mail input:focus{outline:none;border-color:var(--lit)}
+.mail input::placeholder{color:#5E4E7E}
+.mail input.bad{border-color:var(--seal)}
+.mail-err{font-size:12.5px;color:#E08B72;margin-top:8px}
+.mail-note{font-size:12px;color:var(--dim);margin-top:10px;line-height:1.75}
+.bubble.fail{font-family:var(--sans);font-size:14.5px;border:1px solid rgba(196,85,61,.5);
+  border-radius:10px;padding:16px;background:rgba(196,85,61,.07)}
+.bubble.fail p{margin-bottom:6px}
+.bubble.fail .fine{margin-bottom:0}
+.bubble.fail .go{font-size:15px;padding:14px}
+.seal{position:absolute;right:20px;bottom:20px;width:74px;height:74px;border-radius:50%;
+  border:2.5px solid var(--seal);color:var(--seal);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;font-family:var(--serif);letter-spacing:.12em;
+  transform:rotate(-9deg);opacity:0;pointer-events:none;transition:opacity .3s}
+.seal b{font-size:12.5px;line-height:1.35;font-weight:700}
+.seal i{font-style:normal;font-size:9px;letter-spacing:.2em;margin-top:3px;text-indent:.2em}
+.seal.on{animation:stamp .5s cubic-bezier(.3,1.5,.5,1) forwards}
+keyframes stamp{
+  0%{opacity:0;transform:rotate(-9deg) scale(2.4)}
+  55%{opacity:.95;transform:rotate(-9deg) scale(.94)}
+  100%{opacity:.82;transform:rotate(-9deg) scale(1)}
+}
+
+.total{display:flex;justify-content:space-between;align-items:baseline;padding:20px 0 4px;
+  border-top:1px solid var(--line);margin-top:8px}
+.total span{font-size:13px;color:var(--dim);letter-spacing:.08em}
+.total b{font-family:var(--serif);font-size:34px;font-weight:600;color:var(--gold);letter-spacing:.02em}
+
+.done-mark{font-family:var(--serif);font-size:56px;color:var(--gold);text-align:center;margin:26px 0 4px;opacity:.9}
+
+/* ── 確認對話框 ── */
+.veil{position:fixed;inset:0;background:rgba(6,3,14,.82);backdrop-filter:blur(3px);
+  display:none;align-items:center;justify-content:center;padding:24px;z-index:50}
+.veil.on{display:flex}
+.modal{max-width:380px;width:100%;background:linear-gradient(170deg,var(--card-2),var(--card));
+  border:1px solid var(--line);border-radius:14px;padding:26px 22px;text-align:center;
+  animation:rise .3s both}
+.modal h4{font-family:var(--serif);font-size:19px;color:var(--gold);margin-bottom:12px}
+.modal p{font-size:14px;color:var(--text);margin-bottom:6px}
+
+media (max-width:400px){
+  .slip{padding:28px 20px 26px}
+  .slip-q{font-size:19px}
+  .seal{width:62px;height:62px;right:14px;bottom:14px}
+  .seal b{font-size:10.5px}
+}
+media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .seal.on{opacity:.82}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <button class="icon-btn" id="topBack" aria-label="回到上一步" onclick="back()">‹</button>
+    <div class="brand"><em>☾</em>未完籤所<em>✦</em></div>
+    <button class="pill-btn">? 查看流程</button>
+  </div>
+
+  <nav class="steps" id="steps" aria-label="流程進度"></nav>
+
+  <!-- ① 抽籤結果 -->
+  <section class="step live" id="s0">
+    <div class="narrow">
+      <header class="hero">
+        <h1><i>✦</i>籤面之外<i>✦</i></h1>
+        <p>一般籤說的是通則。你心裡真正卡住的那一件事，需要有人真的讀過你的處境，再回答你。</p>
+      </header>
+      <div class="card">
+        <div class="line"><dt>形式</dt><dd>真人老師撰寫，500–800 字</dd></div>
+        <div class="line"><dt>時間</dt><dd>三日內寄到你的信箱</dd></div>
+        <div class="line"><dt>範圍</dt><dd>一個問題，一次回答</dd></div>
+      </div>
+      <button class="go" onclick="go(1)">開始</button>
+      <button class="go ghost" onclick="history.back()">回到我的籤</button>
+      <div class="foot">先整理問題，看過完整內容再決定要不要付款</div>
+    </div>
+  </section>
+
+
+  <!-- ② 聯絡方式 -->
+  <section class="step" id="s1">
+    <div class="narrow">
+      <header class="hero">
+        <h1><i>✦</i>先留個稱呼<i>✦</i></h1>
+        <p>接下來的整理與解答都會用到。只需要兩件事。</p>
+      </header>
+
+      <div class="mail" style="margin-top:26px">
+        <label class="mail-lbl" for="nameIn">老師怎麼稱呼你</label>
+        <input type="text" id="nameIn" maxlength="12" placeholder="例如：小雅、Amy、林小姐" oninput="checkIntro()">
+        <div class="mail-note">本名最準確，用暱稱也可以。這個稱呼會出現在老師寫給你的內容裡。</div>
+      </div>
+
+      <div class="mail" style="margin-top:22px">
+        <label class="mail-lbl" for="mailIn">解答寄送信箱</label>
+        <input type="email" id="mailIn" inputmode="email" autocomplete="email"
+               placeholder="your@email.com" oninput="checkIntro()">
+        <div class="mail-err" id="mailInErr" hidden>請確認信箱格式，例如 name@example.com</div>
+        <div class="mail-note">
+          解答完成後會寄到這裡。<br>
+          我們不會用這個信箱寄送行銷訊息，也不會提供給第三方。
+        </div>
+      </div>
+
+      <div class="note keep">兩個欄位在付款前都還可以修改。</div>
+
+      <button class="go" id="goName" disabled onclick="go(2)">繼續</button>
+      <button class="go ghost" onclick="go(0)">回上一步</button>
+    </div>
+  </section>
+
+  <!-- ③ 選擇風格 -->
+  <section class="step" id="s2">
+    <header class="hero">
+      <h1><i>✦</i><span id="styleTitle">選擇解讀風格</span><i>✦</i></h1>
+      <p>選擇一位適合你的解讀風格，老師將以你選擇的方式為你解讀。</p>
+      <div class="badge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2l7 4v6c0 5-3 8-7 10-4-2-7-5-7-10V6z"/></svg>
+        所有老師皆為平台合作占卜師，真實姓名不公開
+      </div>
+    </header>
+
+    <div class="deck" id="deck" role="radiogroup" aria-label="解讀風格"></div>
+    <div class="pips" id="pips"></div>
+
+    <div class="narrow">
+      <div class="remind">
+        <div class="orb">🔮</div>
+        <div>
+          <h4>小提醒</h4>
+          <p>一次委託對應一位老師。付款前都可以回來更換，付款後即無法更動。</p>
+        </div>
+      </div>
+      <button class="go" id="pickBtn" disabled onclick="go(3)">請先選擇一種風格</button>
+      <button class="go ghost" onclick="go(1)">回上一步</button>
+      <div class="foot">下一步將閱讀注意事項</div>
+    </div>
+  </section>
+
+  <!-- ④ 注意事項 -->
+  <section class="step" id="s3">
+    <div class="narrow">
+      <header class="hero">
+        <h1><i>✦</i>開始之前<i>✦</i></h1>
+        <p>有些事我們先說清楚。</p>
+      </header>
+
+      <h2>這次能問什麼</h2>
+      <ul class="rules">
+        <li>一次一個問題。老師只會回答你最後確認的那一題。</li>
+        <li>問題關於你自己的處境、選擇、關係，或你正在等的一個決定。</li>
+        <li>問題需要有一個時間邊界。可以是期間（三個月內），也可以是一件事（放榜前、他生日前）。</li>
+        <li>問題越具體越好。「他最近在想什麼」比「我們的未來會怎樣」更容易解讀。</li>
+        <li>可以問結果、問時間點，也可以問自己能做什麼。</li>
+        <li>若問題牽涉到另一個人，需要提供他的名字或暱稱，老師才知道要算誰。</li>
+        <li>不確定怎麼問沒關係，下一步會提供各類問法讓你參考。</li>
+      </ul>
+
+      <h2>這次不能問什麼</h2>
+      <ul class="rules no">
+        <li>醫療診斷、用藥、病情發展</li>
+        <li>法律判決、投資標的、賭博結果</li>
+        <li>生死、壽命</li>
+        <li>他人的隱私、行蹤、下落</li>
+      </ul>
+      <p class="fine">這些不是我們不願意，是這類問題需要的是專業，不是解籤。</p>
+
+      <div class="note warn">
+        本服務屬心靈參考性質。因屬依你的問題客製撰寫，一經付款即開始製作，不適用七日猶豫期。
+      </div>
+
+      <label class="agree">
+        <input type="checkbox" id="ok1" onchange="document.getElementById('go2').disabled=!this.checked">
+        <span>我了解上述範圍與限制，也同意本服務為客製化內容、不適用七日猶豫期。</span>
+      </label>
+
+      <button class="go" id="go2" disabled onclick="go(4)">我了解，繼續</button>
+      <button class="go ghost" onclick="go(2)">回上一步</button>
+    </div>
+  </section>
+
+  <!-- ⑤ AI 問籤引導 -->
+  <section class="step" id="s4">
+    <div class="narrow">
+      <header class="hero">
+        <h1><i>✦</i><span id="aiTitle">先說說你的事</span><i>✦</i></h1>
+        <p id="intro">一次問一件事。下面是幾種問得清楚的方式，可以直接選來改，也可以自己寫。</p>
+      </header>
+
+      <div class="turns" id="turns"></div>
+
+      <div id="inputArea">
+        <div class="samples" id="samples">
+          <div class="samp-head">
+            <span>這樣問最清楚</span>
+            <button class="linkish" id="sampToggle" onclick="toggleSamp()">收合</button>
+          </div>
+          <div id="sampBody">
+            <div class="samp-tabs" id="sampTabs"></div>
+            <div class="samp-list" id="sampList"></div>
+            <div class="samp-note">點一句帶入下方，再改成你自己的情況。</div>
+          </div>
+        </div>
+        <textarea id="say" rows="5" maxlength="600" placeholder="從上面選一句，或直接寫下你想問的那一件事……"
+          id-note="round0" oninput="count()"></textarea>
+        <div class="meta"><span id="cnt">0 / 600</span><span>還可以說 <b id="left">3</b> 次</span></div>
+        <button class="go" id="sendBtn" onclick="send()">送出</button>
+      </div>
+
+      <!-- 已整理完成後回到此頁時顯示 -->
+      <div id="doneArea" hidden>
+        <div class="note keep">你的問題已經整理好了。內容保留著，可以直接回到確認單。</div>
+        <button class="go" onclick="go(5)">回到確認單</button>
+        <button class="go ghost" onclick="askRestart()">重新開始整理</button>
+      </div>
+
+      <div class="note" id="aiNote">我只負責把問題整理清楚，不會給你任何解讀或答案。那是老師的事。<br>說過的話都可以點「修改」重寫。</div>
+      <button class="go ghost" onclick="go(3)">回上一步</button>
+    </div>
+  </section>
+
+  <!-- ⑥ 確認問題 -->
+  <section class="step" id="s5">
+    <div class="narrow">
+      <header class="hero">
+        <h1><i>✦</i>確認你的問題<i>✦</i></h1>
+        <p id="editHint">這是老師會看到的內容。兩欄都可以改，你最信任自己寫的版本。</p>
+      </header>
+
+      <div class="note warn" id="manualNote" hidden>
+        剛才連線不穩，沒能幫你整理。你說過的話都放在下方「背景」了，
+        請把最想問的那一件事寫成一句話填在「你的問題」，記得帶上時間邊界。
+      </div>
+
+      <div class="slip" id="slip">
+        <div class="slip-tag">未完籤所 受理單</div>
+
+        <div class="slip-lbl">老師怎麼稱呼你</div>
+        <div id="nView" class="slip-tf" hidden></div>
+        <input type="text" id="nEdit" maxlength="12" placeholder="例如：小雅、Amy、林小姐">
+        <div class="slip-hint" id="nHint">本名最準確，暱稱也可以。這個稱呼會出現在老師寫給你的內容裡。</div>
+
+        <div class="slip-lbl" style="margin-top:22px">這題要算的對方　<span style="letter-spacing:0;text-indent:0">（選填）</span></div>
+        <div id="oView" class="slip-tf" hidden></div>
+        <input type="text" id="oEdit" maxlength="16" placeholder="例如：阿哲、林經理、Momo">
+        <div class="slip-hint" id="oHint">
+          塔羅需要知道要算誰。本名最準，暱稱也可以。<br>
+          若這題不牽涉別人（例如考試、財務），留空即可。
+        </div>
+
+        <div class="slip-lbl" style="margin-top:22px">你的問題</div>
+        <div id="qView" class="slip-q" hidden></div>
+        <textarea id="qEdit" class="edit-q" rows="2" maxlength="40"
+          placeholder="例如：三個月內，我換工作會不會順利？／放榜前，我該補強哪裡？"></textarea>
+        <div class="slip-hint" id="qHint">一句話，包含時間範圍。這是老師唯一會回答的那一題。</div>
+
+        <div class="slip-lbl" style="margin-top:22px">時間邊界</div>
+        <div id="tfView" class="slip-tf" hidden></div>
+        <div class="chips" id="tfChips"></div>
+        <input type="text" id="tfOther" class="tf-other" maxlength="20" hidden
+               placeholder="例如：放榜前、他生日前、今年底前" oninput="setOtherTf(this.value)">
+        <div class="slip-hint" id="tfWarn" hidden style="color:#A8452F">
+          占卜的有效期間大約半年，超過這個範圍準確度會下降。建議改成半年內的一個節點。
+        </div>
+        <div class="slip-hint" id="tfHint">
+          也可以用一件事當邊界，例如「放榜前」「下次見面前」。占卜的有效期間約為半年。
+        </div>
+
+        <div class="slip-lbl" style="margin-top:22px">你想知道的　<span style="letter-spacing:0;text-indent:0">（選填）</span></div>
+        <div id="inView" class="slip-tf" hidden></div>
+        <div class="chips" id="inChips"></div>
+        <div class="slip-hint" id="inHint"></div>
+
+        <div class="slip-lbl" style="margin-top:22px">背景</div>
+        <div id="bView" class="slip-bg" hidden></div>
+        <textarea id="bEdit" rows="5" maxlength="220"
+          placeholder="讓老師知道發生了什麼事，例如目前的狀況、持續多久了。"></textarea>
+
+        <div id="extraBox" hidden>
+          <div class="slip-lbl" style="margin-top:22px">你也提到（老師會看到，不保證回答）</div>
+          <ul class="slip-extra" id="extraList"></ul>
+        </div>
+
+        <div class="slip-hr"></div>
+        <div class="slip-foot">
+          解讀風格：<span id="slipStyle">—</span><br>
+          由真人老師閱讀並撰寫回覆，三日內寄達。<br>
+          本次為單一問題之回覆，不含後續追問。
+        </div>
+
+        <div class="seal" id="seal"><b>已受理</b><i>未完籤所</i></div>
+      </div>
+
+      <div id="beforeLock">
+        <button class="go" onclick="lockSlip()">確認內容</button>
+        <button class="go ghost" onclick="go(4)">回上一步</button>
+        <div class="foot">確認後內容即鎖定，付款前仍可解除重新編輯</div>
+      </div>
+
+      <div id="afterLock" hidden>
+        <button class="go" onclick="toPay()">前往確認訂單</button>
+        <button class="go ghost" onclick="go(4)">回上一步</button>
+        <div class="foot" style="margin-top:14px">
+          <button class="linkish" onclick="unlock()">需要修改？解除鎖定</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑦ 付款 -->
+  <section class="step" id="s6">
+    <div class="narrow">
+      <header class="hero">
+        <h1><i>✦</i>確認訂單<i>✦</i></h1>
+        <p>付款前再看一次。</p>
+      </header>
+
+      <div class="card">
+        <div class="line"><dt>訂單編號</dt><dd class="oid" id="oid">—</dd></div>
+        <div class="line"><dt>你的問題</dt><dd id="sumQ">—</dd></div>
+        <div class="line"><dt>稱呼</dt><dd id="sumN">—</dd></div>
+        <div class="line"><dt>算的對方</dt><dd id="sumO">—</dd></div>
+        <div class="line"><dt>時間邊界</dt><dd id="sumT">—</dd></div>
+        <div class="line"><dt>你想知道的</dt><dd id="sumI">—</dd></div>
+        <div class="line"><dt>解讀老師</dt><dd id="sumS">—</dd></div>
+        <div class="line"><dt>交付時間</dt><dd id="sumD">—</dd></div>
+        <div class="line"><dt>內容長度</dt><dd>500–800 字</dd></div>
+        <div class="line"><dt>後續追問</dt><dd>不含</dd></div>
+        <div class="total"><span>應付金額　NT$</span><b>599</b></div>
+      </div>
+
+      <div class="mail">
+        <label class="mail-lbl" for="mail">解答寄送信箱</label>
+        <input type="email" id="mail" inputmode="email" autocomplete="email"
+               placeholder="youremail.com" oninput="checkMail()">
+        <div class="mail-err" id="mailErr" hidden>請確認信箱格式，例如 nameexample.com</div>
+        <div class="mail-note">
+          這是收到解答的唯一管道，請確認沒有打錯。<br>
+          寄出後若三日內沒看到，請先查看垃圾郵件匣。
+        </div>
+      </div>
+
+      <label class="agree">
+        <input type="checkbox" id="ok2" onchange="syncPayBtn()">
+        <span>我已確認問題內容與寄送信箱無誤，並同意付款後即開始製作、不適用七日猶豫期。</span>
+      </label>
+
+      <button class="go pay" id="payBtn" disabled onclick="pay()">前往付款</button>
+      <button class="go ghost" onclick="go(5)">回上一步</button>
+      <div class="foot">將前往綠界 ECPay 完成付款</div>
+    </div>
+  </section>
+
+  <!-- 完成 -->
+  <section class="step" id="s7">
+    <div class="narrow">
+      <div class="done-mark">籤</div>
+      <header class="hero" style="padding-top:0">
+        <h1>收到了</h1>
+        <p>你的問題已經送進老師手上。</p>
+      </header>
+      <div class="card">
+        <div class="line"><dt>訂單編號</dt><dd class="oid" id="oid2">—</dd></div>
+        <div class="line"><dt>解讀老師</dt><dd id="sumS2">—</dd></div>
+        <div class="line"><dt>預計寄達</dt><dd id="due2">—</dd></div>
+        <div class="line"><dt>寄達信箱</dt><dd id="mail2">—</dd></div>
+      </div>
+      <div class="note">老師接下案件後會再通知你一次。若三日內未收到，請憑訂單編號與我們聯繫。</div>
+      <button class="go ghost" onclick="location.reload()">回到首頁</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- 重新整理確認 -->
+<div class="veil" id="veil">
+  <div class="modal">
+    <h4>要重新開始嗎</h4>
+    <p>目前的對話與已整理好的問題會被清除，需要重新說一次。</p>
+    <button class="go" onclick="doRestart()">重新開始</button>
+    <button class="go ghost" onclick="closeVeil()">先不要</button>
+  </div>
+</div>
+
+<script>
+/* ════════ 老師資料 ════════
+   avatar：換成你的圖片路徑，例如 "img/seer-star.png"
+   stats：累積真實數據前請保持 null，卡片會自動隱藏該區塊
+*/
+const SEERS=[
+  {id:'gentle',tag:'溫柔陪伴系',name:'星語',glyph:'☾',
+   motto:'溫柔陪伴・療癒指引',
+   method:'塔羅牌・月亮神諭卡・直覺引導',
+   desc:'擅長以溫柔視角理解你的處境，給予情緒支持與方向建議，陪你一起看見內心的力量。',
+   avatar:null,fallback:'☾',stats:null},
+  {id:'direct',tag:'直球指路系',name:'夜行者',glyph:'★',
+   motto:'直球分析・給你答案',
+   method:'雷諾曼卡・靈擺占卜・直覺結合邏輯',
+   desc:'擅長快速切入問題核心，不繞彎給出明確方向，適合想知道「真相」的你。',
+   avatar:null,fallback:'★',stats:null},
+  {id:'logic',tag:'邏輯分析系',name:'蒼穹',glyph:'☉',
+   motto:'邏輯解析・理性洞察',
+   method:'易經卜卦・數字能量・塔羅牌',
+   desc:'擅長從事件脈絡與潛在模式分析，清楚拆解問題結構，提供理性可執行的建議。',
+   avatar:null,fallback:'☉',stats:null}
+];
+
+const STEPS=['抽籤結果','聯絡方式','選擇風格','注意事項','AI問籤引導','確認問題','付款'];
+const MAIL_RE=/^[^\s]+[^\s]+\.[a-zA-Z]{2,}$/;
+const S={step:0,max:0,round:0,history:[],result:null,locked:false,seer:null,
+         oid:null,paid:false,name:'',email:'',fails:0,
+         fb:{narrowed:false,tfAsked:false,intentAsked:false}};
+
+/* ═══════════════════════════════════════
+   後端 API 位址。部署 worker.js 之後把網址填進來。
+   提示詞在後端，不放前端。
+   ═══════════════════════════════════════ */
+/* Worker 的 API 位址。換 Worker 時只要改這一行。 */
+const API_URL = 'https://unfinished-test.jiazhen0404.workers.dev/api/guide';
+/* 若網頁與 Worker 同一個網域，也可以直接寫相對路徑：'/api/guide' */
+
+/* ════════ 導覽（不清空任何內容）════════ */
+function go(n){
+  document.querySelectorAll('.step').forEach(e=>e.classList.remove('live'));
+  document.getElementById('s'+n).classList.add('live');
+  S.step=n;
+  S.max=Math.max(S.max,n);
+  if(n===4)renderAI();
+  if(n===2)document.getElementById('styleTitle').textContent=
+    S.name?S.name+'，選一種說法':'選擇解讀風格';
+  paintSteps();
+  document.getElementById('topBack').hidden=(n===0||n===7);
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(n===4&&S.round===0&&!S.result)setTimeout(()=>document.getElementById('say').focus(),320);
+}
+function back(){
+  if(S.step>0&&S.step<7)go(S.step-1);
+}
+
+function paintSteps(){
+  const i=Math.min(S.step,6);
+  document.getElementById('steps').innerHTML=STEPS.map((s,k)=>{
+    const can=(k<i)||(k<=S.max&&!S.paid);
+    const cls=[k===i?'on':(k<i?'done':''),can&&k!==i?'jump':''].filter(Boolean).join(' ');
+    return `<button class="stp ${cls}" ${can&&k!==i?`onclick="go(${k})"`:'disabled style="opacity:1"'}>
+      <b>${k+1}</b><span>${s}</span></button>`;
+  }).join('');
+  const on=document.querySelector('.stp.on');
+  if(on)on.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+}
+paintSteps();
+
+/* ════════ 聯絡方式頁 ════════ */
+function checkIntro(){
+  const nm=document.getElementById('nameIn').value.trim();
+  const mv=document.getElementById('mailIn').value.trim();
+  const el=document.getElementById('mailIn');
+  const bad=mv.length>0&&!MAIL_RE.test(mv);
+  el.classList.toggle('bad',bad);
+  document.getElementById('mailInErr').hidden=!bad;
+
+  if(nm)S.name=nm;
+  if(MAIL_RE.test(mv))S.email=mv;
+
+  document.getElementById('goName').disabled=!(nm.length>0&&MAIL_RE.test(mv));
+}
+
+/* ════════ 角色卡 ════════ */
+document.getElementById('deck').innerHTML=SEERS.map((s,i)=>{
+  const face=s.avatar?`<img src="${s.avatar}" alt="${s.name}">`:`<div class="ph">${s.fallback}</div>`;
+  const stats=s.stats?`<div class="stats">
+      <span class="chip"><span class="st">★</span> ${s.stats.rating}</span>
+      <span class="chip">已解讀 ${s.stats.count.toLocaleString()} 個問題</span></div>`:'';
+  return `<button class="seer" role="radio" aria-checked="false" onclick="pick(${i})">
+    <span class="tick">✓</span>
+    <div class="tag">${s.tag}</div>
+    <div class="face">${face}</div>
+    <h3>${s.name}<em>${s.glyph}</em></h3>
+    <div class="motto">${s.motto}</div>
+    <div class="hr"></div>
+    <div class="lbl">使用占卜手法</div>
+    <div class="val">${s.method}</div>
+    <div class="lbl">解讀特色</div>
+    <div class="desc">${s.desc}</div>
+    ${stats}
+  </button>`;
+}).join('');
+document.getElementById('pips').innerHTML=SEERS.map((_,i)=>`<i class="${i===0?'on':''}"></i>`).join('');
+
+function pick(i){
+  S.seer=SEERS[i];
+  document.querySelectorAll('.seer').forEach((el,k)=>{
+    el.classList.toggle('pick',k===i);
+    el.setAttribute('aria-checked',k===i);
+  });
+  const b=document.getElementById('pickBtn');
+  b.disabled=false;
+  b.textContent='確認選擇：'+S.seer.name+'　›';
+  /* 若確認單已存在，同步更新上面的風格 */
+  const t=document.getElementById('slipStyle');
+  if(S.result)t.textContent=S.seer.name+'（'+S.seer.tag+'）';
+}
+
+const deck=document.getElementById('deck');
+deck.addEventListener('scroll',()=>{
+  const mid=deck.scrollLeft+deck.clientWidth/2;
+  let near=0,best=1e9;
+  [...deck.children].forEach((c,i)=>{
+    const d=Math.abs(c.offsetLeft+c.offsetWidth/2-mid);
+    if(d<best){best=d;near=i}
+  });
+  document.querySelectorAll('#pips i').forEach((d,i)=>d.classList.toggle('on',i===near));
+},{passive:true});
+
+/* ════════ 問法範例（依合作老師實務建議整理）════════ */
+const SAMPLES=[
+ {cat:'感情',items:[
+   '三個月內，他會不會主動找我？',
+   '半年內，他有沒有可能回來？',
+   '我該怎麼做，才有機會讓他回來？',
+   '他目前對我的看法是什麼？',
+   '他現在對我有沒有喜歡或好感？',
+   '他目前身邊有沒有其他人？',
+   '半年內，他大概什麼時候會主動聯絡我？',
+   '他生日前，我們有機會恢復聯絡嗎？',
+   '一個月內，我們的關係會有什麼變化？'
+ ]},
+ {cat:'工作',items:[
+   '三個月內，我有沒有機會升遷？',
+   '半年內，我適不適合換工作？',
+   '主管目前對我的評價是什麼？',
+   '這份新工作，三個月內會不會順利？',
+   '半年內，大概什麼時候會出現轉職的機會？',
+   '年底前，我提出來的案子會不會過？',
+   '我該怎麼做，才能改善現在的工作處境？'
+ ]},
+ {cat:'學業',items:[
+   '三個月內，我有沒有機會考上？',
+   '放榜前，我還可以補強哪個部分？',
+   '半年內，我這個科目的狀況會怎麼樣？',
+   '我該怎麼準備，勝算會比較大？'
+ ]},
+ {cat:'金錢',items:[
+   '他跟我借的錢，半年內會不會還？',
+   '三個月內，我的財務狀況會不會好轉？',
+   '這筆支出，一個月內做決定是好時機嗎？'
+ ]},
+ {cat:'選擇',items:[
+   '這兩個選項，哪一個對我比較有利？',
+   '三個月內做這個決定，會有什麼結果？',
+   '我現在該不該行動，還是再等一等？'
+ ]},
+ {cat:'毛孩',items:[
+   '牠最近的狀態是怎麼了？',
+   '一個月內，牠的情況會有什麼變化？',
+   '我可以為牠做些什麼？'
+ ]}
+];
+let sampCat=0, sampOpen=true;
+
+function renderSamples(){
+  document.getElementById('sampTabs').innerHTML=SAMPLES.map((g,i)=>
+    `<button type="button" class="${i===sampCat?'on':''}" onclick="setSampCat(${i})">${g.cat}</button>`).join('');
+  document.getElementById('sampList').innerHTML=SAMPLES[sampCat].items.map(t=>
+    `<button type="button" onclick="useSample(this)">${t}</button>`).join('');
+}
+function setSampCat(i){sampCat=i;renderSamples()}
+function useSample(el){
+  const box=document.getElementById('say');
+  box.value=el.textContent.replace(/^→\s*/,'');
+  count();
+  box.focus();
+  box.setSelectionRange(box.value.length,box.value.length);
+}
+function toggleSamp(){
+  sampOpen=!sampOpen;
+  document.getElementById('sampBody').hidden=!sampOpen;
+  document.getElementById('sampToggle').textContent=sampOpen?'收合':'展開';
+}
+renderSamples();
+
+/* ════════ AI 對話 ════════ */
+const PH=['從上面選一句，或直接寫下你想問的那一件事……',
+          '回答上面那個問題就好，一句話也可以。',
+          '再確認最後一件事就完成了。'];
+
+function renderAI(){
+  const done=!!S.result;
+  document.getElementById('samples').hidden=(S.round>0);
+  document.getElementById('say').placeholder=PH[Math.min(S.round,2)];
+  document.getElementById('aiTitle').textContent=
+    S.name?S.name+'，先說說你的事':'先說說你的事';
+  document.getElementById('inputArea').hidden=done;
+  document.getElementById('doneArea').hidden=!done;
+  document.getElementById('aiNote').hidden=done;
+  document.getElementById('intro').hidden=(S.round>0||done);
+  document.getElementById('left').textContent=Math.max(0,3-S.round);
+}
+function count(){
+  const v=document.getElementById('say').value.length;
+  const c=document.getElementById('cnt');
+  c.textContent=v+' / 600';
+  c.className=v>=600?'over':'';
+}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+/* 依 S.history 重畫整段對話。使用者的每一則都可以點「修改」退回 */
+function renderTurns(){
+  const c=document.getElementById('turns');
+  c.innerHTML='';
+  S.history.forEach((h,i)=>{
+    const me=h.role==='user';
+    const d=document.createElement('div');
+    d.className='turn '+(me?'me':'sys');
+    const edit=me?`<button class="edit-turn" onclick="rollback(${i})">修改</button>`:'';
+    d.innerHTML=`<div class="who">${me?'你':'未完籤所'}${edit}</div>`
+               +`<div class="bubble">${esc(h.content)}</div>`;
+    c.appendChild(d);
+  });
+  const last=c.lastElementChild;
+  if(last)last.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+/* 退回到某一則重寫。之後的對話是根據舊內容產生的，一併清掉 */
+function rollback(i){
+  const text=S.history[i].content;
+  S.history=S.history.slice(0,i);
+  S.round=S.history.filter(h=>h.role==='user').length;
+  S.fb={narrowed:false,tfAsked:false,intentAsked:false};
+  S.fails=0;
+  renderTurns();
+  document.getElementById('failBox')?.remove();
+  document.getElementById('sendBtn').textContent='送出';
+  document.getElementById('inputArea').hidden=false;
+  renderAI();
+  const say=document.getElementById('say');
+  say.value=text;count();
+  say.focus();
+  say.setSelectionRange(say.value.length,say.value.length);
+}
+
+async function send(){
+  const box=document.getElementById('say');
+  const text=box.value.trim();
+  if(text.length<4){box.focus();return}
+
+  S.round++;
+  S.history.push({role:'user',content:text});
+  renderTurns();
+  box.value='';count();
+  document.getElementById('intro').hidden=true;
+  document.getElementById('inputArea').hidden=true;
+  document.getElementById('samples').hidden=true;
+
+  const w=document.createElement('div');
+  w.className='turn sys';w.id='wait';
+  w.innerHTML='<div class="who">未完籤所</div><div class="bubble dots3"><span></span><span></span><span></span></div>';
+  document.getElementById('turns').appendChild(w);
+  w.scrollIntoView({behavior:'smooth',block:'nearest'});
+
+  const reply=await ask();
+  document.getElementById('wait')?.remove();
+
+  if(reply===null){
+    S.fails++;
+    S.history.pop();          // 這一輪不算，退回去讓他重送
+    S.round--;
+    showFail(text);
+    return;
+  }
+  S.fails=0;
+  document.getElementById('failBox')?.remove();
+  document.getElementById('sendBtn').textContent='送出';
+  const parsed=tryJSON(reply);
+  if(parsed||S.round>=3){
+    S.result=parsed||fallbackResult();
+    fillSlip();
+    renderAI();
+    setTimeout(()=>go(5),450);
+    return;
+  }
+  S.history.push({role:'assistant',content:reply});
+  renderTurns();
+  document.getElementById('inputArea').hidden=false;
+  document.getElementById('left').textContent=3-S.round;
+  box.placeholder=PH[Math.min(S.round,2)];
+  box.focus();
+}
+
+async function ask(){
+  const msgs=S.history.map(m=>({role:m.role,content:m.content}));
+  try{
+    const r=await fetch(API_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({messages:msgs,name:S.name})
+    });
+    if(!r.ok)throw new Error('http '+r.status);
+    const d=await r.json();
+    if(!d.text)throw new Error('empty');
+    return d.text;
+  }catch(e){
+    console.error('guide api:',e.message);
+    return null;
+  }
+}
+
+/* 連線失敗時的處理。不假裝成 AI，誠實說明並給兩條路 */
+function showFail(lastText){
+  const turns=document.getElementById('turns');
+  renderTurns();   /* history 已經退回，重畫即可 */
+  document.getElementById('failBox')?.remove();
+
+  const box=document.createElement('div');
+  box.className='turn sys';
+  box.id='failBox';
+  const manual=S.fails>=2
+    ? `<button class="linkish" style="margin-top:10px" onclick="manualEntry()">連不上？自己填寫問題</button>`
+    : '';
+  box.innerHTML=`
+    <div class="who">未完籤所</div>
+    <div class="bubble fail">
+      <p>連線出了點問題，剛剛那句話沒有送出去。</p>
+      <p class="fine">你寫的內容還在下方，可以改一改再按送出。</p>
+      ${manual}
+    </div>`;
+  turns.appendChild(box);
+
+  /* 原文放回輸入框，送出鍵就是重試 */
+  const say=document.getElementById('say');
+  say.value=lastText;count();
+  document.getElementById('inputArea').hidden=false;
+  document.getElementById('sendBtn').textContent='再送一次';
+  box.scrollIntoView({behavior:'smooth',block:'nearest'});
+  say.focus();
+}
+
+/* 兩次都失敗：跳過 AI，直接讓使用者自己填受理單 */
+function manualEntry(){
+  const us=S.history.filter(h=>h.role==='user').map(h=>h.content.trim());
+  const typed=document.getElementById('say').value.trim();
+  const all=[...us,typed].filter(Boolean).join('\n');
+  /* 不猜主問題。猜出來的多半是背景而不是問題，讓使用者自己寫比較準 */
+  S.result={main_question:'',timeframe:null,intent:null,other_party:'',
+            background:all.slice(0,200),extra:[]};
+  fillSlip();
+  document.getElementById('manualNote').hidden=false;
+  go(5);
+  setTimeout(()=>document.getElementById('qEdit').focus(),400);
+}
+function tryJSON(t){
+  const m=t.match(/\{[\s\S]*\}/);
+  if(!m)return null;
+  try{const o=JSON.parse(m[0]);return o.main_question?o:null}catch(e){return null}
+}
+
+/* 重新開始（唯一會清空的動作，需確認）*/
+function askRestart(){document.getElementById('veil').classList.add('on')}
+function closeVeil(){document.getElementById('veil').classList.remove('on')}
+function doRestart(){
+  S.round=0;S.history=[];S.result=null;S.locked=false;
+  S.fb={narrowed:false,tfAsked:false,intentAsked:false};S.fails=0;
+  document.getElementById('failBox')?.remove();
+  document.getElementById('sendBtn').textContent='送出';
+  document.getElementById('manualNote').hidden=true;
+  renderTurns();
+  document.getElementById('samples').hidden=false;
+  document.getElementById('say').value='';count();
+  document.getElementById('say').placeholder=PH[0];
+  document.getElementById('oEdit').value='';
+  document.getElementById('qEdit').value='';
+  document.getElementById('bEdit').value='';
+  document.getElementById('extraBox').hidden=true;
+  unlockUI();
+  closeVeil();
+  renderAI();
+  document.getElementById('say').focus();
+}
+
+/* ════════ 時間 / 落點 選項 ════════ */
+const TF=['兩週內','一個月內','三個月內','半年內'];
+const IN=['會不會發生','什麼時候會發生','我可以做什麼'];
+
+const IN_HINT={
+  '會不會發生':'問法像這樣：一個月內，他會不會主動回來找我？',
+  '什麼時候會發生':'問法像這樣：半年內，他大概什麼時候會主動回來找我？時間邊界拉長一點，比較看得出落點。',
+  '我可以做什麼':'問法像這樣：一個月內，我可以做什麼讓他主動回來？'
+};
+
+function buildChips(boxId,list,key){
+  const box=document.getElementById(boxId);
+  let html=list.map(v=>`<button type="button" onclick="setChip('${key}','${v}')">${v}</button>`).join('');
+  if(key==='timeframe')html+=`<button type="button" onclick="openOtherTf()">其他…</button>`;
+  box.innerHTML=html;
+}
+
+function setChip(key,val){
+  const prev=S.result[key];
+  S.result[key]=val;
+  if(key==='timeframe'){
+    document.getElementById('tfOther').hidden=true;
+    if(prev!==val)syncQuestionTf(val);
+  }
+  paintChips();
+}
+
+function openOtherTf(){
+  const el=document.getElementById('tfOther');
+  el.hidden=false;
+  if(TF.includes(S.result.timeframe))el.value='';
+  paintChips();
+  el.focus();
+}
+
+/* 超過半年的說法，柔性提醒但不阻擋 */
+const TOO_LONG=/一年|兩年|三年|明年|十二個月|後年/;
+
+function setOtherTf(v){
+  const prev=S.result.timeframe;
+  const t=v.trim();
+  S.result.timeframe=t;
+  if(t&&prev!==t)syncQuestionTf(t);
+  const w=document.getElementById('tfWarn');
+  w.hidden=!(t&&TOO_LONG.test(t));
+  paintChips();
+}
+
+function paintChips(){
+  const tf=S.result?S.result.timeframe:null;
+  const isPreset=TF.includes(tf);
+  const btns=document.querySelectorAll('#tfChips button');
+  btns.forEach((b,i)=>{
+    if(i<TF.length)b.classList.toggle('on',TF[i]===tf);
+    else b.classList.toggle('on',!!tf&&!isPreset);   /* 其他… */
+  });
+  const other=document.getElementById('tfOther');
+  if(tf&&!isPreset){other.hidden=false;if(other.value!==tf)other.value=tf;}
+
+  const it=S.result?S.result.intent:null;
+  document.querySelectorAll('#inChips button').forEach((b,i)=>b.classList.toggle('on',IN[i]===it));
+  const h=document.getElementById('inHint');
+  if(h)h.textContent=it?IN_HINT[it]:'選填。如果問句本身已經講清楚了，可以不選。';
+}
+
+/* AI 回傳的 intent 是「結果」「行動」，對應到人看得懂的字 */
+function normIntent(v){
+  if(!v)return null;
+  v=String(v).trim();
+  if(!v)return null;
+  if(IN.includes(v))return v;
+  if(/時間點|何時|什麼時候|甚麼時候|時機/.test(v))return '什麼時候會發生';
+  if(/行動|做什麼|怎麼做|該做/.test(v))return '我可以做什麼';
+  if(/結果|會不會|是否|發生/.test(v))return '會不會發生';
+  return null;
+}
+/* AI 可能回傳任何形式的時間邊界。能對到快選就對，對不到就原樣保留 */
+function normTf(v){
+  if(!v)return null;
+  v=String(v).trim();
+  if(!v)return null;
+  if(TF.includes(v))return v;
+  const map=[[/^兩週|^兩周|^兩星期|^2週/,'兩週內'],
+             [/^一個月|^1個月|^30天/,'一個月內'],
+             [/^三個月|^3個月|^一季/,'三個月內'],
+             [/^半年|^六個月|^6個月/,'半年內']];
+  for(const [re,val] of map)if(re.test(v))return val;
+  return v;
+}
+
+/* ════════ 確認單 ════════ */
+function fillSlip(){
+  if(!document.getElementById('nEdit').value)document.getElementById('nEdit').value=S.name||'';
+  const oe=document.getElementById('oEdit');
+  if(!oe.value)oe.value=S.result.other_party||'';
+  document.getElementById('qEdit').value=S.result.main_question||'';
+  document.getElementById('bEdit').value=S.result.background||'';
+  document.getElementById('slipStyle').textContent=S.seer?S.seer.name+'（'+S.seer.tag+'）':'—';
+  S.result.timeframe=normTf(S.result.timeframe);
+  S.result.intent=normIntent(S.result.intent);
+  buildChips('tfChips',TF,'timeframe');
+  buildChips('inChips',IN,'intent');
+  paintChips();
+  const ex=(S.result.extra||[]).filter(Boolean);
+  const box=document.getElementById('extraBox');
+  if(ex.length){
+    box.hidden=false;
+    document.getElementById('extraList').innerHTML=ex.map(x=>`<li>${esc(x)}</li>`).join('');
+  }else box.hidden=true;
+}
+
+function lockSlip(){
+  const q=document.getElementById('qEdit').value.trim();
+  const b=document.getElementById('bEdit').value.trim();
+  const nm=document.getElementById('nEdit').value.trim();
+  if(!nm){document.getElementById('nEdit').focus();flash('nEdit');return}
+  if(q.length<4){document.getElementById('qEdit').focus();return}
+  if(!S.result.timeframe){
+    document.getElementById('tfChips').scrollIntoView({behavior:'smooth',block:'center'});
+    flash('tfChips');flash('tfHint');return;
+  }
+  S.result.main_question=q;S.result.background=b;S.name=nm;
+  S.result.other_party=document.getElementById('oEdit').value.trim();
+  S.locked=true;
+
+  document.getElementById('qEdit').hidden=true;
+  document.getElementById('bEdit').hidden=true;
+  const qv=document.getElementById('qView'),bv=document.getElementById('bView');
+  qv.textContent=q;bv.textContent=b;qv.hidden=false;bv.hidden=false;
+  const nv=document.getElementById('nView');
+  nv.textContent=nm;nv.hidden=false;
+  document.getElementById('nEdit').hidden=true;
+  document.getElementById('nHint').hidden=true;
+
+  const ov=document.getElementById('oView'),oi=document.getElementById('oEdit');
+  if(S.result.other_party){ov.textContent=S.result.other_party;ov.hidden=false}
+  oi.hidden=true;
+  document.getElementById('oHint').hidden=true;
+  document.getElementById('qHint').hidden=true;
+  document.getElementById('inHint').hidden=true;
+
+  const tv=document.getElementById('tfView'),iv=document.getElementById('inView');
+  tv.textContent=S.result.timeframe;tv.hidden=false;
+  if(S.result.intent){iv.textContent=S.result.intent;iv.hidden=false;}
+  document.getElementById('tfChips').hidden=true;
+  document.getElementById('tfOther').hidden=true;
+  document.getElementById('tfWarn').hidden=true;
+  document.getElementById('inChips').hidden=true;
+  document.getElementById('tfHint').hidden=true;
+
+  document.getElementById('editHint').textContent='內容已鎖定。這份就是老師收到的版本。';
+  document.getElementById('beforeLock').hidden=true;
+  document.getElementById('afterLock').hidden=false;
+  document.getElementById('seal').classList.add('on');
+}
+
+function unlock(){
+  S.locked=false;
+  unlockUI();
+  document.getElementById('qEdit').focus();
+}
+function unlockUI(){
+  document.getElementById('qEdit').hidden=false;
+  document.getElementById('bEdit').hidden=false;
+  document.getElementById('qView').hidden=true;
+  document.getElementById('bView').hidden=true;
+  document.getElementById('nView').hidden=true;
+  document.getElementById('nEdit').hidden=false;
+  document.getElementById('nHint').hidden=false;
+  document.getElementById('oEdit').hidden=false;
+  document.getElementById('oHint').hidden=false;
+  document.getElementById('oView').hidden=true;
+  document.getElementById('qHint').hidden=false;
+  document.getElementById('inHint').hidden=false;
+  document.getElementById('tfView').hidden=true;
+  document.getElementById('inView').hidden=true;
+  document.getElementById('tfChips').hidden=false;
+  document.getElementById('inChips').hidden=false;
+  document.getElementById('tfHint').hidden=false;
+  document.getElementById('editHint').textContent='這是老師會看到的內容。兩欄都可以改，你最信任自己寫的版本。';
+  document.getElementById('beforeLock').hidden=false;
+  document.getElementById('afterLock').hidden=true;
+  document.getElementById('seal').classList.remove('on');
+}
+
+/* ════════ Email 驗證 ════════ */
+function mailOK(){
+  const v=document.getElementById('mail').value.trim();
+  return MAIL_RE.test(v);
+}
+function checkMail(){
+  const el=document.getElementById('mail');
+  const v=el.value.trim();
+  const bad=v.length>0&&!MAIL_RE.test(v);
+  el.classList.toggle('bad',bad);
+  document.getElementById('mailErr').hidden=!bad;
+  if(MAIL_RE.test(v))S.email=v;
+  syncPayBtn();
+}
+function syncPayBtn(){
+  document.getElementById('payBtn').disabled=
+    !(mailOK()&&document.getElementById('ok2').checked);
+}
+
+/* ════════ 訂單 ════════ */
+function toPay(){
+  if(!S.oid){
+    const d=new Date(),pad=n=>String(n).padStart(2,'0');
+    S.oid='WW'+d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+String(Math.floor(Math.random()*900)+100);
+  }
+  const due=new Date(Date.now()+72*3600*1000);
+  const dueStr=`${due.getMonth()+1} 月 ${due.getDate()} 日前`;
+  const who=S.seer?S.seer.name+'（'+S.seer.tag+'）':'—';
+
+  document.getElementById('oid').textContent=S.oid;
+  document.getElementById('sumQ').textContent=S.result.main_question;
+  document.getElementById('sumN').textContent=S.name||'—';
+  document.getElementById('sumO').textContent=S.result.other_party||'不牽涉他人';
+  document.getElementById('sumT').textContent=S.result.timeframe||'—';
+  document.getElementById('sumI').textContent=S.result.intent||'未特別指定';
+  document.getElementById('sumS').textContent=who;
+  document.getElementById('sumD').textContent=dueStr;
+  document.getElementById('oid2').textContent=S.oid;
+  document.getElementById('sumS2').textContent=who;
+  document.getElementById('due2').textContent=dueStr;
+  if(S.email&&!document.getElementById('mail').value)
+    document.getElementById('mail').value=S.email;
+  syncPayBtn();
+  go(6);
+}
+
+function pay(){
+  /* 實際串接：POST 到你的伺服器建立 ECPay 訂單
+     送出內容：S.oid, S.name, S.email, S.result.main_question,
+              S.result.timeframe, S.result.intent, S.result.background,
+              S.result.extra, S.seer.id */
+  S.email=document.getElementById('mail').value.trim();
+  document.getElementById('mail2').textContent=S.email;
+  S.paid=true;
+  go(7);
+}
+
+function flash(id){
+  const el=document.getElementById(id);
+  el.animate([{opacity:1},{opacity:.25},{opacity:1},{opacity:.25},{opacity:1}],{duration:700});
+}
+
+document.getElementById('say').addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();send()}
+});
+</script>
+</body>
+</html>
