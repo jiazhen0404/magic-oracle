@@ -164,6 +164,12 @@ media (max-width:800px){
   background:radial-gradient(circle at 50% 35%,#3A2456,#1B1030)}
 .face img{width:100%;height:100%;object-fit:cover;display:block}
 .face .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:38px;opacity:.5}
+.face .art{width:100%;height:100%;display:block;padding:14%}
+.face{background:
+  radial-gradient(circle at 50% 30%,rgba(201,169,240,.22),transparent 62%),
+  radial-gradient(circle at 50% 40%,#3A2456,#1B1030 78%)}
+.seer.pick .face{border-color:var(--lit);box-shadow:0 0 20px rgba(168,85,247,.28)}
+.face{transition:border-color .28s,box-shadow .28s}
 .seer h3{font-family:var(--serif);font-size:24px;font-weight:600;color:var(--gold);letter-spacing:.08em;margin-bottom:7px}
 .seer h3 em{font-style:normal;font-size:.72em;opacity:.8;margin-left:.15em}
 .motto{font-size:13.5px;color:var(--text);margin-bottom:15px}
@@ -340,23 +346,49 @@ media (prefers-reduced-motion:reduce){
   <section class="step live" id="s0">
     <div class="narrow">
       <header class="hero">
-        <h1><i>✦</i>籤面之外<i>✦</i></h1>
-        <p>一般籤說的是通則。你心裡真正卡住的那一件事，需要有人真的讀過你的處境，再回答你。</p>
+        <h1><i>✦</i>未完相談室<i>✦</i></h1>
+        <p class="sub">有些問題，一支籤還說不完。</p>
+        <p>選一位適合你的老師，把你的故事說給她聽。<br>
+           由真人老師親自占卜、閱讀你的問題並完成解讀。</p>
+        <div class="badge">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2l7 4v6c0 5-3 8-7 10-4-2-7-5-7-10V6z"/></svg>
+          所有老師皆為未完籤所合作真人占卜師
+        </div>
       </header>
+
       <div class="card">
-        <div class="line"><dt>形式</dt><dd>真人老師撰寫，500–800 字</dd></div>
-        <div class="line"><dt>時間</dt><dd>三日內寄到你的信箱</dd></div>
-        <div class="line"><dt>範圍</dt><dd>一個問題，一次回答</dd></div>
+        <div class="line"><dt>形式</dt><dd>真人老師親自占卜與撰寫</dd></div>
+        <div class="line"><dt>長度</dt><dd>約 800–1,500 字</dd></div>
+        <div class="line"><dt>時間</dt><dd>24–48 小時內完成</dd></div>
+        <div class="line"><dt>追問</dt><dd>可免費追問一次</dd></div>
       </div>
-      <button class="go" onclick="go(1)">開始</button>
-      <button class="go ghost" onclick="history.back()">回到我的籤</button>
-      <div class="foot">先整理問題，看過完整內容再決定要不要付款</div>
+
+      <button class="go" onclick="go(1)">看看有哪些老師</button>
+      <div class="foot">先認識老師、整理好問題，看過完整內容再決定要不要付款</div>
     </div>
   </section>
 
-
-  <!-- ② 聯絡方式 -->
+  <!-- ③ 聯絡方式 -->
   <section class="step" id="s1">
+    <header class="hero">
+      <h1><i>✦</i><span id="listTitle">選一位老師</span><i>✦</i></h1>
+      <p>每位老師擅長的問題不一樣。看看誰比較接近你現在的狀況。</p>
+      <div class="badge">
+        照片為老師本人，公開名稱為老師於未完籤所使用的藝名
+      </div>
+    </header>
+
+    <div class="deck" id="deck"></div>
+    <div class="pips" id="pips"></div>
+
+    <div class="narrow">
+      <button class="go ghost" onclick="go(0)">回上一步</button>
+    </div>
+  </section>
+
+  <!-- ② 相談室（老師列表）-->
+  <section class="step" id="s2">
     <div class="narrow">
       <header class="hero">
         <h1><i>✦</i>先留個稱呼<i>✦</i></h1>
@@ -382,37 +414,8 @@ media (prefers-reduced-motion:reduce){
 
       <div class="note keep">兩個欄位在付款前都還可以修改。</div>
 
-      <button class="go" id="goName" disabled onclick="go(2)">繼續</button>
-      <button class="go ghost" onclick="go(0)">回上一步</button>
-    </div>
-  </section>
-
-  <!-- ③ 選擇風格 -->
-  <section class="step" id="s2">
-    <header class="hero">
-      <h1><i>✦</i><span id="styleTitle">選擇解讀風格</span><i>✦</i></h1>
-      <p>選擇一位適合你的解讀風格，老師將以你選擇的方式為你解讀。</p>
-      <div class="badge">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 2l7 4v6c0 5-3 8-7 10-4-2-7-5-7-10V6z"/></svg>
-        所有老師皆為平台合作占卜師，真實姓名不公開
-      </div>
-    </header>
-
-    <div class="deck" id="deck" role="radiogroup" aria-label="解讀風格"></div>
-    <div class="pips" id="pips"></div>
-
-    <div class="narrow">
-      <div class="remind">
-        <div class="orb">🔮</div>
-        <div>
-          <h4>小提醒</h4>
-          <p>一次委託對應一位老師。付款前都可以回來更換，付款後即無法更動。</p>
-        </div>
-      </div>
-      <button class="go" id="pickBtn" disabled onclick="go(3)">請先選擇一種風格</button>
+      <button class="go" id="goName" disabled onclick="go(3)">繼續</button>
       <button class="go ghost" onclick="go(1)">回上一步</button>
-      <div class="foot">下一步將閱讀注意事項</div>
     </div>
   </section>
 
@@ -493,7 +496,7 @@ media (prefers-reduced-motion:reduce){
         <button class="go ghost" onclick="askRestart()">重新開始整理</button>
       </div>
 
-      <div class="note" id="aiNote">我只負責把問題整理清楚，不會給你任何解讀或答案。那是老師的事。<br>說過的話都可以點「修改」重寫。</div>
+      <div class="note" id="aiNote"><b>AI 僅協助整理你的問題，不參與占卜與解讀。</b><br>我不會給你任何解讀或答案，那是老師的事。<br>說過的話都可以點「修改」重寫。</div>
       <button class="go ghost" onclick="go(3)">回上一步</button>
     </div>
   </section>
@@ -562,9 +565,9 @@ media (prefers-reduced-motion:reduce){
 
         <div class="slip-hr"></div>
         <div class="slip-foot">
-          解讀風格：<span id="slipStyle">—</span><br>
-          由真人老師閱讀並撰寫回覆，三日內寄達。<br>
-          本次為單一問題之回覆，不含後續追問。
+          指定老師：<span id="slipStyle">—</span><br>
+          由真人老師閱讀並撰寫回覆，24–48 小時內寄達。<br>
+          本次為單一問題之回覆，可免費追問一次。
         </div>
 
         <div class="seal" id="seal"><b>已受理</b><i>未完籤所</i></div>
@@ -601,11 +604,11 @@ media (prefers-reduced-motion:reduce){
         <div class="line"><dt>算的對方</dt><dd id="sumO">—</dd></div>
         <div class="line"><dt>時間邊界</dt><dd id="sumT">—</dd></div>
         <div class="line"><dt>你想知道的</dt><dd id="sumI">—</dd></div>
-        <div class="line"><dt>解讀老師</dt><dd id="sumS">—</dd></div>
+        <div class="line"><dt>指定老師</dt><dd id="sumS">—</dd></div>
         <div class="line"><dt>交付時間</dt><dd id="sumD">—</dd></div>
-        <div class="line"><dt>內容長度</dt><dd>500–800 字</dd></div>
-        <div class="line"><dt>後續追問</dt><dd>不含</dd></div>
-        <div class="total"><span>應付金額　NT$</span><b>599</b></div>
+        <div class="line"><dt>內容長度</dt><dd>800–1,500 字</dd></div>
+        <div class="line"><dt>追問</dt><dd>可免費追問一次</dd></div>
+        <div class="total"><span id="payLbl">應付金額　NT$</span><b id="payAmt">399</b></div>
       </div>
 
       <div class="mail">
@@ -615,7 +618,7 @@ media (prefers-reduced-motion:reduce){
         <div class="mail-err" id="mailErr" hidden>請確認信箱格式，例如 nameexample.com</div>
         <div class="mail-note">
           這是收到解答的唯一管道，請確認沒有打錯。<br>
-          寄出後若三日內沒看到，請先查看垃圾郵件匣。
+          寄出後若 48 小時內沒看到，請先查看垃圾郵件匣。
         </div>
       </div>
 
@@ -640,15 +643,26 @@ media (prefers-reduced-motion:reduce){
       </header>
       <div class="card">
         <div class="line"><dt>訂單編號</dt><dd class="oid" id="oid2">—</dd></div>
-        <div class="line"><dt>解讀老師</dt><dd id="sumS2">—</dd></div>
+        <div class="line"><dt>指定老師</dt><dd id="sumS2">—</dd></div>
         <div class="line"><dt>預計寄達</dt><dd id="due2">—</dd></div>
         <div class="line"><dt>寄達信箱</dt><dd id="mail2">—</dd></div>
       </div>
-      <div class="note">老師接下案件後會再通知你一次。若三日內未收到，請憑訂單編號與我們聯繫。</div>
+      <div class="note">老師接下案件後會再通知你一次。若 48 小時內未收到，請憑訂單編號與我們聯繫。</div>
       <button class="go ghost" onclick="location.reload()">回到首頁</button>
     </div>
   </section>
 
+  <div style="text-align:center;padding:30px 0 10px;font-size:11px;
+       color:#5E4E7E;letter-spacing:.08em;font-family:var(--mono)">build 0827-da68fa</div>
+
+</div>
+
+<!-- 老師個人頁 -->
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shName">
+  <div class="sheet-in">
+    <button class="sheet-x" onclick="closeTeacher()" aria-label="關閉">×</button>
+    <div id="sheetBody"></div>
+  </div>
 </div>
 
 <!-- 重新整理確認 -->
@@ -666,29 +680,119 @@ media (prefers-reduced-motion:reduce){
    avatar：換成你的圖片路徑，例如 "img/seer-star.png"
    stats：累積真實數據前請保持 null，卡片會自動隱藏該區塊
 */
-const SEERS=[
-  {id:'gentle',tag:'溫柔陪伴系',name:'星語',glyph:'☾',
-   motto:'溫柔陪伴・療癒指引',
-   method:'塔羅牌・月亮神諭卡・直覺引導',
-   desc:'擅長以溫柔視角理解你的處境，給予情緒支持與方向建議，陪你一起看見內心的力量。',
-   avatar:null,fallback:'☾',stats:null},
-  {id:'direct',tag:'直球指路系',name:'夜行者',glyph:'★',
-   motto:'直球分析・給你答案',
-   method:'雷諾曼卡・靈擺占卜・直覺結合邏輯',
-   desc:'擅長快速切入問題核心，不繞彎給出明確方向，適合想知道「真相」的你。',
-   avatar:null,fallback:'★',stats:null},
-  {id:'logic',tag:'邏輯分析系',name:'蒼穹',glyph:'☉',
-   motto:'邏輯解析・理性洞察',
-   method:'易經卜卦・數字能量・塔羅牌',
-   desc:'擅長從事件脈絡與潛在模式分析，清楚拆解問題結構，提供理性可執行的建議。',
-   avatar:null,fallback:'☉',stats:null}
+/* ═══════════════════════════════════════════════
+   老師資料。每位老師的完整檔案都在這裡。
+   photo：換成真人照片路徑（例如 'assets/teachers/xiaobai.jpg'）
+          留 null 會顯示暫代的星象圖
+   reviews：一定要來自真實完成的訂單，不要自製
+   ═══════════════════════════════════════════════ */
+const TEACHERS=[
+{
+  id:'xiaobai',
+  name:'小白老師',
+  photo:null,
+  fields:['感情關係','曖昧','復合'],
+  tagline:'如果你一直猜不透對方在想什麼，我很擅長陪你把這段關係慢慢拆開來看。',
+  quote:'比起告訴你會不會，我更希望陪你看懂這段關係現在到底發生了什麼。',
+  styleTag:'溫柔陪伴型',
+  styleWords:['溫柔細膩','關係分析','不批判'],
+  best:[
+    '他現在對我的真實想法？',
+    '我們還有復合的可能嗎？',
+    '為什麼他最近突然冷淡？',
+    '這段曖昧會不會有結果？',
+    '我應該繼續等他嗎？',
+    '這段關係接下來可能怎麼發展？'
+  ],
+  forYou:[
+    '一直猜不透他的想法',
+    '不知道該繼續還是放下',
+    '明明感覺彼此有感情，關係卻一直停在原地'
+  ],
+  forYouEnd:'這段關係到底還有沒有下一步？',
+  meters:[['溫柔程度',5],['直接程度',3],['分析程度',5],['行動建議',4]],
+  meterNote:'如果牌面出現比較不理想的狀況，我不會刻意說好聽的，但我會告訴你，現在還有哪些事情是你可以做的。',
+  tools:'塔羅牌｜神諭卡｜直覺解讀',
+  years:'5 年',
+  bio:'我第一次接觸塔羅，其實也是因為一段感情。\n\n那時候的我一直想知道「他到底還愛不愛我」，後來才慢慢發現，很多時候我們真正想知道的，不只是一個會或不會，而是自己到底應該怎麼走下去。\n\n所以現在替人解讀時，我特別喜歡處理那些「說不清楚的關係」。如果你現在也卡在一段不知道該繼續還是離開的關係裡，可以把故事告訴我。',
+  reviews:[],
+  art:`<svg viewBox="0 0 100 100" class="art" aria-hidden="true"><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EAD3A4"/><stop offset="1" stop-color="#B08D57"/></linearGradient></defs><path d="M64 20 A32 32 0 1 0 64 80 A25 25 0 1 1 64 20 Z" fill="url(#g1)" opacity=".9"/><g fill="#EAD3A4"><path d="M26 24 l1.6 4.4 4.4 1.6 -4.4 1.6 -1.6 4.4 -1.6-4.4 -4.4-1.6 4.4-1.6z" opacity=".85"/><circle cx="20" cy="52" r="1.4" opacity=".5"/><circle cx="82" cy="34" r="1.1" opacity=".45"/></g><g stroke="#B08D57" fill="none" stroke-linecap="round" opacity=".4"><path d="M18 86 q16-7 32 0 t32 0"/><path d="M24 92 q13-5 26 0 t26 0" opacity=".6"/></g></svg>`
+},
+{
+  id:'anan',
+  name:'安安老師',
+  photo:null,
+  fields:['工作','轉職','人際'],
+  tagline:'職場上的事情很少只是能力問題。我會陪你看清楚，卡住你的到底是什麼。',
+  quote:'我不會叫你忍，也不會叫你走。我會先讓你看懂現在的局，再決定要怎麼動。',
+  styleTag:'邏輯分析型',
+  styleWords:['條理清晰','務實','有具體建議'],
+  best:[
+    '這份工作我還該不該繼續？',
+    '主管現在對我的評價是什麼？',
+    '接下來半年會不會有轉職機會？',
+    '我跟同事之間的僵局怎麼解？',
+    '這個新機會值得接嗎？',
+    '我該怎麼做才能改善現在的處境？'
+  ],
+  forYou:[
+    '每天上班都在耗，但又不確定該不該走',
+    '努力了很久，卻好像一直沒被看見',
+    '有一個機會擺在眼前，但不知道是不是對的'
+  ],
+  forYouEnd:'我到底還要在這裡待多久？',
+  meters:[['溫柔程度',3],['直接程度',4],['分析程度',5],['行動建議',5]],
+  meterNote:'我習慣把事情拆成一項一項講清楚。如果牌面顯示現在不是好時機，我會直接說，但也會告訴你要等的是什麼。',
+  tools:'塔羅牌｜雷諾曼卡｜易經卜卦',
+  years:'7 年',
+  bio:'我做過八年上班族，離職那年三十二歲。\n\n那時候每天都在想同一件事：到底是我不夠好，還是這個地方不適合我。那個問題沒有人能替我回答，我花了很久才自己想明白。\n\n後來開始替人解牌，最常遇到的也是這種卡住的人。我不太會安慰人，但我很會拆問題。如果你現在需要的是把事情想清楚，而不是被摸摸頭，那我們應該會聊得來。',
+  reviews:[],
+  art:`<svg viewBox="0 0 100 100" class="art" aria-hidden="true"><g fill="none" stroke="#C9A96E" stroke-linecap="round"><ellipse cx="50" cy="50" rx="38" ry="15" transform="rotate(-22 50 50)" opacity=".75"/><ellipse cx="50" cy="50" rx="38" ry="15" transform="rotate(38 50 50)" opacity=".5"/><ellipse cx="50" cy="50" rx="30" ry="30" opacity=".28" stroke-dasharray="2 5"/></g><circle cx="50" cy="50" r="11" fill="#EAD3A4" opacity=".92"/><g fill="#EAD3A4"><circle cx="82" cy="36" r="3"/><circle cx="20" cy="66" r="2.2" opacity=".7"/></g><g fill="#EAD3A4" opacity=".45"><circle cx="26" cy="22" r="1.2"/><circle cx="78" cy="78" r="1.4"/></g></svg>`
+},
+{
+  id:'acheng',
+  name:'阿澄老師',
+  photo:null,
+  fields:['人生方向','選擇','毛孩'],
+  tagline:'有些答案其實你心裡有數，只是需要有人陪你確認一次。',
+  quote:'我不會給你標準答案。但我會告訴你，你現在站的位置，還有哪幾條路。',
+  styleTag:'直球指路型',
+  styleWords:['乾脆','不繞路','會說實話'],
+  best:[
+    '這兩個選擇，哪一個對我比較好？',
+    '現在是行動的時機嗎，還是該再等？',
+    '我最近的方向是不是走偏了？',
+    '牠最近的狀態是怎麼了？',
+    '我可以為牠做些什麼？',
+    '接下來三個月會有什麼變化？'
+  ],
+  forYou:[
+    '在兩個選項之間卡了很久，遲遲下不了決定',
+    '想聽真話，不想再聽場面話',
+    '心裡其實已經有答案，只是想確認一次'
+  ],
+  forYouEnd:'我到底該往哪邊走？',
+  meters:[['溫柔程度',3],['直接程度',5],['分析程度',4],['行動建議',5]],
+  meterNote:'我講話比較直，但不會故意嚇人。牌面不好我會說，同時也會告訴你哪些是還能改的。',
+  tools:'塔羅牌｜神諭卡｜動物溝通卡',
+  years:'6 年',
+  bio:'我從小就是那種會被說「太直接」的人。\n\n剛開始替人解牌的時候，我很擔心這樣會傷到人，所以講話特別小心。後來有個客人跟我說，她繞了三家，只有我告訴她真話，她反而鬆了一口氣。\n\n那次之後我就決定不再修飾了。我會盡量溫和，但不會為了讓你舒服而說假話。如果你要的是這種，歡迎來找我。',
+  reviews:[],
+  art:`<svg viewBox="0 0 100 100" class="art" aria-hidden="true"><defs><linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EAD3A4"/><stop offset="1" stop-color="#A87F4A"/></linearGradient></defs><path d="M50 12 L55 43 L86 48 L55 53 L50 84 L45 53 L14 48 L45 43 Z" fill="url(#g2)"/><path d="M50 26 L52 46 L72 48 L52 50 L50 70 L48 50 L28 48 L48 46 Z" fill="#150F22" opacity=".55"/><circle cx="50" cy="48" r="4" fill="#EAD3A4"/><g stroke="#B08D57" fill="none" stroke-linecap="round" opacity=".45"><path d="M10 74 h80"/><path d="M22 82 h56" opacity=".6"/></g><g fill="#EAD3A4" opacity=".5"><circle cx="22" cy="24" r="1.3"/><circle cx="80" cy="30" r="1"/></g></svg>`
+}
 ];
 
-const STEPS=['抽籤結果','聯絡方式','選擇風格','注意事項','AI問籤引導','確認問題','付款'];
+/* 舊變數保留給既有程式碼使用 */
+const SEERS=TEACHERS;
+
+
+const STEPS=['相談室','選擇老師','聯絡方式','注意事項','整理問題','確認問題','付款'];
 const MAIL_RE=/^[^\s]+[^\s]+\.[a-zA-Z]{2,}$/;
 const S={step:0,max:0,round:0,history:[],result:null,locked:false,seer:null,
          oid:null,paid:false,name:'',email:'',fails:0,
          fb:{narrowed:false,tfAsked:false,intentAsked:false}};
+
+console.log('%c未完籤所 build 0827-da68fa','color:#D8B87E;font-weight:bold');
 
 /* ═══════════════════════════════════════
    後端 API 位址。部署 worker.js 之後把網址填進來。
@@ -705,8 +809,10 @@ function go(n){
   S.step=n;
   S.max=Math.max(S.max,n);
   if(n===4)renderAI();
-  if(n===2)document.getElementById('styleTitle').textContent=
-    S.name?S.name+'，選一種說法':'選擇解讀風格';
+  if(n===1){
+    const el=document.getElementById('listTitle');
+    if(el)el.textContent=S.name?S.name+'，選一位老師':'選一位老師';
+  }
   paintSteps();
   document.getElementById('topBack').hidden=(n===0||n===7);
   window.scrollTo({top:0,behavior:'smooth'});
@@ -745,40 +851,138 @@ function checkIntro(){
 }
 
 /* ════════ 角色卡 ════════ */
-document.getElementById('deck').innerHTML=SEERS.map((s,i)=>{
-  const face=s.avatar?`<img src="${s.avatar}" alt="${s.name}">`:`<div class="ph">${s.fallback}</div>`;
-  const stats=s.stats?`<div class="stats">
-      <span class="chip"><span class="st">★</span> ${s.stats.rating}</span>
-      <span class="chip">已解讀 ${s.stats.count.toLocaleString()} 個問題</span></div>`:'';
-  return `<button class="seer" role="radio" aria-checked="false" onclick="pick(${i})">
-    <span class="tick">✓</span>
-    <div class="tag">${s.tag}</div>
-    <div class="face">${face}</div>
-    <h3>${s.name}<em>${s.glyph}</em></h3>
-    <div class="motto">${s.motto}</div>
-    <div class="hr"></div>
-    <div class="lbl">使用占卜手法</div>
-    <div class="val">${s.method}</div>
-    <div class="lbl">解讀特色</div>
-    <div class="desc">${s.desc}</div>
-    ${stats}
-  </button>`;
-}).join('');
-document.getElementById('pips').innerHTML=SEERS.map((_,i)=>`<i class="${i===0?'on':''}"></i>`).join('');
+const PRICE = 399;
+const DEEP_CREDIT = 99;          /* 已購未完深解可折抵 */
+let hasDeep = false;             /* 之後由訂單系統帶入 */
 
-function pick(i){
-  S.seer=SEERS[i];
-  document.querySelectorAll('.seer').forEach((el,k)=>{
-    el.classList.toggle('pick',k===i);
-    el.setAttribute('aria-checked',k===i);
-  });
-  const b=document.getElementById('pickBtn');
-  b.disabled=false;
-  b.textContent='確認選擇：'+S.seer.name+'　›';
-  /* 若確認單已存在，同步更新上面的風格 */
-  const t=document.getElementById('slipStyle');
-  if(S.result)t.textContent=S.seer.name+'（'+S.seer.tag+'）';
+function face(t, cls){
+  const inner = t.photo ? `<img src="${t.photo}" alt="${t.name}">` : t.art;
+  return `<div class="${cls}">${inner}</div>`;
 }
+
+document.getElementById('deck').innerHTML = TEACHERS.map(t=>`
+  <div class="seer" id="card-${t.id}">
+    <div class="tcard-head">
+      ${face(t,'face')}
+      <div>
+        <div class="tname">${t.name}</div>
+        <div class="tfields">${t.fields.map(f=>`<span>${f}</span>`).join('')}</div>
+      </div>
+    </div>
+    <p class="tquote">${t.tagline}</p>
+
+    <div class="tsec">
+      <div class="lbl">解讀風格</div>
+      <p class="val">${t.styleWords.join('　')}</p>
+    </div>
+
+    <div class="tsec">
+      <div class="lbl">擅長</div>
+      <ul class="tgood">${t.best.slice(0,4).map(q=>`<li>${q}</li>`).join('')}</ul>
+    </div>
+
+    <div class="tsec">
+      <div class="lbl">使用方式</div>
+      <p class="val">${t.tools}</p>
+    </div>
+
+    <div class="tverify"><span>真人老師</span><span>未完籤所合作占卜師</span><span>經歷 ${t.years}</span></div>
+
+    <div class="tfoot">
+      <div class="tprice"><small>真人文字占卜</small>NT$${PRICE}</div>
+      <button class="tmore" onclick="openTeacher('${t.id}')">看看${t.name}　›</button>
+    </div>
+  </div>`).join('');
+
+document.getElementById('pips').innerHTML = TEACHERS.map((_,i)=>`<i class="${i===0?'on':''}"></i>`).join('');
+
+/* ── 老師個人頁 ── */
+function stars(n){
+  let h='';
+  for(let i=1;i<=5;i++)h+=`<s class="${i<=n?'on':''}">★</s>`;
+  return h;
+}
+
+function openTeacher(id){
+  const t = TEACHERS.find(x=>x.id===id);
+  if(!t)return;
+  const pay = hasDeep ? PRICE - DEEP_CREDIT : PRICE;
+
+  document.getElementById('sheetBody').innerHTML = `
+    ${face(t,'sh-photo')}
+    <div class="sh-name" id="shName">${t.name}</div>
+    <div class="sh-sub">${t.fields.join('・')}</div>
+    <div class="sh-tag"><span>${t.styleTag}</span></div>
+    <p class="sh-quote">「${t.quote}」</p>
+    <div class="tverify" style="justify-content:center"><span>未完籤所合作真人占卜師</span></div>
+
+    <h3 class="sh-h">${t.name}特別擅長</h3>
+    <ul class="tgood">${t.best.map(q=>`<li>${q}</li>`).join('')}</ul>
+
+    <h3 class="sh-h">推薦給這樣的你</h3>
+    <p class="sh-body">如果你現在……</p>
+    <ul class="tgood" style="margin-top:8px">${t.forYou.map(x=>`<li>${x}</li>`).join('')}</ul>
+    <p class="sh-body" style="margin-top:14px">或者你只是很想知道：<br>「${t.forYouEnd}」<br><br>那麼${t.name}會很適合你。</p>
+
+    <h3 class="sh-h">我的解讀方式</h3>
+    <div class="meters">
+      ${t.meters.map(m=>`<div class="meter"><b>${m[0]}</b><i>${stars(m[1])}</i></div>`).join('')}
+    </div>
+    <p class="sh-body" style="margin-top:16px;font-size:13.5px;color:#B3A6CB">「${t.meterNote}」</p>
+
+    <h3 class="sh-h">我會怎麼替你解讀</h3>
+    <dl class="spec">
+      <dt>使用工具</dt><dd>${t.tools}</dd>
+      <dt>解讀形式</dt><dd>真人完整文字解讀</dd>
+      <dt>內容長度</dt><dd>約 800–1,500 字</dd>
+      <dt>完成時間</dt><dd>24–48 小時內</dd>
+      <dt>追　　問</dt><dd>可免費追問一次</dd>
+    </dl>
+
+    <h3 class="sh-h">關於${t.name}</h3>
+    <p class="sh-body">${t.bio}</p>
+
+    <h3 class="sh-h">他們也曾經把故事交給${t.name}</h3>
+    ${t.reviews.length
+      ? t.reviews.map(r=>`<div class="tsec"><div class="lbl">★★★★★　${r.who}｜${r.topic}</div><p class="val">${r.text}</p></div>`).join('')
+      : `<div class="noreview">這位老師還在累積評價。<br>所有評價都來自實際完成服務的客人，我們不會自行撰寫。</div>`}
+
+    <div class="buybox">
+      ${hasDeep ? `<div class="upsell">你已經購買本次<b>未完深解</b>，升級真人占卜可折抵 NT$${DEEP_CREDIT}。</div>` : ''}
+      <h4>真人一題占卜</h4>
+      <div class="amt"><small>NT$</small>${pay}${hasDeep?`<small style="margin-left:10px">原價 ${PRICE}</small>`:''}</div>
+      <ul>
+        <li>選擇一個核心問題</li>
+        <li>真人老師親自占卜</li>
+        <li>完整文字解析，約 800–1,500 字</li>
+        <li>一次免費追問</li>
+        <li>24–48 小時內完成</li>
+      </ul>
+      <button class="go" onclick="chooseTeacher('${t.id}')">選擇${t.name}</button>
+    </div>`;
+
+  const sh=document.getElementById('sheet');
+  sh.classList.add('on');
+  sh.scrollTop=0;
+  document.body.style.overflow='hidden';
+}
+
+function closeTeacher(){
+  document.getElementById('sheet').classList.remove('on');
+  document.body.style.overflow='';
+}
+
+function chooseTeacher(id){
+  S.seer = TEACHERS.find(x=>x.id===id);
+  closeTeacher();
+  const el=document.getElementById('slipStyle');
+  if(S.result&&el)el.textContent=S.seer.name;
+  go(2);
+}
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape')closeTeacher();
+});
 
 const deck=document.getElementById('deck');
 deck.addEventListener('scroll',()=>{
@@ -1152,7 +1356,7 @@ function fillSlip(){
   if(!oe.value)oe.value=S.result.other_party||'';
   document.getElementById('qEdit').value=S.result.main_question||'';
   document.getElementById('bEdit').value=S.result.background||'';
-  document.getElementById('slipStyle').textContent=S.seer?S.seer.name+'（'+S.seer.tag+'）':'—';
+  document.getElementById('slipStyle').textContent=S.seer?S.seer.name:'—';
   S.result.timeframe=normTf(S.result.timeframe);
   S.result.intent=normIntent(S.result.intent);
   buildChips('tfChips',TF,'timeframe');
@@ -1265,13 +1469,17 @@ function toPay(){
     const d=new Date(),pad=n=>String(n).padStart(2,'0');
     S.oid='WW'+d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+String(Math.floor(Math.random()*900)+100);
   }
-  const due=new Date(Date.now()+72*3600*1000);
-  const dueStr=`${due.getMonth()+1} 月 ${due.getDate()} 日前`;
-  const who=S.seer?S.seer.name+'（'+S.seer.tag+'）':'—';
+  const due=new Date(Date.now()+48*3600*1000);
+  const dueStr=`${due.getMonth()+1}/${due.getDate()} ${String(due.getHours()).padStart(2,'0')}:00 前`;
+  const who=S.seer?S.seer.name:'—';
 
   document.getElementById('oid').textContent=S.oid;
   document.getElementById('sumQ').textContent=S.result.main_question;
   document.getElementById('sumN').textContent=S.name||'—';
+  const pay = hasDeep ? PRICE - DEEP_CREDIT : PRICE;
+  document.getElementById('payAmt').textContent = pay;
+  document.getElementById('payLbl').textContent =
+    hasDeep ? ('應付金額（已折抵 ' + DEEP_CREDIT + '）　NT$') : '應付金額　NT$';
   document.getElementById('sumO').textContent=S.result.other_party||'不牽涉他人';
   document.getElementById('sumT').textContent=S.result.timeframe||'—';
   document.getElementById('sumI').textContent=S.result.intent||'未特別指定';
