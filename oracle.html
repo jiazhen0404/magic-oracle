@@ -599,7 +599,7 @@ textarea::placeholder{color:#5E4E7E}
 
         <div class="slip-lbl" style="margin-top:22px">你的問題</div>
         <div id="qView" class="slip-q" hidden></div>
-        <textarea id="qEdit" class="edit-q" rows="2" maxlength="40"
+        <textarea id="qEdit" class="edit-q" rows="2" maxlength="40" oninput="checkMatch()"
           placeholder="例如：三個月內，我換工作會不會順利？／放榜前，我該補強哪裡？"></textarea>
         <div class="slip-hint" id="qHint">一句話，包含時間範圍。這是老師唯一會回答的那一題。</div>
 
@@ -611,6 +611,7 @@ textarea::placeholder{color:#5E4E7E}
         <div class="slip-hint" id="tfWarn" hidden style="color:#A8452F">
           占卜的有效期間大約半年，超過這個範圍準確度會下降。建議改成半年內的一個節點。
         </div>
+        <div class="slip-hint" id="matchWarn" hidden style="color:#A8452F"></div>
         <div class="slip-hint" id="tfHint">
           也可以用一件事當邊界，例如「放榜前」「下次見面前」。占卜的有效期間約為半年。
         </div>
@@ -1323,6 +1324,74 @@ const IN_HINT={
   '我可以做什麼':'問法像這樣：一個月內，我可以做什麼讓他主動回來？'
 };
 
+/* 這兩個函式原本被呼叫卻沒有定義。
+   syncQuestionTf 缺失時，點時間邊界會拋 ReferenceError，
+   後面的 paintChips() 永遠不會執行 —— 值改了但畫面沒更新，
+   問題句也不會跟著改，於是問句寫「三個月內」、按鈕停在「一個月內」。 */
+
+const TF_WORDS=['兩週內','兩周內','兩星期內','一個月內','1個月內','三個月內','3個月內',
+                '半年內','六個月內','一年內','近期內','不限時間',
+                '兩週後','一個月後','三個月後','半年後'];
+
+function syncQuestionTf(newTf){
+  const q=document.getElementById('qEdit');
+  if(!q||q.hidden||!q.value||!newTf)return;
+  const v=q.value;
+  for(const w of TF_WORDS){
+    if(v.indexOf(w)>-1){
+      if(w!==newTf){
+        q.value=v.replace(w,newTf);
+        S.result.main_question=q.value;
+        flash('qEdit');
+      }
+      checkMatch();
+      return;
+    }
+  }
+  /* 自訂的說法（放榜前、他生日前）沒有固定詞可以取代，交給提示處理 */
+  checkMatch();
+}
+
+/* 三輪用完卻沒拿到 JSON 時的收尾。
+   不猜時間邊界：使用者說「我們三個月沒聯絡」是背景不是邊界，
+   猜錯會讓老師整篇答錯題，留空讓使用者自己選。 */
+function fallbackResult(){
+  const us=S.history.filter(h=>h.role==='user').map(h=>h.content.trim()).filter(Boolean);
+  return {main_question:'',timeframe:null,intent:null,other_party:'',
+          background:us.join('\n').slice(0,200),extra:[]};
+}
+
+/* 問題句跟下面的選項對不起來時提醒。不阻擋，只是講清楚老師會以哪個為準。 */
+function guessIntent(q){
+  if(/什麼時候|甚麼時候|何時|多久之?後|哪時/.test(q))return '什麼時候會發生';
+  if(/該不該|要不要|怎麼做|可以做什麼|該怎麼/.test(q))return '我可以做什麼';
+  if(/會不會|有沒有|能不能|是否|機會|可能/.test(q))return '會不會發生';
+  return null;
+}
+
+function checkMatch(){
+  const box=document.getElementById('matchWarn');
+  if(!box)return;
+  const q=document.getElementById('qEdit');
+  const text=(q&&!q.hidden?q.value:(S.result&&S.result.main_question)||'').trim();
+  if(!S.result||!text){box.hidden=true;return}
+
+  const msgs=[];
+  const tf=S.result.timeframe;
+  if(tf&&text.indexOf(tf)<0){
+    const other=TF_WORDS.find(w=>w!==tf&&text.indexOf(w)>-1);
+    msgs.push(other
+      ? '問題句裡寫的是「'+other+'」，但時間邊界選的是「'+tf+'」。老師會以「'+tf+'」為準。'
+      : '問題句裡沒有寫到「'+tf+'」，老師會以「'+tf+'」為準。');
+  }
+  const g=guessIntent(text);
+  if(g&&S.result.intent&&g!==S.result.intent)
+    msgs.push('問題句聽起來是在問「'+g+'」，但下面選的是「'+S.result.intent+'」。');
+
+  box.innerHTML=msgs.map(esc).join('<br>');
+  box.hidden=msgs.length===0;
+}
+
 function buildChips(boxId,list,key){
   const box=document.getElementById(boxId);
   let html=list.map(v=>`<button type="button" onclick="setChip('${key}','${v}')">${v}</button>`).join('');
@@ -1338,6 +1407,7 @@ function setChip(key,val){
     if(prev!==val)syncQuestionTf(val);
   }
   paintChips();
+  checkMatch();
 }
 
 function openOtherTf(){
@@ -1359,6 +1429,7 @@ function setOtherTf(v){
   const w=document.getElementById('tfWarn');
   w.hidden=!(t&&TOO_LONG.test(t));
   paintChips();
+  checkMatch();
 }
 
 function paintChips(){
@@ -1416,6 +1487,7 @@ function fillSlip(){
   buildChips('tfChips',TF,'timeframe');
   buildChips('inChips',IN,'intent');
   paintChips();
+  checkMatch();
   const ex=(S.result.extra||[]).filter(Boolean);
   const box=document.getElementById('extraBox');
   if(ex.length){
