@@ -190,6 +190,27 @@ app.get("/api/ecpay/order/:id",(req,res)=>{
   });
 });
 
+// Branded short links for campaign tracking.
+// Keep these stable so printed/social links can stay short while UTM destinations can evolve.
+const SHORT_LINKS = {
+  "/line": "/?utm_source=line&utm_medium=official_account&utm_campaign=return_draw_20260829&utm_content=cta",
+  "/line-image": "/?utm_source=line&utm_medium=official_account&utm_campaign=return_draw_20260829&utm_content=image",
+  "/line-menu": "/?utm_source=line&utm_medium=rich_menu&utm_campaign=always_on&utm_content=home",
+  "/line-draw": "/?utm_source=line&utm_medium=rich_menu&utm_campaign=always_on&utm_content=draw",
+  "/threads": "/?utm_source=threads&utm_medium=organic_social&utm_campaign=brand_account&utm_content=profile",
+  "/me": "/?utm_source=threads&utm_medium=organic_social&utm_campaign=personal_account&utm_content=profile",
+  "/ig": "/?utm_source=instagram&utm_medium=organic_social&utm_campaign=profile&utm_content=bio",
+  "/ig-story": "/?utm_source=instagram&utm_medium=organic_social&utm_campaign=story&utm_content=link",
+  "/reels": "/?utm_source=instagram&utm_medium=organic_social&utm_campaign=reels&utm_content=link",
+  "/facebook": "/?utm_source=facebook&utm_medium=organic_social&utm_campaign=content&utm_content=post",
+  "/dcard": "/?utm_source=dcard&utm_medium=organic_social&utm_campaign=content&utm_content=post",
+  "/qr": "/?utm_source=qr&utm_medium=offline&utm_campaign=brand&utm_content=qrcode"
+};
+
+for (const [shortPath, destination] of Object.entries(SHORT_LINKS)) {
+  app.get(shortPath, (req, res) => res.redirect(302, destination));
+}
+
 // Legacy SEO entry links used ?entry=breakup. Always send them into the real oracle flow.
 app.get("/", (req,res,next)=>{
   if(req.query && req.query.entry){

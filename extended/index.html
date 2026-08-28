@@ -14,7 +14,38 @@
 <meta property="og:image" content="https://unfinished.tw/assets/og-cover.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-71RMD00WPJ"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-71RMD00WPJ');</script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-71RMD00WPJ');</script><script>
+(function(){
+  var KEYS=['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
+  var params=new URLSearchParams(window.location.search);
+  var found={};
+  var hasUtm=false;
+  KEYS.forEach(function(k){var v=params.get(k);if(v){found[k]=v;hasUtm=true;}});
+  try{
+    if(hasUtm){
+      found.saved_at=Date.now();
+      localStorage.setItem('unfinished_utm',JSON.stringify(found));
+    }
+    var saved=JSON.parse(localStorage.getItem('unfinished_utm')||'{}');
+    if(saved.saved_at && Date.now()-saved.saved_at>30*24*60*60*1000){
+      localStorage.removeItem('unfinished_utm'); saved={};
+    }
+    window.UNFINISHED_UTM=saved;
+    window.dataLayer=window.dataLayer||[];
+    function applyUtm(){
+      if(typeof window.gtag!=='function') return;
+      var e={};
+      if(saved.utm_source)e.utm_source=saved.utm_source;
+      if(saved.utm_medium)e.utm_medium=saved.utm_medium;
+      if(saved.utm_campaign)e.utm_campaign=saved.utm_campaign;
+      if(saved.utm_content)e.utm_content=saved.utm_content;
+      if(saved.utm_term)e.utm_term=saved.utm_term;
+      if(Object.keys(e).length) window.gtag('set',e);
+    }
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',applyUtm); else applyUtm();
+  }catch(e){window.UNFINISHED_UTM={};}
+})();
+</script>
 <style>
 :root{--gold:#d9bd82;--soft:#d7cfe2;--faint:#968aa7;--line:rgba(217,189,130,.28)}
 *{box-sizing:border-box}
