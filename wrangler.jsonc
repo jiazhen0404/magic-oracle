@@ -15,7 +15,7 @@
 
   // 綠界模式：測試期間用 stage，正式收錢時改成 production
   "vars": {
-    "ECPAY_MODE": "production"
+    "ECPAY_MODE": "stage"
   },
 
   // 訂單暫存空間。
