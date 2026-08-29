@@ -148,7 +148,7 @@ __SECTIONS__
   }
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(mark);
-    setTimeout(mark, 20000);        // 字型真的抓不到也不要卡死
+    setTimeout(mark, 6000);         // 字型真的抓不到也不要卡死，6 秒就放行
   } else {
     mark();
   }

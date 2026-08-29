@@ -248,6 +248,11 @@ async function orderStatus(url, env) {
     status: order.status,
     slipId: order.slipId,
     amount: order.amount,
+    // 寄送狀況。這些是給你自己排查用的，不含信箱與問題內容。
+    mailed: Boolean(order.mailedAt),
+    mailedAt: order.mailedAt || null,
+    deliveryError: order.deliveryError || null,
+    deliveryTriedAt: order.deliveryTriedAt || null,
   });
 }
 
@@ -374,38 +379,52 @@ async function renderPdf(slip, order, env, origin) {
     fontBase: origin + '/assets/fonts/',
   });
 
-  const res = await fetch(
-    'https://api.cloudflare.com/client/v4/accounts/' + env.CF_ACCOUNT_ID + '/browser-rendering/pdf',
-    {
-      method: 'POST',
-      headers: {
-        Authorization: 'Bearer ' + env.CF_API_TOKEN,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        html,
-        gotoOptions: { waitUntil: 'networkidle0', timeout: 60000 },
-        // 等字型真的載完才截圖。
-        // 少了這一行，Cloudflare 會用它自己的字型，中文看起來像對的，
-        // 但複製出來會是不同的字。
-        waitForSelector: { selector: '#fonts-ready', timeout: 30000 },
-        pdfOptions: {
-          format: 'a4',
-          printBackground: true,
-          displayHeaderFooter: true,
-          headerTemplate: '<div></div>',
-          footerTemplate:
-            '<div style="width:100%;font-family:serif;font-size:7pt;color:#A8A2B4;'
-            + 'padding:0 20mm;display:flex;justify-content:space-between;">'
-            + '<span>未完籤所 · MAGIC ORACLE</span><span class="pageNumber"></span></div>',
-          margin: { top: '22mm', bottom: '18mm', left: '20mm', right: '20mm' },
-        },
-      }),
-    }
-  );
+  const pdfOptions = {
+    format: 'a4',
+    printBackground: true,
+    displayHeaderFooter: true,
+    headerTemplate: '<div></div>',
+    footerTemplate:
+      '<div style="width:100%;font-family:serif;font-size:7pt;color:#A8A2B4;'
+      + 'padding:0 20mm;display:flex;justify-content:space-between;">'
+      + '<span>未完籤所 · MAGIC ORACLE</span><span class="pageNumber"></span></div>',
+    margin: { top: '22mm', bottom: '18mm', left: '20mm', right: '20mm' },
+  };
 
+  async function ask(waitForFonts) {
+    const body = {
+      html,
+      gotoOptions: { waitUntil: 'networkidle0', timeout: 45000 },
+      pdfOptions,
+    };
+    // 等字型真的載完才截圖。少了這個，Cloudflare 會用它自己的字型，
+    // 中文看起來像對的，但複製出來會是不同的字。
+    if (waitForFonts) {
+      body.waitForSelector = { selector: '#fonts-ready', timeout: 15000 };
+    }
+    return fetch(
+      'https://api.cloudflare.com/client/v4/accounts/' + env.CF_ACCOUNT_ID + '/browser-rendering/pdf',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: 'Bearer ' + env.CF_API_TOKEN,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      }
+    );
+  }
+
+  // 先用「等字型」的方式試。如果因此失敗，就退一步用一般方式再試一次——
+  // 字型不對總比信寄不出去好。
+  let res = await ask(true);
   if (!res.ok) {
-    throw new Error('產生 PDF 失敗 ' + res.status + ' ' + (await res.text()).slice(0, 200));
+    const first = (await res.text()).slice(0, 200);
+    console.error('產 PDF（等字型）失敗，改用一般方式重試：' + res.status + ' ' + first);
+    res = await ask(false);
+    if (!res.ok) {
+      throw new Error('產生 PDF 失敗 ' + res.status + ' ' + (await res.text()).slice(0, 200));
+    }
   }
   return new Uint8Array(await res.arrayBuffer());
 }
