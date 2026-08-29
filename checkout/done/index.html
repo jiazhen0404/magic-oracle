@@ -99,8 +99,7 @@ async function poll(){
     const d = await r.json();
 
     if(d.status === 'paid'){
-      show('ok','付款成功','謝謝你。這支籤的完整解籤已經替你保留。',
-           '解籤內容與 PDF 寄送功能正在最後準備中，開放時會第一時間通知你。');
+      await unlock(d.slipId);
       return;
     }
     if(d.status === 'failed'){
@@ -115,6 +114,33 @@ async function poll(){
   else{
     show('','還在確認中','綠界的通知還沒送達，這通常只是稍微慢一點。',
          '請保留上方的訂單編號，過幾分鐘重新整理這一頁。若十分鐘後仍是這個畫面，請來信告訴我們。');
+  }
+}
+
+/* 付款成功後，換一張解鎖憑證存進這台瀏覽器，
+   之後回到閱讀頁就能直接看，不用再輸入任何東西。 */
+async function unlock(slipId){
+  show('ok','付款成功','謝謝你。正在為你解鎖完整解籤⋯','');
+  try{
+    const r = await fetch('/api/unlock', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ tradeNo })
+    });
+    if(!r.ok) throw new Error('unlock ' + r.status);
+    const { token, slipId: sid } = await r.json();
+    const id = sid || slipId;
+
+    try{ localStorage.setItem('unfinished.unlock.' + id, token); }catch(e){}
+
+    show('ok','付款成功','謝謝你。這支籤的完整解籤已經替你解鎖。',
+         '這一頁可以關掉了。解讀隨時能回來重讀，網址建議加入書籤。');
+    cta.innerHTML = '<a class="btn" href="/extended/reading/?id=' +
+                    encodeURIComponent(id) + '">閱讀完整解籤</a>';
+  }catch(e){
+    console.error(e);
+    show('ok','付款成功','謝謝你，款項已經收到。',
+         '解鎖時出了點狀況。請來信 hello@unfinished.tw 並附上下方訂單編號，我們會立刻替你處理。');
   }
 }
 

@@ -1221,6 +1221,11 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
     send("category_entry_"+entryTheme,{theme:entryTheme,theme_label:themeLabels[entryTheme],subtheme:entrySubtheme||"",entry_source:"direct_link"});
   }
 
+  document.addEventListener("input",function(e){
+    if(e.target&&e.target.tagName==="TEXTAREA"){
+      try{sessionStorage.setItem("oracle.question",String(e.target.value||"").slice(0,500));}catch(_){}
+    }
+  },true);
   function addExtendedPreview(){
     const frame=document.querySelector(".device > .scroll > .frame");
     const resultScroll=frame?.parentElement;
@@ -1237,19 +1242,39 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
     const section=document.createElement("section");
     section.className="extended-preview";
     section.setAttribute("aria-label","完整延伸解籤預告");
-    section.innerHTML='<div class="extended-preview-kicker">COMING SOON · 即將開放</div><div class="extended-preview-title">想知道這支籤，如何對應你現在的處境？</div><div class="extended-preview-copy">完整延伸解籤將包含情境解析、對方或環境的可能反應、後續走向，以及你現在能採取的具體行動。</div><button type="button" class="extended-preview-btn">我想看完整延伸解籤</button><div class="extended-preview-thanks" role="status" hidden>已記下你的期待，正式開放時會在這裡出現。</div>';
-    const button=section.querySelector(".extended-preview-btn");
-    const thanks=section.querySelector(".extended-preview-thanks");
-    function showSent(){button.textContent="✓ 已記下，我想看完整解析";button.disabled=true;thanks.hidden=false;}
-    if(sessionStorage.getItem(storageKey)==="1")showSent();
-    button.addEventListener("click",function(){
-      if(sessionStorage.getItem(storageKey)==="1"){showSent();return;}
-      sessionStorage.setItem(storageKey,"1");
-      const params={theme:theme,theme_label:themeLabels[theme]||theme,subtheme:subtheme,fortune_number:fortuneNumber,fortune_title:title,button_location:"result_after_fortune",interest_version:"preview_v1"};
-      send("extended_reading_interest",params);
-      if(theme!=="unknown")send("extended_interest_"+theme,params);
-      showSent();
-    });
+    // ── 愛情類已經可以購買，其他主題維持預告 ──
+    const EXT_SLUG={"失戀中":"breakup","曖昧中":"flirting","關係中":"relationship","單身中":"single","桃花運勢":"fortune"};
+    const extSlug=EXT_SLUG[subtheme]||"";
+    const extNo=parseInt(fortuneNumber,10);
+    const slipId=(theme==="love"&&extSlug&&extNo>0)?("love_"+extSlug+"_"+String(extNo).padStart(3,"0")):"";
+
+    if(slipId){
+      section.innerHTML='<div class="extended-preview-kicker">完整解籤 · NT$ 99</div>'
+        +'<div class="extended-preview-title">想知道這支籤，如何對應你現在的處境？</div>'
+        +'<div class="extended-preview-copy">為這一支籤寫的完整解讀：情境解析、對方或環境的可能反應、後續走向，以及你現在能採取的具體行動。約 1300 字，另附一份 PDF 寄到你信箱。</div>'
+        +'<button type="button" class="extended-preview-btn">閱讀完整解籤　NT$ 99</button>';
+      const buy=section.querySelector(".extended-preview-btn");
+      try{sessionStorage.setItem("oracle.drawnAt",new Date().toISOString());}catch(e){}
+      buy.addEventListener("click",function(){
+        send("extended_checkout_click",{theme:theme,theme_label:themeLabels[theme]||theme,subtheme:subtheme,
+          fortune_number:fortuneNumber,fortune_title:title,slip_id:slipId,button_location:"result_after_fortune"});
+        location.href="/checkout/?id="+encodeURIComponent(slipId);
+      });
+    }else{
+      section.innerHTML='<div class="extended-preview-kicker">COMING SOON · 即將開放</div><div class="extended-preview-title">想知道這支籤，如何對應你現在的處境？</div><div class="extended-preview-copy">完整延伸解籤將包含情境解析、對方或環境的可能反應、後續走向，以及你現在能採取的具體行動。</div><button type="button" class="extended-preview-btn">我想看完整延伸解籤</button><div class="extended-preview-thanks" role="status" hidden>已記下你的期待，正式開放時會在這裡出現。</div>';
+      const button=section.querySelector(".extended-preview-btn");
+      const thanks=section.querySelector(".extended-preview-thanks");
+      function showSent(){button.textContent="✓ 已記下，我想看完整解析";button.disabled=true;thanks.hidden=false;}
+      if(sessionStorage.getItem(storageKey)==="1")showSent();
+      button.addEventListener("click",function(){
+        if(sessionStorage.getItem(storageKey)==="1"){showSent();return;}
+        sessionStorage.setItem(storageKey,"1");
+        const params={theme:theme,theme_label:themeLabels[theme]||theme,subtheme:subtheme,fortune_number:fortuneNumber,fortune_title:title,button_location:"result_after_fortune",interest_version:"preview_v1"};
+        send("extended_reading_interest",params);
+        if(theme!=="unknown")send("extended_interest_"+theme,params);
+        showSent();
+      });
+    }
     // 付費區插在「具體建議」之後、「分享／再抽一次」之前。
     // 那兩顆是結束動作，使用者看到就認為讀完了 —— 原本放在它們下面，
     // 導致只有 27.5% 的人滑到付費區。移上來後，讀完解籤情緒還在時就會看到。

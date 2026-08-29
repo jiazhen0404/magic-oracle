@@ -79,6 +79,7 @@ input[type=email][aria-invalid="true"]{border-color:var(--alert)}
 .submit:hover:not(:disabled),.submit:focus-visible{background:var(--gold-glow)}
 .submit:disabled{color:var(--paper-faint);border-color:var(--ink-line);cursor:not-allowed}
 .err{font-family:var(--sans);font-size:.8rem;color:var(--alert);margin:12px 0 0;min-height:1.4em}
+.need{font-family:var(--sans);font-size:.78rem;color:var(--paper-faint);margin:11px 0 0;min-height:1.3em;text-align:center}
 .foot{font-family:var(--sans);font-size:.74rem;line-height:1.95;color:var(--paper-faint);
   text-align:center;margin-top:26px}
 .foot a{color:var(--paper-dim);text-decoration:none}
@@ -139,6 +140,7 @@ input[type=email][aria-invalid="true"]{border-color:var(--alert)}
     </div>
 
     <button type="submit" class="submit" id="submit" disabled>前往付款</button>
+    <p class="need" id="need"></p>
     <p class="err" id="err" role="alert"></p>
   </form>
 
@@ -215,11 +217,23 @@ const submit = document.getElementById('submit');
 const err    = document.getElementById('err');
 const valid  = s => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s.trim());
 
+const need = document.getElementById('need');
+
 function refresh(){
-  submit.disabled = !(valid(email.value) && t1.checked && t2.checked && SLIP_ID);
+  const missing = [];
+  if(!SLIP_ID)            missing.push('網址少了籤支編號，請回到籤文頁重新進入');
+  if(!valid(email.value)) missing.push('填寫收件信箱');
+  if(!t1.checked)         missing.push('勾選服務條款與隱私權政策');
+  if(!t2.checked)         missing.push('勾選數位內容同意');
+
+  submit.disabled = missing.length > 0;
+  need.textContent = missing.length ? '還需要：' + missing.join('、') : '';
   if(err.textContent && valid(email.value)) err.textContent = '';
 }
-[email, t1, t2].forEach(el => el.addEventListener('input', refresh));
+['input','change'].forEach(ev => {
+  [email, t1, t2].forEach(el => el.addEventListener(ev, refresh));
+});
+refresh();   // 一進頁面就先算一次，讓使用者知道還缺什麼
 email.addEventListener('blur', () => {
   const bad = email.value && !valid(email.value);
   email.setAttribute('aria-invalid', bad);

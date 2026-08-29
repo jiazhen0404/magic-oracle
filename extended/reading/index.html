@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>完整解籤｜未完籤所</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+TC:wght@300;400;500;600&family=Noto+Sans+TC:wght@300;400&display=swap">
+<style>
+:root{
+  --ink:#0B1026; --ink-raised:#131A38; --ink-line:#1E2749;
+  --gold:#C9A961; --gold-dim:#8A7443; --gold-glow:rgba(201,169,97,.10);
+  --paper:#E8E3D9; --paper-dim:#9A9384; --paper-faint:#6E6A5E; --alert:#D9836B;
+  --serif:"Noto Serif TC",Georgia,"Songti TC",serif;
+  --sans:"Noto Sans TC",-apple-system,"Helvetica Neue",sans-serif;
+  --display:"Cinzel","Noto Serif TC",Georgia,serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--paper);font-family:var(--serif);font-weight:300;
+  line-height:2.05;letter-spacing:.025em;-webkit-font-smoothing:antialiased}
+#sky{position:fixed;inset:0;z-index:0;pointer-events:none}
+.wrap{position:relative;z-index:1;max-width:36em;margin:0 auto;padding:0 24px 100px}
+
+.masthead{padding:46px 0 22px;text-align:center}
+.masthead a{color:inherit;text-decoration:none}
+.masthead .zh{font-size:.94rem;letter-spacing:.42em;color:var(--gold);text-indent:.42em}
+.masthead .en{font-family:var(--display);font-size:.58rem;letter-spacing:.34em;color:var(--paper-faint);margin-top:8px;text-indent:.34em}
+
+/* 籤頭 */
+.head{position:relative;text-align:center;padding:38px 24px 34px;margin-bottom:14px;
+  border:1px solid var(--gold-dim);background:linear-gradient(180deg,var(--ink-raised),rgba(19,26,56,0))}
+.head::before,.head::after{content:"";position:absolute;width:12px;height:12px;border:1px solid var(--gold)}
+.head::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.head::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.kicker{font-family:var(--sans);font-size:.7rem;letter-spacing:.3em;color:var(--paper-faint);
+  text-indent:.3em;margin-bottom:16px}
+.name{font-size:2rem;font-weight:600;color:var(--gold);letter-spacing:.16em;
+  text-indent:.16em;margin:0 0 10px;line-height:1.5}
+.situ{font-family:var(--sans);font-size:.74rem;letter-spacing:.18em;color:var(--paper-dim);margin:0}
+.poem{margin:26px auto 0;max-width:22em;font-size:1rem;line-height:2.1;color:#DCD2E4;
+  padding-top:22px;border-top:1px solid var(--ink-line)}
+.outcome{display:inline-block;margin-top:20px;padding:5px 16px;border:1px solid var(--gold-dim);
+  font-family:var(--sans);font-size:.72rem;letter-spacing:.2em;color:var(--gold);text-indent:.2em}
+
+/* 內文 */
+section.part{margin-top:46px}
+section.part h2{font-size:1.02rem;font-weight:600;color:var(--gold);letter-spacing:.14em;
+  margin:0 0 16px;text-wrap:balance;display:flex;align-items:baseline;gap:12px}
+section.part h2::before{content:"";flex:0 0 16px;height:1px;background:var(--gold-dim);transform:translateY(-.42em)}
+section.part p{margin:0 0 1.25em;font-size:.97rem}
+section.part p:last-child{margin-bottom:0}
+
+/* 狀態畫面 */
+.state{text-align:center;padding:60px 24px}
+.state .mk{font-size:1.8rem;color:var(--gold);margin-bottom:16px}
+.state h1{font-size:1.15rem;font-weight:600;color:var(--gold);letter-spacing:.14em;margin:0 0 14px}
+.state p{font-size:.93rem;margin:0 0 1em}
+.state .sub{font-family:var(--sans);font-size:.8rem;line-height:1.9;color:var(--paper-faint)}
+.btn{display:inline-block;margin-top:24px;padding:14px 30px;border:1px solid var(--gold);
+  color:var(--gold);text-decoration:none;font-size:.92rem;letter-spacing:.2em;text-indent:.2em;
+  transition:background .25s}
+.btn:hover,.btn:focus-visible{background:var(--gold-glow)}
+
+.tail{margin-top:56px;padding-top:26px;border-top:1px solid var(--ink-line);
+  font-family:var(--sans);font-size:.76rem;line-height:1.95;color:var(--paper-faint);text-align:center}
+.tail a{color:var(--paper-dim);text-decoration:none}
+.tail a:hover{color:var(--gold-dim)}
+
+@media (max-width:520px){
+  .name{font-size:1.6rem}
+  .head{padding:32px 18px 28px}
+  body{line-height:1.95}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{
+  #sky{display:none}
+  body{background:#fff;color:#1a1a1a}
+  .name,section.part h2,.kicker{color:#8A7443}
+  .tail,.masthead{color:#666}
+}
+:focus-visible{outline:1px solid var(--gold);outline-offset:3px}
+</style>
+</head>
+<body>
+<canvas id="sky"></canvas>
+<div class="wrap">
+  <header class="masthead">
+    <a href="/"><div class="zh">未完籤所</div><div class="en">MAGIC ORACLE</div></a>
+  </header>
+  <main id="main">
+    <div class="state">
+      <div class="mk">✦</div>
+      <h1>正在取出你的籤</h1>
+      <p class="sub">稍候片刻⋯</p>
+    </div>
+  </main>
+</div>
+
+<script>
+const SITU = { breakup:'失戀中', flirting:'曖昧中', relationship:'關係中',
+               single:'單身中', fortune:'桃花運勢' };
+const SLIP_ID = new URLSearchParams(location.search).get('id') || '';
+const main = document.getElementById('main');
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function state(mark, title, lines, cta){
+  main.innerHTML =
+    '<div class="state"><div class="mk">' + mark + '</div>' +
+    '<h1>' + esc(title) + '</h1>' +
+    lines.map(l => '<p class="sub">' + esc(l) + '</p>').join('') +
+    (cta ? '<a class="btn" href="' + cta.href + '">' + esc(cta.text) + '</a>' : '') +
+    '</div>';
+}
+
+function tokenFor(id){
+  try { return localStorage.getItem('unfinished.unlock.' + id) || ''; }
+  catch(e) { return ''; }   /* 無痕模式或封鎖儲存時不會爆掉 */
+}
+
+function render(d){
+  const parts = (d.sections || []).map(s =>
+    '<section class="part"><h2>' + esc(s.title) + '</h2>' +
+    (s.paragraphs || []).map(p => '<p>' + esc(p) + '</p>').join('') +
+    '</section>'
+  ).join('');
+
+  main.innerHTML =
+    '<div class="head">' +
+      '<div class="kicker">完整解籤</div>' +
+      '<h1 class="name">' + esc(d.name) + '</h1>' +
+      '<p class="situ">愛情・' + esc(d.situation) + '</p>' +
+      (d.poem ? '<p class="poem">' + esc(d.poem) + '</p>' : '') +
+      (d.outcome ? '<div class="outcome">' + esc(d.outcome) + '</div>' : '') +
+    '</div>' +
+    parts +
+    '<div class="tail">' +
+      '這份解讀屬於你，隨時可以回到這一頁重讀。<br>' +
+      '換裝置或清除瀏覽器資料後會需要重新解鎖，寄到信箱的 PDF 則不受影響。<br><br>' +
+      '<a href="/">回到未完籤所</a>　·　<a href="/privacy/">服務條款</a>' +
+    '</div>';
+
+  document.title = d.name + '｜完整解籤・未完籤所';
+}
+
+(async function(){
+  const m = /^love_([a-z-]+)_(\d{3})$/.exec(SLIP_ID);
+  if(!m || !SITU[m[1]]){
+    state('✕', '找不到這支籤', ['網址不完整，請從你的付款完成頁重新進入。'],
+          { href:'/', text:'回到首頁' });
+    return;
+  }
+
+  const token = tokenFor(SLIP_ID);
+  if(!token){
+    state('✦', '尚未解鎖', [
+      '這個瀏覽器上找不到這支籤的解鎖紀錄。',
+      '如果你已經付款，請回到付款完成頁重新開啟，或用當初購買時的同一個瀏覽器。',
+      '寄到你信箱的 PDF 不受影響，隨時可以打開。'
+    ], { href:'/', text:'回到首頁' });
+    return;
+  }
+
+  let res;
+  try{
+    res = await fetch('/api/extended?id=' + encodeURIComponent(SLIP_ID),
+                      { headers: { 'X-Unlock-Token': token } });
+  }catch(e){
+    state('✕', '連線出了點問題', ['請稍後重新整理這一頁。', '若持續發生，來信 hello@unfinished.tw。']);
+    return;
+  }
+
+  if(res.status === 402){
+    state('✦', '尚未解鎖', [
+      '這張解鎖憑證已經失效，或不是這支籤的憑證。',
+      '請來信 hello@unfinished.tw，附上你的訂單編號，我們會替你處理。'
+    ], { href:'/', text:'回到首頁' });
+    return;
+  }
+  if(!res.ok){
+    state('✕', '暫時讀不到內容', ['伺服器回應 ' + res.status + '。', '請稍後再試，或來信 hello@unfinished.tw。']);
+    return;
+  }
+
+  try{
+    render(await res.json());
+  }catch(e){
+    state('✕', '內容格式有問題', ['請來信 hello@unfinished.tw 告訴我們，附上網址。']);
+  }
+})();
+
+/* ── 星點 ── */
+(function sky(){
+  const c = document.getElementById('sky'), x = c.getContext('2d');
+  let stars = [], raf = null;
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function seed(){
+    const d = devicePixelRatio || 1;
+    c.width = innerWidth*d; c.height = innerHeight*d;
+    c.style.width = innerWidth+'px'; c.style.height = innerHeight+'px';
+    x.setTransform(d,0,0,d,0,0);
+    const n = Math.round(innerWidth*innerHeight/16000);
+    stars = Array.from({length:n}, () => ({
+      x:Math.random()*innerWidth, y:Math.random()*innerHeight,
+      r:Math.random()*0.8+0.22, a:Math.random()*0.35+0.09,
+      s:Math.random()*0.0006+0.0002, p:Math.random()*Math.PI*2
+    }));
+  }
+  function draw(t){
+    x.clearRect(0,0,innerWidth,innerHeight);
+    for(const st of stars){
+      const a = still ? st.a : st.a*(0.62+0.38*Math.sin(t*st.s+st.p));
+      x.beginPath(); x.arc(st.x,st.y,st.r,0,6.283);
+      x.fillStyle = 'rgba(201,169,97,' + a + ')'; x.fill();
+    }
+    if(!still) raf = requestAnimationFrame(draw);
+  }
+  seed(); draw(0);
+  addEventListener('resize', () => { cancelAnimationFrame(raf); seed(); draw(0); });
+})();
+</script>
+</body>
+</html>

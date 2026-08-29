@@ -3,12 +3,17 @@
  * ------------------------------------------------------------------
  * 這支程式負責網站「會動」的部分。沒有它，Cloudflare 只會把檔案送出去。
  *
- * 目前提供三個網址（統稱 API）：
+ * 目前提供這些網址（統稱 API）：
  *   POST /api/create-order    建立訂單，回傳綠界付款表單需要的欄位
  *   POST /api/ecpay-callback  綠界付款成功後，由綠界主動通知這裡
  *   GET  /api/order-status    前端用來問「這筆付好了沒」
+ *   POST /api/unlock          付款成功後換一張解鎖憑證
+ *   GET  /api/extended        憑解鎖憑證讀取延伸解籤全文
  *
  * 其他所有網址都交還給靜態檔案（首頁、籤文頁、圖片⋯⋯）。
+ *
+ * 延伸籤全文放在 src/extended-love.json，會被打包進程式裡面。
+ * 它不是網站上的檔案，外面下載不到——這是付費內容唯一安全的放法。
  *
  * 需要的設定（在 Cloudflare 後台填，不要寫進這個檔案）：
  *   ECPAY_MERCHANT_ID   綠界商店代號
@@ -18,8 +23,11 @@
  *   ORDERS              KV 儲存空間（暫存訂單用）
  */
 
+import EXTENDED from './extended-love.json';
+
 const PRICE = 99;                       // 售價，改這裡就好
 const ORDER_TTL = 60 * 60 * 24;         // 訂單暫存 24 小時後自動消失
+const UNLOCK_TTL = 60 * 60 * 24 * 365;  // 解鎖憑證保留一年
 const MAX_QUESTION = 500;               // 使用者問題的字數上限
 
 const ECPAY_URL = {
@@ -42,6 +50,12 @@ export default {
       if (path === '/api/order-status' && request.method === 'GET') {
         return await orderStatus(url, env);
       }
+      if (path === '/api/unlock' && request.method === 'POST') {
+        return await issueUnlock(request, env);
+      }
+      if (path === '/api/extended' && request.method === 'GET') {
+        return await readExtended(request, url, env);
+      }
       if (path === '/api/health') {
         return json({
           ok: true,
@@ -50,6 +64,7 @@ export default {
           hasHashKey: Boolean(env.ECPAY_HASH_KEY),
           hasHashIv: Boolean(env.ECPAY_HASH_IV),
           hasKv: Boolean(env.ORDERS),
+          extendedCount: EXTENDED.length,
         });
       }
     } catch (err) {
@@ -224,8 +239,81 @@ async function orderStatus(url, env) {
 }
 
 /* ══════════════════════════════════════════════════════════
+   四、換發解鎖憑證
+   付款成功的訂單，可以換一張憑證。憑證本身是一串亂數，
+   存在使用者的瀏覽器裡；伺服器只記「這張憑證對應哪一支籤」，
+   不含信箱、不含問題。
+   ══════════════════════════════════════════════════════════ */
+
+async function issueUnlock(request, env) {
+  if (!env.ORDERS) return json({ error: 'not_configured' }, 503);
+
+  let body;
+  try { body = await request.json(); } catch { return json({ error: 'bad_json' }, 400); }
+
+  const tradeNo = String(body.tradeNo || '');
+  if (!/^[A-Za-z0-9]{6,20}$/.test(tradeNo)) return json({ error: 'bad_no' }, 400);
+
+  const raw = await env.ORDERS.get('order:' + tradeNo);
+  if (!raw) return json({ error: 'not_found' }, 404);
+
+  const order = JSON.parse(raw);
+  if (order.status !== 'paid') return json({ error: 'not_paid', status: order.status }, 402);
+
+  // 同一筆訂單重複索取，就把同一張憑證給回去，不會一直長出新的
+  if (order.unlockToken) {
+    return json({ token: order.unlockToken, slipId: order.slipId });
+  }
+
+  const token = randomToken();
+  await env.ORDERS.put(
+    'unlock:' + token,
+    JSON.stringify({ slipId: order.slipId, issuedAt: new Date().toISOString() }),
+    { expirationTtl: UNLOCK_TTL }
+  );
+
+  order.unlockToken = token;
+  await env.ORDERS.put('order:' + tradeNo, JSON.stringify(order), { expirationTtl: ORDER_TTL });
+
+  return json({ token, slipId: order.slipId });
+}
+
+/* ══════════════════════════════════════════════════════════
+   五、讀取延伸解籤全文
+   沒有有效憑證就回 402，前端據此顯示「尚未解鎖」。
+   ══════════════════════════════════════════════════════════ */
+
+async function readExtended(request, url, env) {
+  const slipId = url.searchParams.get('id') || '';
+  if (!/^love_[a-z-]{3,20}_\d{3}$/.test(slipId)) return json({ error: 'bad_slip_id' }, 400);
+
+  const token = request.headers.get('X-Unlock-Token') || '';
+  if (!/^[A-Za-z0-9]{20,60}$/.test(token)) return json({ error: 'locked' }, 402);
+
+  if (!env.ORDERS) return json({ error: 'not_configured' }, 503);
+  const rec = await env.ORDERS.get('unlock:' + token);
+  if (!rec) return json({ error: 'locked' }, 402);
+
+  // 這張憑證只能開它買的那一支籤
+  if (JSON.parse(rec).slipId !== slipId) return json({ error: 'locked' }, 402);
+
+  const slip = EXTENDED.find((x) => x.id === slipId);
+  if (!slip) return json({ error: 'not_found' }, 404);
+
+  return json(slip);
+}
+
+/* ══════════════════════════════════════════════════════════
    工具
    ══════════════════════════════════════════════════════════ */
+
+/** 32 碼亂數憑證，用不會看錯的字元集 */
+function randomToken() {
+  const A = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+  return Array.from(crypto.getRandomValues(new Uint8Array(32)))
+    .map((b) => A[b % A.length])
+    .join('');
+}
 
 function checkConfig(env) {
   const missing = [];
