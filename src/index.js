@@ -565,7 +565,14 @@ function checkConfig(env) {
 function json(obj, status = 200) {
   return new Response(JSON.stringify(obj), {
     status,
-    headers: { 'content-type': 'application/json; charset=utf-8' },
+    headers: {
+      'content-type': 'application/json; charset=utf-8',
+      // 一定要禁止快取。
+      // 少了這一行，Cloudflare 會把 API 的回應當成靜態內容存起來，
+      // 付款完成頁就會一直拿到「還沒付款」那份舊答案，永遠等不到結果。
+      'cache-control': 'no-store, no-cache, must-revalidate',
+      'pragma': 'no-cache',
+    },
   });
 }
 

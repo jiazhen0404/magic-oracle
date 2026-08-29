@@ -225,7 +225,7 @@ const metaEl = document.getElementById('slipMeta');
 })();
 
 /* 測試模式提示條 */
-fetch('/api/health').then(r => r.json()).then(h => {
+fetch('/api/health', { cache: 'no-store' }).then(r => r.json()).then(h => {
   if(h.mode !== 'production') document.getElementById('testbar').hidden = false;
 }).catch(()=>{});
 

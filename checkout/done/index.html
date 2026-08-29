@@ -95,7 +95,8 @@ async function poll(){
   if(!tradeNo){ show('fail','找不到訂單','網址裡沒有訂單編號。','若你已完成付款，請來信告訴我們。'); return; }
   tries++;
   try{
-    const r = await fetch('/api/order-status?no=' + encodeURIComponent(tradeNo));
+    const r = await fetch('/api/order-status?no=' + encodeURIComponent(tradeNo)
+                          + '&t=' + Date.now(), { cache: 'no-store' });
     const d = await r.json();
 
     if(d.status === 'paid'){
@@ -123,7 +124,7 @@ async function unlock(slipId){
   show('ok','付款成功','謝謝你。正在為你解鎖完整解籤⋯','');
   try{
     const r = await fetch('/api/unlock', {
-      method:'POST',
+      method:'POST', cache:'no-store',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ tradeNo })
     });
