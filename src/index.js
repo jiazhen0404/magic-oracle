@@ -26,7 +26,7 @@
 import EXTENDED from './extended-love.json';
 
 const PRICE = 99;                       // 售價，改這裡就好
-const ORDER_TTL = 60 * 60 * 24;         // 訂單暫存 24 小時後自動消失
+const ORDER_TTL = 60 * 60 * 24 * 7;     // 支援 ATM／超商延遲付款，訂單保留 7 天
 const UNLOCK_TTL = 60 * 60 * 24 * 365;  // 解鎖憑證保留一年
 const MAX_QUESTION = 500;               // 使用者問題的字數上限
 
@@ -42,22 +42,22 @@ export default {
 
     try {
       if (path === '/api/create-order' && request.method === 'POST') {
-        return await createOrder(request, env, url);
+        return secure(await createOrder(request, env, url), true);
       }
       if (path === '/api/ecpay-callback' && request.method === 'POST') {
         return await ecpayCallback(request, env);
       }
       if (path === '/api/order-status' && request.method === 'GET') {
-        return await orderStatus(url, env);
+        return secure(await orderStatus(request, url, env), true);
       }
       if (path === '/api/unlock' && request.method === 'POST') {
-        return await issueUnlock(request, env);
+        return secure(await issueUnlock(request, env), true);
       }
       if (path === '/api/extended' && request.method === 'GET') {
-        return await readExtended(request, url, env);
+        return secure(await readExtended(request, url, env), true);
       }
       if (path === '/api/health') {
-        return json({
+        return secure(json({
           ok: true,
           mode: env.ECPAY_MODE || 'stage',
           hasMerchantId: Boolean(env.ECPAY_MERCHANT_ID),
@@ -65,15 +65,15 @@ export default {
           hasHashIv: Boolean(env.ECPAY_HASH_IV),
           hasKv: Boolean(env.ORDERS),
           extendedCount: EXTENDED.length,
-        });
+        }), true);
       }
     } catch (err) {
       console.error('API 發生錯誤', path, err && err.stack ? err.stack : err);
-      return json({ error: 'internal_error' }, 500);
+      return secure(json({ error: 'internal_error' }, 500), true);
     }
 
     // 不是 API 就交還給靜態檔案
-    return env.ASSETS.fetch(request);
+    return secure(await env.ASSETS.fetch(request));
   },
 };
 
@@ -82,6 +82,7 @@ export default {
    ══════════════════════════════════════════════════════════ */
 
 async function createOrder(request, env, url) {
+  if (!sameOrigin(request, url)) return json({ error: 'forbidden_origin' }, 403);
   const missing = checkConfig(env);
   if (missing.length) {
     console.error('缺少設定：' + missing.join(', '));
@@ -114,6 +115,7 @@ async function createOrder(request, env, url) {
   }
 
   const tradeNo = makeTradeNo();
+  const claimToken = randomToken();
   const now = new Date();
 
   // ── 寫進暫存 ──
@@ -122,6 +124,7 @@ async function createOrder(request, env, url) {
     'order:' + tradeNo,
     JSON.stringify({
       tradeNo,
+      claimToken,
       slipId,
       email,
       question,
@@ -159,6 +162,7 @@ async function createOrder(request, env, url) {
   return json({
     action: ECPAY_URL[env.ECPAY_MODE === 'production' ? 'production' : 'stage'],
     fields: params,
+    claimToken,
   });
 }
 
@@ -182,6 +186,11 @@ async function ecpayCallback(request, env) {
   if (!received || received.toUpperCase() !== expected) {
     console.error('綠界通知驗章失敗', data.MerchantTradeNo);
     return new Response('0|CheckMacValue Error', { status: 400 });
+  }
+
+  if (data.MerchantID !== env.ECPAY_MERCHANT_ID) {
+    console.error('綠界商店代號不符', data.MerchantTradeNo);
+    return new Response('0|MerchantID Error', { status: 400 });
   }
 
   const tradeNo = data.MerchantTradeNo || '';
@@ -223,7 +232,7 @@ async function ecpayCallback(request, env) {
    絕對不回傳使用者的問題與信箱。
    ══════════════════════════════════════════════════════════ */
 
-async function orderStatus(url, env) {
+async function orderStatus(request, url, env) {
   const tradeNo = url.searchParams.get('no') || '';
   if (!/^[A-Za-z0-9]{6,20}$/.test(tradeNo)) return json({ error: 'bad_no' }, 400);
 
@@ -231,6 +240,8 @@ async function orderStatus(url, env) {
   if (!raw) return json({ status: 'not_found' }, 404);
 
   const order = JSON.parse(raw);
+  const claimToken = request.headers.get('X-Claim-Token') || '';
+  if (!validClaim(claimToken, order.claimToken)) return json({ error: 'unauthorized' }, 403);
   return json({
     status: order.status,
     slipId: order.slipId,
@@ -252,12 +263,14 @@ async function issueUnlock(request, env) {
   try { body = await request.json(); } catch { return json({ error: 'bad_json' }, 400); }
 
   const tradeNo = String(body.tradeNo || '');
+  const claimToken = String(body.claimToken || '');
   if (!/^[A-Za-z0-9]{6,20}$/.test(tradeNo)) return json({ error: 'bad_no' }, 400);
 
   const raw = await env.ORDERS.get('order:' + tradeNo);
   if (!raw) return json({ error: 'not_found' }, 404);
 
   const order = JSON.parse(raw);
+  if (!validClaim(claimToken, order.claimToken)) return json({ error: 'unauthorized' }, 403);
   if (order.status !== 'paid') return json({ error: 'not_paid', status: order.status }, 402);
 
   // 同一筆訂單重複索取，就把同一張憑證給回去，不會一直長出新的
@@ -315,6 +328,18 @@ function randomToken() {
     .join('');
 }
 
+function validClaim(received, expected) {
+  if (!/^[A-Za-z0-9]{32}$/.test(received) || !/^[A-Za-z0-9]{32}$/.test(expected || '')) return false;
+  let diff = 0;
+  for (let i = 0; i < 32; i++) diff |= received.charCodeAt(i) ^ expected.charCodeAt(i);
+  return diff === 0;
+}
+
+function sameOrigin(request, url) {
+  const origin = request.headers.get('Origin');
+  return !origin || origin === url.origin;
+}
+
 function checkConfig(env) {
   const missing = [];
   if (!env.ECPAY_MERCHANT_ID) missing.push('ECPAY_MERCHANT_ID');
@@ -329,6 +354,16 @@ function json(obj, status = 200) {
     status,
     headers: { 'content-type': 'application/json; charset=utf-8' },
   });
+}
+
+function secure(response, noStore = false) {
+  const out = new Response(response.body, response);
+  out.headers.set('X-Content-Type-Options', 'nosniff');
+  out.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  out.headers.set('X-Frame-Options', 'SAMEORIGIN');
+  out.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  if (noStore) out.headers.set('Cache-Control', 'no-store');
+  return out;
 }
 
 /** 訂單編號：UF + 台北時間到秒 + 4 碼亂數，共 18 碼，只用英數字 */

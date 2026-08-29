@@ -1,27 +1,13 @@
-# --- 建置工具與相依套件（一定要排除，否則建置會失敗）---
-node_modules
-.git
-.github
-.wrangler
-package.json
-package-lock.json
-bun.lockb
-wrangler.jsonc
-.assetsignore
-
-# --- 後端程式碼，不可以公開（由 Cloudflare 執行，不是給人下載的）---
-src/
-
-# --- 開發用檔案，不需要公開在網站上 ---
+# 後端原始碼、付費內容與部署設定不可成為公開靜態檔案
+src/**
 server.js
 env.example
-scripts/
-__pycache__/
-*.pyc
-
-# --- 內部筆記與說明文件，不需要公開 ---
-README.md
-README-v6.txt
-README-v7.txt
-GA4-TRACKING.md
-QA_610_*.txt
+wrangler.jsonc
+package.json
+package-lock.json
+README*
+*.md
+QA_*.txt
+scripts/**
+.git/**
+node_modules/**

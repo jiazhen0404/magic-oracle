@@ -263,7 +263,9 @@ form.addEventListener('submit', async ev => {
       const detail = await res.json().catch(()=>({}));
       throw new Error(detail.error || res.status);
     }
-    const { action, fields } = await res.json();
+    const { action, fields, claimToken } = await res.json();
+    if(!claimToken || !fields || !fields.MerchantTradeNo) throw new Error('missing_claim');
+    sessionStorage.setItem('unfinished.claim.' + fields.MerchantTradeNo, claimToken);
 
     const f = document.createElement('form');
     f.method = 'POST'; f.action = action;
