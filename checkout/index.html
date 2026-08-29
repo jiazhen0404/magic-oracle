@@ -164,18 +164,42 @@ const nameEl = document.getElementById('slipName');
 const metaEl = document.getElementById('slipMeta');
 
 (async function showSlip(){
+  // 出問題時把原因直接寫在畫面上，方便排查（正式營運後可以拿掉）
+  const fail = (why) => { metaEl.textContent = '（' + why + '）'; };
+
   const m = /^love_([a-z-]+)_(\d{3})$/.exec(SLIP_ID);
-  if(!m){ nameEl.textContent = '找不到這支籤'; metaEl.textContent = '請回到籤文頁重新進入'; return; }
-  const sub = SITU[m[1]], no = parseInt(m[2], 10);
-  try{
-    const all = await (await fetch('/data/love.json')).json();
-    const g = all.find(x => x.sub === sub && Number(x.n) === no);
-    if(!g){ nameEl.textContent = '找不到這支籤'; return; }
-    nameEl.textContent = g.t;
-    metaEl.textContent = `愛情・${g.sub}｜${g.outcomeLabel || ''}`;
-  }catch(e){
-    nameEl.textContent = '—'; metaEl.textContent = '';
+  if(!m){
+    nameEl.textContent = '找不到這支籤';
+    fail('網址參數不正確：' + (SLIP_ID || '空白'));
+    return;
   }
+  const sub = SITU[m[1]], no = parseInt(m[2], 10);
+  if(!sub){ nameEl.textContent = '找不到這支籤'; fail('未知的情境代號：' + m[1]); return; }
+
+  let res;
+  try{
+    res = await fetch('/data/love.json', { cache: 'no-store' });
+  }catch(e){
+    nameEl.textContent = '—'; fail('連不到籤文資料：' + e.message); return;
+  }
+  if(!res.ok){ nameEl.textContent = '—'; fail('籤文資料回應 ' + res.status); return; }
+
+  let all;
+  try{
+    all = await res.json();
+  }catch(e){
+    nameEl.textContent = '—'; fail('籤文資料格式有問題：' + e.message); return;
+  }
+  if(!Array.isArray(all)){ nameEl.textContent = '—'; fail('籤文資料不是清單'); return; }
+
+  const g = all.find(x => x.sub === sub && Number(x.n) === no);
+  if(!g){
+    nameEl.textContent = '找不到這支籤';
+    fail('資料裡沒有 ' + sub + ' 第 ' + no + ' 號，共 ' + all.length + ' 筆');
+    return;
+  }
+  nameEl.textContent = g.t;
+  metaEl.textContent = '愛情・' + g.sub + (g.outcomeLabel ? '｜' + g.outcomeLabel : '');
 })();
 
 /* 測試模式提示條 */
