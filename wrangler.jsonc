@@ -1,23 +1,21 @@
 {
   "name": "magic-oracle",
   "compatibility_date": "2026-08-28",
-
-  // 後端主程式的位置。加了這一行，網站才會「動」。
   "main": "src/index.js",
-
   "observability": { "enabled": true },
 
   "assets": {
     "directory": ".",
-    // 讓主程式在找不到 API 時，能把請求交還給靜態檔案
     "binding": "ASSETS"
   },
 
-  // 綠界模式：測試期間用 stage，正式收錢時改成 production
- 
+  // 這兩個不是機密，寫在這裡才不會被建置洗掉。
+  // 要切正式收款時，把 stage 改成 production，就只改這一個地方。
+  "vars": {
+    "ECPAY_MODE": "stage",
+    "CF_ACCOUNT_ID": "52b866ad397c38a72b9ef7c4a24622b1"
+  },
 
-  // 訂單暫存空間。
-  // ↓↓↓ 下面這個 id 要換成你自己的（見說明檔第三步）↓↓↓
   "kv_namespaces": [
     {
       "binding": "ORDERS",
