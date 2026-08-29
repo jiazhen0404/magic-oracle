@@ -11,6 +11,8 @@ const TEMPLATE = String.raw`<!doctype html>
 <head>
 <meta charset="utf-8">
 <title>__TITLE__</title>
+<link rel="preload" as="font" type="font/woff2" crossorigin href="__FONTBASE__oracle-serif.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="__FONTBASE__oracle-serif-semibold.woff2">
 <style>
 /* 這兩個字型檔會放在 unfinished.tw/assets/fonts/ 底下，
    Cloudflare 產 PDF 時會去抓。網址在下面的 __FONTBASE__ 換掉。 */
@@ -99,6 +101,12 @@ section p:last-child{margin-bottom:0}
 </head>
 <body>
 
+<!-- 這一小塊看不見，作用是讓兩個字重都被「用到」，
+     瀏覽器才會真的去下載它們。 -->
+<div aria-hidden="true" style="position:absolute;left:-9999px;top:0;white-space:nowrap">
+  <span style="font-weight:300">籤文月影</span><span style="font-weight:600">籤文月影</span>
+</div>
+
 <div class="masthead">
   <div class="rule-pair"></div>
   <div class="brand">未完籤所</div>
@@ -126,6 +134,26 @@ __SECTIONS__
   <div class="order">訂單編號　__ORDER__　·　unfinished.tw</div>
 </div>
 
+<script>
+/* 字型載完才放行。
+   Cloudflare 產 PDF 時會等 #fonts-ready 出現，
+   沒有這一段的話，字型還沒到就先截圖，中文會變成別的字型。 */
+(function(){
+  function mark(){
+    var d = document.createElement('div');
+    d.id = 'fonts-ready';
+    d.setAttribute('aria-hidden','true');
+    d.style.cssText = 'position:absolute;left:-9999px;top:0;width:1px;height:1px';
+    document.body.appendChild(d);
+  }
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(mark);
+    setTimeout(mark, 20000);        // 字型真的抓不到也不要卡死
+  } else {
+    mark();
+  }
+})();
+</script>
 </body>
 </html>
 `;

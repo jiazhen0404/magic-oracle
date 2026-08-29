@@ -385,6 +385,10 @@ async function renderPdf(slip, order, env, origin) {
       body: JSON.stringify({
         html,
         gotoOptions: { waitUntil: 'networkidle0', timeout: 60000 },
+        // 等字型真的載完才截圖。
+        // 少了這一行，Cloudflare 會用它自己的字型，中文看起來像對的，
+        // 但複製出來會是不同的字。
+        waitForSelector: { selector: '#fonts-ready', timeout: 30000 },
         pdfOptions: {
           format: 'a4',
           printBackground: true,
