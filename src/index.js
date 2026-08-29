@@ -376,7 +376,6 @@ async function renderPdf(slip, order, env, origin) {
     question: order.question,
     drawnAt: order.drawnAt || order.createdAt,
     orderNo: order.tradeNo,
-    fontBase: origin + '/assets/fonts/',
   });
 
   const pdfOptions = {
@@ -391,17 +390,12 @@ async function renderPdf(slip, order, env, origin) {
     margin: { top: '22mm', bottom: '18mm', left: '20mm', right: '20mm' },
   };
 
-  async function ask(waitForFonts) {
+  async function ask() {
     const body = {
       html,
       gotoOptions: { waitUntil: 'networkidle0', timeout: 45000 },
       pdfOptions,
     };
-    // 等字型真的載完才截圖。少了這個，Cloudflare 會用它自己的字型，
-    // 中文看起來像對的，但複製出來會是不同的字。
-    if (waitForFonts) {
-      body.waitForSelector = { selector: '#fonts-ready', timeout: 15000 };
-    }
     return fetch(
       'https://api.cloudflare.com/client/v4/accounts/' + env.CF_ACCOUNT_ID + '/browser-rendering/pdf',
       {
@@ -415,13 +409,13 @@ async function renderPdf(slip, order, env, origin) {
     );
   }
 
-  // 先用「等字型」的方式試。如果因此失敗，就退一步用一般方式再試一次——
-  // 字型不對總比信寄不出去好。
-  let res = await ask(true);
+  // 字型已經內嵌在版面裡，不必等網路，也就不需要重試機制了。
+  let res = await ask();
   if (!res.ok) {
-    const first = (await res.text()).slice(0, 200);
-    console.error('產 PDF（等字型）失敗，改用一般方式重試：' + res.status + ' ' + first);
-    res = await ask(false);
+    const msg = (await res.text()).slice(0, 200);
+    console.error('產生 PDF 失敗 ' + res.status + ' ' + msg);
+    // 再試一次，處理偶發的網路或額度抖動
+    res = await ask();
     if (!res.ok) {
       throw new Error('產生 PDF 失敗 ' + res.status + ' ' + (await res.text()).slice(0, 200));
     }

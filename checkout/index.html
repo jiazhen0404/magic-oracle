@@ -47,6 +47,11 @@ h1{font-family:var(--serif);font-weight:400;font-size:.78rem;letter-spacing:.3em
 .order dt{color:var(--paper-faint);letter-spacing:.1em;white-space:nowrap}
 .order dd{margin:0;color:var(--paper);text-align:right}
 .order .price{font-family:var(--display);font-size:1.1rem;color:var(--gold);letter-spacing:.06em}
+.asked{margin-top:20px;padding:14px 0 2px 14px;border-left:1px solid var(--gold-dim);text-align:left}
+.asked-lab{font-family:var(--sans);font-size:.7rem;letter-spacing:.22em;color:var(--paper-faint);margin-bottom:7px}
+.asked-txt{font-size:.88rem;line-height:1.9;color:var(--paper-dim);white-space:pre-wrap;word-break:break-word}
+.asked-none{font-family:var(--sans);font-size:.74rem;line-height:1.8;color:var(--paper-faint);
+  margin:16px 0 0;text-align:center}
 
 label.field{display:block;margin:0 0 26px}
 label.field .lab{display:block;font-family:var(--sans);font-size:.76rem;letter-spacing:.14em;
@@ -113,6 +118,11 @@ input[type=email][aria-invalid="true"]{border-color:var(--alert)}
       <dt>包含</dt><dd>網站上完整解讀<br>解籤 PDF 寄到信箱</dd>
       <dt>金額</dt><dd class="price">NT$ 99</dd>
     </dl>
+    <div class="asked" id="askedBox" hidden>
+      <div class="asked-lab">你寫下的問題</div>
+      <div class="asked-txt" id="askedTxt"></div>
+    </div>
+    <p class="asked-none" id="askedNone" hidden>你這次沒有寫下問題，PDF 上不會有這一段。</p>
   </section>
 
   <form id="form" novalidate>
@@ -202,6 +212,16 @@ const metaEl = document.getElementById('slipMeta');
   }
   nameEl.textContent = g.t;
   metaEl.textContent = '愛情・' + g.sub + (g.outcomeLabel ? '｜' + g.outcomeLabel : '');
+})();
+
+/* 把使用者寫下的問題顯示出來，讓他在付款前就知道 PDF 上會印什麼 */
+(function showQuestion(){
+  const box = document.getElementById('askedBox');
+  const txt = document.getElementById('askedTxt');
+  const none = document.getElementById('askedNone');
+  const q = (QUESTION || '').trim();
+  if(q){ txt.textContent = q; box.hidden = false; }
+  else { none.hidden = false; }
 })();
 
 /* 測試模式提示條 */
