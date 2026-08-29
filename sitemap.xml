@@ -287,4 +287,8 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>https://unfinished.tw/extended/</loc>
+    <lastmod>2026-08-29</lastmod>
+  </url>
 </urlset>
