@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>確認訂單｜未完籤所</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+TC:wght@300;400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap">
+<style>
+:root{
+  --ink:#0B1026; --ink-raised:#131A38; --ink-line:#1E2749; --ink-field:#0E1430;
+  --gold:#C9A961; --gold-dim:#8A7443; --gold-glow:rgba(201,169,97,.13);
+  --paper:#E8E3D9; --paper-dim:#9A9384; --paper-faint:#6E6A5E;
+  --alert:#D9836B;
+  --serif:"Noto Serif TC",Georgia,"Songti TC",serif;
+  --sans:"Noto Sans TC",-apple-system,"Helvetica Neue",sans-serif;
+  --display:"Cinzel","Noto Serif TC",Georgia,serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--ink);color:var(--paper);font-family:var(--serif);font-weight:300;
+  line-height:1.9;letter-spacing:.02em;-webkit-font-smoothing:antialiased}
+#sky{position:fixed;inset:0;z-index:0;pointer-events:none}
+.wrap{position:relative;z-index:1;max-width:33em;margin:0 auto;padding:0 24px 80px}
+
+.masthead{padding:48px 0 24px;text-align:center}
+.masthead a{color:inherit;text-decoration:none}
+.masthead .zh{font-size:.98rem;letter-spacing:.42em;color:var(--gold);text-indent:.42em}
+.masthead .en{font-family:var(--display);font-size:.6rem;letter-spacing:.34em;color:var(--paper-faint);margin-top:9px;text-indent:.34em}
+
+h1{font-family:var(--serif);font-weight:400;font-size:.78rem;letter-spacing:.3em;
+  color:var(--paper-faint);text-align:center;margin:28px 0 30px;text-indent:.3em}
+
+.order{position:relative;padding:30px 26px;background:linear-gradient(180deg,var(--ink-raised),rgba(19,26,56,0));
+  border:1px solid var(--gold-dim);margin-bottom:34px}
+.order::before,.order::after{content:"";position:absolute;width:11px;height:11px;border:1px solid var(--gold)}
+.order::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.order::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.order .slipname{font-size:1.5rem;font-weight:600;color:var(--gold);letter-spacing:.12em;
+  text-align:center;margin:0 0 6px;text-indent:.12em}
+.order .slipmeta{font-family:var(--sans);font-size:.72rem;letter-spacing:.14em;
+  color:var(--paper-dim);text-align:center;margin:0 0 22px}
+.order dl{margin:0;padding-top:20px;border-top:1px solid var(--ink-line);
+  display:grid;grid-template-columns:auto 1fr;gap:9px 16px;font-family:var(--sans);font-size:.82rem}
+.order dt{color:var(--paper-faint);letter-spacing:.1em;white-space:nowrap}
+.order dd{margin:0;color:var(--paper);text-align:right}
+.order .price{font-family:var(--display);font-size:1.1rem;color:var(--gold);letter-spacing:.06em}
+
+label.field{display:block;margin:0 0 26px}
+label.field .lab{display:block;font-family:var(--sans);font-size:.76rem;letter-spacing:.14em;
+  color:var(--paper-dim);margin-bottom:9px}
+label.field .hint{display:block;font-family:var(--sans);font-size:.74rem;line-height:1.85;
+  color:var(--paper-faint);margin-top:8px}
+input[type=email]{width:100%;padding:13px 14px;background:var(--ink-field);color:var(--paper);
+  border:1px solid var(--ink-line);font-family:var(--sans);font-size:.94rem;letter-spacing:.02em}
+input[type=email]:focus{outline:none;border-color:var(--gold-dim);background:#101738}
+input[type=email]::placeholder{color:var(--paper-faint)}
+input[type=email][aria-invalid="true"]{border-color:var(--alert)}
+
+.agreements{border-top:1px solid var(--ink-line);padding-top:24px;margin-bottom:8px}
+.agree{display:grid;grid-template-columns:20px 1fr;gap:13px;align-items:start;
+  padding:14px 0;border-bottom:1px solid var(--ink-line);cursor:pointer}
+.agree:last-of-type{border-bottom:0}
+.agree input{appearance:none;-webkit-appearance:none;width:20px;height:20px;margin:2px 0 0;
+  border:1px solid var(--gold-dim);background:transparent;cursor:pointer;display:grid;place-items:center}
+.agree input:checked{border-color:var(--gold)}
+.agree input:checked::after{content:"";width:10px;height:10px;background:var(--gold)}
+.agree input:focus-visible{outline:1px solid var(--gold);outline-offset:2px}
+.agree .txt{font-family:var(--sans);font-size:.86rem;line-height:1.9;color:var(--paper)}
+.agree .sub{display:block;font-size:.78rem;line-height:1.85;color:var(--paper-faint);margin-top:5px}
+.agree a{color:var(--gold-dim);text-decoration:none;border-bottom:1px solid var(--ink-line)}
+.agree a:hover,.agree a:focus-visible{color:var(--gold);border-bottom-color:var(--gold-dim)}
+
+.submit{width:100%;margin-top:28px;padding:17px;background:transparent;color:var(--gold);
+  border:1px solid var(--gold);font-family:var(--serif);font-size:1rem;font-weight:400;
+  letter-spacing:.22em;text-indent:.22em;cursor:pointer;transition:background .25s}
+.submit:hover:not(:disabled),.submit:focus-visible{background:var(--gold-glow)}
+.submit:disabled{color:var(--paper-faint);border-color:var(--ink-line);cursor:not-allowed}
+.err{font-family:var(--sans);font-size:.8rem;color:var(--alert);margin:12px 0 0;min-height:1.4em}
+.foot{font-family:var(--sans);font-size:.74rem;line-height:1.95;color:var(--paper-faint);
+  text-align:center;margin-top:26px}
+.foot a{color:var(--paper-dim);text-decoration:none}
+.foot a:hover{color:var(--gold-dim)}
+.testbar{font-family:var(--sans);font-size:.74rem;letter-spacing:.08em;text-align:center;
+  color:#0B1026;background:var(--gold);padding:7px 12px;line-height:1.7}
+
+@media (max-width:520px){
+  .order{padding:26px 20px}
+  .order .slipname{font-size:1.3rem}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+:focus-visible{outline:1px solid var(--gold);outline-offset:3px}
+</style>
+</head>
+<body>
+<div class="testbar" id="testbar" hidden>測試模式 · 不會真的扣款</div>
+<canvas id="sky"></canvas>
+<div class="wrap">
+  <header class="masthead">
+    <a href="/"><div class="zh">未完籤所</div><div class="en">MAGIC ORACLE</div></a>
+  </header>
+
+  <h1>確認訂單</h1>
+
+  <section class="order">
+    <p class="slipname" id="slipName">—</p>
+    <p class="slipmeta" id="slipMeta">　</p>
+    <dl>
+      <dt>購買項目</dt><dd>這支籤的完整解籤</dd>
+      <dt>包含</dt><dd>網站上完整解讀<br>解籤 PDF 寄到信箱</dd>
+      <dt>金額</dt><dd class="price">NT$ 99</dd>
+    </dl>
+  </section>
+
+  <form id="form" novalidate>
+    <label class="field">
+      <span class="lab">收件信箱</span>
+      <input type="email" id="email" name="email" placeholder="your@email.com"
+             autocomplete="email" inputmode="email" required>
+      <span class="hint">解籤 PDF 會寄到這裡。這份 PDF 是你永久保存的版本——換手機、清除瀏覽器紀錄都還在。</span>
+    </label>
+
+    <div class="agreements">
+      <label class="agree">
+        <input type="checkbox" id="agreeTerms" required>
+        <span class="txt">我已閱讀並同意<a href="/privacy/#terms" target="_blank" rel="noopener">服務條款</a>與<a href="/privacy/#privacy" target="_blank" rel="noopener">隱私權政策</a>
+          <span class="sub">包含：你填寫的信箱與問題僅用於寄送這份解籤，寄出後即刪除。</span>
+        </span>
+      </label>
+
+      <label class="agree">
+        <input type="checkbox" id="agreeDigital" required>
+        <span class="txt">我同意付款完成後立即提供數位內容，並瞭解本項服務不適用七日解除權
+          <span class="sub">解籤內容在付款後立刻解鎖並寄出，屬於一經提供即完成的數位內容。<a href="/privacy/#refund" target="_blank" rel="noopener">退款說明</a></span>
+        </span>
+      </label>
+    </div>
+
+    <button type="submit" class="submit" id="submit" disabled>前往付款</button>
+    <p class="err" id="err" role="alert"></p>
+  </form>
+
+  <p class="foot">
+    付款由綠界科技處理，本站不會接觸你的卡片資訊。<br>
+    <a href="/">回到未完籤所</a>
+  </p>
+</div>
+
+<script>
+/* ── 這支籤是哪一支 ──
+   網址格式：/checkout/?id=love_breakup_001
+   籤名與情境從 /data/love.json 讀，跟站上其他頁面用同一份資料。 */
+const SITU = { breakup:'失戀中', flirting:'曖昧中', relationship:'關係中',
+               single:'單身中', fortune:'桃花運勢' };
+
+const params   = new URLSearchParams(location.search);
+const SLIP_ID  = params.get('id') || '';
+const QUESTION = sessionStorage.getItem('oracle.question') || '';
+const DRAWN_AT = sessionStorage.getItem('oracle.drawnAt') || new Date().toISOString();
+
+const nameEl = document.getElementById('slipName');
+const metaEl = document.getElementById('slipMeta');
+
+(async function showSlip(){
+  const m = /^love_([a-z-]+)_(\d{3})$/.exec(SLIP_ID);
+  if(!m){ nameEl.textContent = '找不到這支籤'; metaEl.textContent = '請回到籤文頁重新進入'; return; }
+  const sub = SITU[m[1]], no = parseInt(m[2], 10);
+  try{
+    const all = await (await fetch('/data/love.json')).json();
+    const g = all.find(x => x.sub === sub && Number(x.n) === no);
+    if(!g){ nameEl.textContent = '找不到這支籤'; return; }
+    nameEl.textContent = g.t;
+    metaEl.textContent = `愛情・${g.sub}｜${g.outcomeLabel || ''}`;
+  }catch(e){
+    nameEl.textContent = '—'; metaEl.textContent = '';
+  }
+})();
+
+/* 測試模式提示條 */
+fetch('/api/health').then(r => r.json()).then(h => {
+  if(h.mode !== 'production') document.getElementById('testbar').hidden = false;
+}).catch(()=>{});
+
+const form   = document.getElementById('form');
+const email  = document.getElementById('email');
+const t1     = document.getElementById('agreeTerms');
+const t2     = document.getElementById('agreeDigital');
+const submit = document.getElementById('submit');
+const err    = document.getElementById('err');
+const valid  = s => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s.trim());
+
+function refresh(){
+  submit.disabled = !(valid(email.value) && t1.checked && t2.checked && SLIP_ID);
+  if(err.textContent && valid(email.value)) err.textContent = '';
+}
+[email, t1, t2].forEach(el => el.addEventListener('input', refresh));
+email.addEventListener('blur', () => {
+  const bad = email.value && !valid(email.value);
+  email.setAttribute('aria-invalid', bad);
+  err.textContent = bad ? '這個信箱看起來不太對，再確認一次好嗎？' : '';
+});
+
+form.addEventListener('submit', async ev => {
+  ev.preventDefault();
+  if(submit.disabled) return;
+  submit.disabled = true;
+  submit.textContent = '正在前往綠界⋯';
+  err.textContent = '';
+
+  try{
+    const res = await fetch('/api/create-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        slipId: SLIP_ID,
+        question: QUESTION,
+        email: email.value.trim(),
+        drawnAt: DRAWN_AT,
+        consent: { terms: true, digitalContent: true, consentAt: new Date().toISOString() }
+      })
+    });
+    if(!res.ok){
+      const detail = await res.json().catch(()=>({}));
+      throw new Error(detail.error || res.status);
+    }
+    const { action, fields } = await res.json();
+
+    const f = document.createElement('form');
+    f.method = 'POST'; f.action = action;
+    for(const [k, v] of Object.entries(fields)){
+      const i = document.createElement('input');
+      i.type = 'hidden'; i.name = k; i.value = v;
+      f.appendChild(i);
+    }
+    document.body.appendChild(f);
+    f.submit();
+  }catch(e){
+    console.error(e);
+    submit.disabled = false;
+    submit.textContent = '前往付款';
+    err.textContent = '連線出了點問題，請再試一次。若持續發生，請來信 hello@unfinished.tw。';
+  }
+});
+
+/* ── 星點 ── */
+(function sky(){
+  const c = document.getElementById('sky'), x = c.getContext('2d');
+  let stars = [], raf = null;
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function seed(){
+    const d = devicePixelRatio || 1;
+    c.width = innerWidth * d; c.height = innerHeight * d;
+    c.style.width = innerWidth + 'px'; c.style.height = innerHeight + 'px';
+    x.setTransform(d,0,0,d,0,0);
+    const n = Math.round(innerWidth * innerHeight / 15000);
+    stars = Array.from({length:n}, () => ({
+      x: Math.random()*innerWidth, y: Math.random()*innerHeight,
+      r: Math.random()*0.85 + 0.25, a: Math.random()*0.4 + 0.1,
+      s: Math.random()*0.0006 + 0.0002, p: Math.random()*Math.PI*2
+    }));
+  }
+  function draw(t){
+    x.clearRect(0,0,innerWidth,innerHeight);
+    for(const st of stars){
+      const a = still ? st.a : st.a * (0.62 + 0.38*Math.sin(t*st.s + st.p));
+      x.beginPath(); x.arc(st.x, st.y, st.r, 0, 6.283);
+      x.fillStyle = `rgba(201,169,97,${a})`; x.fill();
+    }
+    if(!still) raf = requestAnimationFrame(draw);
+  }
+  seed(); draw(0);
+  addEventListener('resize', () => { cancelAnimationFrame(raf); seed(); draw(0); });
+})();
+</script>
+</body>
+</html>

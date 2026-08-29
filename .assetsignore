@@ -9,6 +9,9 @@ bun.lockb
 wrangler.jsonc
 .assetsignore
 
+# --- 後端程式碼，不可以公開（由 Cloudflare 執行，不是給人下載的）---
+src/
+
 # --- 開發用檔案，不需要公開在網站上 ---
 server.js
 env.example
