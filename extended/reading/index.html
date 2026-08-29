@@ -75,8 +75,81 @@ section.part p:last-child{margin-bottom:0}
   .head{padding:32px 18px 28px}
   body{line-height:1.95}
 }
+/* ══════ 開封動畫 ══════
+   一封蠟封的信浮現 → 封蠟裂開、金光滲出 → 光暈擴散填滿畫面 → 解讀浮現
+   全長 2.4 秒，點一下可以跳過。 */
+.veil{position:fixed;inset:0;z-index:50;display:grid;place-items:center;cursor:pointer;
+  background:radial-gradient(circle at 50% 46%,#1B1038 0%,#0D0A22 52%,#0B1026 100%)}
+.veil[hidden]{display:none}
+.veil.out{animation:veilOut .55s ease forwards;pointer-events:none}
+@keyframes veilOut{to{opacity:0}}
+
+.stage{position:relative;display:block;width:min(64vw,290px)}
+.stage img{display:block;width:100%;height:auto;
+  filter:drop-shadow(0 22px 46px rgba(0,0,0,.55)) drop-shadow(0 0 22px rgba(201,169,97,.18))}
+
+.veil.play .stage img{animation:letter 2.4s cubic-bezier(.22,.68,.3,1) both}
+@keyframes letter{
+  0%{opacity:0;transform:scale(.82) translateY(18px)}
+  20%{opacity:1;transform:scale(1) translateY(0)}
+  42%{transform:scale(1.008) translateY(-6px)}
+  60%{transform:scale(1.02) translateY(0)}
+  74%{opacity:1;transform:scale(1.07) translateY(-2px)}
+  100%{opacity:0;transform:scale(1.52) translateY(-10px)}
+}
+
+/* 封蠟的位置，約在信件的 46% / 47% 處 */
+.seal{position:absolute;left:46%;top:47%;width:46%;aspect-ratio:1;border-radius:50%;
+  transform:translate(-50%,-50%);pointer-events:none;
+  background:radial-gradient(circle,rgba(255,241,201,.95) 0%,rgba(228,186,108,.6) 26%,rgba(201,169,97,.22) 52%,transparent 72%);
+  opacity:0;mix-blend-mode:screen}
+.veil.play .seal{animation:seal 2.4s ease-out both}
+@keyframes seal{
+  0%,26%{opacity:0;transform:translate(-50%,-50%) scale(.35)}
+  40%{opacity:.85;transform:translate(-50%,-50%) scale(.9)}
+  54%{opacity:.5;transform:translate(-50%,-50%) scale(1.15)}
+  72%{opacity:1;transform:translate(-50%,-50%) scale(1.8)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(6.5)}
+}
+
+/* 封蠟上裂開的那道縫 */
+.crack{position:absolute;left:46%;top:47%;width:2px;height:0;transform:translate(-50%,-50%) rotate(-7deg);
+  background:linear-gradient(180deg,transparent,#FFF3D2 18%,#FFF9E8 50%,#FFF3D2 82%,transparent);
+  box-shadow:0 0 12px rgba(255,240,200,.95),0 0 26px rgba(201,169,97,.6);
+  opacity:0;pointer-events:none}
+.veil.play .crack{animation:crack 2.4s ease-out both}
+@keyframes crack{
+  0%,30%{opacity:0;height:0}
+  38%{opacity:1;height:9%}
+  48%{opacity:1;height:20%}
+  68%{opacity:.9;height:26%}
+  86%{opacity:0;height:30%}
+  100%{opacity:0}
+}
+
+/* 最後擴散開來的光 */
+.burst{position:fixed;left:50%;top:50%;width:52vmax;height:52vmax;border-radius:50%;
+  transform:translate(-50%,-50%) scale(.2);opacity:0;pointer-events:none;
+  background:radial-gradient(circle,rgba(255,246,220,.5) 0%,rgba(201,169,97,.24) 34%,transparent 66%)}
+.veil.play .burst{animation:burst 2.4s ease-out both}
+@keyframes burst{
+  0%,56%{opacity:0;transform:translate(-50%,-50%) scale(.2)}
+  76%{opacity:.9;transform:translate(-50%,-50%) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(2.6)}
+}
+
+.skip{position:absolute;left:0;right:0;bottom:8vh;text-align:center;opacity:0;
+  font-family:var(--sans);font-size:.74rem;letter-spacing:.2em;color:var(--paper-faint);text-indent:.2em}
+.veil.play .skip{animation:skipIn .6s ease 1s both}
+@keyframes skipIn{to{opacity:1}}
+
+/* 解讀本身淡入 */
+.reveal{animation:reveal .8s ease both}
+@keyframes reveal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media print{
+  .veil{display:none!important}
   #sky{display:none}
   body{background:#fff;color:#1a1a1a}
   .name,section.part h2,.kicker{color:#8A7443}
@@ -87,6 +160,17 @@ section.part p:last-child{margin-bottom:0}
 </head>
 <body>
 <canvas id="sky"></canvas>
+
+<div class="veil" id="veil" hidden aria-hidden="true">
+  <div class="stage">
+    <img src="/assets/magic-letter-guide.webp" alt="" width="440" height="352">
+    <div class="seal"></div>
+    <div class="crack"></div>
+  </div>
+  <div class="burst"></div>
+  <div class="skip">點一下可以跳過</div>
+</div>
+
 <div class="wrap">
   <header class="masthead">
     <a href="/"><div class="zh">未完籤所</div><div class="en">MAGIC ORACLE</div></a>
@@ -147,6 +231,36 @@ function render(d){
   document.title = d.name + '｜完整解籤・未完籤所';
 }
 
+/* ── 開封動畫的開關 ──
+   動畫和取內容是同時進行的，兩邊都好了才收起來，
+   所以使用者不會先看到動畫再等載入。 */
+const veil = document.getElementById('veil');
+let animDone = false, contentDone = false, veilTimer = null;
+
+function hideVeil(){
+  if(veil.hidden || veil.classList.contains('out')) return;
+  clearTimeout(veilTimer);
+  veil.classList.add('out');
+  setTimeout(function(){ veil.hidden = true; }, 560);
+}
+function maybeHide(){ if(animDone && contentDone) hideVeil(); }
+
+function playVeil(){
+  let seen = false;
+  try{ seen = sessionStorage.getItem('unfinished.opened.' + SLIP_ID) === '1'; }catch(e){}
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(seen || reduce){ animDone = true; return; }        // 讀過一次就不再播
+  try{ sessionStorage.setItem('unfinished.opened.' + SLIP_ID, '1'); }catch(e){}
+
+  veil.hidden = false;
+  requestAnimationFrame(function(){ veil.classList.add('play'); });
+
+  const skip = function(){ animDone = true; hideVeil(); };
+  veil.addEventListener('click', skip);
+  document.addEventListener('keydown', skip, { once:true });
+  veilTimer = setTimeout(function(){ animDone = true; maybeHide(); }, 2150);
+}
+
 (async function(){
   const m = /^love_([a-z-]+)_(\d{3})$/.exec(SLIP_ID);
   if(!m || !SITU[m[1]]){
@@ -165,14 +279,19 @@ function render(d){
     return;
   }
 
+  playVeil();   // 有憑證才開封，動畫與取內容同時進行
+
   let res;
   try{
     res = await fetch('/api/extended?id=' + encodeURIComponent(SLIP_ID),
                       { headers: { 'X-Unlock-Token': token } });
   }catch(e){
+    animDone = true; hideVeil();
     state('✕', '連線出了點問題', ['請稍後重新整理這一頁。', '若持續發生，來信 hello@unfinished.tw。']);
     return;
   }
+
+  if(!res.ok || res.status === 402){ animDone = true; hideVeil(); }
 
   if(res.status === 402){
     state('✦', '尚未解鎖', [
@@ -188,7 +307,11 @@ function render(d){
 
   try{
     render(await res.json());
+    main.classList.add('reveal');
+    contentDone = true;
+    maybeHide();
   }catch(e){
+    animDone = true; hideVeil();
     state('✕', '內容格式有問題', ['請來信 hello@unfinished.tw 告訴我們，附上網址。']);
   }
 })();
