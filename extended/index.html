@@ -148,7 +148,7 @@ footer{text-align:center;color:var(--faint);font-size:12px;margin-top:56px}
   // 從 LINE 帶著籤過來的，先接住那支籤，別讓他覺得跳到不相干的頁面
   if(slip){
     var box=document.getElementById("fromline");
-    box.textContent="你剛剛抽到的是"+(sub?"（"+sub+"）":"")+"〈"+slip+"〉";
+    box.innerHTML="你剛剛抽到的是"+(sub?"（"+sub+"）":"")+"<b>〈"+slip+"〉</b>";
     box.hidden=false;
     var lead=document.getElementById("lead");
     if(lead) lead.innerHTML="這支籤說中了，卻沒說完。<br>延伸解籤會把它放回你現在的處境裡展開。";

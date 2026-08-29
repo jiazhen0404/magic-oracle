@@ -78,7 +78,6 @@ p.sub{font-family:var(--sans);font-size:.8rem;line-height:1.9;color:var(--paper-
 
 <script>
 const tradeNo = new URLSearchParams(location.search).get('no') || '';
-const claimToken = tradeNo ? (sessionStorage.getItem('unfinished.claim.' + tradeNo) || '') : '';
 const wrap  = document.getElementById('wrap');
 const mark  = document.getElementById('mark');
 const title = document.getElementById('title');
@@ -96,9 +95,7 @@ async function poll(){
   if(!tradeNo){ show('fail','找不到訂單','網址裡沒有訂單編號。','若你已完成付款，請來信告訴我們。'); return; }
   tries++;
   try{
-    const r = await fetch('/api/order-status?no=' + encodeURIComponent(tradeNo), {
-      headers: { 'X-Claim-Token': claimToken }
-    });
+    const r = await fetch('/api/order-status?no=' + encodeURIComponent(tradeNo));
     const d = await r.json();
 
     if(d.status === 'paid'){
@@ -128,14 +125,13 @@ async function unlock(slipId){
     const r = await fetch('/api/unlock', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ tradeNo, claimToken })
+      body: JSON.stringify({ tradeNo })
     });
     if(!r.ok) throw new Error('unlock ' + r.status);
     const { token, slipId: sid } = await r.json();
     const id = sid || slipId;
 
     try{ localStorage.setItem('unfinished.unlock.' + id, token); }catch(e){}
-    try{ sessionStorage.removeItem('unfinished.claim.' + tradeNo); }catch(e){}
 
     show('ok','付款成功','謝謝你。這支籤的完整解籤已經替你解鎖。',
          '這一頁可以關掉了。解讀隨時能回來重讀，網址建議加入書籤。');

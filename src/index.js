@@ -24,9 +24,10 @@
  */
 
 import EXTENDED from './extended-love.json';
+import { buildPdfHtml } from './pdf-template.js';
 
 const PRICE = 99;                       // 售價，改這裡就好
-const ORDER_TTL = 60 * 60 * 24 * 7;     // 支援 ATM／超商延遲付款，訂單保留 7 天
+const ORDER_TTL = 60 * 60 * 24;         // 訂單暫存 24 小時後自動消失
 const UNLOCK_TTL = 60 * 60 * 24 * 365;  // 解鎖憑證保留一年
 const MAX_QUESTION = 500;               // 使用者問題的字數上限
 
@@ -42,22 +43,25 @@ export default {
 
     try {
       if (path === '/api/create-order' && request.method === 'POST') {
-        return secure(await createOrder(request, env, url), true);
+        return await createOrder(request, env, url);
       }
       if (path === '/api/ecpay-callback' && request.method === 'POST') {
-        return await ecpayCallback(request, env);
+        return await ecpayCallback(request, env, ctx, url);
       }
       if (path === '/api/order-status' && request.method === 'GET') {
-        return secure(await orderStatus(request, url, env), true);
+        return await orderStatus(url, env);
       }
       if (path === '/api/unlock' && request.method === 'POST') {
-        return secure(await issueUnlock(request, env), true);
+        return await issueUnlock(request, env);
       }
       if (path === '/api/extended' && request.method === 'GET') {
-        return secure(await readExtended(request, url, env), true);
+        return await readExtended(request, url, env);
+      }
+      if (path === '/api/resend-pdf' && request.method === 'POST') {
+        return await resendPdf(request, env, url);
       }
       if (path === '/api/health') {
-        return secure(json({
+        return json({
           ok: true,
           mode: env.ECPAY_MODE || 'stage',
           hasMerchantId: Boolean(env.ECPAY_MERCHANT_ID),
@@ -65,15 +69,18 @@ export default {
           hasHashIv: Boolean(env.ECPAY_HASH_IV),
           hasKv: Boolean(env.ORDERS),
           extendedCount: EXTENDED.length,
-        }), true);
+          hasCfAccount: Boolean(env.CF_ACCOUNT_ID),
+          hasCfToken: Boolean(env.CF_API_TOKEN),
+          hasResendKey: Boolean(env.RESEND_API_KEY),
+        });
       }
     } catch (err) {
       console.error('API 發生錯誤', path, err && err.stack ? err.stack : err);
-      return secure(json({ error: 'internal_error' }, 500), true);
+      return json({ error: 'internal_error' }, 500);
     }
 
     // 不是 API 就交還給靜態檔案
-    return secure(await env.ASSETS.fetch(request));
+    return env.ASSETS.fetch(request);
   },
 };
 
@@ -82,7 +89,6 @@ export default {
    ══════════════════════════════════════════════════════════ */
 
 async function createOrder(request, env, url) {
-  if (!sameOrigin(request, url)) return json({ error: 'forbidden_origin' }, 403);
   const missing = checkConfig(env);
   if (missing.length) {
     console.error('缺少設定：' + missing.join(', '));
@@ -115,7 +121,6 @@ async function createOrder(request, env, url) {
   }
 
   const tradeNo = makeTradeNo();
-  const claimToken = randomToken();
   const now = new Date();
 
   // ── 寫進暫存 ──
@@ -124,7 +129,6 @@ async function createOrder(request, env, url) {
     'order:' + tradeNo,
     JSON.stringify({
       tradeNo,
-      claimToken,
       slipId,
       email,
       question,
@@ -162,7 +166,6 @@ async function createOrder(request, env, url) {
   return json({
     action: ECPAY_URL[env.ECPAY_MODE === 'production' ? 'production' : 'stage'],
     fields: params,
-    claimToken,
   });
 }
 
@@ -172,7 +175,7 @@ async function createOrder(request, env, url) {
    否則綠界會判定失敗並重送。
    ══════════════════════════════════════════════════════════ */
 
-async function ecpayCallback(request, env) {
+async function ecpayCallback(request, env, ctx, url) {
   const form = await request.formData();
   const data = {};
   for (const [k, v] of form.entries()) data[k] = String(v);
@@ -186,11 +189,6 @@ async function ecpayCallback(request, env) {
   if (!received || received.toUpperCase() !== expected) {
     console.error('綠界通知驗章失敗', data.MerchantTradeNo);
     return new Response('0|CheckMacValue Error', { status: 400 });
-  }
-
-  if (data.MerchantID !== env.ECPAY_MERCHANT_ID) {
-    console.error('綠界商店代號不符', data.MerchantTradeNo);
-    return new Response('0|MerchantID Error', { status: 400 });
   }
 
   const tradeNo = data.MerchantTradeNo || '';
@@ -223,6 +221,12 @@ async function ecpayCallback(request, env) {
     expirationTtl: ORDER_TTL,
   });
 
+  // 付款成功就在背景產 PDF、寄信。
+  // 用 waitUntil 是為了讓綠界立刻收到 1|OK，不會因為我們慢而重送通知。
+  if (order.status === 'paid' && ctx && typeof ctx.waitUntil === 'function') {
+    ctx.waitUntil(deliverReading(tradeNo, env, url.origin));
+  }
+
   return new Response('1|OK', { headers: { 'content-type': 'text/plain' } });
 }
 
@@ -232,7 +236,7 @@ async function ecpayCallback(request, env) {
    絕對不回傳使用者的問題與信箱。
    ══════════════════════════════════════════════════════════ */
 
-async function orderStatus(request, url, env) {
+async function orderStatus(url, env) {
   const tradeNo = url.searchParams.get('no') || '';
   if (!/^[A-Za-z0-9]{6,20}$/.test(tradeNo)) return json({ error: 'bad_no' }, 400);
 
@@ -240,8 +244,6 @@ async function orderStatus(request, url, env) {
   if (!raw) return json({ status: 'not_found' }, 404);
 
   const order = JSON.parse(raw);
-  const claimToken = request.headers.get('X-Claim-Token') || '';
-  if (!validClaim(claimToken, order.claimToken)) return json({ error: 'unauthorized' }, 403);
   return json({
     status: order.status,
     slipId: order.slipId,
@@ -263,14 +265,12 @@ async function issueUnlock(request, env) {
   try { body = await request.json(); } catch { return json({ error: 'bad_json' }, 400); }
 
   const tradeNo = String(body.tradeNo || '');
-  const claimToken = String(body.claimToken || '');
   if (!/^[A-Za-z0-9]{6,20}$/.test(tradeNo)) return json({ error: 'bad_no' }, 400);
 
   const raw = await env.ORDERS.get('order:' + tradeNo);
   if (!raw) return json({ error: 'not_found' }, 404);
 
   const order = JSON.parse(raw);
-  if (!validClaim(claimToken, order.claimToken)) return json({ error: 'unauthorized' }, 403);
   if (order.status !== 'paid') return json({ error: 'not_paid', status: order.status }, 402);
 
   // 同一筆訂單重複索取，就把同一張憑證給回去，不會一直長出新的
@@ -317,6 +317,214 @@ async function readExtended(request, url, env) {
 }
 
 /* ══════════════════════════════════════════════════════════
+   六、產生 PDF 並寄出
+   跑在付款通知之後、用背景執行，所以綠界不用等我們產完 PDF。
+   寄出成功後立刻把使用者的問題與信箱抹掉——那是隱私權政策上的承諾。
+   ══════════════════════════════════════════════════════════ */
+
+async function deliverReading(tradeNo, env, origin) {
+  const raw = await env.ORDERS.get('order:' + tradeNo);
+  if (!raw) return { ok: false, reason: 'order_gone' };
+
+  const order = JSON.parse(raw);
+  if (order.status !== 'paid') return { ok: false, reason: 'not_paid' };
+  if (order.mailedAt) return { ok: true, reason: 'already_sent' };
+  if (!order.email) return { ok: false, reason: 'no_email' };
+
+  const slip = EXTENDED.find((x) => x.id === order.slipId);
+  if (!slip) return { ok: false, reason: 'slip_not_found' };
+
+  try {
+    const pdf = await renderPdf(slip, order, env, origin);
+    await sendMail(slip, order, pdf, env);
+
+    // ── 寄出了，馬上抹掉個資 ──
+    // 只留爭議處理需要的：訂單編號、同意時間、買了哪一支、金額。
+    await env.ORDERS.put('order:' + tradeNo, JSON.stringify({
+      tradeNo: order.tradeNo,
+      slipId: order.slipId,
+      amount: order.amount,
+      status: 'paid',
+      consent: order.consent,
+      createdAt: order.createdAt,
+      paidAt: order.paidAt,
+      ecpayTradeNo: order.ecpayTradeNo,
+      unlockToken: order.unlockToken,
+      mailedAt: new Date().toISOString(),
+      // email 與 question 到此為止，不再保留
+    }), { expirationTtl: ORDER_TTL });
+
+    return { ok: true };
+  } catch (err) {
+    const msg = String((err && err.message) || err).slice(0, 300);
+    console.error('寄送失敗', tradeNo, msg);
+    order.deliveryError = msg;
+    order.deliveryTriedAt = new Date().toISOString();
+    await env.ORDERS.put('order:' + tradeNo, JSON.stringify(order), { expirationTtl: ORDER_TTL });
+    return { ok: false, reason: msg };
+  }
+}
+
+/** 把版面交給 Cloudflare 的 Browser Rendering 轉成 PDF */
+async function renderPdf(slip, order, env, origin) {
+  const html = buildPdfHtml(slip, {
+    question: order.question,
+    drawnAt: order.drawnAt || order.createdAt,
+    orderNo: order.tradeNo,
+    fontBase: origin + '/assets/fonts/',
+  });
+
+  const res = await fetch(
+    'https://api.cloudflare.com/client/v4/accounts/' + env.CF_ACCOUNT_ID + '/browser-rendering/pdf',
+    {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + env.CF_API_TOKEN,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        html,
+        gotoOptions: { waitUntil: 'networkidle0', timeout: 60000 },
+        pdfOptions: {
+          format: 'a4',
+          printBackground: true,
+          displayHeaderFooter: true,
+          headerTemplate: '<div></div>',
+          footerTemplate:
+            '<div style="width:100%;font-family:serif;font-size:7pt;color:#A8A2B4;'
+            + 'padding:0 20mm;display:flex;justify-content:space-between;">'
+            + '<span>未完籤所 · MAGIC ORACLE</span><span class="pageNumber"></span></div>',
+          margin: { top: '22mm', bottom: '18mm', left: '20mm', right: '20mm' },
+        },
+      }),
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error('產生 PDF 失敗 ' + res.status + ' ' + (await res.text()).slice(0, 200));
+  }
+  return new Uint8Array(await res.arrayBuffer());
+}
+
+/** 透過 Resend 寄出，PDF 當附件 */
+async function sendMail(slip, order, pdfBytes, env) {
+  const from = env.MAIL_FROM || '未完籤所 <hello@unfinished.tw>';
+  const filename = '未完籤所_' + slip.name + '_完整解籤.pdf';
+
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + env.RESEND_API_KEY,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from,
+      to: [order.email],
+      reply_to: 'hello@unfinished.tw',
+      subject: '你的完整解籤：' + slip.name,
+      html: mailHtml(slip, order),
+      text: mailText(slip, order),
+      attachments: [{ filename, content: base64(pdfBytes) }],
+    }),
+  });
+
+  if (!res.ok) {
+    throw new Error('寄信失敗 ' + res.status + ' ' + (await res.text()).slice(0, 200));
+  }
+}
+
+function mailHtml(slip, order) {
+  return '<!doctype html><html lang="zh-Hant"><body style="margin:0;padding:0;background:#0B1026;">'
+  + '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0B1026;padding:36px 16px;">'
+  + '<tr><td align="center"><table role="presentation" width="100%" style="max-width:520px;" cellpadding="0" cellspacing="0">'
+  + '<tr><td align="center" style="padding-bottom:26px;font-family:Georgia,\'Songti TC\',serif;">'
+  +   '<div style="color:#C9A961;font-size:14px;letter-spacing:.4em;">未完籤所</div>'
+  +   '<div style="color:#8A8698;font-size:9px;letter-spacing:.3em;margin-top:6px;">MAGIC ORACLE</div>'
+  + '</td></tr>'
+  + '<tr><td style="border:1px solid #8A7443;padding:30px 26px;font-family:Georgia,\'Songti TC\',serif;">'
+  +   '<div style="color:#8A8698;font-size:11px;letter-spacing:.24em;text-align:center;">完整解籤</div>'
+  +   '<div style="color:#C9A961;font-size:26px;letter-spacing:.14em;text-align:center;margin:12px 0 8px;">' + esc(slip.name) + '</div>'
+  +   '<div style="color:#9A9384;font-size:12px;letter-spacing:.16em;text-align:center;">愛情・' + esc(slip.situation) + '</div>'
+  +   '<div style="height:1px;background:#1E2749;margin:24px 0;"></div>'
+  +   '<div style="color:#E8E3D9;font-size:15px;line-height:2;">謝謝你讓這支籤陪你想一想。<br><br>'
+  +   '完整的解讀在附件的 PDF 裡，共四頁。換手機、清除瀏覽器紀錄都不會消失，'
+  +   '建議你留著，過一段時間再讀一次，感覺常常會不一樣。</div>'
+  +   '<div style="height:1px;background:#1E2749;margin:24px 0;"></div>'
+  +   '<div style="color:#8A8698;font-size:12px;line-height:1.9;">訂單編號　' + esc(order.tradeNo) + '<br>'
+  +   '有任何問題，直接回這封信就可以。</div>'
+  + '</td></tr>'
+  + '<tr><td align="center" style="padding-top:22px;font-family:Georgia,serif;color:#6E6A5E;font-size:11px;line-height:1.9;">'
+  +   '籤文陪你把問題想清楚，不預測未來，也不保證結果。<br>'
+  +   '<a href="https://unfinished.tw" style="color:#9A9384;text-decoration:none;">unfinished.tw</a>'
+  + '</td></tr></table></td></tr></table></body></html>';
+}
+
+function mailText(slip, order) {
+  return [
+    '未完籤所 · MAGIC ORACLE', '',
+    '完整解籤：' + slip.name + '（愛情・' + slip.situation + '）', '',
+    '謝謝你讓這支籤陪你想一想。',
+    '完整的解讀在附件的 PDF 裡，共四頁，建議留著，過一段時間再讀一次。', '',
+    '訂單編號　' + order.tradeNo,
+    '有任何問題，直接回這封信就可以。', '',
+    'unfinished.tw',
+  ].join('\n');
+}
+
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+}
+
+/** 把 PDF 的位元組轉成 base64，分段處理避免爆堆疊 */
+function base64(bytes) {
+  let s = '';
+  const chunk = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunk) {
+    s += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+  }
+  return btoa(s);
+}
+
+/* ══════════════════════════════════════════════════════════
+   七、手動重寄（客服用）
+   使用者說沒收到信、或信箱填錯時用這支。
+   需要 ADMIN_KEY，只有你知道。
+   ══════════════════════════════════════════════════════════ */
+
+async function resendPdf(request, env, url) {
+  if (!env.ADMIN_KEY || request.headers.get('X-Admin-Key') !== env.ADMIN_KEY) {
+    return json({ error: 'unauthorized' }, 401);
+  }
+
+  let body;
+  try { body = await request.json(); } catch { return json({ error: 'bad_json' }, 400); }
+
+  const tradeNo = String(body.tradeNo || '');
+  if (!/^[A-Za-z0-9]{6,20}$/.test(tradeNo)) return json({ error: 'bad_no' }, 400);
+
+  const raw = await env.ORDERS.get('order:' + tradeNo);
+  if (!raw) return json({ error: 'not_found', hint: '訂單已超過 24 小時自動刪除' }, 404);
+
+  const order = JSON.parse(raw);
+
+  // 換信箱重寄（原本填錯的情況）
+  if (body.email) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(body.email)) return json({ error: 'bad_email' }, 400);
+    order.email = String(body.email).trim();
+  }
+  if (!order.email) {
+    return json({ error: 'no_email', hint: '這筆已經寄過並清除信箱，請帶 email 參數指定要寄到哪裡' }, 400);
+  }
+
+  delete order.mailedAt;          // 允許再寄一次
+  delete order.deliveryError;
+  await env.ORDERS.put('order:' + tradeNo, JSON.stringify(order), { expirationTtl: ORDER_TTL });
+
+  const r = await deliverReading(tradeNo, env, url.origin);
+  return json(r, r.ok ? 200 : 500);
+}
+
+/* ══════════════════════════════════════════════════════════
    工具
    ══════════════════════════════════════════════════════════ */
 
@@ -326,18 +534,6 @@ function randomToken() {
   return Array.from(crypto.getRandomValues(new Uint8Array(32)))
     .map((b) => A[b % A.length])
     .join('');
-}
-
-function validClaim(received, expected) {
-  if (!/^[A-Za-z0-9]{32}$/.test(received) || !/^[A-Za-z0-9]{32}$/.test(expected || '')) return false;
-  let diff = 0;
-  for (let i = 0; i < 32; i++) diff |= received.charCodeAt(i) ^ expected.charCodeAt(i);
-  return diff === 0;
-}
-
-function sameOrigin(request, url) {
-  const origin = request.headers.get('Origin');
-  return !origin || origin === url.origin;
 }
 
 function checkConfig(env) {
@@ -354,16 +550,6 @@ function json(obj, status = 200) {
     status,
     headers: { 'content-type': 'application/json; charset=utf-8' },
   });
-}
-
-function secure(response, noStore = false) {
-  const out = new Response(response.body, response);
-  out.headers.set('X-Content-Type-Options', 'nosniff');
-  out.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-  out.headers.set('X-Frame-Options', 'SAMEORIGIN');
-  out.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
-  if (noStore) out.headers.set('Cache-Control', 'no-store');
-  return out;
 }
 
 /** 訂單編號：UF + 台北時間到秒 + 4 碼亂數，共 18 碼，只用英數字 */
