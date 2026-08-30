@@ -30,6 +30,7 @@
 
 import { ECPAY_URL, makeTradeNo, taipeiStamp, checkMac } from './ecpay.js';
 
+const BUILD = '0830-41c40d';   /* 版本標記，三個頁面下方都會顯示 */
 const PRICE = 399;
 const DEEP_CREDIT = 99;                  /* 已買延伸籤可折抵，前端傳 hasDeep */
 const MODEL = 'claude-sonnet-5';
@@ -98,7 +99,7 @@ export async function oracleRoutes(request, env, ctx, url) {
 
     if (path === '/api/oracle/health') {
       return json({
-        ok: true, price: PRICE,
+        ok: true, build: BUILD, price: PRICE,
         mode: ecpayConf(env).mode,
         modeNote: ecpayConf(env).mode === 'stage'
           ? '測試模式，用測試卡，不會真的扣款'
@@ -1403,7 +1404,8 @@ if(KEY){
   }).catch(function(){ sessionStorage.removeItem('uw_admin') });
 }
 document.getElementById('pw').addEventListener('keydown', function(e){ if(e.key==='Enter') login() });
-</script></body></html>`;
+</script><div style="text-align:center;padding:22px 0 8px;font-size:11px;color:#5A5468;font-family:ui-monospace,monospace">build ${BUILD}</div>
+</body></html>`;
 
 const PAGE_TEACHER = `<!doctype html><html lang="zh-Hant"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -1567,7 +1569,8 @@ if(KEY){
   }).catch(function(){ sessionStorage.removeItem('uw_teacher') });
 }
 document.getElementById('pw').addEventListener('keydown', function(e){ if(e.key==='Enter') login() });
-</script></body></html>`;
+</script><div style="text-align:center;padding:22px 0 8px;font-size:11px;color:#5A5468;font-family:ui-monospace,monospace">build ${BUILD}</div>
+</body></html>`;
 
 const PAGE_ORDER = `<!doctype html><html lang="zh-Hant"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -1709,7 +1712,8 @@ function sendFu(){
   post('/api/oracle/order/followup',{id:ID,email:MAIL,text:t}).then(look).catch(function(){ alert('沒有成功') });
 }
 document.getElementById('mail').addEventListener('keydown', function(e){ if(e.key==='Enter') look() });
-</script></body></html>`;
+</script><div style="text-align:center;padding:22px 0 8px;font-size:11px;color:#5A5468;font-family:ui-monospace,monospace">build ${BUILD}</div>
+</body></html>`;
 
 /* ══════════════════════════════════════════════════
    付款完成頁
@@ -1768,7 +1772,8 @@ function slow(){
   + 'href="/oracle/order?id=' + encodeURIComponent(NO) + '">查詢進度</a></div>';
 }
 poll();
-</script></body></html>`;
+</script><div style="text-align:center;padding:22px 0 8px;font-size:11px;color:#5A5468;font-family:ui-monospace,monospace">build ${BUILD}</div>
+</body></html>`;
 
 
 const SYSTEM_PROMPT = `你是「未完籤所」真人占卜服務的問題整理助理。
