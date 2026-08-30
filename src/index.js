@@ -185,6 +185,12 @@ async function ecpayCallback(request, env, ctx, url) {
   const data = {};
   for (const [k, v] of form.entries()) data[k] = String(v);
 
+  // 真人占卜的訂單編號開頭是 UO，交給它自己處理。
+  // 它會用自己的金鑰驗章，因為測試模式用的是綠界測試商店，跟這裡不同。
+  if (String(data.MerchantTradeNo || '').startsWith('UO')) {
+    return await oraclePaid(data, env, ctx);
+  }
+
   // ── 驗章：確認這筆通知真的來自綠界，不是別人偽造的 ──
   const received = data.CheckMacValue;
   const rest = { ...data };
@@ -197,12 +203,6 @@ async function ecpayCallback(request, env, ctx, url) {
   }
 
   const tradeNo = data.MerchantTradeNo || '';
-
-  // 真人占卜的訂單編號開頭是 UO，交給它自己處理
-  if (tradeNo.startsWith('UO')) {
-    return await oraclePaid(data, env, ctx);
-  }
-
   const raw = await env.ORDERS.get('order:' + tradeNo);
 
   if (!raw) {

@@ -38,6 +38,40 @@ const MAX_CHARS = 800;
 const RATE_LIMIT = 30;
 const RATE_WINDOW = 3600;
 const KEEP_DAYS = 180;
+
+/* ═══════════════════════════════════════════════════════════
+   綠界環境。跟延伸籤分開，兩邊互不影響。
+
+   ORACLE_ECPAY_MODE = stage        測試模式（預設）
+   ORACLE_ECPAY_MODE = production   正式收款
+
+   測試模式會自動改用綠界公開的測試商店，
+   不會動到你的正式商店代號，也不會真的扣款。
+
+   測試卡號 4311-9511-1111-1111
+   有效期限 隨便填未來日期，安全碼隨便三碼
+   3D 驗證密碼 1234
+   ═══════════════════════════════════════════════════════════ */
+const ECPAY_TEST = {
+  id:  '3002607',
+  key: 'pwFHCqoQZGmho4w6',
+  iv:  'EkRm7iFT261dpevs'
+};
+
+function ecpayConf(env) {
+  const mode = String(env.ORACLE_ECPAY_MODE || 'stage').toLowerCase();
+  if (mode === 'production') {
+    return {
+      mode: 'production',
+      id: env.ECPAY_MERCHANT_ID,
+      key: env.ECPAY_HASH_KEY,
+      iv: env.ECPAY_HASH_IV,
+      url: ECPAY_URL.production
+    };
+  }
+  return { mode: 'stage', id: ECPAY_TEST.id, key: ECPAY_TEST.key,
+           iv: ECPAY_TEST.iv, url: ECPAY_URL.stage };
+}
 const TTL = 60 * 60 * 24 * KEEP_DAYS;
 
 function now() { return new Date().toISOString(); }
@@ -65,8 +99,11 @@ export async function oracleRoutes(request, env, ctx, url) {
     if (path === '/api/oracle/health') {
       return json({
         ok: true, price: PRICE,
-        mode: env.ECPAY_MODE || 'stage',
-        hasEcpay: !!(env.ECPAY_MERCHANT_ID && env.ECPAY_HASH_KEY && env.ECPAY_HASH_IV),
+        mode: ecpayConf(env).mode,
+        modeNote: ecpayConf(env).mode === 'stage'
+          ? '測試模式，用測試卡，不會真的扣款'
+          : '正式收款中',
+        hasEcpay: !!ecpayConf(env).id,
         hasAdminKey: !!env.ADMIN_KEY,
         hasAiKey: !!env.ANTHROPIC_API_KEY,
         hasKv: !!env.ORDERS,
@@ -117,8 +154,9 @@ export async function oracleRoutes(request, env, ctx, url) {
 async function createOracleOrder(request, env, url, origin) {
   if (request.method !== 'POST') return json({ error: 'method_not_allowed' }, 405, origin);
   if (!env.ORDERS) return json({ error: 'no_kv' }, 500, origin);
-  if (!env.ECPAY_MERCHANT_ID || !env.ECPAY_HASH_KEY || !env.ECPAY_HASH_IV) {
-    return json({ error: 'not_configured' }, 503, origin);
+  const ec = ecpayConf(env);
+  if (!ec.id || !ec.key || !ec.iv) {
+    return json({ error: 'not_configured', hint: '正式模式需要設定綠界三個變數' }, 503, origin);
   }
 
   let o;
@@ -148,6 +186,7 @@ async function createOracleOrder(request, env, url, origin) {
     id,
     st: 'unpaid',
     created: now(),
+    ecpay_mode: ec.mode,
     paid: false,
     amount,
     hasDeep,
@@ -175,12 +214,12 @@ async function createOracleOrder(request, env, url, origin) {
   await env.ORDERS.put('oracle:' + id, JSON.stringify(order), { expirationTtl: 60 * 60 * 24 });
 
   const params = {
-    MerchantID: env.ECPAY_MERCHANT_ID,
+    MerchantID: ec.id,
     MerchantTradeNo: id,
     MerchantTradeDate: taipeiStamp(d),
     PaymentType: 'aio',
     TotalAmount: String(amount),
-    TradeDesc: '未完相談室 真人占卜',
+    TradeDesc: '真人占卜 真人占卜',
     ItemName: '真人文字占卜 x 1',
     ReturnURL: url.origin + '/api/ecpay-callback',
     ClientBackURL: url.origin + '/oracle/done?no=' + id,
@@ -188,11 +227,11 @@ async function createOracleOrder(request, env, url, origin) {
     EncryptType: '1',
     CustomField1: 'oracle'
   };
-  params.CheckMacValue = await checkMac(params, env.ECPAY_HASH_KEY, env.ECPAY_HASH_IV);
+  params.CheckMacValue = await checkMac(params, ec.key, ec.iv);
 
   return json({
-    ok: true, id, amount,
-    action: ECPAY_URL[env.ECPAY_MODE === 'production' ? 'production' : 'stage'],
+    ok: true, id, amount, mode: ec.mode,
+    action: ec.url,
     fields: params
   }, 200, origin);
 }
@@ -211,10 +250,24 @@ async function checkDeepCredit(env, token) {
 
 /* ══════════════════════════════════════════════════
    二、綠界付款通知（由 index.js 的 ecpayCallback 分流過來）
-   進到這裡時驗章已經過了。
+
+   這裡自己驗章，因為測試模式用的是綠界測試商店的金鑰，
+   跟延伸籤的正式金鑰不一樣。
    ══════════════════════════════════════════════════ */
 
 export async function oraclePaid(data, env, ctx) {
+  const ec = ecpayConf(env);
+
+  const received = data.CheckMacValue || '';
+  const rest = Object.assign({}, data);
+  delete rest.CheckMacValue;
+  const expected = await checkMac(rest, ec.key, ec.iv);
+
+  if (!received || received.toUpperCase() !== expected) {
+    console.error('真人占卜驗章失敗', data.MerchantTradeNo, ec.mode);
+    return new Response('0|CheckMacValue Error', { status: 400 });
+  }
+
   const id = data.MerchantTradeNo || '';
   const o = await get(env, id);
 
@@ -1214,7 +1267,7 @@ function csv(month){
   var blob = new Blob(['\ufeff' + head + body], { type: 'text/csv;charset=utf-8' });
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = '未完相談室_' + month + '.csv';
+  a.download = '真人占卜_' + month + '.csv';
   a.click();
   URL.revokeObjectURL(a.href);
 }
@@ -1597,7 +1650,7 @@ body{background:#0D0818}
 .bar{background:rgba(13,8,24,.96);border-color:#3E2C5C}
 .big-logo{display:block;width:min(150px,40%);height:auto;margin:30px auto 10px;opacity:.95}
 </style></head><body>
-<div class="bar"><h1><img src="/assets/logo-mark.png" alt="" class="lg">未完相談室</h1></div>
+<div class="bar"><h1><img src="/assets/logo-mark.png" alt="" class="lg">真人占卜</h1></div>
 <div class="wrap" id="box"><div class="empty">正在確認付款…</div></div>
 <script>
 var NO = new URLSearchParams(location.search).get('no') || '';

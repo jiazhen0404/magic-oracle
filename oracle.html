@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>未完相談室 · 未完籤所</title>
+<title>真人占卜 · 未完籤所</title>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/icon-32.png">
 <link rel="apple-touch-icon" href="/assets/icon-180.png">
@@ -21,7 +21,7 @@ if (GA_ID && GA_ID.indexOf('X') < 0) {
   window.dataLayer = window.dataLayer || [];
   window.gtag = function(){ dataLayer.push(arguments) };
   gtag('js', new Date());
-  gtag('config', GA_ID, { page_title: '未完相談室' });
+  gtag('config', GA_ID, { page_title: '真人占卜' });
 } else {
   window.gtag = function(){ console.log('[GA]', Array.from(arguments).slice(1)) };
 }
@@ -453,7 +453,7 @@ textarea::placeholder{color:#5E4E7E}
   <section class="step live" id="s0">
     <div class="narrow">
       <header class="hero">
-        <h1><i>✦</i>未完相談室<i>✦</i></h1>
+        <h1><i>✦</i>真人占卜<i>✦</i></h1>
         <p class="sub">有些問題，一支籤還說不完。</p>
         <p>選一位適合你的老師，把你的故事說給她聽。<br>
            由真人老師親自占卜、閱讀你的問題並完成解讀。</p>
@@ -494,7 +494,7 @@ textarea::placeholder{color:#5E4E7E}
     </div>
   </section>
 
-  <!-- ② 相談室（老師列表）-->
+  <!-- ② 真人占卜（老師列表）-->
   <section class="step" id="s2">
     <div class="narrow">
       <header class="hero">
@@ -762,7 +762,7 @@ textarea::placeholder{color:#5E4E7E}
   </section>
 
   <div style="text-align:center;padding:30px 0 10px;font-size:11px;
-       color:#5E4E7E;letter-spacing:.08em;font-family:var(--mono)">build 0830-000d1f</div>
+       color:#5E4E7E;letter-spacing:.08em;font-family:var(--mono)">build 0830-7d222f</div>
 
 </div>
 
@@ -932,13 +932,13 @@ if(!TEST_MODE) TEACHERS.pop();
 const SEERS=TEACHERS;
 
 
-const STEPS=['相談室','選擇老師','聯絡方式','注意事項','整理問題','確認問題','付款'];
+const STEPS=['真人占卜','選擇老師','聯絡方式','注意事項','整理問題','確認問題','付款'];
 const MAIL_RE=/^[^\s]+[^\s]+\.[a-zA-Z]{2,}$/;
 const S={step:0,max:0,round:0,history:[],result:null,locked:false,seer:null,
          oid:null,paid:false,name:'',email:'',fails:0,
          fb:{narrowed:false,tfAsked:false,intentAsked:false}};
 
-console.log('%c未完籤所 build 0830-000d1f','color:#D8B87E;font-weight:bold');
+console.log('%c未完籤所 build 0830-7d222f','color:#D8B87E;font-weight:bold');
 
 /* ═══════════════════════════════════════
    後端 API。與網站同一個網域，用相對路徑。

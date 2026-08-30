@@ -1301,21 +1301,32 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
     else { frame.insertAdjacentElement("afterend",section); }
 
     // ══════════════════════════════════════════════════
-    // 真人相談室入口
+    // 真人占卜入口
     //
     // 現在是測試中，只有網址帶 ?test=1 才看得到。
     // 要對所有人開放時，把下面這行的 false 改成 true。
     // ══════════════════════════════════════════════════
     const TALK_LIVE = false;
-    const TALK_TEST = new URLSearchParams(location.search).get("test") === "1";
+    // 抽籤過程中網址會被改寫成 #start，?test=1 會不見。
+    // 所以進站時看到一次就記起來，這一整次瀏覽都算測試模式。
+    const TALK_TEST = (function(){
+      try{
+        if(new URLSearchParams(location.search).get("test") === "1"){
+          sessionStorage.setItem("uw.talk.test","1");
+        }
+        return sessionStorage.getItem("uw.talk.test") === "1";
+      }catch(e){
+        return new URLSearchParams(location.search).get("test") === "1";
+      }
+    })();
 
     if(TALK_LIVE || TALK_TEST){
       const talk=document.createElement("section");
       talk.className="talk-band" + (TALK_LIVE ? "" : " testing");
-      talk.setAttribute("aria-label","未完相談室");
+      talk.setAttribute("aria-label","真人占卜");
       talk.innerHTML=(TALK_LIVE ? "" : '<div class="talk-test">測試中・只有你看得到</div>')
         +'<div class="talk-lead">有些問題，一支籤還說不完。</div>'
-        +'<div class="talk-title">未完相談室</div>'
+        +'<div class="talk-title">真人占卜</div>'
         +'<div class="talk-copy">三位合作占卜師，讀完你的處境之後親自占卜，'
         +'把完整解讀寫下來寄給你。24 到 48 小時內完成，可免費追問一次。</div>'
         +'<button type="button" class="talk-btn">看看有哪些老師</button>'
