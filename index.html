@@ -702,6 +702,8 @@ function magicOraclePay(){
   border-radius:18px;background:linear-gradient(150deg,rgba(28,19,48,.86),rgba(16,10,27,.92));
   text-align:center;
 }
+.talk-band.testing{border-style:dashed;border-color:rgba(168,85,247,.5)}
+.talk-test{margin-bottom:12px;font-size:11px;letter-spacing:.16em;color:#C9A9F0}
 .talk-lead{font-family:"Noto Serif TC","Songti TC",serif;font-size:15px;
   line-height:1.7;color:var(--gold);letter-spacing:.03em}
 .talk-title{margin-top:10px;font-family:"Noto Serif TC","Songti TC",serif;
@@ -1298,25 +1300,35 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
     if(actionsRow){ actionsRow.insertAdjacentElement("beforebegin",section); }
     else { frame.insertAdjacentElement("afterend",section); }
 
-    // 真人相談室入口。接在延伸籤下方，所有主題都會出現。
-    // 延伸籤是「這支籤的完整解讀」，相談室是「我的情況比較複雜」，
-    // 兩者不衝突，是同一條路上的兩站。
-    const talk=document.createElement("section");
-    talk.className="talk-band";
-    talk.setAttribute("aria-label","未完相談室");
-    talk.innerHTML='<div class="talk-lead">有些問題，一支籤還說不完。</div>'
-      +'<div class="talk-title">未完相談室</div>'
-      +'<div class="talk-copy">三位合作占卜師，讀完你的處境之後親自占卜，'
-      +'把完整解讀寫下來寄給你。24 到 48 小時內完成，可免費追問一次。</div>'
-      +'<button type="button" class="talk-btn">看看有哪些老師</button>'
-      +'<div class="talk-note">NT$399・買過完整解籤可折抵 99</div>';
-    talk.querySelector(".talk-btn").addEventListener("click",function(){
-      send("talk_entry_click",{theme:theme,theme_label:themeLabels[theme]||theme,
-        subtheme:subtheme,fortune_number:fortuneNumber,fortune_title:title,
-        button_location:"result_after_extended"});
-      location.href="/oracle.html";
-    });
-    section.insertAdjacentElement("afterend",talk);
+    // ══════════════════════════════════════════════════
+    // 真人相談室入口
+    //
+    // 現在是測試中，只有網址帶 ?test=1 才看得到。
+    // 要對所有人開放時，把下面這行的 false 改成 true。
+    // ══════════════════════════════════════════════════
+    const TALK_LIVE = false;
+    const TALK_TEST = new URLSearchParams(location.search).get("test") === "1";
+
+    if(TALK_LIVE || TALK_TEST){
+      const talk=document.createElement("section");
+      talk.className="talk-band" + (TALK_LIVE ? "" : " testing");
+      talk.setAttribute("aria-label","未完相談室");
+      talk.innerHTML=(TALK_LIVE ? "" : '<div class="talk-test">測試中・只有你看得到</div>')
+        +'<div class="talk-lead">有些問題，一支籤還說不完。</div>'
+        +'<div class="talk-title">未完相談室</div>'
+        +'<div class="talk-copy">三位合作占卜師，讀完你的處境之後親自占卜，'
+        +'把完整解讀寫下來寄給你。24 到 48 小時內完成，可免費追問一次。</div>'
+        +'<button type="button" class="talk-btn">看看有哪些老師</button>'
+        +'<div class="talk-note">NT$399・買過完整解籤可折抵 99</div>';
+      talk.querySelector(".talk-btn").addEventListener("click",function(){
+        send("talk_entry_click",{theme:theme,theme_label:themeLabels[theme]||theme,
+          subtheme:subtheme,fortune_number:fortuneNumber,fortune_title:title,
+          button_location:"result_after_extended",mode:TALK_LIVE?"live":"test"});
+        // 測試時一併把測試老師帶過去
+        location.href = TALK_LIVE ? "/oracle.html" : "/oracle.html?test=1";
+      });
+      section.insertAdjacentElement("afterend",talk);
+    }
 
     // 解籤最後一頁：延伸預告下方補一個 LINE 入口
     if(!resultScroll.querySelector(".line-band")){
