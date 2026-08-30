@@ -10,9 +10,14 @@ app.use(express.json());
 
 const PORT = Number(process.env.PORT || 3000);
 const MODE = (process.env.ECPAY_MODE || "stage").toLowerCase();
-const MERCHANT_ID = process.env.ECPAY_MERCHANT_ID || "3002607";
-const HASH_KEY = process.env.ECPAY_HASH_KEY || "pwFHCqoQZGmho4w6";
-const HASH_IV = process.env.ECPAY_HASH_IV || "EkRm7iFT261dpevs";
+const MERCHANT_ID = process.env.ECPAY_MERCHANT_ID || (MODE === "stage" ? "3002607" : "");
+const HASH_KEY = process.env.ECPAY_HASH_KEY || (MODE === "stage" ? "pwFHCqoQZGmho4w6" : "");
+const HASH_IV = process.env.ECPAY_HASH_IV || (MODE === "stage" ? "EkRm7iFT261dpevs" : "");
+
+// 正式環境禁止 fallback 到 Stage 測試憑證。
+if (MODE === "production" && (!MERCHANT_ID || !HASH_KEY || !HASH_IV)) {
+  throw new Error("Missing ECPay production credentials. Set ECPAY_MERCHANT_ID, ECPAY_HASH_KEY and ECPAY_HASH_IV.");
+}
 const PUBLIC_BASE_URL = (process.env.PUBLIC_BASE_URL || `http://localhost:${PORT}`).replace(/\/+$/,"");
 
 const PAYMENT_URL = MODE === "production"
@@ -73,13 +78,13 @@ app.post("/api/ecpay/create-order",(req,res)=>{
   const kind = "draw";
   const amount = Number(req.body.amount);
 
-  if(amount !== 50){
+  if(amount !== 99){
     return res.status(400).send("Invalid payment request.");
   }
 
   const merchantTradeNo = tradeNo();
-  const itemName = "未完籤所 單次抽籤";
-  const tradeDesc = "Magic Oracle Draw";
+  const itemName = "未完籤所 完整解籤 x 1";
+  const tradeDesc = "未完籤所 完整解籤";
 
   const fields = {
     MerchantID: MERCHANT_ID,
