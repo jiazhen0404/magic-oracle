@@ -1049,10 +1049,14 @@ var ALL = [], TEACHERS = [], CANMAIL = false, F = 'todo';
 
 function testMail(){
   api('/api/oracle/admin/testmail').then(function(d){
-    if(d.ok) alert('已送出。\n\n寄件人：' + d.from + '\n收件人：' + d.to
-      + '\n\n一分鐘內沒收到就看一下垃圾郵件匣。');
-    else alert('寄不出去。\n\n狀態：' + d.status + '\n\n' + (d.detail || d.hint || ''));
-  }).catch(function(){ alert('沒有成功') });
+    if(d.ok){
+      alert('已送出。\\n\\n寄件人：' + d.from + '\\n收件人：' + d.to
+        + '\\n\\n一分鐘內沒收到就看一下垃圾郵件匣。');
+    } else {
+      alert('寄不出去。\\n\\n狀態：' + (d.status || '') + '\\n\\n'
+        + (d.detail || d.hint || d.error || ''));
+    }
+  }).catch(function(){ alert('沒有成功，請重試') });
 }
 var G = [
   ['todo','要我處理',['q_review','draft_wait','draft_doing','fu_review','fu_doing','refund']],
@@ -1278,13 +1282,13 @@ function renderBook(){
          + '<td>' + (r.st === 'refunded' ? '<s>' + r.amount + '</s>' : r.amount) + '</td>'
          + '<td>' + (r.st === 'refunded'
               ? '—'
-              : '<input class="inv" id="iv_' + r.id + '" value="' + esc(r.invoice_no)
-                + '" placeholder="填號碼" onchange="saveInv(\'' + r.id + '\')">')
+              : '<input class="inv" data-inv="' + r.id + '" id="iv_' + r.id
+                + '" value="' + esc(r.invoice_no) + '" placeholder="填號碼">')
          + '</td></tr>';
     });
     h += '</table>';
     h += '<div class="btns" style="margin-top:12px">'
-       + '<button class="b ghost" onclick="csv(\'' + k + '\')">下載這個月的 CSV</button></div>';
+       + '<button class="b ghost" data-csv="' + k + '">下載這個月的 CSV</button></div>';
     h += '</div>';
   });
 
@@ -1292,6 +1296,16 @@ function renderBook(){
     '<div class="hint" style="padding:0 2px 12px">開完發票把號碼填進去，之後對帳才知道哪幾筆還沒開。'
     + '退款的那筆會畫掉，不計入實收。</div>' + h;
 }
+
+/* 用事件委派，避免在字串裡塞引號 */
+document.addEventListener('change', function(e){
+  var t = e.target;
+  if(t && t.dataset && t.dataset.inv) saveInv(t.dataset.inv);
+});
+document.addEventListener('click', function(e){
+  var t = e.target;
+  if(t && t.dataset && t.dataset.csv) csv(t.dataset.csv);
+});
 
 function saveInv(id){
   api('/api/oracle/admin/invoice', { id: id, invoice_no: val('iv_' + id) })
@@ -1305,14 +1319,14 @@ function saveInv(id){
 
 function csv(month){
   var rows = BOOK.filter(function(r){ return ym(r.paid_at) === month });
-  var head = '付款時間,訂單編號,綠界交易編號,金額,是否折抵,老師,狀態,發票號碼\n';
+  var head = '付款時間,訂單編號,綠界交易編號,金額,是否折抵,老師,狀態,發票號碼\\n';
   var body = rows.map(function(r){
     return [String(r.paid_at).slice(0,19).replace('T',' '), r.id, r.trade_no, r.amount,
             r.hasDeep ? '是' : '否', r.teacher,
             r.st === 'refunded' ? '已退款' : '正常', r.invoice_no].join(',');
-  }).join('\n');
+  }).join('\\n');
   /* 加 BOM，Excel 開中文才不會變亂碼 */
-  var blob = new Blob(['\ufeff' + head + body], { type: 'text/csv;charset=utf-8' });
+  var blob = new Blob(['\\ufeff' + head + body], { type: 'text/csv;charset=utf-8' });
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = '真人占卜_' + month + '.csv';
@@ -1331,11 +1345,11 @@ function reviewCard(o){
   h += '<label>評價內容（可修改錯字，但不要改變意思）</label>';
   h += '<textarea id="rx_'+o.id+'" rows="3">'+esc(r.text)+'</textarea>';
   h += '<div class="btns">'
-     + '<button class="b ghost" onclick="saveReview(\''+o.id+'\')">存修改</button>'
+     + '<button class="b ghost" onclick="saveReview(\\''+o.id+'\\')">存修改</button>'
      + (r.ok
-        ? '<button class="b no" onclick="act2(\''+o.id+'\',\'review_no\')">取消公開</button>'
-        : '<button class="b ok" onclick="act2(\''+o.id+'\',\'review_ok\')">通過</button>')
-     + '<button class="b mid" onclick="copyReview(\''+o.id+'\')">複製</button>'
+        ? '<button class="b no" onclick="act2(\\''+o.id+'\\',\\'review_no\\')">取消公開</button>'
+        : '<button class="b ok" onclick="act2(\\''+o.id+'\\',\\'review_ok\\')">通過</button>')
+     + '<button class="b mid" onclick="copyReview(\\''+o.id+'\\')">複製</button>'
      + '</div>';
   if(r.ok) h += '<div class="hint" style="margin-top:9px">已通過。按「複製」拿到可以貼進 oracle.html 的那一行。</div>';
   return h + '</div>';
@@ -1347,7 +1361,7 @@ function saveReview(id){
 }
 function copyReview(id){
   var line = "{ who:'匿名', topic:'" + val('rt_'+id).replace(/'/g,'') + "', text:'"
-           + val('rx_'+id).replace(/'/g,'').replace(/\n/g,' ') + "' },";
+           + val('rx_'+id).replace(/'/g,'').replace(/\\n/g,' ') + "' },";
   if(navigator.clipboard){
     navigator.clipboard.writeText(line).then(function(){ alert('複製好了，貼到 oracle.html 的 reviews 陣列裡') });
   } else {
