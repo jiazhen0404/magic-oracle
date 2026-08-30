@@ -4,6 +4,29 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>未完籤所 · 真人占卜</title>
+<!-- ═══ Google Analytics 4 ═══
+     GA_ID 換成你的評估 ID（在 GA 後台：管理 → 資料串流 → 找 G- 開頭那串）
+     跟你 index.html 用的是同一組 -->
+<script>
+const GA_ID = 'G-XXXXXXXXXX';   /* ← 換成你的 */
+if (GA_ID && GA_ID.indexOf('X') < 0) {
+  const g = document.createElement('script');
+  g.async = true;
+  g.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+  document.head.appendChild(g);
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function(){ dataLayer.push(arguments) };
+  gtag('js', new Date());
+  gtag('config', GA_ID, { page_title: '未完相談室' });
+} else {
+  window.gtag = function(){ console.log('[GA]', Array.from(arguments).slice(1)) };
+}
+/* 統一的事件送出。GA_ID 沒填時只會印在 console，不會出錯 */
+function track(name, params){
+  try { gtag('event', name, params || {}) } catch(e) {}
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght500;600;700&family=Noto+Sans+TC:wght300;400;500&display=swap" rel="stylesheet">
@@ -110,6 +133,11 @@ p{font-size:14.5px;color:var(--text)}
 .note{border-left:2px solid var(--gold-dim);padding:2px 0 2px 15px;margin:20px 0;font-size:13px;color:var(--text);line-height:1.8}
 .note.warn{border-left-color:var(--seal)}
 .note.keep{border-left-color:var(--lit)}
+.lock-err{border:1px solid var(--seal);border-radius:10px;padding:14px 16px;margin-top:18px;
+  font-size:13.5px;line-height:1.8;color:#F0C4B6;background:rgba(196,85,61,.12)}
+.lock-err::before{content:"！";display:inline-block;width:18px;height:18px;line-height:18px;
+  text-align:center;border-radius:50%;background:var(--seal);color:#FBF4EA;font-size:12px;
+  margin-right:9px;vertical-align:1px}
 
 .agree{display:flex;gap:12px;align-items:flex-start;cursor:pointer;padding:16px;border:1px solid var(--line);
   border-radius:10px;background:rgba(168,85,247,.05);margin:22px 0}
@@ -397,38 +425,7 @@ textarea::placeholder{color:#5E4E7E}
   .seal.on{opacity:.82}
 }
 </style>
-<script>
-(function(){
-  var KEYS=['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
-  var params=new URLSearchParams(window.location.search);
-  var found={};
-  var hasUtm=false;
-  KEYS.forEach(function(k){var v=params.get(k);if(v){found[k]=v;hasUtm=true;}});
-  try{
-    if(hasUtm){
-      found.saved_at=Date.now();
-      localStorage.setItem('unfinished_utm',JSON.stringify(found));
-    }
-    var saved=JSON.parse(localStorage.getItem('unfinished_utm')||'{}');
-    if(saved.saved_at && Date.now()-saved.saved_at>30*24*60*60*1000){
-      localStorage.removeItem('unfinished_utm'); saved={};
-    }
-    window.UNFINISHED_UTM=saved;
-    window.dataLayer=window.dataLayer||[];
-    function applyUtm(){
-      if(typeof window.gtag!=='function') return;
-      var e={};
-      if(saved.utm_source)e.utm_source=saved.utm_source;
-      if(saved.utm_medium)e.utm_medium=saved.utm_medium;
-      if(saved.utm_campaign)e.utm_campaign=saved.utm_campaign;
-      if(saved.utm_content)e.utm_content=saved.utm_content;
-      if(saved.utm_term)e.utm_term=saved.utm_term;
-      if(Object.keys(e).length) window.gtag('set',e);
-    }
-    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',applyUtm); else applyUtm();
-  }catch(e){window.UNFINISHED_UTM={};}
-})();
-</script></head>
+</head>
 <body>
 <div class="wrap">
 
@@ -630,7 +627,7 @@ textarea::placeholder{color:#5E4E7E}
 
         <div class="slip-lbl" style="margin-top:22px">你的問題</div>
         <div id="qView" class="slip-q" hidden></div>
-        <textarea id="qEdit" class="edit-q" rows="2" maxlength="40" oninput="checkMatch()"
+        <textarea id="qEdit" class="edit-q" rows="2" maxlength="40"
           placeholder="例如：三個月內，我換工作會不會順利？／放榜前，我該補強哪裡？"></textarea>
         <div class="slip-hint" id="qHint">一句話，包含時間範圍。這是老師唯一會回答的那一題。</div>
 
@@ -642,7 +639,6 @@ textarea::placeholder{color:#5E4E7E}
         <div class="slip-hint" id="tfWarn" hidden style="color:#A8452F">
           占卜的有效期間大約半年，超過這個範圍準確度會下降。建議改成半年內的一個節點。
         </div>
-        <div class="slip-hint" id="matchWarn" hidden style="color:#A8452F"></div>
         <div class="slip-hint" id="tfHint">
           也可以用一件事當邊界，例如「放榜前」「下次見面前」。占卜的有效期間約為半年。
         </div>
@@ -673,6 +669,7 @@ textarea::placeholder{color:#5E4E7E}
       </div>
 
       <div id="beforeLock">
+        <div class="lock-err" id="lockErr" hidden></div>
         <button class="go" onclick="lockSlip()">確認內容</button>
         <button class="go ghost" onclick="go(4)">回上一步</button>
         <div class="foot">確認後內容即鎖定，付款前仍可解除重新編輯</div>
@@ -742,27 +739,17 @@ textarea::placeholder{color:#5E4E7E}
       </header>
       <div class="card">
         <div class="line"><dt>訂單編號</dt><dd class="oid" id="oid2">—</dd></div>
-        <div class="line"><dt>受理編號</dt><dd class="oid" id="refId">—</dd></div>
         <div class="line"><dt>指定老師</dt><dd id="sumS2">—</dd></div>
         <div class="line"><dt>預計寄達</dt><dd id="due2">—</dd></div>
         <div class="line"><dt>寄達信箱</dt><dd id="mail2">—</dd></div>
       </div>
-      <div class="note">
-        <p style="margin:0 0 8px">老師接下案件後會再通知你一次。</p>
-        <p class="fine" style="margin:0">
-          老師看過之後，如果覺得問法可以更精準，會寄信跟你確認調整後的問題。
-          沒有收到這封信就表示問題照原樣進行，不用特別回覆。
-        </p>
-        <p class="fine" style="margin:8px 0 0">
-          若三日內沒有收到解讀，請憑訂單編號與我們聯繫。
-        </p>
-      </div>
+      <div class="note">老師接下案件後會再通知你一次。若 48 小時內未收到，請憑訂單編號與我們聯繫。</div>
       <button class="go ghost" onclick="location.reload()">回到首頁</button>
     </div>
   </section>
 
   <div style="text-align:center;padding:30px 0 10px;font-size:11px;
-       color:#5E4E7E;letter-spacing:.08em;font-family:var(--mono)">build 0827-e8cc65</div>
+       color:#5E4E7E;letter-spacing:.08em;font-family:var(--mono)">build 0830-e701fd</div>
 
 </div>
 
@@ -795,113 +782,150 @@ textarea::placeholder{color:#5E4E7E}
           留 null 會顯示暫代的星象圖
    reviews：一定要來自真實完成的訂單，不要自製
    ═══════════════════════════════════════════════ */
-const TEACHERS=[
+let TEACHERS=[
+/* ═══════════════════════════════════════════════
+   老師資料。內容取自老師本人填寫的資料表。
+   標了「※」的欄位是依老師自述推導的，請跟老師確認過再上線。
+   photo：換成真人照片路徑，例如 'assets/teachers/lightwalker.jpg'
+   reviews：只放實際完成服務的評價，不要自己寫
+   ═══════════════════════════════════════════════ */
 {
   id:'lightwalker',
-  name:'Lightwalker',
-  photo:null,
-  fields:['感情關係','曖昧','復合'],
-  tagline:'如果你一直猜不透對方在想什麼，我很擅長陪你把這段關係慢慢拆開來看。',
-  quote:'比起告訴你會不會，我更希望陪你看懂這段關係現在到底發生了什麼。',
-  styleTag:'溫柔陪伴型',
-  styleWords:['溫柔細膩','關係分析','不批判'],
+  name:'光行者老師',
+  photo:'assets/teachers/lightwalker.png',
+  fields:['感情復合','第三者','人生方向'],
+  tagline:'一針見血，直接告訴你對方在想什麼、事情卡在哪裡，也會給你實際可以做的下一步。',
+  quote:'預見未來，不是為了認命，而是為了改變命運。',
+  styleTag:'直球指路型',
+  styleWords:['直接不拐彎','行動建議','療癒'],
   best:[
-    '他現在對我的真實想法？',
-    '我們還有復合的可能嗎？',
-    '為什麼他最近突然冷淡？',
-    '這段曖昧會不會有結果？',
-    '我應該繼續等他嗎？',
-    '這段關係接下來可能怎麼發展？'
+    '我們還有沒有復合的可能？',
+    '他還會主動回來找我嗎？',
+    '他現在對我的真實想法是什麼？',
+    '我們之間是不是有第三者？',
+    '這份工作適不適合繼續？',
+    '接下來我該往哪個方向走？'
   ],
+  /* ※ 推導 */
   forYou:[
-    '一直猜不透他的想法',
-    '不知道該繼續還是放下',
-    '明明感覺彼此有感情，關係卻一直停在原地'
+    '算過很多次，卻還是不知道自己該怎麼做',
+    '想聽真話，不想再聽場面話',
+    '卡在同一個地方很久，需要一個能動起來的方向'
   ],
-  forYouEnd:'這段關係到底還有沒有下一步？',
-  meters:[['溫柔程度',5],['直接程度',3],['分析程度',5],['行動建議',4]],
-  meterNote:'如果牌面出現比較不理想的狀況，我不會刻意說好聽的，但我會告訴你，現在還有哪些事情是你可以做的。',
-  tools:'塔羅牌｜神諭卡｜直覺解讀',
-  years:'5 年',
-  bio:'我第一次接觸塔羅，其實也是因為一段感情。\n\n那時候的我一直想知道「他到底還愛不愛我」，後來才慢慢發現，很多時候我們真正想知道的，不只是一個會或不會，而是自己到底應該怎麼走下去。\n\n所以現在替人解讀時，我特別喜歡處理那些「說不清楚的關係」。如果你現在也卡在一段不知道該繼續還是離開的關係裡，可以把故事告訴我。',
+  forYouEnd:'我的人生還有救嗎？',
+  /* ※ 推導 */
+  meters:[['溫柔程度',4],['直接程度',5],['分析程度',4],['行動建議',5]],
+  meterNote:'我很少只告訴你會或不會、有或沒有。我更想告訴你，你可以怎麼做。牌面只是現在的結果，只要你改變，未來也可能跟著改變。',
+  tools:'塔羅牌',
+  years:'接觸 8 年・接案 6 年',
+  bio:'我會開始接觸占卜，因為當時正經歷憂鬱症。我幾乎算遍了各種東西方占卜命理，只想知道一件事：我的人生還有救嗎？\n\n那時候有一位老師告訴我：命也許是固定，但運，掌握在自己的手裡。對當時的我來說，那句話就像黑暗裡突然亮起的一盞燈。我第一次發現，原來占卜不是告訴我人生只能這樣，而是讓我看見還有另一個選擇。\n\n從那天開始我大量學習命理與牌卡，也一步一步把自己從人生的泥沼裡拉出來。\n\n我知道人在迷惘、失戀、卡關的時候，有時候真的只是很需要一個答案。那個答案可能是一根浮木，也可能是一點點撐下去的力氣。\n\n因為我淋過雨，所以有能力的時候，我更想替你撐一把傘。',
   reviews:[],
-  art:`<svg viewBox="0 0 100 100" class="art" aria-hidden="true"><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EAD3A4"/><stop offset="1" stop-color="#B08D57"/></linearGradient></defs><path d="M64 20 A32 32 0 1 0 64 80 A25 25 0 1 1 64 20 Z" fill="url(#g1)" opacity=".9"/><g fill="#EAD3A4"><path d="M26 24 l1.6 4.4 4.4 1.6 -4.4 1.6 -1.6 4.4 -1.6-4.4 -4.4-1.6 4.4-1.6z" opacity=".85"/><circle cx="20" cy="52" r="1.4" opacity=".5"/><circle cx="82" cy="34" r="1.1" opacity=".45"/></g><g stroke="#B08D57" fill="none" stroke-linecap="round" opacity=".4"><path d="M18 86 q16-7 32 0 t32 0"/><path d="M24 92 q13-5 26 0 t26 0" opacity=".6"/></g></svg>`
+  art:`<svg viewBox="0 0 100 100" class="art" aria-hidden="true"><defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EAD3A4"/><stop offset="1" stop-color="#A87F4A"/></linearGradient></defs><path d="M50 10 L56 42 L88 48 L56 54 L50 86 L44 54 L12 48 L44 42 Z" fill="url(#ga)"/><circle cx="50" cy="48" r="5" fill="#150F22" opacity=".5"/><g stroke="#B08D57" fill="none" stroke-linecap="round" opacity=".4"><path d="M12 72 h76"/></g><g fill="#EAD3A4" opacity=".5"><circle cx="22" cy="24" r="1.4"/><circle cx="80" cy="28" r="1.1"/><circle cx="76" cy="72" r="1.3"/></g></svg>`
 },
 {
   id:'iris',
-  name:'Iris老師',
-  photo:null,
-  fields:['工作','轉職','人際'],
-  tagline:'職場上的事情很少只是能力問題。我會陪你看清楚，卡住你的到底是什麼。',
-  quote:'我不會叫你忍，也不會叫你走。我會先讓你看懂現在的局，再決定要怎麼動。',
+  name:'Iris 老師',
+  photo:'assets/teachers/iris.png',
+  fields:['感情曖昧','對方想法','工作方向'],
+  tagline:'比起單純預測結果，我更習慣從牌裡慢慢拆解現在的狀態、雙方的想法，以及事情真正卡住的地方。',
+  quote:'有些事情你不是沒有答案，只是身在其中，很難看清楚。',
   styleTag:'邏輯分析型',
-  styleWords:['條理清晰','務實','有具體建議'],
+  styleWords:['理性分析','細膩深入','直接不拐彎'],
   best:[
-    '這份工作我還該不該繼續？',
-    '主管現在對我的評價是什麼？',
-    '接下來半年會不會有轉職機會？',
-    '我跟同事之間的僵局怎麼解？',
-    '這個新機會值得接嗎？',
-    '我該怎麼做才能改善現在的處境？'
+    '他現在對我的想法是什麼？',
+    '這段關係接下來會怎麼發展？',
+    '目前這份工作適不適合繼續？',
+    '這份工作未來的發展如何？',
+    '面對現在的選擇，我真正需要看清楚的是什麼？',
+    '我現在卡住的地方到底是什麼？'
   ],
+  /* ※ 推導 */
   forYou:[
-    '每天上班都在耗，但又不確定該不該走',
-    '努力了很久，卻好像一直沒被看見',
-    '有一個機會擺在眼前，但不知道是不是對的'
+    '心裡有底，但被情緒和期待攪得看不清楚',
+    '需要有人把事情一項一項拆開來講',
+    '不想只聽到一個會或不會的答案'
   ],
-  forYouEnd:'我到底還要在這裡待多久？',
+  forYouEnd:'我現在到底走到哪裡了？',
+  /* ※ 推導 */
   meters:[['溫柔程度',3],['直接程度',4],['分析程度',5],['行動建議',5]],
-  meterNote:'我習慣把事情拆成一項一項講清楚。如果牌面顯示現在不是好時機，我會直接說，但也會告訴你要等的是什麼。',
-  tools:'塔羅牌｜雷諾曼卡｜易經卜卦',
-  years:'7 年',
-  bio:'我做過八年上班族，離職那年三十二歲。\n\n那時候每天都在想同一件事：到底是我不夠好，還是這個地方不適合我。那個問題沒有人能替我回答，我花了很久才自己想明白。\n\n後來開始替人解牌，最常遇到的也是這種卡住的人。我不太會安慰人，但我很會拆問題。如果你現在需要的是把事情想清楚，而不是被摸摸頭，那我們應該會聊得來。',
+  meterNote:'我會直接告訴你我從牌裡看到了什麼，也會陪你一起整理接下來可以怎麼做。希望你占卜完得到的不只是一個答案，而是更清楚自己現在的位置。',
+  tools:'塔羅牌',
+  years:'塔羅約 1 年',
+  bio:'一開始接觸塔羅，其實只是單純覺得有趣。但真正開始替不同的人解牌之後，我慢慢發現，我喜歡的並不是預測一件事情到底會不會發生，而是透過牌面，把那些原本很混亂、很難說清楚的情緒和問題，一點一點整理出來。\n\n很多時候我們不是完全不知道答案，只是當自己身在一段關係或一件事情裡，很容易被情緒、期待和害怕影響，所以很難看清楚事情原本的樣子。\n\n對我來說，塔羅更像是一個幫助我們重新看清現況的工具。它可以讓我們看見現在走到了哪裡、彼此可能抱著什麼心態，以及照目前的狀態繼續發展，事情可能會走向哪裡。\n\n但我不太喜歡把任何結果說成命中注定。牌可以讓我們看見當下的狀態與趨勢，而最後要怎麼選、怎麼走，依然會回到你自己身上。',
   reviews:[],
-  art:`<svg viewBox="0 0 100 100" class="art" aria-hidden="true"><g fill="none" stroke="#C9A96E" stroke-linecap="round"><ellipse cx="50" cy="50" rx="38" ry="15" transform="rotate(-22 50 50)" opacity=".75"/><ellipse cx="50" cy="50" rx="38" ry="15" transform="rotate(38 50 50)" opacity=".5"/><ellipse cx="50" cy="50" rx="30" ry="30" opacity=".28" stroke-dasharray="2 5"/></g><circle cx="50" cy="50" r="11" fill="#EAD3A4" opacity=".92"/><g fill="#EAD3A4"><circle cx="82" cy="36" r="3"/><circle cx="20" cy="66" r="2.2" opacity=".7"/></g><g fill="#EAD3A4" opacity=".45"><circle cx="26" cy="22" r="1.2"/><circle cx="78" cy="78" r="1.4"/></g></svg>`
+  art:`<svg viewBox="0 0 100 100" class="art" aria-hidden="true"><g fill="none" stroke="#C9A96E" stroke-linecap="round"><ellipse cx="50" cy="50" rx="38" ry="15" transform="rotate(-22 50 50)" opacity=".75"/><ellipse cx="50" cy="50" rx="38" ry="15" transform="rotate(38 50 50)" opacity=".5"/><ellipse cx="50" cy="50" rx="30" ry="30" opacity=".28" stroke-dasharray="2 5"/></g><circle cx="50" cy="50" r="11" fill="#EAD3A4" opacity=".92"/><g fill="#EAD3A4"><circle cx="82" cy="36" r="3"/><circle cx="20" cy="66" r="2.2" opacity=".7"/></g></svg>`
 },
 {
   id:'james',
-  name:'小光',
-  photo:null,
-  fields:['人生方向','選擇','毛孩'],
-  tagline:'有些答案其實你心裡有數，只是需要有人陪你確認一次。',
-  quote:'我不會給你標準答案。但我會告訴你，你現在站的位置，還有哪幾條路。',
-  styleTag:'直球指路型',
-  styleWords:['乾脆','不繞路','會說實話'],
+  name:'小光先生',
+  photo:'assets/teachers/james.png',
+  fields:['對方想法','第三者','工作創業'],
+  tagline:'我用幾張牌，看見你看不見的真相，讀懂對方沒有說出口的心裡話。',
+  quote:'找我占卜，大概就是一種「人生被看透了」的感覺。',
+  styleTag:'看透人心型',
+  styleWords:['直接不拐彎','看透人心','細膩深入'],
   best:[
-    '這兩個選擇，哪一個對我比較好？',
-    '現在是行動的時機嗎，還是該再等？',
-    '我最近的方向是不是走偏了？',
-    '牠最近的狀態是怎麼了？',
-    '我可以為牠做些什麼？',
-    '接下來三個月會有什麼變化？'
+    '他有跟別人曖昧嗎？',
+    '他對我的感情，內心深處究竟是怎麼想的？',
+    '我們之間是不是存在第三者？',
+    '這段關係現在真正卡住的地方在哪裡？',
+    '這份工作我該不該繼續？',
+    '現在適合創業或轉換跑道嗎？'
   ],
+  /* ※ 推導 */
   forYou:[
-    '在兩個選項之間卡了很久，遲遲下不了決定',
-    '想聽真話，不想再聽場面話',
-    '心裡其實已經有答案，只是想確認一次'
+    '覺得對方說的和做的不一樣，但講不出哪裡怪',
+    '懷疑有第三者，卻沒有證據也不敢問',
+    '想知道真相，就算不好聽也想知道'
   ],
-  forYouEnd:'我到底該往哪邊走？',
-  meters:[['溫柔程度',3],['直接程度',5],['分析程度',4],['行動建議',5]],
-  meterNote:'我講話比較直，但不會故意嚇人。牌面不好我會說，同時也會告訴你哪些是還能改的。',
-  tools:'塔羅牌｜神諭卡｜動物溝通卡',
-  years:'6 年',
-  bio:'我從小就是那種會被說「太直接」的人。\n\n剛開始替人解牌的時候，我很擔心這樣會傷到人，所以講話特別小心。後來有個客人跟我說，她繞了三家，只有我告訴她真話，她反而鬆了一口氣。\n\n那次之後我就決定不再修飾了。我會盡量溫和，但不會為了讓你舒服而說假話。如果你要的是這種，歡迎來找我。',
+  forYouEnd:'他到底在想什麼？',
+  /* ※ 推導 */
+  meters:[['溫柔程度',3],['直接程度',5],['分析程度',5],['行動建議',4]],
+  meterNote:'我不太喜歡用模糊的說法帶過問題，也不會只挑好聽的話告訴你。比起給你一個漂亮答案，我更希望讓你真正看懂現在的局面，知道自己接下來可以怎麼走。',
+  tools:'塔羅牌',
+  years:'塔羅 12 年・接案 6 年',   /* 另有紫微斗數 4 年，本服務以塔羅為主 */
+  bio:'我最一開始接觸塔羅牌，是因為身邊有人正處在人生低潮之中，我希望能透過自己的力量幫他重新找到方向。\n\n而在學習命理的過程中，我也曾經歷過許多低谷，包括感情中的劈腿與背叛、兄弟之間的欺騙與傷害。這些經歷讓我慢慢明白，有些事情表面上看到的往往不一定是真實的；有些人嘴上說的，也不一定就是心裡真正想的。\n\n也因此我開始深入接觸塔羅與命理，希望透過這些工具去理解一個人的內心、看見事情背後的脈絡。\n\n對我而言，命理從來不只是算未來。它真正的價值，是幫助一個人在迷惘的時候看清楚自己現在的位置，了解可能面對的選擇，找到適合自己的方向。\n\n能夠陪一個人把原本混亂的事情理清楚，甚至在看完之後重新找到前進的方向，就是我一直做這件事的原因。',
   reviews:[],
-  art:`<svg viewBox="0 0 100 100" class="art" aria-hidden="true"><defs><linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EAD3A4"/><stop offset="1" stop-color="#A87F4A"/></linearGradient></defs><path d="M50 12 L55 43 L86 48 L55 53 L50 84 L45 53 L14 48 L45 43 Z" fill="url(#g2)"/><path d="M50 26 L52 46 L72 48 L52 50 L50 70 L48 50 L28 48 L48 46 Z" fill="#150F22" opacity=".55"/><circle cx="50" cy="48" r="4" fill="#EAD3A4"/><g stroke="#B08D57" fill="none" stroke-linecap="round" opacity=".45"><path d="M10 74 h80"/><path d="M22 82 h56" opacity=".6"/></g><g fill="#EAD3A4" opacity=".5"><circle cx="22" cy="24" r="1.3"/><circle cx="80" cy="30" r="1"/></g></svg>`
+  art:`<svg viewBox="0 0 100 100" class="art" aria-hidden="true"><defs><linearGradient id="gc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EAD3A4"/><stop offset="1" stop-color="#B08D57"/></linearGradient></defs><ellipse cx="50" cy="50" rx="34" ry="21" fill="none" stroke="url(#gc)" stroke-width="2.5"/><circle cx="50" cy="50" r="12" fill="url(#gc)"/><circle cx="50" cy="50" r="5" fill="#150F22" opacity=".65"/><g stroke="#C9A96E" fill="none" opacity=".45" stroke-linecap="round"><path d="M14 50 q36-30 72 0"/><path d="M14 50 q36 30 72 0"/></g><g fill="#EAD3A4" opacity=".5"><circle cx="26" cy="20" r="1.3"/><circle cx="78" cy="80" r="1.4"/></g></svg>`
+},
+{
+  /* ════ 測試用，上線前把這一整段刪掉 ════ */
+  id:'test',
+  name:'測試老師',
+  photo:null,
+  fields:['測試'],
+  tagline:'這是測試用的老師，只有在測試模式打開時才會出現。',
+  quote:'這一筆不是真的委託，用來檢查整條流程有沒有跑通。',
+  styleTag:'測試',
+  styleWords:['測試'],
+  best:['測試問題一','測試問題二','測試問題三'],
+  forYou:['正在測試流程'],
+  forYouEnd:'流程有沒有問題？',
+  meters:[['溫柔程度',3],['直接程度',3],['分析程度',3],['行動建議',3]],
+  meterNote:'測試用。',
+  tools:'測試',
+  years:'—',
+  bio:'測試帳號。',
+  reviews:[],
+  art:`<svg viewBox="0 0 100 100" class="art" aria-hidden="true"><g fill="none" stroke="#C9A96E" stroke-width="3" stroke-linecap="round"><path d="M30 50h40M50 30v40"/><circle cx="50" cy="50" r="32" stroke-dasharray="3 6" stroke-width="1.5"/></g></svg>`
 }
 ];
+
+/* 測試模式。true 時老師列表會多出「測試老師」。上線前改回 false */
+const TEST_MODE = new URLSearchParams(location.search).get('test') === '1';
+if(!TEST_MODE) TEACHERS.pop();
 
 /* 舊變數保留給既有程式碼使用 */
 const SEERS=TEACHERS;
 
 
 const STEPS=['相談室','選擇老師','聯絡方式','注意事項','整理問題','確認問題','付款'];
-const MAIL_RE=/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
+const MAIL_RE=/^[^\s]+[^\s]+\.[a-zA-Z]{2,}$/;
 const S={step:0,max:0,round:0,history:[],result:null,locked:false,seer:null,
          oid:null,paid:false,name:'',email:'',fails:0,
          fb:{narrowed:false,tfAsked:false,intentAsked:false}};
 
-console.log('%c未完籤所 build 0827-e8cc65','color:#D8B87E;font-weight:bold');
+console.log('%c未完籤所 build 0830-e701fd','color:#D8B87E;font-weight:bold');
 
 /* ═══════════════════════════════════════
    後端 API 位址。部署 worker.js 之後把網址填進來。
@@ -912,7 +936,14 @@ const API_URL = 'https://unfinished-test.jiazhen0404.workers.dev/api/guide';
 /* 若網頁與 Worker 同一個網域，也可以直接寫相對路徑：'/api/guide' */
 
 /* ════════ 導覽（不清空任何內容）════════ */
+const STEP_EV = ['oracle_intro','teacher_list','contact','notice','guide','confirm','pay','complete'];
+
 function go(n){
+  track('funnel_step', {
+    step_index: n,
+    step_name: STEP_EV[n] || ('step_' + n),
+    teacher: S.seer ? S.seer.name : ''
+  });
   document.querySelectorAll('.step').forEach(e=>e.classList.remove('live'));
   document.getElementById('s'+n).classList.add('live');
   S.step=n;
@@ -990,7 +1021,7 @@ document.getElementById('deck').innerHTML = TEACHERS.map(t=>`
       <ul class="tgood">${t.best.slice(0,3).map(q=>`<li>${q}</li>`).join('')}</ul>
     </div>
 
-    <div class="tverify"><span>真人老師</span><span>未完籤所合作占卜師</span><span>${t.tools.split('｜')[0]}</span><span>經歷 ${t.years}</span></div>
+    <div class="tverify"><span>真人老師</span><span>未完籤所合作占卜師</span><span>${t.years}</span></div>
 
     <div class="tfoot">
       <div class="tprice"><small>真人文字占卜</small>NT$${PRICE}</div>
@@ -1012,6 +1043,7 @@ function stars(n){
 function openTeacher(id){
   const t = TEACHERS.find(x=>x.id===id);
   if(!t)return;
+  track('teacher_view', { teacher: t.name });
 
   document.getElementById('sheetBody').innerHTML = `
     ${face(t,'sh-photo')}
@@ -1079,6 +1111,10 @@ function closeTeacher(){
 
 function chooseTeacher(id){
   S.seer = TEACHERS.find(x=>x.id===id);
+  track('teacher_pick', {
+    teacher: S.seer ? S.seer.name : '',
+    from: document.getElementById('sheet').classList.contains('on') ? 'detail' : 'list'
+  });
   closeTeacher();
   const el=document.getElementById('slipStyle');
   if(S.result&&el)el.textContent=S.seer.name;
@@ -1145,6 +1181,7 @@ function renderSamples(){
 }
 function setSampCat(i){sampCat=i;renderSamples()}
 function useSample(el){
+  track('sample_use', { cat: SAMPLES[sampCat].cat });
   const box=document.getElementById('say');
   box.value=el.textContent.replace(/^→\s*/,'');
   count();
@@ -1161,8 +1198,8 @@ renderSamples();
 /* ════════ AI 對話 ════════ */
 const PH=['從上面選一句，或直接寫下你想問的那一件事……',
           '回答上面那個問題就好，一句話也可以。',
-          '快好了，再回答一個問題。',
-          '再確認最後一件事就完成了。'];
+          '再說一點就差不多了。',
+          '最後一件事，說完就完成了。'];
 
 function renderAI(){
   const done=!!S.result;
@@ -1202,6 +1239,7 @@ function renderTurns(){
 
 /* 退回到某一則重寫。之後的對話是根據舊內容產生的，一併清掉 */
 function rollback(i){
+  track('guide_edit', { at: i });
   const text=S.history[i].content;
   S.history=S.history.slice(0,i);
   S.round=S.history.filter(h=>h.role==='user').length;
@@ -1224,6 +1262,7 @@ async function send(){
   if(text.length<4){box.focus();return}
 
   S.round++;
+  track('guide_turn', { round: S.round, chars: text.length });
   S.history.push({role:'user',content:text});
   renderTurns();
   box.value='';count();
@@ -1242,6 +1281,7 @@ async function send(){
 
   if(reply===null){
     S.fails++;
+    track('guide_fail', { round: S.round, fails: S.fails });
     S.history.pop();          // 這一輪不算，退回去讓他重送
     S.round--;
     showFail(text);
@@ -1253,6 +1293,7 @@ async function send(){
   const parsed=tryJSON(reply);
   if(parsed||S.round>=4){
     S.result=parsed||fallbackResult();
+    track('guide_done', { rounds: S.round, from_ai: !!parsed });
     fillSlip();
     renderAI();
     setTimeout(()=>go(5),450);
@@ -1337,6 +1378,7 @@ function tryJSON(t){
 function askRestart(){document.getElementById('veil').classList.add('on')}
 function closeVeil(){document.getElementById('veil').classList.remove('on')}
 function doRestart(){
+  track('guide_restart', { rounds: S.round });
   S.round=0;S.history=[];S.result=null;S.locked=false;
   S.fb={narrowed:false,tfAsked:false,intentAsked:false};S.fails=0;
   document.getElementById('failBox')?.remove();
@@ -1357,87 +1399,15 @@ function doRestart(){
 }
 
 /* ════════ 時間 / 落點 選項 ════════ */
-const TF=['兩週內','一個月內','三個月內','半年內'];
+const TF=['當下','兩週內','一個月內','三個月內','半年內'];
 const IN=['會不會發生','什麼時候會發生','我可以做什麼','他現在的想法或狀況'];
 
 const IN_HINT={
   '會不會發生':'問法像這樣：一個月內，他會不會主動回來找我？',
   '什麼時候會發生':'問法像這樣：半年內，他大概什麼時候會主動回來找我？時間邊界拉長一點，比較看得出落點。',
   '我可以做什麼':'問法像這樣：一個月內，我可以做什麼讓他主動回來？',
-  '他現在的想法或狀況':'問法像這樣：他現在怎麼看我們這段關係？這一類看的是當下，時間邊界可以填「當下」。'
+  '他現在的想法或狀況':'問的是當下，不需要時間範圍。例如：他現在對我是什麼想法？'
 };
-
-/* 這兩個函式原本被呼叫卻沒有定義。
-   syncQuestionTf 缺失時，點時間邊界會拋 ReferenceError，
-   後面的 paintChips() 永遠不會執行 —— 值改了但畫面沒更新，
-   問題句也不會跟著改，於是問句寫「三個月內」、按鈕停在「一個月內」。 */
-
-const TF_WORDS=['兩週內','兩周內','兩星期內','一個月內','1個月內','三個月內','3個月內',
-                '半年內','六個月內','一年內','近期內','不限時間',
-                '兩週後','一個月後','三個月後','半年後'];
-
-function syncQuestionTf(newTf){
-  const q=document.getElementById('qEdit');
-  if(!q||q.hidden||!q.value||!newTf)return;
-  const v=q.value;
-  for(const w of TF_WORDS){
-    if(v.indexOf(w)>-1){
-      if(w!==newTf){
-        q.value=v.replace(w,newTf);
-        S.result.main_question=q.value;
-        flash('qEdit');
-      }
-      checkMatch();
-      return;
-    }
-  }
-  /* 自訂的說法（放榜前、他生日前）沒有固定詞可以取代，交給提示處理 */
-  checkMatch();
-}
-
-/* 三輪用完卻沒拿到 JSON 時的收尾。
-   不猜時間邊界：使用者說「我們三個月沒聯絡」是背景不是邊界，
-   猜錯會讓老師整篇答錯題，留空讓使用者自己選。 */
-function fallbackResult(){
-  const us=S.history.filter(h=>h.role==='user').map(h=>h.content.trim()).filter(Boolean);
-  return {main_question:'',timeframe:null,intent:null,other_party:'',
-          background:us.join('\n').slice(0,200),extra:[]};
-}
-
-/* 問題句跟下面的選項對不起來時提醒。不阻擋，只是講清楚老師會以哪個為準。 */
-function guessIntent(q){
-  if(/什麼時候|甚麼時候|何時|多久之?後|哪時/.test(q))return '什麼時候會發生';
-  if(/該不該|要不要|怎麼做|可以做什麼|該怎麼/.test(q))return '我可以做什麼';
-  /* 現況型要排在「會不會」前面。「他身邊有沒有其他人」問的是當下，
-     若先比對到「有沒有」就會被誤判成問未來。 */
-  if(/為什麼|為何|怎麼想|心裡|還愛|喜不喜歡|在意我|怎麼看|適不適合/.test(q))return '他現在的想法或狀況';
-  if(/目前|現在|身邊有|過得好/.test(q))return '他現在的想法或狀況';
-  if(/會不會|有沒有|能不能|是否|機會|可能/.test(q))return '會不會發生';
-  return null;
-}
-
-function checkMatch(){
-  const box=document.getElementById('matchWarn');
-  if(!box)return;
-  const q=document.getElementById('qEdit');
-  const text=(q&&!q.hidden?q.value:(S.result&&S.result.main_question)||'').trim();
-  if(!S.result||!text){box.hidden=true;return}
-
-  const msgs=[];
-  const tf=S.result.timeframe;
-  if(tf&&tf!=='當下'&&text.indexOf(tf)<0){
-    const other=TF_WORDS.find(w=>w!==tf&&text.indexOf(w)>-1);
-    msgs.push(other
-      ? '問題句裡寫的是「'+other+'」，但時間邊界選的是「'+tf+'」。老師會以「'+tf+'」為準。'
-      : '問題句裡沒有寫到「'+tf+'」，老師會以「'+tf+'」為準。');
-  }
-  const g=guessIntent(text);
-  if(g&&S.result.intent&&g!==S.result.intent)
-    msgs.push('問題句聽起來是在問「'+g+'」，但下面選的是「'+S.result.intent+'」。');
-
-  box.innerHTML=msgs.map(esc).join('<br>');
-  box.hidden=msgs.length===0;
-}
 
 function buildChips(boxId,list,key){
   const box=document.getElementById(boxId);
@@ -1446,7 +1416,15 @@ function buildChips(boxId,list,key){
   box.innerHTML=html;
 }
 
+function clearLockErr(){
+  const e=document.getElementById('lockErr');
+  if(e)e.hidden=true;
+}
+
 function setChip(key,val){
+  clearLockErr();
+  if(key==='intent'&&val==='他現在的想法或狀況'&&!S.result.timeframe)
+    S.result.timeframe='當下';
   const prev=S.result[key];
   S.result[key]=val;
   if(key==='timeframe'){
@@ -1454,7 +1432,6 @@ function setChip(key,val){
     if(prev!==val)syncQuestionTf(val);
   }
   paintChips();
-  checkMatch();
 }
 
 function openOtherTf(){
@@ -1469,6 +1446,7 @@ function openOtherTf(){
 const TOO_LONG=/一年|兩年|三年|明年|十二個月|後年/;
 
 function setOtherTf(v){
+  clearLockErr();
   const prev=S.result.timeframe;
   const t=v.trim();
   S.result.timeframe=t;
@@ -1476,7 +1454,6 @@ function setOtherTf(v){
   const w=document.getElementById('tfWarn');
   w.hidden=!(t&&TOO_LONG.test(t));
   paintChips();
-  checkMatch();
 }
 
 function paintChips(){
@@ -1502,9 +1479,9 @@ function normIntent(v){
   v=String(v).trim();
   if(!v)return null;
   if(IN.includes(v))return v;
+  if(/現在的想法|當下|目前狀況|此刻|現況/.test(v))return '他現在的想法或狀況';
   if(/時間點|何時|什麼時候|甚麼時候|時機/.test(v))return '什麼時候會發生';
   if(/行動|做什麼|怎麼做|該做/.test(v))return '我可以做什麼';
-  if(/想法|狀況|現況|心裡|關係狀態|為什麼/.test(v))return '他現在的想法或狀況';
   if(/結果|會不會|是否|發生/.test(v))return '會不會發生';
   return null;
 }
@@ -1532,10 +1509,12 @@ function fillSlip(){
   document.getElementById('slipStyle').textContent=S.seer?S.seer.name:'—';
   S.result.timeframe=normTf(S.result.timeframe);
   S.result.intent=normIntent(S.result.intent);
+  /* 問對方當下的狀態時沒有時間範圍可言，直接補上「當下」 */
+  if(S.result.intent==='他現在的想法或狀況'&&!S.result.timeframe)
+    S.result.timeframe='當下';
   buildChips('tfChips',TF,'timeframe');
   buildChips('inChips',IN,'intent');
   paintChips();
-  checkMatch();
   const ex=(S.result.extra||[]).filter(Boolean);
   const box=document.getElementById('extraBox');
   if(ex.length){
@@ -1548,12 +1527,19 @@ function lockSlip(){
   const q=document.getElementById('qEdit').value.trim();
   const b=document.getElementById('bEdit').value.trim();
   const nm=document.getElementById('nEdit').value.trim();
-  if(!nm){document.getElementById('nEdit').focus();flash('nEdit');return}
-  if(q.length<4){document.getElementById('qEdit').focus();return}
-  if(!S.result.timeframe){
-    document.getElementById('tfChips').scrollIntoView({behavior:'smooth',block:'center'});
-    flash('tfChips');flash('tfHint');return;
-  }
+
+  if(!nm)      return lockFail('nEdit','請先填寫老師怎麼稱呼你。');
+  if(q.length<4) return lockFail('qEdit','問題再寫具體一點，老師才知道這次要算什麼。');
+  if(!S.result.timeframe)
+    return lockFail('tfChips','還要選一個時間邊界。占卜需要知道看的是多久之內，沒有期間就沒辦法解讀。');
+
+  document.getElementById('lockErr').hidden=true;
+  track('slip_lock', {
+    teacher: S.seer ? S.seer.name : '',
+    timeframe: S.result.timeframe || '',
+    intent: S.result.intent || '',
+    has_other: !!document.getElementById('oEdit').value.trim()
+  });
   S.result.main_question=q;S.result.background=b;S.name=nm;
   S.result.other_party=document.getElementById('oEdit').value.trim();
   S.locked=true;
@@ -1638,38 +1624,6 @@ function syncPayBtn(){
 }
 
 /* ════════ 訂單 ════════ */
-/* 訂單成立後把受理單送進老師的待辦。
-   付款不等審查，老師收到之後才判斷問法要不要調整。 */
-async function submitForReview(){
-  if(S.submitted)return;                  // 只送一次
-  S.submitted=true;
-  try{
-    const r=await fetch(API_URL.replace('/api/guide','/api/submit'),{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        name:S.name,email:S.email||document.getElementById('mail')?.value||'',
-        seer:S.seer?S.seer.name:'',
-        main_question:S.result.main_question,timeframe:S.result.timeframe,
-        intent:S.result.intent,other_party:S.result.other_party,
-        background:S.result.background,extra:S.result.extra||[]
-      })
-    });
-    const d=await r.json();
-    if(!r.ok||!d.ok){
-      /* 建單失敗不擋使用者，錢已經收了。記下來讓人工補。 */
-      S.submitted=false;
-      console.error('submit failed', d);
-      return;
-    }
-    S.orderRef=d.id;
-    const el=document.getElementById('refId');
-    if(el)el.textContent=d.id;
-  }catch(e){
-    S.submitted=false;
-    console.error('submit error', e);
-  }
-}
-
 function toPay(){
   if(!S.oid){
     const d=new Date(),pad=n=>String(n).padStart(2,'0');
@@ -1701,6 +1655,12 @@ function toPay(){
 }
 
 function pay(){
+  track('begin_checkout', {
+    currency: 'TWD',
+    value: hasDeep ? PRICE - DEEP_CREDIT : PRICE,
+    teacher: S.seer ? S.seer.name : '',
+    order_id: S.oid
+  });
   /* 實際串接：POST 到你的伺服器建立 ECPay 訂單
      送出內容：S.oid, S.name, S.email, S.result.main_question,
               S.result.timeframe, S.result.intent, S.result.background,
@@ -1709,14 +1669,27 @@ function pay(){
   document.getElementById('mail2').textContent=S.email;
   S.paid=true;
   go(7);
-  /* 訂單成立後才把受理單送進老師的待辦。
-     付款不等審查，老師收到之後才判斷問法要不要調整。 */
-  submitForReview();
+}
+
+function lockFail(fieldId,msg){
+  track('slip_blocked', { field: fieldId });
+  const e=document.getElementById('lockErr');
+  e.textContent=msg;
+  e.hidden=false;
+  const f=document.getElementById(fieldId);
+  f.scrollIntoView({behavior:'smooth',block:'center'});
+  flash(fieldId);
+  if(f.focus&&f.tagName!=='DIV')setTimeout(()=>f.focus(),400);
 }
 
 function flash(id){
   const el=document.getElementById(id);
-  el.animate([{opacity:1},{opacity:.25},{opacity:1},{opacity:.25},{opacity:1}],{duration:700});
+  if(!el)return;
+  el.animate([
+    {transform:'translateX(0)'},{transform:'translateX(-6px)'},
+    {transform:'translateX(6px)'},{transform:'translateX(-4px)'},
+    {transform:'translateX(0)'}
+  ],{duration:380,easing:'ease-out'});
 }
 
 document.getElementById('say').addEventListener('keydown',e=>{
