@@ -643,7 +643,7 @@ textarea::placeholder{color:#5E4E7E}
           placeholder="例如：三個月內，我換工作會不會順利？／放榜前，我該補強哪裡？"></textarea>
         <div class="slip-hint" id="qHint">一句話，包含時間範圍。這是老師唯一會回答的那一題。</div>
 
-        <div class="slip-lbl" style="margin-top:22px">時間邊界</div>
+        <div class="slip-lbl" style="margin-top:22px">占卜期間</div>
         <div id="tfView" class="slip-tf" hidden></div>
         <div class="chips" id="tfChips"></div>
         <input type="text" id="tfOther" class="tf-other" maxlength="20" hidden
@@ -710,10 +710,10 @@ textarea::placeholder{color:#5E4E7E}
         <div class="line"><dt>你的問題</dt><dd id="sumQ">—</dd></div>
         <div class="line"><dt>稱呼</dt><dd id="sumN">—</dd></div>
         <div class="line"><dt>算的對方</dt><dd id="sumO">—</dd></div>
-        <div class="line"><dt>時間邊界</dt><dd id="sumT">—</dd></div>
+        <div class="line"><dt>占卜期間</dt><dd id="sumT">—</dd></div>
         <div class="line"><dt>你想知道的</dt><dd id="sumI">—</dd></div>
         <div class="line"><dt>指定老師</dt><dd id="sumS">—</dd></div>
-        <div class="line"><dt>交付時間</dt><dd id="sumD">—</dd></div>
+        <div class="line"><dt>預計完成</dt><dd id="sumD">—</dd></div>
         <div class="line"><dt>內容長度</dt><dd>800–1,500 字</dd></div>
         <div class="line"><dt>追問</dt><dd>可免費追問一次</dd></div>
         <div class="total"><span id="payLbl">應付金額　NT$</span><b id="payAmt">399</b></div>
@@ -753,7 +753,7 @@ textarea::placeholder{color:#5E4E7E}
       <div class="card">
         <div class="line"><dt>訂單編號</dt><dd class="oid" id="oid2">—</dd></div>
         <div class="line"><dt>指定老師</dt><dd id="sumS2">—</dd></div>
-        <div class="line"><dt>預計寄達</dt><dd id="due2">—</dd></div>
+        <div class="line"><dt>預計完成</dt><dd id="due2">—</dd></div>
         <div class="line"><dt>寄達信箱</dt><dd id="mail2">—</dd></div>
       </div>
       <div class="note">老師接下案件後會再通知你一次。若 48 小時內未收到，請憑訂單編號與我們聯繫。</div>
@@ -762,7 +762,7 @@ textarea::placeholder{color:#5E4E7E}
   </section>
 
   <div style="text-align:center;padding:30px 0 10px;font-size:11px;
-       color:#5E4E7E;letter-spacing:.08em;font-family:var(--mono)">build 0830-7d222f</div>
+       color:#5E4E7E;letter-spacing:.08em;font-family:var(--mono)">build 0830-f1953e</div>
 
 </div>
 
@@ -938,7 +938,7 @@ const S={step:0,max:0,round:0,history:[],result:null,locked:false,seer:null,
          oid:null,paid:false,name:'',email:'',fails:0,
          fb:{narrowed:false,tfAsked:false,intentAsked:false}};
 
-console.log('%c未完籤所 build 0830-7d222f','color:#D8B87E;font-weight:bold');
+console.log('%c未完籤所 build 0830-f1953e','color:#D8B87E;font-weight:bold');
 
 /* ═══════════════════════════════════════
    後端 API。與網站同一個網域，用相對路徑。

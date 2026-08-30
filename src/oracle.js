@@ -1094,7 +1094,7 @@ function card(o){
   h += '<dl><dt>稱呼</dt><dd>'+esc(o.name)+'</dd>'
      + '<dt>信箱</dt><dd>'+esc(o.email)+'</dd>'
      + '<dt>老師</dt><dd>'+esc(o.teacher)+'</dd>'
-     + '<dt>時間</dt><dd>'+(esc(o.timeframe)||'—')+'</dd>'
+     + '<dt>占卜期間</dt><dd>'+(esc(o.timeframe)||'—')+'</dd>'
      + '<dt>想知道</dt><dd>'+(esc(o.intent)||'—')+'</dd>'
      + '<dt>對方</dt><dd>'+(esc(o.other_party)||'不牽涉他人')+'</dd></dl>';
   h += '<div class="bg">'+esc(o.background)+'</div>';
@@ -1413,7 +1413,7 @@ function card(o){
      + '<span class="tag '+tone(o.st)+'">'+label(o.st)+'</span></div>';
   h += '<div class="q">'+esc(o.q)+'</div>';
   h += '<dl><dt>稱呼</dt><dd>'+esc(o.name)+'</dd>'
-     + '<dt>時間</dt><dd>'+(esc(o.timeframe)||'—')+'</dd>'
+     + '<dt>占卜期間</dt><dd>'+(esc(o.timeframe)||'—')+'</dd>'
      + '<dt>想知道</dt><dd>'+(esc(o.intent)||'—')+'</dd>'
      + '<dt>對方</dt><dd>'+(esc(o.other_party)||'不牽涉他人')+'</dd></dl>';
   h += '<div class="bg">'+esc(o.background)+'</div>';
@@ -1544,13 +1544,25 @@ function look(){
     .catch(function(){ document.getElementById('gerr').hidden = false });
 }
 
+/* 客人最在意的是「什麼時候收到」。
+   占卜期間是牌要看的範圍，兩者完全不同，一定要分開講。 */
+function eta(o){
+  if(o.st === 'sent' || o.st === 'done'){
+    return '<dt>已寄出</dt><dd>'+esc(String(o.sent_at||'').slice(0,16).replace('T',' '))+'</dd>';
+  }
+  if(['refund','refunded'].indexOf(o.st) >= 0) return '';
+  return '<dt>預計完成</dt><dd>付款後 24–48 小時內</dd>';
+}
+
 function show(o){
   var h = '<div class="card">';
   h += '<div class="top"><span class="id">'+esc(o.id)+'</span>'
      + '<span class="tag '+tone(o.st)+'">'+label(o.st)+'</span></div>';
   h += '<div class="q">'+esc(o.q)+'</div>';
   h += '<dl><dt>老師</dt><dd>'+esc(o.teacher)+'</dd>'
-     + '<dt>時間</dt><dd>'+(esc(o.timeframe)||'—')+'</dd></dl>';
+     + '<dt>占卜期間</dt><dd>'+(esc(o.timeframe)||'—')+'</dd>'
+     + eta(o)
+     + '</dl>';
 
   if(o.st === 'q_revised'){
     h += '<div class="warn">我們看過之後調整了你的問法，想請你確認。<br><br>'
