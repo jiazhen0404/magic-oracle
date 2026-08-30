@@ -109,6 +109,9 @@ export async function oracleRoutes(request, env, ctx, url) {
         hasKv: !!env.ORDERS,
         hasMediaR2: !!env.MEDIA,
         hasMail: !!env.RESEND_API_KEY,
+        mailFrom: env.MAIL_FROM || '(未設定，會用 Resend 預設網域，很可能寄不出去)',
+        adminEmail: env.ADMIN_EMAIL || '(未設定，你收不到通知)',
+        teacherMails: teacherList(env).map(t => t.id + ':' + (env['MAIL_' + t.id.toUpperCase()] ? '已設定' : '未設定')),
         teachers: teacherList(env).map(t => t.id)
       }, 200, origin);
     }
@@ -346,6 +349,37 @@ async function adminApi(request, env, ctx, path, origin) {
       teachers: teacherList(env).map(t => ({ id: t.id, name: t.name })),
       canMail: !!env.RESEND_API_KEY
     }, 200, origin);
+  }
+
+  if (path === '/api/oracle/admin/testmail') {
+    const to = new URL(request.url).searchParams.get('to') || env.ADMIN_EMAIL || '';
+    if (!to) return json({ error: 'no_address', hint: '請先設定 ADMIN_EMAIL' }, 400, origin);
+    if (!env.RESEND_API_KEY) return json({ error: 'no_key', hint: '請先設定 RESEND_API_KEY' }, 400, origin);
+
+    try {
+      const r = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + env.RESEND_API_KEY,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          from: env.MAIL_FROM || '未完籤所 <onboarding@resend.dev>',
+          to: [to],
+          subject: '[未完籤所] 寄信測試',
+          text: '這是一封測試信。\n\n收到就代表寄信設定正確，訂單通知會正常寄達。'
+        })
+      });
+      const body = await r.text();
+      return json({
+        ok: r.ok, status: r.status,
+        from: env.MAIL_FROM || '(未設定，用 Resend 預設)',
+        to,
+        detail: body.slice(0, 400)
+      }, 200, origin);
+    } catch (e) {
+      return json({ ok: false, error: 'network', detail: e.message }, 200, origin);
+    }
   }
 
   if (path === '/api/oracle/admin/book') {
@@ -1002,12 +1036,24 @@ const PAGE_ADMIN = `<!doctype html><html lang="zh-Hant"><head>
 <div id="app" hidden>
   <div class="bar"><h1><img src="/assets/logo-mark.png" alt="" class="lg">受理單 <em id="cnt"></em></h1></div>
   <div class="tabs" id="tabs"></div>
+  <div class="wrap">
+    <button class="b ghost" id="testmail" hidden onclick="testMail()"
+            style="margin-bottom:12px">寄一封測試信給我</button>
+  </div>
   <div class="wrap" id="list"></div>
 </div>
 
 <script>${JSC}
 var KEY = sessionStorage.getItem('uw_admin') || '';
 var ALL = [], TEACHERS = [], CANMAIL = false, F = 'todo';
+
+function testMail(){
+  api('/api/oracle/admin/testmail').then(function(d){
+    if(d.ok) alert('已送出。\n\n寄件人：' + d.from + '\n收件人：' + d.to
+      + '\n\n一分鐘內沒收到就看一下垃圾郵件匣。');
+    else alert('寄不出去。\n\n狀態：' + d.status + '\n\n' + (d.detail || d.hint || ''));
+  }).catch(function(){ alert('沒有成功') });
+}
 var G = [
   ['todo','要我處理',['q_review','draft_wait','draft_doing','fu_review','fu_doing','refund']],
   ['wait','等別人',['q_revised','writing','fu_wait']],
@@ -1041,6 +1087,8 @@ function render(d){
   if(d.teachers) TEACHERS = d.teachers;
   if(typeof d.canMail !== 'undefined') CANMAIL = d.canMail;
   document.getElementById('cnt').textContent = ALL.length + ' 筆' + (CANMAIL ? '' : '　·　尚未設定寄信');
+  var tm = document.getElementById('testmail');
+  if(tm) tm.hidden = !CANMAIL;
   document.getElementById('tabs').innerHTML = G.map(function(g){
     var n = g[0]==='book'
       ? ALL.filter(function(o){ return o.paid }).length
