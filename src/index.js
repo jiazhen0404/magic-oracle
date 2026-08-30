@@ -25,6 +25,7 @@
 
 import EXTENDED from './extended-love.json';
 import { buildPdfHtml } from './pdf-template.js';
+import { oracleRoutes, oraclePaid } from './oracle.js';
 
 const PRICE = 99;                       // 售價，改這裡就好
 const ORDER_TTL = 60 * 60 * 24;         // 訂單暫存 24 小時後自動消失
@@ -42,6 +43,10 @@ export default {
     const path = url.pathname;
 
     try {
+      // 真人占卜。不是它的路徑會回 null，繼續往下走
+      const oracle = await oracleRoutes(request, env, ctx, url);
+      if (oracle) return oracle;
+
       if (path === '/api/create-order' && request.method === 'POST') {
         return await createOrder(request, env, url);
       }
@@ -192,6 +197,12 @@ async function ecpayCallback(request, env, ctx, url) {
   }
 
   const tradeNo = data.MerchantTradeNo || '';
+
+  // 真人占卜的訂單編號開頭是 UO，交給它自己處理
+  if (tradeNo.startsWith('UO')) {
+    return await oraclePaid(data, env, ctx);
+  }
+
   const raw = await env.ORDERS.get('order:' + tradeNo);
 
   if (!raw) {
