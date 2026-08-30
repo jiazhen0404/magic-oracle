@@ -88,6 +88,10 @@ export async function oracleRoutes(request, env, ctx, url) {
       });
     }
 
+    if (path === '/api/oracle/credit') {
+      const t = url.searchParams.get('t') || '';
+      return json({ ok: true, credit: (await checkDeepCredit(env, t)) ? DEEP_CREDIT : 0 }, 200, origin);
+    }
     if (path === '/api/oracle/create-order') return createOracleOrder(request, env, url, origin);
     if (path === '/api/oracle/status')       return oracleStatus(request, env, origin);
     if (path === '/api/oracle/guide')        return guide(request, env, origin);
@@ -132,7 +136,11 @@ async function createOracleOrder(request, env, url, origin) {
   /* 法規要求：客製化服務不適用七日解除權，要留下事先同意的證據 */
   if (o.consent !== true) return json({ error: 'consent_required' }, 400, origin);
 
-  const amount = o.hasDeep ? PRICE - DEEP_CREDIT : PRICE;
+  /* 折抵不能信前端。要拿 99 元的解鎖憑證來，由後端查 KV 驗證。
+     一張憑證只能折抵一次，付款成功時才標記用掉。 */
+  const deepToken = String(o.deep_token || '').trim();
+  const hasDeep = await checkDeepCredit(env, deepToken);
+  const amount = hasDeep ? PRICE - DEEP_CREDIT : PRICE;
   const id = makeTradeNo('UO');
   const d = new Date();
 
@@ -142,7 +150,8 @@ async function createOracleOrder(request, env, url, origin) {
     created: now(),
     paid: false,
     amount,
-    hasDeep: !!o.hasDeep,
+    hasDeep,
+    deep_token: hasDeep ? deepToken : '',
 
     name:        String(o.name || '').slice(0, 12),
     email:       mail.slice(0, 120),
@@ -162,7 +171,8 @@ async function createOracleOrder(request, env, url, origin) {
     log: [{ t: now(), who: '系統', act: '建立訂單，等待付款' }]
   };
 
-  await put(env, order);
+  /* 還沒付款的訂單只留 24 小時。付款成功後才改成長期保存 */
+  await env.ORDERS.put('oracle:' + id, JSON.stringify(order), { expirationTtl: 60 * 60 * 24 });
 
   const params = {
     MerchantID: env.ECPAY_MERCHANT_ID,
@@ -185,6 +195,18 @@ async function createOracleOrder(request, env, url, origin) {
     action: ECPAY_URL[env.ECPAY_MODE === 'production' ? 'production' : 'stage'],
     fields: params
   }, 200, origin);
+}
+
+/* 延伸籤的解鎖憑證存在 unlock:<token>，一年有效。
+   拿得出有效憑證就代表真的買過 99 元，可以折抵。 */
+async function checkDeepCredit(env, token) {
+  if (!token || !/^[A-Za-z0-9]{20,60}$/.test(token)) return false;
+  try {
+    const raw = await env.ORDERS.get('unlock:' + token);
+    if (!raw) return false;
+    const u = JSON.parse(raw);
+    return !u.oracleUsed;          /* 已經折抵過就不能再用 */
+  } catch (e) { return false; }
 }
 
 /* ══════════════════════════════════════════════════
@@ -213,9 +235,24 @@ export async function oraclePaid(data, env, ctx) {
     o.paid = true;
     o.paid_at = now();
     o.trade_no = data.TradeNo || '';
+    o.pay_type = data.PaymentType || '';
+    o.card_last4 = data.card4no || '';
+    o.invoice_no = '';                    /* 開立發票後手動填，或之後接綠界發票 API */
     o.st = 'q_review';                       /* 付款成功才進到你的待審 */
-    log(o, '系統', '付款成功 NT$' + o.amount);
+    log(o, '系統', '付款成功 NT$' + o.amount + (o.hasDeep ? '（已折抵 ' + DEEP_CREDIT + '）' : ''));
     await put(env, o);
+    /* 折抵用掉的憑證要標記，避免同一張重複折 */
+    if (o.hasDeep && o.deep_token) {
+      try {
+        const raw = await env.ORDERS.get('unlock:' + o.deep_token);
+        if (raw) {
+          const u = JSON.parse(raw);
+          u.oracleUsed = o.id;
+          await env.ORDERS.put('unlock:' + o.deep_token, JSON.stringify(u),
+            { expirationTtl: 60 * 60 * 24 * 365 });
+        }
+      } catch (e) { console.error('標記折抵憑證失敗', e.message); }
+    }
     await pushIndex(env, id);
     if (ctx) ctx.waitUntil(mailAdmin(env, '新訂單待審問法 ' + id,
       o.name + '｜' + o.teacher + '\n\n' + o.q + '\n\n' + o.background));
@@ -256,6 +293,27 @@ async function adminApi(request, env, ctx, path, origin) {
       teachers: teacherList(env).map(t => ({ id: t.id, name: t.name })),
       canMail: !!env.RESEND_API_KEY
     }, 200, origin);
+  }
+
+  if (path === '/api/oracle/admin/book') {
+    const all = await listOrders(env, 400);
+    const rows = all.filter(o => o.paid).map(o => ({
+      id: o.id, paid_at: o.paid_at || o.created, amount: o.amount,
+      hasDeep: !!o.hasDeep, teacher: o.teacher, trade_no: o.trade_no || '',
+      pay_type: o.pay_type || '', invoice_no: o.invoice_no || '',
+      st: o.st, refunded_at: o.refunded_at || ''
+    }));
+    return json({ rows }, 200, origin);
+  }
+
+  if (path === '/api/oracle/admin/invoice' && request.method === 'POST') {
+    const b = await request.json();
+    const o = await get(env, b.id);
+    if (!o) return json({ error: 'not_found' }, 404, origin);
+    o.invoice_no = String(b.invoice_no || '').slice(0, 30);
+    log(o, '你', o.invoice_no ? ('填入發票號碼 ' + o.invoice_no) : '清除發票號碼');
+    await put(env, o);
+    return json({ ok: true }, 200, origin);
   }
 
   if (path === '/api/oracle/admin/act' && request.method === 'POST') {
@@ -839,6 +897,14 @@ label{display:block;font-size:12.5px;color:var(--dim);margin-bottom:6px}
 .shots img{width:100%;height:100%;object-fit:cover;display:block}
 .logs{font-size:12px;color:#6F6880;line-height:1.9;margin-top:12px;
   border-top:1px solid var(--line);padding-top:10px}
+table.bk{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
+table.bk th{text-align:left;color:var(--dim);font-weight:400;font-size:11.5px;
+  padding:6px 4px;border-bottom:1px solid var(--line)}
+table.bk td{padding:8px 4px;border-bottom:1px solid rgba(46,42,58,.6);vertical-align:top}
+table.bk tr.rf td{color:#6F6880}
+table.bk .mono{font-family:ui-monospace,monospace;font-size:11.5px}
+table.bk .sub2{color:var(--dim);font-size:11px;font-family:system-ui}
+input.inv{margin:0;padding:6px 8px;font-size:12px;min-width:88px}
 .lg{height:26px;width:auto;display:block;flex:0 0 auto}
 .gate{max-width:340px;margin:50px auto;padding:0 20px;text-align:center}
 .gate-logo{display:block;width:min(140px,45%);height:auto;margin:0 auto 22px;opacity:.95}
@@ -895,7 +961,8 @@ var G = [
   ['sent','已寄出',['sent']],
   ['done','已結案',['done','refunded']],
   ['all','全部',null],
-  ['review','評價',null]
+  ['review','評價',null],
+  ['book','對帳',null]
 ];
 
 function api(p, body){
@@ -922,11 +989,14 @@ function render(d){
   if(typeof d.canMail !== 'undefined') CANMAIL = d.canMail;
   document.getElementById('cnt').textContent = ALL.length + ' 筆' + (CANMAIL ? '' : '　·　尚未設定寄信');
   document.getElementById('tabs').innerHTML = G.map(function(g){
-    var n = g[0]==='review'
+    var n = g[0]==='book'
+      ? ALL.filter(function(o){ return o.paid }).length
+      : g[0]==='review'
       ? ALL.filter(function(o){ return o.review }).length
       : (g[2] ? ALL.filter(function(o){ return g[2].indexOf(o.st)>=0 }).length : ALL.length);
     return '<button class="'+(F===g[0]?'on':'')+'" onclick="setF(\\''+g[0]+'\\')">'+g[1]+'<b>'+n+'</b></button>';
   }).join('');
+  if(F === 'book'){ loadBook(); return; }
   if(F === 'review'){
     var rv = ALL.filter(function(o){ return o.review });
     document.getElementById('list').innerHTML = rv.length
@@ -1052,6 +1122,101 @@ function card(o){
            return fmt(l.t)+'　'+esc(l.who)+'　'+esc(l.act) }).join('<br>')+'</div></details>';
   }
   return h + '</div>';
+}
+
+/* ── 對帳 ── */
+var BOOK = [];
+
+function loadBook(){
+  document.getElementById('list').innerHTML = '<div class="empty">載入中…</div>';
+  api('/api/oracle/admin/book').then(function(d){
+    BOOK = d.rows || [];
+    renderBook();
+  });
+}
+
+function ym(t){ return String(t || '').slice(0, 7); }
+
+function renderBook(){
+  if(!BOOK.length){
+    document.getElementById('list').innerHTML = '<div class="empty">還沒有已付款的訂單</div>';
+    return;
+  }
+  /* 依月份分組 */
+  var months = {};
+  BOOK.forEach(function(r){
+    var k = ym(r.paid_at);
+    (months[k] = months[k] || []).push(r);
+  });
+  var keys = Object.keys(months).sort().reverse();
+
+  var h = '';
+  keys.forEach(function(k){
+    var rows = months[k];
+    var gross = 0, refund = 0, noInv = 0;
+    rows.forEach(function(r){
+      if(r.st === 'refunded'){ refund += r.amount } else { gross += r.amount }
+      if(r.st !== 'refunded' && !r.invoice_no) noInv++;
+    });
+
+    h += '<div class="card">';
+    h += '<div class="top"><span class="id">' + k + '</span>'
+       + '<span class="tag done">' + rows.length + ' 筆</span></div>';
+    h += '<dl>'
+       + '<dt>實收</dt><dd>NT$' + gross + '</dd>'
+       + (refund ? '<dt>已退</dt><dd>NT$' + refund + '</dd>' : '')
+       + '<dt>待開發票</dt><dd>' + (noInv ? noInv + ' 筆' : '無') + '</dd>'
+       + '</dl>';
+
+    h += '<table class="bk"><tr><th>日期</th><th>編號</th><th>金額</th><th>發票</th></tr>';
+    rows.forEach(function(r){
+      h += '<tr' + (r.st === 'refunded' ? ' class="rf"' : '') + '>'
+         + '<td>' + esc(String(r.paid_at).slice(5,10)) + '</td>'
+         + '<td class="mono">' + esc(r.id.slice(-8)) + '<br><span class="sub2">'
+         + esc(r.teacher) + (r.hasDeep ? '・折抵' : '') + '</span></td>'
+         + '<td>' + (r.st === 'refunded' ? '<s>' + r.amount + '</s>' : r.amount) + '</td>'
+         + '<td>' + (r.st === 'refunded'
+              ? '—'
+              : '<input class="inv" id="iv_' + r.id + '" value="' + esc(r.invoice_no)
+                + '" placeholder="填號碼" onchange="saveInv(\'' + r.id + '\')">')
+         + '</td></tr>';
+    });
+    h += '</table>';
+    h += '<div class="btns" style="margin-top:12px">'
+       + '<button class="b ghost" onclick="csv(\'' + k + '\')">下載這個月的 CSV</button></div>';
+    h += '</div>';
+  });
+
+  document.getElementById('list').innerHTML =
+    '<div class="hint" style="padding:0 2px 12px">開完發票把號碼填進去，之後對帳才知道哪幾筆還沒開。'
+    + '退款的那筆會畫掉，不計入實收。</div>' + h;
+}
+
+function saveInv(id){
+  api('/api/oracle/admin/invoice', { id: id, invoice_no: val('iv_' + id) })
+    .then(function(){
+      var r = BOOK.filter(function(x){ return x.id === id })[0];
+      if(r) r.invoice_no = val('iv_' + id);
+      renderBook();
+    })
+    .catch(function(){ alert('沒有存成功') });
+}
+
+function csv(month){
+  var rows = BOOK.filter(function(r){ return ym(r.paid_at) === month });
+  var head = '付款時間,訂單編號,綠界交易編號,金額,是否折抵,老師,狀態,發票號碼\n';
+  var body = rows.map(function(r){
+    return [String(r.paid_at).slice(0,19).replace('T',' '), r.id, r.trade_no, r.amount,
+            r.hasDeep ? '是' : '否', r.teacher,
+            r.st === 'refunded' ? '已退款' : '正常', r.invoice_no].join(',');
+  }).join('\n');
+  /* 加 BOM，Excel 開中文才不會變亂碼 */
+  var blob = new Blob(['\ufeff' + head + body], { type: 'text/csv;charset=utf-8' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '未完相談室_' + month + '.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
 }
 
 function reviewCard(o){

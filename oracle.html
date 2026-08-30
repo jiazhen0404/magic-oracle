@@ -762,7 +762,7 @@ textarea::placeholder{color:#5E4E7E}
   </section>
 
   <div style="text-align:center;padding:30px 0 10px;font-size:11px;
-       color:#5E4E7E;letter-spacing:.08em;font-family:var(--mono)">build 0830-8eb6cc</div>
+       color:#5E4E7E;letter-spacing:.08em;font-family:var(--mono)">build 0830-000d1f</div>
 
 </div>
 
@@ -938,7 +938,7 @@ const S={step:0,max:0,round:0,history:[],result:null,locked:false,seer:null,
          oid:null,paid:false,name:'',email:'',fails:0,
          fb:{narrowed:false,tfAsked:false,intentAsked:false}};
 
-console.log('%c未完籤所 build 0830-8eb6cc','color:#D8B87E;font-weight:bold');
+console.log('%c未完籤所 build 0830-000d1f','color:#D8B87E;font-weight:bold');
 
 /* ═══════════════════════════════════════
    後端 API。與網站同一個網域，用相對路徑。
@@ -1006,7 +1006,32 @@ function checkIntro(){
 /* ════════ 角色卡 ════════ */
 const PRICE = 399;
 const DEEP_CREDIT = 99;          /* 已購未完深解可折抵 */
-let hasDeep = false;             /* 之後由訂單系統帶入 */
+let hasDeep = false;
+let deepToken = '';
+
+/* 買過 99 元延伸籤的人，瀏覽器裡會有一張解鎖憑證。
+   這裡只負責找出來，能不能折抵由後端驗證。 */
+(function findDeepToken(){
+  try{
+    for(let i=0;i<localStorage.length;i++){
+      const k = localStorage.key(i);
+      if(k && k.indexOf('unfinished.unlock.') === 0){
+        const v = localStorage.getItem(k);
+        if(v && /^[A-Za-z0-9]{20,60}$/.test(v)){ deepToken = v; break; }
+      }
+    }
+  }catch(e){}
+  if(!deepToken) return;
+  fetch('/api/oracle/credit?t=' + encodeURIComponent(deepToken))
+    .then(r => r.json())
+    .then(d => {
+      if(d && d.credit > 0){
+        hasDeep = true;
+        track('deep_credit_found', { credit: d.credit });
+      }
+    })
+    .catch(function(){});
+})();
 
 function face(t, cls){
   const inner = t.photo ? `<img src="${t.photo}" alt="${t.name}">` : t.art;
@@ -1699,7 +1724,7 @@ function pay(){
       other_party:   S.result.other_party || '',
       background:    S.result.background || '',
       extra:         S.result.extra || [],
-      hasDeep:       hasDeep,
+      deep_token:    deepToken,
       consent:       true
     })
   })

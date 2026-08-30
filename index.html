@@ -697,6 +697,22 @@ function magicOraclePay(){
   box-shadow:0 12px 34px rgba(0,0,0,.25),inset 0 0 28px rgba(199,156,82,.05);text-align:center;
 }
 .extended-preview-kicker{color:var(--gold);font-size:11px;letter-spacing:.2em}
+.talk-band{
+  margin:14px 0 4px;padding:20px 18px;border:1px solid rgba(199,156,82,.26);
+  border-radius:18px;background:linear-gradient(150deg,rgba(28,19,48,.86),rgba(16,10,27,.92));
+  text-align:center;
+}
+.talk-lead{font-family:"Noto Serif TC","Songti TC",serif;font-size:15px;
+  line-height:1.7;color:var(--gold);letter-spacing:.03em}
+.talk-title{margin-top:10px;font-family:"Noto Serif TC","Songti TC",serif;
+  font-size:21px;letter-spacing:.09em;color:var(--text)}
+.talk-copy{margin:10px auto 16px;max-width:310px;color:var(--text-soft);
+  font-size:12.5px;line-height:1.85}
+.talk-btn{width:100%;min-height:46px;padding:11px 16px;border:1px solid rgba(199,156,82,.6);
+  border-radius:999px;color:#F0E4C8;background:none;font-size:13.5px;letter-spacing:.06em;
+  cursor:pointer;transition:background .2s}
+.talk-btn:hover{background:rgba(199,156,82,.1)}
+.talk-note{margin-top:11px;font-size:11.5px;color:var(--text-soft);letter-spacing:.04em}
 .extended-preview-title{margin-top:9px;font-family:"Noto Serif TC","Songti TC",serif;font-size:19px;line-height:1.55;color:var(--text)}
 .extended-preview-copy{margin:10px auto 16px;max-width:310px;color:var(--text-soft);font-size:12.5px;line-height:1.85}
 .extended-preview-btn{width:100%;min-height:48px;padding:11px 16px;border:1px solid var(--gold);border-radius:999px;color:#fff7df;background:linear-gradient(110deg,rgba(147,92,41,.88),rgba(89,48,85,.92));font-size:13.5px;letter-spacing:.06em;box-shadow:0 7px 22px rgba(0,0,0,.22);cursor:pointer}
@@ -1281,6 +1297,26 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
     const actionsRow=frame.querySelector(".actions");
     if(actionsRow){ actionsRow.insertAdjacentElement("beforebegin",section); }
     else { frame.insertAdjacentElement("afterend",section); }
+
+    // 真人相談室入口。接在延伸籤下方，所有主題都會出現。
+    // 延伸籤是「這支籤的完整解讀」，相談室是「我的情況比較複雜」，
+    // 兩者不衝突，是同一條路上的兩站。
+    const talk=document.createElement("section");
+    talk.className="talk-band";
+    talk.setAttribute("aria-label","未完相談室");
+    talk.innerHTML='<div class="talk-lead">有些問題，一支籤還說不完。</div>'
+      +'<div class="talk-title">未完相談室</div>'
+      +'<div class="talk-copy">三位合作占卜師，讀完你的處境之後親自占卜，'
+      +'把完整解讀寫下來寄給你。24 到 48 小時內完成，可免費追問一次。</div>'
+      +'<button type="button" class="talk-btn">看看有哪些老師</button>'
+      +'<div class="talk-note">NT$399・買過完整解籤可折抵 99</div>';
+    talk.querySelector(".talk-btn").addEventListener("click",function(){
+      send("talk_entry_click",{theme:theme,theme_label:themeLabels[theme]||theme,
+        subtheme:subtheme,fortune_number:fortuneNumber,fortune_title:title,
+        button_location:"result_after_extended"});
+      location.href="/oracle.html";
+    });
+    section.insertAdjacentElement("afterend",talk);
 
     // 解籤最後一頁：延伸預告下方補一個 LINE 入口
     if(!resultScroll.querySelector(".line-band")){
