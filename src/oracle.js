@@ -30,7 +30,7 @@
 
 import { ECPAY_URL, makeTradeNo, taipeiStamp, checkMac } from './ecpay.js';
 
-const BUILD = '0830-41c40d';   /* 版本標記，三個頁面下方都會顯示 */
+const BUILD = '0830-16a462';   /* 版本標記，三個頁面下方都會顯示 */
 const PRICE = 399;
 const DEEP_CREDIT = 99;                  /* 已買延伸籤可折抵，前端傳 hasDeep */
 const MODEL = 'claude-sonnet-5';
@@ -354,8 +354,12 @@ async function adminApi(request, env, ctx, path, origin) {
 
   if (path === '/api/oracle/admin/testmail') {
     const to = new URL(request.url).searchParams.get('to') || env.ADMIN_EMAIL || '';
-    if (!to) return json({ error: 'no_address', hint: '請先設定 ADMIN_EMAIL' }, 400, origin);
-    if (!env.RESEND_API_KEY) return json({ error: 'no_key', hint: '請先設定 RESEND_API_KEY' }, 400, origin);
+    if (!to) return json({ error: 'no_address',
+      hint: '還沒設定 ADMIN_EMAIL。到 Cloudflare → Settings → Variables and Secrets 加一個 Text 變數 ADMIN_EMAIL，值填你的信箱，然後 Deploy。' }, 400, origin);
+    if (!env.RESEND_API_KEY) return json({ error: 'no_key',
+      hint: '還沒設定 RESEND_API_KEY。' }, 400, origin);
+    if (!env.MAIL_FROM) return json({ error: 'no_from',
+      hint: '還沒設定 MAIL_FROM。加一個 Text 變數 MAIL_FROM，值填「未完籤所 <noreply@send.unfinished.tw>」，必須用你在 Resend 驗證過的網域。' }, 400, origin);
 
     try {
       const r = await fetch('https://api.resend.com/emails', {
@@ -1054,10 +1058,15 @@ function testMail(){
       alert('已送出。\\n\\n寄件人：' + d.from + '\\n收件人：' + d.to
         + '\\n\\n一分鐘內沒收到就看一下垃圾郵件匣。');
     } else {
-      alert('寄不出去。\\n\\n狀態：' + (d.status || '') + '\\n\\n'
-        + (d.detail || d.hint || d.error || ''));
+      alert('寄不出去。\\n\\n' + (d.hint || d.detail || d.error || ''));
     }
-  }).catch(function(){ alert('沒有成功，請重試') });
+  }).catch(function(e){
+    /* 400 之類的錯誤 fetch 會直接丟出來，要把內容撈出來給你看 */
+    fetch('/api/oracle/admin/testmail', { headers: { 'X-Key': KEY } })
+      .then(function(r){ return r.json() })
+      .then(function(d){ alert('寄不出去。\\n\\n' + (d.hint || d.detail || d.error || '未知錯誤')) })
+      .catch(function(){ alert('寄不出去，而且連錯誤訊息都拿不到。') });
+  });
 }
 var G = [
   ['todo','要我處理',['q_review','draft_wait','draft_doing','fu_review','fu_doing','refund']],
