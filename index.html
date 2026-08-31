@@ -9,6 +9,38 @@
     gtag('js', new Date());
     gtag('config', 'G-71RMD00WPJ');
   </script>
+  <script>
+(function(){
+  var KEYS=['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
+  var params=new URLSearchParams(window.location.search);
+  var found={};
+  var hasUtm=false;
+  KEYS.forEach(function(k){var v=params.get(k);if(v){found[k]=v;hasUtm=true;}});
+  try{
+    if(hasUtm){
+      found.saved_at=Date.now();
+      localStorage.setItem('unfinished_utm',JSON.stringify(found));
+    }
+    var saved=JSON.parse(localStorage.getItem('unfinished_utm')||'{}');
+    if(saved.saved_at && Date.now()-saved.saved_at>30*24*60*60*1000){
+      localStorage.removeItem('unfinished_utm'); saved={};
+    }
+    window.UNFINISHED_UTM=saved;
+    window.dataLayer=window.dataLayer||[];
+    function applyUtm(){
+      if(typeof window.gtag!=='function') return;
+      var e={};
+      if(saved.utm_source)e.utm_source=saved.utm_source;
+      if(saved.utm_medium)e.utm_medium=saved.utm_medium;
+      if(saved.utm_campaign)e.utm_campaign=saved.utm_campaign;
+      if(saved.utm_content)e.utm_content=saved.utm_content;
+      if(saved.utm_term)e.utm_term=saved.utm_term;
+      if(Object.keys(e).length) window.gtag('set',e);
+    }
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',applyUtm); else applyUtm();
+  }catch(e){window.UNFINISHED_UTM={};}
+})();
+</script>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
   <script type="application/ld+json">
 {
@@ -665,6 +697,24 @@ function magicOraclePay(){
   box-shadow:0 12px 34px rgba(0,0,0,.25),inset 0 0 28px rgba(199,156,82,.05);text-align:center;
 }
 .extended-preview-kicker{color:var(--gold);font-size:11px;letter-spacing:.2em}
+.talk-band{
+  margin:14px 0 4px;padding:20px 18px;border:1px solid rgba(199,156,82,.26);
+  border-radius:18px;background:linear-gradient(150deg,rgba(28,19,48,.86),rgba(16,10,27,.92));
+  text-align:center;
+}
+.talk-band.testing{border-style:dashed;border-color:rgba(168,85,247,.5)}
+.talk-test{margin-bottom:12px;font-size:11px;letter-spacing:.16em;color:#C9A9F0}
+.talk-lead{font-family:"Noto Serif TC","Songti TC",serif;font-size:15px;
+  line-height:1.7;color:var(--gold);letter-spacing:.03em}
+.talk-title{margin-top:10px;font-family:"Noto Serif TC","Songti TC",serif;
+  font-size:21px;letter-spacing:.09em;color:var(--text)}
+.talk-copy{margin:10px auto 16px;max-width:310px;color:var(--text-soft);
+  font-size:12.5px;line-height:1.85}
+.talk-btn{width:100%;min-height:46px;padding:11px 16px;border:1px solid rgba(199,156,82,.6);
+  border-radius:999px;color:#F0E4C8;background:none;font-size:13.5px;letter-spacing:.06em;
+  cursor:pointer;transition:background .2s}
+.talk-btn:hover{background:rgba(199,156,82,.1)}
+.talk-note{margin-top:11px;font-size:11.5px;color:var(--text-soft);letter-spacing:.04em}
 .extended-preview-title{margin-top:9px;font-family:"Noto Serif TC","Songti TC",serif;font-size:19px;line-height:1.55;color:var(--text)}
 .extended-preview-copy{margin:10px auto 16px;max-width:310px;color:var(--text-soft);font-size:12.5px;line-height:1.85}
 .extended-preview-btn{width:100%;min-height:48px;padding:11px 16px;border:1px solid var(--gold);border-radius:999px;color:#fff7df;background:linear-gradient(110deg,rgba(147,92,41,.88),rgba(89,48,85,.92));font-size:13.5px;letter-spacing:.06em;box-shadow:0 7px 22px rgba(0,0,0,.22);cursor:pointer}
@@ -1189,6 +1239,11 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
     send("category_entry_"+entryTheme,{theme:entryTheme,theme_label:themeLabels[entryTheme],subtheme:entrySubtheme||"",entry_source:"direct_link"});
   }
 
+  document.addEventListener("input",function(e){
+    if(e.target&&e.target.tagName==="TEXTAREA"){
+      try{sessionStorage.setItem("oracle.question",String(e.target.value||"").slice(0,500));}catch(_){}
+    }
+  },true);
   function addExtendedPreview(){
     const frame=document.querySelector(".device > .scroll > .frame");
     const resultScroll=frame?.parentElement;
@@ -1205,25 +1260,86 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
     const section=document.createElement("section");
     section.className="extended-preview";
     section.setAttribute("aria-label","完整延伸解籤預告");
-    section.innerHTML='<div class="extended-preview-kicker">COMING SOON · 即將開放</div><div class="extended-preview-title">想知道這支籤，如何對應你現在的處境？</div><div class="extended-preview-copy">完整延伸解籤將包含情境解析、對方或環境的可能反應、後續走向，以及你現在能採取的具體行動。</div><button type="button" class="extended-preview-btn">我想看完整延伸解籤</button><div class="extended-preview-thanks" role="status" hidden>已記下你的期待，正式開放時會在這裡出現。</div>';
-    const button=section.querySelector(".extended-preview-btn");
-    const thanks=section.querySelector(".extended-preview-thanks");
-    function showSent(){button.textContent="✓ 已記下，我想看完整解析";button.disabled=true;thanks.hidden=false;}
-    if(sessionStorage.getItem(storageKey)==="1")showSent();
-    button.addEventListener("click",function(){
-      if(sessionStorage.getItem(storageKey)==="1"){showSent();return;}
-      sessionStorage.setItem(storageKey,"1");
-      const params={theme:theme,theme_label:themeLabels[theme]||theme,subtheme:subtheme,fortune_number:fortuneNumber,fortune_title:title,button_location:"result_after_fortune",interest_version:"preview_v1"};
-      send("extended_reading_interest",params);
-      if(theme!=="unknown")send("extended_interest_"+theme,params);
-      showSent();
-    });
+    // ── 愛情類已經可以購買，其他主題維持預告 ──
+    const EXT_SLUG={"失戀中":"breakup","曖昧中":"flirting","關係中":"relationship","單身中":"single","桃花運勢":"fortune"};
+    const extSlug=EXT_SLUG[subtheme]||"";
+    const extNo=parseInt(fortuneNumber,10);
+    const slipId=(theme==="love"&&extSlug&&extNo>0)?("love_"+extSlug+"_"+String(extNo).padStart(3,"0")):"";
+
+    if(slipId){
+      section.innerHTML='<div class="extended-preview-kicker">完整解籤 · NT$ 99</div>'
+        +'<div class="extended-preview-title">想知道這支籤，如何對應你現在的處境？</div>'
+        +'<div class="extended-preview-copy">為這一支籤寫的完整解讀：情境解析、對方或環境的可能反應、後續走向，以及你現在能採取的具體行動。約 1300 字，另附一份 PDF 寄到你信箱。</div>'
+        +'<button type="button" class="extended-preview-btn">閱讀完整解籤　NT$ 99</button>';
+      const buy=section.querySelector(".extended-preview-btn");
+      try{sessionStorage.setItem("oracle.drawnAt",new Date().toISOString());}catch(e){}
+      buy.addEventListener("click",function(){
+        send("extended_checkout_click",{theme:theme,theme_label:themeLabels[theme]||theme,subtheme:subtheme,
+          fortune_number:fortuneNumber,fortune_title:title,slip_id:slipId,button_location:"result_after_fortune"});
+        location.href="/checkout/?id="+encodeURIComponent(slipId);
+      });
+    }else{
+      section.innerHTML='<div class="extended-preview-kicker">COMING SOON · 即將開放</div><div class="extended-preview-title">想知道這支籤，如何對應你現在的處境？</div><div class="extended-preview-copy">完整延伸解籤將包含情境解析、對方或環境的可能反應、後續走向，以及你現在能採取的具體行動。</div><button type="button" class="extended-preview-btn">我想看完整延伸解籤</button><div class="extended-preview-thanks" role="status" hidden>已記下你的期待，正式開放時會在這裡出現。</div>';
+      const button=section.querySelector(".extended-preview-btn");
+      const thanks=section.querySelector(".extended-preview-thanks");
+      function showSent(){button.textContent="✓ 已記下，我想看完整解析";button.disabled=true;thanks.hidden=false;}
+      if(sessionStorage.getItem(storageKey)==="1")showSent();
+      button.addEventListener("click",function(){
+        if(sessionStorage.getItem(storageKey)==="1"){showSent();return;}
+        sessionStorage.setItem(storageKey,"1");
+        const params={theme:theme,theme_label:themeLabels[theme]||theme,subtheme:subtheme,fortune_number:fortuneNumber,fortune_title:title,button_location:"result_after_fortune",interest_version:"preview_v1"};
+        send("extended_reading_interest",params);
+        if(theme!=="unknown")send("extended_interest_"+theme,params);
+        showSent();
+      });
+    }
     // 付費區插在「具體建議」之後、「分享／再抽一次」之前。
     // 那兩顆是結束動作，使用者看到就認為讀完了 —— 原本放在它們下面，
     // 導致只有 27.5% 的人滑到付費區。移上來後，讀完解籤情緒還在時就會看到。
     const actionsRow=frame.querySelector(".actions");
     if(actionsRow){ actionsRow.insertAdjacentElement("beforebegin",section); }
     else { frame.insertAdjacentElement("afterend",section); }
+
+    // ══════════════════════════════════════════════════
+    // 真人占卜入口
+    //
+    // 現在是測試中，只有網址帶 ?test=1 才看得到。
+    // 要對所有人開放時，把下面這行的 false 改成 true。
+    // ══════════════════════════════════════════════════
+    const TALK_LIVE = false;
+    // 抽籤過程中網址會被改寫成 #start，?test=1 會不見。
+    // 所以進站時看到一次就記起來，這一整次瀏覽都算測試模式。
+    const TALK_TEST = (function(){
+      try{
+        if(new URLSearchParams(location.search).get("test") === "1"){
+          sessionStorage.setItem("uw.talk.test","1");
+        }
+        return sessionStorage.getItem("uw.talk.test") === "1";
+      }catch(e){
+        return new URLSearchParams(location.search).get("test") === "1";
+      }
+    })();
+
+    if(TALK_LIVE || TALK_TEST){
+      const talk=document.createElement("section");
+      talk.className="talk-band" + (TALK_LIVE ? "" : " testing");
+      talk.setAttribute("aria-label","真人占卜");
+      talk.innerHTML=(TALK_LIVE ? "" : '<div class="talk-test">測試中・只有你看得到</div>')
+        +'<div class="talk-lead">有些問題，一支籤還說不完。</div>'
+        +'<div class="talk-title">真人占卜</div>'
+        +'<div class="talk-copy">三位合作占卜師，讀完你的處境之後親自占卜，'
+        +'把完整解讀寫下來寄給你。24 到 48 小時內完成，可免費追問一次。</div>'
+        +'<button type="button" class="talk-btn">看看有哪些老師</button>'
+        +'<div class="talk-note">NT$399・買過完整解籤可折抵 99</div>';
+      talk.querySelector(".talk-btn").addEventListener("click",function(){
+        send("talk_entry_click",{theme:theme,theme_label:themeLabels[theme]||theme,
+          subtheme:subtheme,fortune_number:fortuneNumber,fortune_title:title,
+          button_location:"result_after_extended",mode:TALK_LIVE?"live":"test"});
+        // 測試時一併把測試老師帶過去
+        location.href = TALK_LIVE ? "/oracle.html" : "/oracle.html?test=1";
+      });
+      section.insertAdjacentElement("afterend",talk);
+    }
 
     // 解籤最後一頁：延伸預告下方補一個 LINE 入口
     if(!resultScroll.querySelector(".line-band")){

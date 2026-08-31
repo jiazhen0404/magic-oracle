@@ -1,0 +1,25 @@
+{
+  "name": "magic-oracle",
+  "compatibility_date": "2026-08-28",
+  "main": "src/index.js",
+  "observability": { "enabled": true },
+
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS"
+  },
+
+  // 這兩個不是機密，寫在這裡才不會被建置洗掉。
+  // 要切正式收款時，把 stage 改成 production，就只改這一個地方。
+  "vars": {
+    "ECPAY_MODE": "production",
+    "CF_ACCOUNT_ID": "52b866ad397c38a72b9ef7c4a24622b1"
+  },
+
+  "kv_namespaces": [
+    {
+      "binding": "ORDERS",
+      "id": "c0cf3e32839b4f97b884fa838a4396ea"
+    }
+  ]
+}

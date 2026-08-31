@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>付款結果｜未完籤所</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+TC:wght@300;400;600&family=Noto+Sans+TC:wght@300;400&display=swap">
+<style>
+:root{
+  --ink:#0B1026; --ink-raised:#131A38; --ink-line:#1E2749;
+  --gold:#C9A961; --gold-dim:#8A7443; --gold-glow:rgba(201,169,97,.12);
+  --paper:#E8E3D9; --paper-dim:#9A9384; --paper-faint:#6E6A5E; --alert:#D9836B;
+  --serif:"Noto Serif TC",Georgia,"Songti TC",serif;
+  --sans:"Noto Sans TC",-apple-system,"Helvetica Neue",sans-serif;
+  --display:"Cinzel","Noto Serif TC",Georgia,serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--ink);color:var(--paper);font-family:var(--serif);font-weight:300;
+  line-height:1.95;letter-spacing:.02em;-webkit-font-smoothing:antialiased}
+#sky{position:fixed;inset:0;z-index:0;pointer-events:none}
+.wrap{position:relative;z-index:1;max-width:31em;margin:0 auto;padding:0 24px 90px;text-align:center}
+.masthead{padding:56px 0 30px}
+.masthead a{color:inherit;text-decoration:none}
+.masthead .zh{font-size:.98rem;letter-spacing:.42em;color:var(--gold);text-indent:.42em}
+.masthead .en{font-family:var(--display);font-size:.6rem;letter-spacing:.34em;color:var(--paper-faint);margin-top:9px;text-indent:.34em}
+
+.card{position:relative;padding:44px 28px;border:1px solid var(--gold-dim);
+  background:linear-gradient(180deg,var(--ink-raised),rgba(19,26,56,0))}
+.card::before,.card::after{content:"";position:absolute;width:11px;height:11px;border:1px solid var(--gold)}
+.card::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.card::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+
+.mark{font-size:1.9rem;color:var(--gold);line-height:1;margin-bottom:18px}
+h1{font-size:1.2rem;font-weight:600;color:var(--gold);letter-spacing:.14em;margin:0 0 14px;text-indent:.14em}
+p{font-size:.92rem;color:var(--paper);margin:0 0 1em}
+p.sub{font-family:var(--sans);font-size:.8rem;line-height:1.9;color:var(--paper-faint)}
+.no{font-family:var(--sans);font-size:.76rem;letter-spacing:.1em;color:var(--paper-dim);
+  margin-top:22px;padding-top:18px;border-top:1px solid var(--ink-line);word-break:break-all}
+.btn{display:inline-block;margin-top:26px;padding:14px 30px;border:1px solid var(--gold);
+  color:var(--gold);text-decoration:none;font-size:.92rem;letter-spacing:.2em;text-indent:.2em;
+  transition:background .25s}
+.btn:hover,.btn:focus-visible{background:var(--gold-glow)}
+.foot{font-family:var(--sans);font-size:.74rem;line-height:1.95;color:var(--paper-faint);margin-top:30px}
+.foot a{color:var(--paper-dim);text-decoration:none}
+.foot a:hover{color:var(--gold-dim)}
+.fail .mark,.fail h1{color:var(--alert)}
+.fail .card{border-color:var(--alert)}
+.fail .card::before,.fail .card::after{border-color:var(--alert)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+:focus-visible{outline:1px solid var(--gold);outline-offset:3px}
+</style>
+</head>
+<body>
+<canvas id="sky"></canvas>
+<div class="wrap" id="wrap">
+  <header class="masthead">
+    <a href="/"><div class="zh">未完籤所</div><div class="en">MAGIC ORACLE</div></a>
+  </header>
+
+  <section class="card">
+    <div class="mark" id="mark">✦</div>
+    <h1 id="title">正在確認付款</h1>
+    <p id="body">綠界正在回報結果，請稍候幾秒⋯</p>
+    <p class="sub" id="sub"></p>
+    <div id="cta"></div>
+    <p class="no" id="no"></p>
+  </section>
+
+  <p class="foot">
+    有任何問題請來信 <a href="mailto:hello@unfinished.tw">hello@unfinished.tw</a><br>
+    附上上方的訂單編號，我們會盡快處理。
+  </p>
+</div>
+
+<script>
+const tradeNo = new URLSearchParams(location.search).get('no') || '';
+const wrap  = document.getElementById('wrap');
+const mark  = document.getElementById('mark');
+const title = document.getElementById('title');
+const body  = document.getElementById('body');
+const sub   = document.getElementById('sub');
+const cta   = document.getElementById('cta');
+const noEl  = document.getElementById('no');
+
+if(tradeNo) noEl.textContent = '訂單編號　' + tradeNo;
+
+/* 綠界通知我們的伺服器，跟使用者的瀏覽器跳回來，是兩條各自獨立的路。
+   有時候瀏覽器比較快，所以這裡輪詢幾次再下結論。 */
+let tries = 0;
+async function poll(){
+  if(!tradeNo){ show('fail','找不到訂單','網址裡沒有訂單編號。','若你已完成付款，請來信告訴我們。'); return; }
+  tries++;
+  try{
+    const r = await fetch('/api/order-status?no=' + encodeURIComponent(tradeNo)
+                          + '&t=' + Date.now(), { cache: 'no-store' });
+    const d = await r.json();
+
+    if(d.status === 'paid'){
+      await unlock(d.slipId);
+      return;
+    }
+    if(d.status === 'failed'){
+      show('fail','付款未完成','這筆交易沒有成功，款項不會被扣除。',
+           '你可以回到籤文頁重新嘗試，或換一種付款方式。');
+      cta.innerHTML = '<a class="btn" href="/">回到首頁</a>';
+      return;
+    }
+  }catch(e){ /* 網路不穩，繼續重試 */ }
+
+  if(tries < 10){ setTimeout(poll, 2000); }
+  else{
+    show('','還在確認中','綠界的通知還沒送達，這通常只是稍微慢一點。',
+         '請保留上方的訂單編號，過幾分鐘重新整理這一頁。若十分鐘後仍是這個畫面，請來信告訴我們。');
+  }
+}
+
+/* 付款成功後，換一張解鎖憑證存進這台瀏覽器，
+   之後回到閱讀頁就能直接看，不用再輸入任何東西。 */
+async function unlock(slipId){
+  show('ok','付款成功','謝謝你。正在為你解鎖完整解籤⋯','');
+  try{
+    const r = await fetch('/api/unlock', {
+      method:'POST', cache:'no-store',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ tradeNo })
+    });
+    if(!r.ok) throw new Error('unlock ' + r.status);
+    const { token, slipId: sid } = await r.json();
+    const id = sid || slipId;
+
+    try{ localStorage.setItem('unfinished.unlock.' + id, token); }catch(e){}
+
+    show('ok','付款成功','謝謝你。這支籤的完整解籤已經替你解鎖。',
+         '這一頁可以關掉了。解讀隨時能回來重讀，網址建議加入書籤。');
+    cta.innerHTML = '<a class="btn" href="/extended/reading/?id=' +
+                    encodeURIComponent(id) + '">閱讀完整解籤</a>';
+  }catch(e){
+    console.error(e);
+    show('ok','付款成功','謝謝你，款項已經收到。',
+         '解鎖時出了點狀況。請來信 hello@unfinished.tw 並附上下方訂單編號，我們會立刻替你處理。');
+  }
+}
+
+function show(kind, t, b, s){
+  wrap.className = 'wrap' + (kind === 'fail' ? ' fail' : '');
+  mark.textContent  = kind === 'fail' ? '✕' : (kind === 'ok' ? '✦' : '⋯');
+  title.textContent = t; body.textContent = b; sub.textContent = s || '';
+}
+poll();
+
+/* ── 星點 ── */
+(function sky(){
+  const c = document.getElementById('sky'), x = c.getContext('2d');
+  let stars = [], raf = null;
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function seed(){
+    const d = devicePixelRatio || 1;
+    c.width = innerWidth*d; c.height = innerHeight*d;
+    c.style.width = innerWidth+'px'; c.style.height = innerHeight+'px';
+    x.setTransform(d,0,0,d,0,0);
+    const n = Math.round(innerWidth*innerHeight/15000);
+    stars = Array.from({length:n}, () => ({
+      x:Math.random()*innerWidth, y:Math.random()*innerHeight,
+      r:Math.random()*0.85+0.25, a:Math.random()*0.4+0.1,
+      s:Math.random()*0.0006+0.0002, p:Math.random()*Math.PI*2
+    }));
+  }
+  function draw(t){
+    x.clearRect(0,0,innerWidth,innerHeight);
+    for(const st of stars){
+      const a = still ? st.a : st.a*(0.62+0.38*Math.sin(t*st.s+st.p));
+      x.beginPath(); x.arc(st.x,st.y,st.r,0,6.283);
+      x.fillStyle = `rgba(201,169,97,${a})`; x.fill();
+    }
+    if(!still) raf = requestAnimationFrame(draw);
+  }
+  seed(); draw(0);
+  addEventListener('resize', () => { cancelAnimationFrame(raf); seed(); draw(0); });
+})();
+</script>
+</body>
+</html>
