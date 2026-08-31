@@ -41,7 +41,11 @@
     // 拿到信箱後把 xxx 換掉，測試老師不用設
     "MAIL_LIGHTWALKER": "xxx@example.com",
     "MAIL_IRIS": "xxx@example.com",
-    "MAIL_JAMES": "xxx@example.com"
+    "MAIL_JAMES": "xxx@example.com",
+
+    // 測試老師的派案信寄到你這裡，方便驗證信件內容。
+    // 上線前跟 TEACHER_KEYS 裡的 test 那段一起刪掉。
+    "MAIL_TEST": "jiazhen0404@gmail.com"
   },
 
   "kv_namespaces": [
@@ -49,13 +53,13 @@
       "binding": "ORDERS",
       "id": "c0cf3e32839b4f97b884fa838a4396ea"
     }
-  ]
+  ],
 
-  // ── 牌陣照片要用的 R2，建好 bucket 之後把下面這段的註解拿掉 ──
-  // ,"r2_buckets": [
-  //   {
-  //     "binding": "MEDIA",
-  //     "bucket_name": "你建的 bucket 名稱"
-  //   }
-  // ]
+  // ── 牌陣照片。寫在這裡才不會被建置洗掉 ──
+  "r2_buckets": [
+    {
+      "binding": "MEDIA",
+      "bucket_name": "unfinished-media"
+    }
+  ]
 }
