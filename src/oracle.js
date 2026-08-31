@@ -30,7 +30,7 @@
 
 import { ECPAY_URL, makeTradeNo, taipeiStamp, checkMac } from './ecpay.js';
 
-const BUILD = '0830-16a462';   /* 版本標記，三個頁面下方都會顯示 */
+const BUILD = '0830-dbda72';   /* 版本標記，三個頁面下方都會顯示 */
 const PRICE = 399;
 const DEEP_CREDIT = 99;                  /* 已買延伸籤可折抵，前端傳 hasDeep */
 const MODEL = 'claude-sonnet-5';
@@ -39,6 +39,8 @@ const MAX_CHARS = 800;
 const RATE_LIMIT = 30;
 const RATE_WINDOW = 3600;
 const KEEP_DAYS = 180;
+const MIN_DRAFT = 500;      /* 交稿的最低字數。服務承諾是 500–800 字 */
+const MAX_IMAGES = 8;       /* 牌陣照片上限 */
 
 /* ═══════════════════════════════════════════════════════════
    綠界環境。跟延伸籤分開，兩邊互不影響。
@@ -543,6 +545,8 @@ async function teacherApi(request, env, ctx, path, origin) {
     return json({
       me: { id: me.id, name: me.name },
       canUpload: !!env.MEDIA,
+      minDraft: MIN_DRAFT,
+      maxImages: MAX_IMAGES,
       orders: mine.map(o => {
         const c = Object.assign({}, o);
         delete c.email;      // 老師看不到客人信箱
@@ -561,9 +565,9 @@ async function teacherApi(request, env, ctx, path, origin) {
     if (b.field === 'draft') {
       if (o.st !== 'writing') return json({ error: 'bad_state' }, 400, origin);
       o.draft = String(b.text || '').slice(0, 8000);
-      if (Array.isArray(b.images)) o.images = b.images.slice(0, 6).map(x => String(x).slice(0, 80));
+      if (Array.isArray(b.images)) o.images = b.images.slice(0, MAX_IMAGES).map(x => String(x).slice(0, 80));
       if (b.done) {
-        if (o.draft.trim().length < 200) return json({ error: 'too_short' }, 400, origin);
+        if (o.draft.trim().length < MIN_DRAFT) return json({ error: 'too_short', hint: '至少要 ' + MIN_DRAFT + ' 字' }, 400, origin);
         o.st = 'draft_wait';
         o.drafted_at = now();
         o.edit_note = '';
@@ -597,16 +601,35 @@ async function teacherApi(request, env, ctx, path, origin) {
     return json({ ok: true, st: o.st }, 200, origin);
   }
 
+  if (path === '/api/oracle/teacher/delete-image' && request.method === 'POST') {
+    const b = await request.json();
+    const o = await get(env, b.id);
+    if (!o) return json({ error: 'not_found' }, 404, origin);
+    if (o.teacher !== me.name && o.teacher !== me.id) return json({ error: 'not_yours' }, 403, origin);
+    if (o.st !== 'writing') return json({ error: 'bad_state', hint: '已經交稿了，不能再改照片' }, 400, origin);
+
+    const key = String(b.key || '');
+    /* 只能刪自己資料夾底下的 */
+    if (key.indexOf(me.id + '/') !== 0) return json({ error: 'not_yours' }, 403, origin);
+
+    o.images = (o.images || []).filter(k => k !== key);
+    log(o, me.name, '刪掉一張照片');
+    await put(env, o);
+    if (env.MEDIA) { try { await env.MEDIA.delete(key); } catch (e) {} }
+    return json({ ok: true, images: o.images }, 200, origin);
+  }
+
   if (path === '/api/oracle/teacher/upload' && request.method === 'POST') {
-    if (!env.MEDIA) return json({ error: 'no_bucket', hint: '請綁定 R2，變數名稱 MEDIA' }, 500, origin);
+    if (!env.MEDIA) return json({ error: 'no_bucket',
+      hint: '平台還沒開放照片上傳。請聯繫平台：Cloudflare → magic-oracle → Settings → Bindings → Add → R2 Bucket，變數名稱填 MEDIA。' }, 500, origin);
     const type = request.headers.get('Content-Type') || 'image/jpeg';
     if (!/^image\//.test(type)) return json({ error: 'not_image' }, 400, origin);
     const buf = await request.arrayBuffer();
-    if (buf.byteLength > 6 * 1024 * 1024) return json({ error: 'too_big' }, 400, origin);
+    if (buf.byteLength > 8 * 1024 * 1024) return json({ error: 'too_big', hint: '單張請小於 8MB' }, 400, origin);
     const ext = type.indexOf('png') >= 0 ? 'png' : (type.indexOf('webp') >= 0 ? 'webp' : 'jpg');
     const k = me.id + '/' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6) + '.' + ext;
     await env.MEDIA.put(k, buf, { httpMetadata: { contentType: type } });
-    return json({ ok: true, key: k, url: '/media/' + k }, 200, origin);
+    return json({ ok: true, key: k, url: '/oracle/media/' + k }, 200, origin);
   }
 
   return json({ error: 'not_found' }, 404, origin);
@@ -734,8 +757,8 @@ function log(o, who, act) {
 
 function scanDraft(t) {
   const f = [];
-  if (t.length < 800) f.push('· 字數偏少（' + t.length + '）');
-  if (t.length > 1600) f.push('· 字數偏多（' + t.length + '）');
+  if (t.length < 500) f.push('· 字數不足（' + t.length + '）');
+  if (t.length > 1000) f.push('· 字數偏多（' + t.length + '）');
   const pats = [
     [/line|賴|加我|私訊|聯絡我|ig|instagram/i, '疑似留下聯絡方式'],
     [/09\d{2}[-\s]?\d{3}[-\s]?\d{3}/, '疑似手機號碼'],
@@ -798,7 +821,7 @@ async function mailTeacher(env, o, extra) {
     o.followup ? ('\n── 客人追問 ──\n' + o.followup) : '',
     '',
     '───',
-    '撰寫規範：800–1,500 字。以未完籤所名義發出，請勿署名或留下任何個人聯絡方式。',
+    '撰寫規範：500–800 字。以未完籤所名義發出，請勿署名或留下任何個人聯絡方式。',
     '只回答上述問題，不擴散到其他主題。不做醫療、法律、投資的具體判斷。',
     '',
     '老師端：' + base(env) + '/teacher'
@@ -1006,6 +1029,8 @@ input.inv{margin:0;padding:6px 8px;font-size:12px;min-width:88px}
   line-height:2;white-space:pre-wrap;margin:12px 0}
 .count{font-size:12px;color:var(--dim);text-align:right;margin:-4px 0 10px}
 .count.bad{color:var(--stop)}
+.count.warn2{color:var(--wait)}
+.count.ok2{color:var(--go)}
 details{margin-top:10px}
 summary{font-size:13px;color:var(--dim);cursor:pointer;padding:5px 0}
 `;
@@ -1131,8 +1156,8 @@ function b(id,a,cls,txt){ return '<button class="b '+cls+'" onclick="act(\\''+id
 
 function scan(t){
   t = t||''; var f = [];
-  if(t.length && t.length<800) f.push('· 字數偏少（'+t.length+'）');
-  if(t.length>1600) f.push('· 字數偏多（'+t.length+'）');
+  if(t.length && t.length<500) f.push('· 字數不足（'+t.length+'）');
+  if(t.length>1000) f.push('· 字數偏多（'+t.length+'）');
   var P = [[/line|賴|加我|私訊|聯絡我|ig|instagram/i,'疑似留下聯絡方式'],
     [/09\\d{2}[-\\s]?\\d{3}[-\\s]?\\d{3}/,'疑似手機號碼'],
     [/[\\w.\\-]+@[\\w\\-]+\\.\\w+/,'疑似 email'],
@@ -1436,6 +1461,7 @@ const PAGE_TEACHER = `<!doctype html><html lang="zh-Hant"><head>
 </div>
 
 <script>${JSC}
+var MAXIMG = ${MAX_IMAGES}, MINWORD = ${MIN_DRAFT};
 var KEY = sessionStorage.getItem('uw_teacher') || '';
 var ALL = [], CANUP = false, ME = '', F = 'todo';
 var G = [
@@ -1494,17 +1520,13 @@ function card(o){
 
   if(o.st === 'writing'){
     if(o.edit_note) h += '<div class="warn">需要修改：'+esc(o.edit_note)+'</div>';
-    h += '<label>牌陣照片（最多 6 張）</label>';
-    h += '<div class="shots" id="s_'+o.id+'">'+(o.images||[]).map(function(k){
-      return '<a href="/media/'+k+'" target="_blank"><img src="/media/'+k+'" alt=""></a>' }).join('')+'</div>';
-    if(CANUP){
-      h += '<input type="file" accept="image/*" id="u_'+o.id+'" style="display:none" onchange="upload(\\''+o.id+'\\',this)">';
-      h += '<button class="b ghost" style="width:100%;margin-bottom:12px" onclick="document.getElementById(\\'u_'+o.id+'\\').click()">＋ 加一張照片</button>';
-    } else {
-      h += '<div class="hint">尚未開放上傳，請聯繫平台。</div>';
-    }
+    h += '<label>牌陣照片（最多 ' + MAXIMG + ' 張，客人看得到）</label>';
+    h += '<div class="shots" id="s_'+o.id+'">' + thumbs(o.images) + '</div>';
+    h += '<input type="file" accept="image/*" multiple id="u_'+o.id+'" style="display:none" onchange="upload(\\''+o.id+'\\',this)">';
+    h += '<button class="b ghost" style="width:100%;margin-bottom:6px" id="ub_'+o.id+'" onclick="document.getElementById(\\'u_'+o.id+'\\').click()">＋ 加照片</button>';
+    h += '<div class="hint" id="uh_'+o.id+'">可以一次選多張。點照片右上角的 × 可以刪掉重傳。</div>';
     h += '<label>解讀內容</label>';
-    h += '<textarea id="t_'+o.id+'" rows="14" oninput="cnt(\\''+o.id+'\\')" placeholder="800–1,500 字。以未完籤所名義撰寫，請勿署名或留下聯絡方式。">'+esc(o.draft)+'</textarea>';
+    h += '<textarea id="t_'+o.id+'" rows="14" oninput="cnt(\\''+o.id+'\\')" placeholder="500–800 字。以未完籤所名義撰寫，請勿署名或留下聯絡方式。">'+esc(o.draft)+'</textarea>';
     h += '<div class="count" id="c_'+o.id+'">'+(o.draft||'').length+' 字</div>';
     h += '<div class="btns">'
        + '<button class="b ghost" onclick="save(\\''+o.id+'\\',\\'draft\\',0)">先存起來</button>'
@@ -1537,33 +1559,106 @@ function card(o){
   return h + '</div>';
 }
 
-function upload(id, input){
-  var f = input.files && input.files[0];
-  if(!f) return;
-  if(f.size > 6*1024*1024){ alert('照片太大，請小於 6MB'); input.value=''; return }
-  var o = ALL.filter(function(x){ return x.id===id })[0];
-  if(o.images && o.images.length >= 6){ alert('最多 6 張'); input.value=''; return }
-  fetch('/api/oracle/teacher/upload', { method:'POST',
-    headers:{'X-Key':KEY,'Content-Type':f.type}, body:f
-  }).then(function(r){ return r.json() }).then(function(d){
-    if(!d.ok){ alert('上傳失敗'); return }
-    o.images = (o.images||[]).concat([d.key]);
-    document.getElementById('s_'+id).insertAdjacentHTML('beforeend',
-      '<a href="'+d.url+'" target="_blank"><img src="'+d.url+'" alt=""></a>');
-    save(id, 'draft', 0, true);
-  }).catch(function(){ alert('上傳失敗') });
-  input.value = '';
+function thumbs(imgs){
+  return (imgs||[]).map(function(k){
+    return '<div class="shot">'
+      + '<a href="/oracle/media/'+k+'" target="_blank"><img src="/oracle/media/'+k+'" alt=""></a>'
+      + '<button class="shot-x" data-del="'+k+'" title="刪掉這張">×</button></div>';
+  }).join('');
 }
+
+/* 刪照片用事件委派，縮圖是動態產生的 */
+document.addEventListener('click', function(e){
+  var t = e.target;
+  if(!t || !t.dataset || !t.dataset.del) return;
+  var key = t.dataset.del;
+  var o = ALL.filter(function(x){ return (x.images||[]).indexOf(key) >= 0 })[0];
+  if(!o) return;
+  if(!confirm('刪掉這張照片？')) return;
+  api('/api/oracle/teacher/delete-image', { id: o.id, key: key }).then(function(d){
+    o.images = d.images || [];
+    document.getElementById('s_'+o.id).innerHTML = thumbs(o.images);
+    upState(o);
+  }).catch(function(){ alert('刪不掉，請重試') });
+});
+
+function upState(o){
+  var b = document.getElementById('ub_'+o.id);
+  var hint = document.getElementById('uh_'+o.id);
+  if(!b) return;
+  var n = (o.images||[]).length;
+  if(n >= MAXIMG){
+    b.disabled = true;
+    b.textContent = '已達上限 ' + MAXIMG + ' 張';
+    if(hint) hint.textContent = '要換照片請先刪掉一張。';
+  } else {
+    b.disabled = false;
+    b.textContent = '＋ 加照片' + (n ? '（還可以加 ' + (MAXIMG - n) + ' 張）' : '');
+    if(hint) hint.textContent = '可以一次選多張。點照片右上角的 × 可以刪掉重傳。';
+  }
+}
+
+function upload(id, input){
+  var files = Array.prototype.slice.call(input.files || []);
+  input.value = '';
+  if(!files.length) return;
+  var o = ALL.filter(function(x){ return x.id===id })[0];
+  var room = MAXIMG - (o.images||[]).length;
+  if(room <= 0){ alert('已經有 ' + MAXIMG + ' 張了，要換請先刪掉一張'); return }
+  if(files.length > room){
+    alert('只能再加 ' + room + ' 張，會先傳前面 ' + room + ' 張');
+    files = files.slice(0, room);
+  }
+  var big = files.filter(function(f){ return f.size > 8*1024*1024 }).length;
+  if(big) alert('有 ' + big + ' 張超過 8MB，會跳過');
+  files = files.filter(function(f){ return f.size <= 8*1024*1024 });
+  if(!files.length) return;
+
+  var b = document.getElementById('ub_'+id);
+  if(b){ b.disabled = true; b.textContent = '上傳中…'; }
+
+  var done = 0, failed = 0;
+  files.forEach(function(f){
+    fetch('/api/oracle/teacher/upload', { method:'POST',
+      headers:{'X-Key':KEY,'Content-Type':f.type}, body:f
+    }).then(function(r){ return r.json().then(function(d){ return {ok:r.ok, d:d} }) })
+      .then(function(x){
+        if(!x.ok || !x.d.ok) throw new Error(x.d.hint || '上傳失敗');
+        o.images = (o.images||[]).concat([x.d.key]);
+        document.getElementById('s_'+id).innerHTML = thumbs(o.images);
+      })
+      .catch(function(e){ failed++; if(failed===1) alert(e.message || '上傳失敗') })
+      .then(function(){
+        if(++done === files.length){
+          upState(o);
+          save(id, 'draft', 0, true);
+        }
+      });
+  });
+}
+
 function cnt(id){
   var n = document.getElementById('t_'+id).value.length;
   var e = document.getElementById('c_'+id);
-  e.textContent = n + ' 字';
-  e.className = 'count' + (((n && n<800) || n>1600) ? ' bad' : '');
+  if(!n){ e.textContent = '0 字'; e.className = 'count'; return }
+  if(n < MINWORD){
+    e.textContent = n + ' 字・還差 ' + (MINWORD - n) + ' 字才能交稿';
+    e.className = 'count bad';
+  } else if(n <= 800){
+    e.textContent = n + ' 字';
+    e.className = 'count ok2';
+  } else if(n <= 1000){
+    e.textContent = n + ' 字・超過 800 了，可以但不用勉強';
+    e.className = 'count warn2';
+  } else {
+    e.textContent = n + ' 字・偏長了';
+    e.className = 'count bad';
+  }
 }
 function save(id, field, done, silent){
   var o = ALL.filter(function(x){ return x.id===id })[0];
   var text = document.getElementById('t_'+id).value;
-  if(done && field==='draft' && text.trim().length < 200){ alert('內容太短，還不能交稿'); return }
+  if(done && field==='draft' && text.trim().length < MINWORD){ alert('至少要 ' + MINWORD + ' 字才能交稿，現在 ' + text.trim().length + ' 字。'); return }
   if(done && !confirm(field==='draft' ? '確定交稿？' : '確定送出回覆？')) return;
   api('/api/oracle/teacher/save', { id:id, field:field, text:text, images:o.images||[], done: done?1:0 })
     .then(function(){ if(!silent){ alert(done?'已送出':'已存起來'); load() } })
@@ -1906,7 +2001,7 @@ timeframe 裡的那個說法，使用者有沒有親口說過他想看這段時�
 若使用者不願意給，接受「他」「前男友」這類代稱，不要追問第二次。
 
 ## 背景這一項不可以省略
-老師要寫 800 到 1500 字。只有一句問題、沒有任何處境，他等於空手上場。
+老師要寫 500 到 800 字。只有一句問題、沒有任何處境，他等於空手上場。
 就算問題本身已經很完整，只要使用者沒說過背景，就要問一輪。
 問法要具體，不要問「可以多說一點嗎」，那太空泛。
 例：「這件事發生多久了？你們現在還有聯絡嗎？」
