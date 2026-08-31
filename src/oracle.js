@@ -30,7 +30,7 @@
 
 import { ECPAY_URL, makeTradeNo, taipeiStamp, checkMac } from './ecpay.js';
 
-const BUILD = '0831-ce3527';   /* 版本標記，三個頁面下方都會顯示 */
+const BUILD = '0831-cad25e';   /* 版本標記，三個頁面下方都會顯示 */
 const PRICE = 399;
 const DEEP_CREDIT = 99;                  /* 已買延伸籤可折抵，前端傳 hasDeep */
 const MODEL = 'claude-sonnet-5';
@@ -1046,6 +1046,11 @@ label{display:block;font-size:12.5px;color:var(--dim);margin-bottom:6px}
 .b.ghost{background:none;border:1px solid var(--line2);color:var(--tx);font-weight:400}
 .empty{text-align:center;color:#6F6880;padding:50px 0;font-size:14px}
 .card.lit{border-color:var(--gold);box-shadow:0 0 0 1px rgba(216,184,126,.3)}
+.navbar{max-width:720px;margin:24px auto 0;padding:16px 14px 0;display:flex;gap:16px;
+  flex-wrap:wrap;justify-content:center;border-top:1px solid var(--line)}
+.navbar a,.navbar button{font-size:13px;color:var(--dim);text-decoration:none;
+  background:none;border:0;padding:6px 4px;cursor:pointer;font-family:inherit}
+.navbar a:hover,.navbar button:hover{color:var(--gold)}
 .shots{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
 .shots a{display:block;width:76px;height:76px;border-radius:8px;overflow:hidden;
   border:1px solid var(--line2)}
@@ -1111,9 +1116,20 @@ const PAGE_ADMIN = `<!doctype html><html lang="zh-Hant"><head>
             style="margin-bottom:12px">寄一封測試信給我</button>
   </div>
   <div class="wrap" id="list"></div>
+  <div class="navbar">
+    <a href="/oracle/teacher">老師端</a>
+    <a href="/oracle/order">客人查詢</a>
+    <a href="/api/oracle/health" target="_blank">系統診斷</a>
+    <button onclick="signOut()">登出</button>
+  </div>
 </div>
 
 <script>${JSC}
+function signOut(){
+  if(!confirm('登出？下次要重新輸入密碼。')) return;
+  sessionStorage.removeItem('uw_admin');
+  location.href = '/oracle/admin';
+}
 var KEY = sessionStorage.getItem('uw_admin') || '';
 var ALL = [], TEACHERS = [], CANMAIL = false, F = 'todo';
 /* 信件裡的直達連結 */
@@ -1522,9 +1538,17 @@ const PAGE_TEACHER = `<!doctype html><html lang="zh-Hant"><head>
   <div class="bar"><h1><img src="/assets/logo-mark.png" alt="" class="lg"><span id="me"></span><em id="cnt"></em></h1></div>
   <div class="tabs" id="tabs"></div>
   <div class="wrap" id="list"></div>
+  <div class="navbar">
+    <button onclick="signOut()">登出</button>
+  </div>
 </div>
 
 <script>${JSC}
+function signOut(){
+  if(!confirm('登出？下次要重新輸入密碼。')) return;
+  sessionStorage.removeItem('uw_teacher');
+  location.href = '/oracle/teacher';
+}
 var MAXIMG = ${MAX_IMAGES}, MINWORD = ${MIN_DRAFT};
 var KEY = sessionStorage.getItem('uw_teacher') || '';
 var ALL = [], CANUP = false, ME = '', F = 'todo';
@@ -1870,7 +1894,8 @@ function show(o){
     }
   }
 
-  document.getElementById('box').innerHTML = h + '</div>';
+  document.getElementById('box').innerHTML = h + '</div>'
+    + '<div class="navbar"><button onclick="another()">查詢其他訂單</button></div>';
 
   var tb = document.getElementById('topics');
   if(tb){
@@ -1893,6 +1918,15 @@ function sendReview(){
   if(t.length < 10){ alert('再多寫一點點'); return }
   post('/api/oracle/order/review', { id:ID, email:MAIL, text:t, topic:TOPIC })
     .then(look).catch(function(){ alert('沒有成功，請重試') });
+}
+function another(){
+  ID = ''; MAIL = '';
+  document.getElementById('box').innerHTML = '';
+  document.getElementById('gate').hidden = false;
+  document.getElementById('gerr').hidden = true;
+  document.getElementById('oid').value = '';
+  document.getElementById('mail').value = '';
+  document.getElementById('oid').focus();
 }
 function okQ(){ post('/api/oracle/order/confirm',{id:ID,email:MAIL}).then(look).catch(function(){ alert('沒有成功') }) }
 function sendFu(){
