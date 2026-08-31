@@ -39,9 +39,9 @@
     // ── 老師信箱。變數名稱是 MAIL_ 加上代號大寫 ──
     // 代號要跟 TEACHER_KEYS 裡的一致（lightwalker / iris / james）
     // 拿到信箱後把 xxx 換掉，測試老師不用設
-    "MAIL_LIGHTWALKER": "xxx@example.com",
-    "MAIL_IRIS": "xxx@example.com",
-    "MAIL_JAMES": "xxx@example.com",
+    "MAIL_LIGHTWALKER": "terrific0722@gmail.com",
+    "MAIL_IRIS": "b0960691947@gmail.com",
+    "MAIL_JAMES": "mysticat7779@gmail.com",   // 原稿寫 gmil.com，判斷是筆誤，請跟老師確認
 
     // 測試老師的派案信寄到你這裡，方便驗證信件內容。
     // 上線前跟 TEACHER_KEYS 裡的 test 那段一起刪掉。
