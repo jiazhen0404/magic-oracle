@@ -760,7 +760,7 @@ textarea::placeholder{color:#5E4E7E}
   </section>
 
   <div style="text-align:center;padding:30px 0 10px;font-size:11px;
-       color:#5E4E7E;letter-spacing:.08em;font-family:var(--mono)">build 0831-c25542</div>
+       color:#5E4E7E;letter-spacing:.08em;font-family:var(--mono)">build 0831-e07147</div>
 
 </div>
 
@@ -793,7 +793,7 @@ textarea::placeholder{color:#5E4E7E}
           留 null 會顯示暫代的星象圖
    reviews：一定要來自真實完成的訂單，不要自製
    ═══════════════════════════════════════════════ */
-let TEACHERS=[
+const TEACHERS=[
 /* ═══════════════════════════════════════════════
    老師資料。內容取自老師本人填寫的資料表。
    標了「※」的欄位是依老師自述推導的，請跟老師確認過再上線。
@@ -898,33 +898,9 @@ let TEACHERS=[
   bio:'我最一開始接觸塔羅牌，是因為身邊有人正處在人生低潮之中，我希望能透過自己的力量幫他重新找到方向。\n\n而在學習命理的過程中，我也曾經歷過許多低谷，包括感情中的劈腿與背叛、兄弟之間的欺騙與傷害。這些經歷讓我慢慢明白，有些事情表面上看到的往往不一定是真實的；有些人嘴上說的，也不一定就是心裡真正想的。\n\n也因此我開始深入接觸塔羅與命理，希望透過這些工具去理解一個人的內心、看見事情背後的脈絡。\n\n對我而言，命理從來不只是算未來。它真正的價值，是幫助一個人在迷惘的時候看清楚自己現在的位置，了解可能面對的選擇，找到適合自己的方向。\n\n能夠陪一個人把原本混亂的事情理清楚，甚至在看完之後重新找到前進的方向，就是我一直做這件事的原因。',
   reviews:[],
   art:`<svg viewBox="0 0 100 100" class="art" aria-hidden="true"><defs><linearGradient id="gc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EAD3A4"/><stop offset="1" stop-color="#B08D57"/></linearGradient></defs><ellipse cx="50" cy="50" rx="34" ry="21" fill="none" stroke="url(#gc)" stroke-width="2.5"/><circle cx="50" cy="50" r="12" fill="url(#gc)"/><circle cx="50" cy="50" r="5" fill="#150F22" opacity=".65"/><g stroke="#C9A96E" fill="none" opacity=".45" stroke-linecap="round"><path d="M14 50 q36-30 72 0"/><path d="M14 50 q36 30 72 0"/></g><g fill="#EAD3A4" opacity=".5"><circle cx="26" cy="20" r="1.3"/><circle cx="78" cy="80" r="1.4"/></g></svg>`
-},
-{
-  /* ════ 測試用，上線前把這一整段刪掉 ════ */
-  id:'test',
-  name:'測試老師',
-  photo:null,
-  fields:['測試'],
-  tagline:'這是測試用的老師，只有在測試模式打開時才會出現。',
-  quote:'這一筆不是真的委託，用來檢查整條流程有沒有跑通。',
-  styleTag:'測試',
-  styleWords:['測試'],
-  best:['測試問題一','測試問題二','測試問題三'],
-  forYou:['正在測試流程'],
-  forYouEnd:'流程有沒有問題？',
-  meters:[['溫柔程度',3],['直接程度',3],['分析程度',3],['行動建議',3]],
-  meterNote:'測試用。',
-  tools:'測試',
-  years:'—',
-  bio:'測試帳號。',
-  reviews:[],
-  art:`<svg viewBox="0 0 100 100" class="art" aria-hidden="true"><g fill="none" stroke="#C9A96E" stroke-width="3" stroke-linecap="round"><path d="M30 50h40M50 30v40"/><circle cx="50" cy="50" r="32" stroke-dasharray="3 6" stroke-width="1.5"/></g></svg>`
 }
-];
 
-/* 測試模式。true 時老師列表會多出「測試老師」。上線前改回 false */
-const TEST_MODE = new URLSearchParams(location.search).get('test') === '1';
-if(!TEST_MODE) TEACHERS.pop();
+];
 
 /* 舊變數保留給既有程式碼使用 */
 const SEERS=TEACHERS;
@@ -936,7 +912,7 @@ const S={step:0,max:0,round:0,history:[],result:null,locked:false,seer:null,
          oid:null,paid:false,name:'',email:'',fails:0,
          fb:{narrowed:false,tfAsked:false,intentAsked:false}};
 
-console.log('%c未完籤所 build 0831-c25542','color:#D8B87E;font-weight:bold');
+console.log('%c未完籤所 build 0831-e07147','color:#D8B87E;font-weight:bold');
 
 /* ═══════════════════════════════════════
    後端 API。與網站同一個網域，用相對路徑。

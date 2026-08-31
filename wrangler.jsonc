@@ -41,11 +41,7 @@
     // 拿到信箱後把 xxx 換掉，測試老師不用設
     "MAIL_LIGHTWALKER": "terrific0722@gmail.com",
     "MAIL_IRIS": "b0960691947@gmail.com",
-    "MAIL_JAMES": "mysticat7779@gmail.com",   // 原稿寫 gmil.com，判斷是筆誤，請跟老師確認
-
-    // 測試老師的派案信寄到你這裡，方便驗證信件內容。
-    // 上線前跟 TEACHER_KEYS 裡的 test 那段一起刪掉。
-    "MAIL_TEST": "jiazhen0404@gmail.com"
+    "MAIL_JAMES": "mysticat7779@gmail.com"
   },
 
   "kv_namespaces": [
