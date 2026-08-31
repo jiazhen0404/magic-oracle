@@ -30,7 +30,7 @@
 
 import { ECPAY_URL, makeTradeNo, taipeiStamp, checkMac } from './ecpay.js';
 
-const BUILD = '0831-0d3db4';   /* 版本標記，三個頁面下方都會顯示 */
+const BUILD = '0831-ce3527';   /* 版本標記，三個頁面下方都會顯示 */
 const PRICE = 399;
 const DEEP_CREDIT = 99;                  /* 已買延伸籤可折抵，前端傳 hasDeep */
 const MODEL = 'claude-sonnet-5';
@@ -78,6 +78,7 @@ function ecpayConf(env) {
 const TTL = 60 * 60 * 24 * KEEP_DAYS;
 
 function now() { return new Date().toISOString(); }
+const NL = String.fromCharCode(10);   /* 信件換行 */
 
 /* ══════════════════════════════════════════════════
    路由。不是真人占卜的路徑就回傳 null，交還給 index.js
@@ -373,8 +374,31 @@ async function adminApi(request, env, ctx, path, origin) {
         body: JSON.stringify({
           from: env.MAIL_FROM || '未完籤所 <onboarding@resend.dev>',
           to: [to],
-          subject: '[未完籤所] 寄信測試',
-          text: '這是一封測試信。\n\n收到就代表寄信設定正確，訂單通知會正常寄達。'
+          subject: '[未完籤所] 寄信測試・常用入口',
+          text: [
+            '收到這封就代表寄信設定正確，訂單通知會正常寄達。',
+            '',
+            '順便把入口放在這裡，這封信可以留著當書籤。',
+            '',
+            '───────────────────',
+            '',
+            '你的後台　　' + base(env) + '/oracle/admin',
+            '　　審問法、審稿、退款、對帳',
+            '',
+            '老師端　　　' + base(env) + '/oracle/teacher',
+            '　　老師寫稿、上傳牌陣照片',
+            '',
+            '客人查詢　　' + base(env) + '/oracle/order',
+            '　　客人用訂單編號和信箱查進度',
+            '',
+            '系統診斷　　' + base(env) + '/api/oracle/health',
+            '　　確認設定齊不齊全',
+            '',
+            '───────────────────',
+            '',
+            '派案通知信裡會有直達某一筆案件的連結，',
+            '點進去會自動跳到那一筆並標亮，不用自己找。'
+          ].join(NL)
         })
       });
       const body = await r.text();
