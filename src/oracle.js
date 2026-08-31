@@ -30,7 +30,7 @@
 
 import { ECPAY_URL, makeTradeNo, taipeiStamp, checkMac } from './ecpay.js';
 
-const BUILD = '0831-3801d5';   /* 版本標記，三個頁面下方都會顯示 */
+const BUILD = '0831-0d3db4';   /* 版本標記，三個頁面下方都會顯示 */
 const PRICE = 399;
 const DEEP_CREDIT = 99;                  /* 已買延伸籤可折抵，前端傳 hasDeep */
 const MODEL = 'claude-sonnet-5';
@@ -314,7 +314,7 @@ export async function oraclePaid(data, env, ctx) {
     }
     await pushIndex(env, id);
     if (ctx) ctx.waitUntil(mailAdmin(env, '新訂單待審問法 ' + id,
-      o.name + '｜' + o.teacher + '\n\n' + o.q + '\n\n' + o.background));
+      o.name + '｜' + o.teacher + '\n\n' + o.q + '\n\n' + o.background, id));
   } else {
     o.st = 'failed';
     o.fail_reason = (data.RtnMsg || '').slice(0, 200);
@@ -575,7 +575,7 @@ async function teacherApi(request, env, ctx, path, origin) {
         const flags = scanDraft(o.draft);
         ctx.waitUntil(mailAdmin(env, '待審稿 ' + o.id,
           me.name + ' 交稿了。\n\n' + o.q + '\n\n字數 ' + o.draft.length + '\n\n'
-          + (flags.length ? flags.join('\n') : '自動檢查沒有發現問題')));
+          + (flags.length ? flags.join('\n') : '自動檢查沒有發現問題'), o.id));
       } else {
         log(o, me.name, '存草稿');
       }
@@ -588,7 +588,7 @@ async function teacherApi(request, env, ctx, path, origin) {
         o.st = 'fu_review';
         o.edit_note = '';
         log(o, me.name, '追問已回覆');
-        ctx.waitUntil(mailAdmin(env, '追問待審稿 ' + o.id, o.fu_reply.slice(0, 400)));
+        ctx.waitUntil(mailAdmin(env, '追問待審稿 ' + o.id, o.fu_reply.slice(0, 400), o.id));
       } else {
         log(o, me.name, '存追問草稿');
       }
@@ -698,7 +698,7 @@ async function orderApi(request, env, ctx, path, origin) {
     log(o, '客人', '留下評價');
     await put(env, o);
     ctx.waitUntil(mailAdmin(env, '有新評價 ' + o.id,
-      o.teacher + '\n\n' + o.review.topic + '｜' + o.review.text));
+      o.teacher + '\n\n' + o.review.topic + '｜' + o.review.text, o.id));
     return json({ ok: true }, 200, origin);
   }
 
@@ -795,38 +795,53 @@ async function sendMail(env, to, subject, text) {
 
 function base(env) { return env.WORKER_URL || ''; }
 
-async function mailAdmin(env, subject, text) {
+async function mailAdmin(env, subject, text, id) {
   await sendMail(env, env.ADMIN_EMAIL, '[未完籤所] ' + subject,
-    text + '\n\n後台：' + base(env) + '/oracle/admin');
+    text + '\n\n直接處理這一筆：' + base(env) + '/oracle/admin' + (id ? '?id=' + id : ''));
 }
 
 async function mailTeacher(env, o, extra) {
   const t = teacherList(env).find(x => x.name === o.teacher || x.id === o.teacher);
   const addr = t ? env['MAIL_' + t.id.toUpperCase()] : '';
+
   const body = [
     extra || '有一筆案件在你這裡。',
     '',
-    '訂單　' + o.id,
-    '稱呼　' + o.name,
+    '　　　寫這一筆　' + base(env) + '/oracle/teacher?id=' + o.id,
     '',
-    '── 問題 ──',
+    '───────────────────',
+    '受理單　' + o.id,
+    '───────────────────',
+    '',
+    '【問題】',
     o.q,
     '',
-    '時間邊界　' + (o.timeframe || '—'),
-    '想知道　　' + (o.intent || '—'),
-    '對方　　　' + (o.other_party || '不牽涉他人'),
+    '【占卜期間】　' + (o.timeframe || '—'),
+    '【想知道】　　' + (o.intent || '—'),
+    '【對方】　　　' + (o.other_party || '不牽涉他人'),
+    '【客人稱呼】　' + o.name,
     '',
-    '── 背景 ──',
+    '【背景】',
     o.background,
-    o.followup ? ('\n── 客人追問 ──\n' + o.followup) : '',
+    o.extra && o.extra.length ? ('\n【也提到，不必回答】\n' + o.extra.join('、')) : '',
+    o.followup ? ('\n───────────────────\n【客人追問】\n' + o.followup) : '',
     '',
-    '───',
-    '撰寫規範：500–800 字。以未完籤所名義發出，請勿署名或留下任何個人聯絡方式。',
-    '只回答上述問題，不擴散到其他主題。不做醫療、法律、投資的具體判斷。',
+    '───────────────────',
+    '撰寫規範',
+    '───────────────────',
     '',
-    '老師端：' + base(env) + '/oracle/teacher'
+    '· 500–800 字',
+    '· 以未完籤所名義發出，請勿署名或留下任何個人聯絡方式',
+    '· 只回答上面那個問題，不要擴散到其他主題',
+    '· 不做醫療、法律、投資的具體判斷',
+    '· 牌陣照片可以上傳，最多 8 張',
+    '',
+    '寫好之後按「交稿」，平台審閱通過才會寄給客人。',
+    '',
+    '　　　寫這一筆　' + base(env) + '/oracle/teacher?id=' + o.id
   ].join('\n');
-  await sendMail(env, addr, '[未完籤所] 案件 ' + o.id, body);
+
+  await sendMail(env, addr, '[未完籤所] 案件 ' + o.id + '　' + o.q.slice(0, 20), body);
 }
 
 async function mailCustomer(env, o, subject, text) {
@@ -1006,6 +1021,7 @@ label{display:block;font-size:12.5px;color:var(--dim);margin-bottom:6px}
 .b.no{background:#6A3E3A;color:#fff}
 .b.ghost{background:none;border:1px solid var(--line2);color:var(--tx);font-weight:400}
 .empty{text-align:center;color:#6F6880;padding:50px 0;font-size:14px}
+.card.lit{border-color:var(--gold);box-shadow:0 0 0 1px rgba(216,184,126,.3)}
 .shots{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
 .shots a{display:block;width:76px;height:76px;border-radius:8px;overflow:hidden;
   border:1px solid var(--line2)}
@@ -1076,6 +1092,8 @@ const PAGE_ADMIN = `<!doctype html><html lang="zh-Hant"><head>
 <script>${JSC}
 var KEY = sessionStorage.getItem('uw_admin') || '';
 var ALL = [], TEACHERS = [], CANMAIL = false, F = 'todo';
+/* 信件裡的直達連結 */
+var WANT = new URLSearchParams(location.search).get('id') || '';
 
 function testMail(){
   api('/api/oracle/admin/testmail').then(function(d){
@@ -1149,7 +1167,29 @@ function render(d){
   var rows = g[2] ? ALL.filter(function(o){ return g[2].indexOf(o.st)>=0 }) : ALL;
   document.getElementById('list').innerHTML = rows.length ? rows.map(card).join('')
     : '<div class="empty">這裡沒有東西</div>';
+  focusWanted();
 }
+
+/* 從信件點進來時，直接跳到那一筆並標亮 */
+function focusWanted(){
+  if(!WANT) return;
+  var hit = ALL.filter(function(o){ return o.id === WANT })[0];
+  if(!hit) return;
+  /* 那一筆不在目前分頁就先切過去 */
+  var g = G.filter(function(x){ return x[0]===F })[0];
+  if(g[2] && g[2].indexOf(hit.st) < 0){
+    var to = G.filter(function(x){ return x[2] && x[2].indexOf(hit.st) >= 0 })[0];
+    if(to){ WANTKEEP = 1; F = to[0]; render({}); return }
+  }
+  setTimeout(function(){
+    var el = document.getElementById('c_card_' + WANT);
+    if(!el) return;
+    el.scrollIntoView({ behavior:'smooth', block:'center' });
+    el.classList.add('lit');
+    WANT = '';
+  }, 60);
+}
+var WANTKEEP = 0;
 function setF(f){ F = f; render({}) }
 
 function b(id,a,cls,txt){ return '<button class="b '+cls+'" onclick="act(\\''+id+'\\',\\''+a+'\\')">'+txt+'</button>' }
@@ -1174,7 +1214,7 @@ function shots(imgs){
 }
 
 function card(o){
-  var h = '<div class="card">';
+  var h = '<div class="card" id="c_card_'+o.id+'">';
   h += '<div class="top"><span class="id">'+esc(o.id)+' · '+fmt(o.created)+'</span>'
      + '<span class="tag '+tone(o.st)+'">'+label(o.st)+'</span></div>';
   h += '<div class="q">'+esc(o.q)+'</div>';
@@ -1464,6 +1504,7 @@ const PAGE_TEACHER = `<!doctype html><html lang="zh-Hant"><head>
 var MAXIMG = ${MAX_IMAGES}, MINWORD = ${MIN_DRAFT};
 var KEY = sessionStorage.getItem('uw_teacher') || '';
 var ALL = [], CANUP = false, ME = '', F = 'todo';
+var WANT = new URLSearchParams(location.search).get('id') || '';
 var G = [
   ['todo','要寫的',['writing','fu_wait']],
   ['wait','審稿中',['draft_wait','draft_doing','fu_review','fu_doing']],
@@ -1503,11 +1544,32 @@ function render(d){
   var rows = ALL.filter(function(o){ return g[2].indexOf(o.st)>=0 });
   document.getElementById('list').innerHTML = rows.length ? rows.map(card).join('')
     : '<div class="empty">這裡沒有東西</div>';
+  focusWanted();
+}
+
+function focusWanted(){
+  if(!WANT) return;
+  var hit = ALL.filter(function(o){ return o.id === WANT })[0];
+  if(!hit) return;
+  var g = G.filter(function(x){ return x[0]===F })[0];
+  if(g[2].indexOf(hit.st) < 0){
+    var to = G.filter(function(x){ return x[2].indexOf(hit.st) >= 0 })[0];
+    if(to){ F = to[0]; render({}); return }
+  }
+  setTimeout(function(){
+    var el = document.getElementById('t_card_' + WANT);
+    if(!el) return;
+    el.scrollIntoView({ behavior:'smooth', block:'start' });
+    el.classList.add('lit');
+    var box = document.getElementById('t_' + WANT);
+    if(box) box.focus();
+    WANT = '';
+  }, 60);
 }
 function setF(f){ F = f; render({}) }
 
 function card(o){
-  var h = '<div class="card">';
+  var h = '<div class="card" id="c_card_'+o.id+'">';
   h += '<div class="top"><span class="id">'+esc(o.id)+' · '+fmt(o.created)+'</span>'
      + '<span class="tag '+tone(o.st)+'">'+label(o.st)+'</span></div>';
   h += '<div class="q">'+esc(o.q)+'</div>';
