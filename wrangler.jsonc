@@ -9,11 +9,39 @@
     "binding": "ASSETS"
   },
 
-  // 這兩個不是機密，寫在這裡才不會被建置洗掉。
-  // 要切正式收款時，把 stage 改成 production，就只改這一個地方。
+  // ═══════════════════════════════════════════════════════════
+  // 一般變數（Text）一定要寫在這裡。
+  //
+  // Cloudflare 每次建置都會用這個檔案重建變數清單，
+  // 沒寫在這裡的會被清空——在後台手動設沒有用，推一次程式碼就沒了。
+  //
+  // Secret 不受影響，不要寫進來（這個檔案在 GitHub 上是公開的）：
+  //   ADMIN_KEY / TEACHER_KEYS / ANTHROPIC_API_KEY
+  //   RESEND_API_KEY / 綠界三把
+  // ═══════════════════════════════════════════════════════════
   "vars": {
+    // ── 延伸籤（99 元）。不要動 ──
     "ECPAY_MODE": "production",
-    "CF_ACCOUNT_ID": "52b866ad397c38a72b9ef7c4a24622b1"
+    "CF_ACCOUNT_ID": "52b866ad397c38a72b9ef7c4a24622b1",
+
+    // ── 真人占卜（399 元）──
+    // 測試期間不填，就是測試模式，用測試卡不會真的扣款。
+    // 要正式收款時把下面這行的註解拿掉：
+    // "ORACLE_ECPAY_MODE": "production",
+
+    // ── 寄信 ──
+    // MAIL_FROM 必須用 Resend 驗證過的網域，不然會被拒絕（403）
+    "MAIL_FROM": "未完籤所 <hello@unfinished.tw>",
+    "ADMIN_EMAIL": "jiazhen0404@gmail.com",
+    "SITE_URL": "https://unfinished.tw",
+    "WORKER_URL": "https://unfinished.tw",
+
+    // ── 老師信箱。變數名稱是 MAIL_ 加上代號大寫 ──
+    // 代號要跟 TEACHER_KEYS 裡的一致（lightwalker / iris / james）
+    // 拿到信箱後把 xxx 換掉，測試老師不用設
+    "MAIL_LIGHTWALKER": "xxx@example.com",
+    "MAIL_IRIS": "xxx@example.com",
+    "MAIL_JAMES": "xxx@example.com"
   },
 
   "kv_namespaces": [
@@ -22,4 +50,12 @@
       "id": "c0cf3e32839b4f97b884fa838a4396ea"
     }
   ]
+
+  // ── 牌陣照片要用的 R2，建好 bucket 之後把下面這段的註解拿掉 ──
+  // ,"r2_buckets": [
+  //   {
+  //     "binding": "MEDIA",
+  //     "bucket_name": "你建的 bucket 名稱"
+  //   }
+  // ]
 }
