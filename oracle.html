@@ -468,8 +468,7 @@ textarea::placeholder{color:#5E4E7E}
         <div class="line"><dt>形式</dt><dd>真人老師親自占卜與撰寫</dd></div>
         <div class="line"><dt>長度</dt><dd>約 500–800 字</dd></div>
         <div class="line"><dt>時間</dt><dd>24–48 小時內完成</dd></div>
-        <div class="line"><dt>追問</dt><dd>可免費追問一次</dd></div>
-      </div>
+              </div>
 
       <button class="go" onclick="go(1)">下一步</button>
       <div class="foot">先認識老師、整理好問題，看過完整內容再決定要不要付款</div>
@@ -674,7 +673,7 @@ textarea::placeholder{color:#5E4E7E}
         <div class="slip-foot">
           指定老師：<span id="slipStyle">—</span><br>
           由真人老師閱讀並撰寫回覆，24–48 小時內寄達。<br>
-          本次為單一問題之回覆，可免費追問一次。
+          本次為單一問題之回覆。
         </div>
 
         <div class="seal" id="seal"><b>已受理</b><i>未完籤所</i></div>
@@ -715,8 +714,7 @@ textarea::placeholder{color:#5E4E7E}
         <div class="line"><dt>指定老師</dt><dd id="sumS">—</dd></div>
         <div class="line"><dt>預計完成</dt><dd id="sumD">—</dd></div>
         <div class="line"><dt>內容長度</dt><dd>500–800 字</dd></div>
-        <div class="line"><dt>追問</dt><dd>可免費追問一次</dd></div>
-        <div class="total"><span id="payLbl">應付金額　NT$</span><b id="payAmt">399</b></div>
+                <div class="total"><span id="payLbl">應付金額　NT$</span><b id="payAmt">399</b></div>
       </div>
 
       <div class="mail">
@@ -762,7 +760,7 @@ textarea::placeholder{color:#5E4E7E}
   </section>
 
   <div style="text-align:center;padding:30px 0 10px;font-size:11px;
-       color:#5E4E7E;letter-spacing:.08em;font-family:var(--mono)">build 0830-0bcd0a</div>
+       color:#5E4E7E;letter-spacing:.08em;font-family:var(--mono)">build 0831-c25542</div>
 
 </div>
 
@@ -938,7 +936,7 @@ const S={step:0,max:0,round:0,history:[],result:null,locked:false,seer:null,
          oid:null,paid:false,name:'',email:'',fails:0,
          fb:{narrowed:false,tfAsked:false,intentAsked:false}};
 
-console.log('%c未完籤所 build 0830-0bcd0a','color:#D8B87E;font-weight:bold');
+console.log('%c未完籤所 build 0831-c25542','color:#D8B87E;font-weight:bold');
 
 /* ═══════════════════════════════════════
    後端 API。與網站同一個網域，用相對路徑。
@@ -1111,7 +1109,6 @@ function openTeacher(id){
       <dt>解讀形式</dt><dd>真人完整文字解讀</dd>
       <dt>內容長度</dt><dd>約 500–800 字</dd>
       <dt>完成時間</dt><dd>24–48 小時內</dd>
-      <dt>追　　問</dt><dd>可免費追問一次</dd>
     </dl>
 
     <h3 class="sh-h">關於${t.name}</h3>
@@ -1130,7 +1127,6 @@ function openTeacher(id){
         <li>選擇一個核心問題</li>
         <li>真人老師親自占卜</li>
         <li>完整文字解析，約 500–800 字</li>
-        <li>一次免費追問</li>
         <li>24–48 小時內完成</li>
       </ul>
       <button class="go" onclick="chooseTeacher('${t.id}')">選擇${t.name}</button>

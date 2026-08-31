@@ -30,7 +30,7 @@
 
 import { ECPAY_URL, makeTradeNo, taipeiStamp, checkMac } from './ecpay.js';
 
-const BUILD = '0831-cad25e';   /* 版本標記，三個頁面下方都會顯示 */
+const BUILD = '0831-0a0899';   /* 版本標記，三個頁面下方都會顯示 */
 const PRICE = 399;
 const DEEP_CREDIT = 99;                  /* 已買延伸籤可折抵，前端傳 hasDeep */
 const MODEL = 'claude-sonnet-5';
@@ -39,6 +39,10 @@ const MAX_CHARS = 800;
 const RATE_LIMIT = 30;
 const RATE_WINDOW = 3600;
 const KEEP_DAYS = 180;
+/* 免費追問。關掉的理由：客人很容易拿追問去問第二個主題，
+   等於多送一次占卜。要開回來把 false 改成 true 就好。 */
+const ALLOW_FOLLOWUP = false;
+
 const MIN_DRAFT = 500;      /* 交稿的最低字數。服務承諾是 500–800 字 */
 const MAX_IMAGES = 8;       /* 牌陣照片上限 */
 
@@ -693,6 +697,7 @@ async function orderApi(request, env, ctx, path, origin) {
     const o = await get(env, b.id);
     if (!o || o.email.toLowerCase() !== String(b.email || '').toLowerCase().trim())
       return json({ error: 'not_found' }, 404, origin);
+    if (!ALLOW_FOLLOWUP) return json({ error: 'not_available', hint: '本服務不提供追問' }, 400, origin);
     if (o.st !== 'sent') return json({ error: 'bad_state', hint: '追問只能提出一次' }, 400, origin);
     const t = String(b.text || '').trim();
     if (t.length < 5) return json({ error: 'too_short' }, 400, origin);
@@ -711,18 +716,28 @@ async function orderApi(request, env, ctx, path, origin) {
       return json({ error: 'not_found' }, 404, origin);
     if (['sent', 'fu_wait', 'fu_review', 'fu_doing', 'done'].indexOf(o.st) < 0)
       return json({ error: 'bad_state' }, 400, origin);
-    const t = String(b.text || '').trim();
-    if (t.length < 10) return json({ error: 'too_short' }, 400, origin);
+    const t    = String(b.text || '').trim();     /* 公開評價 */
+    const note = String(b.note || '').trim();     /* 只給老師看 */
+    /* 門檻放很低。「謝謝你」也是心意，不該被擋 */
+    if (t.length + note.length < 4) {
+      return json({ error: 'too_short', hint: '再多寫幾個字' }, 400, origin);
+    }
     o.review = {
       text: t.slice(0, 200),
+      note: note.slice(0, 500),
       topic: String(b.topic || '').slice(0, 8),
       at: now(),
       ok: false
     };
-    log(o, '客人', '留下評價');
+    log(o, '客人', t ? (note ? '留下評價與給老師的話' : '留下評價') : '留下給老師的話');
     await put(env, o);
-    ctx.waitUntil(mailAdmin(env, '有新評價 ' + o.id,
-      o.teacher + '\n\n' + o.review.topic + '｜' + o.review.text, o.id));
+    ctx.waitUntil(mailAdmin(env, '客人留言 ' + o.id,
+      [o.teacher,
+       '',
+       t ? ('【公開評價・' + (o.review.topic || '—') + '】\n' + t) : '（沒有留公開評價）',
+       '',
+       note ? ('【想給老師的話・不公開】\n' + note) : ''
+      ].join('\n'), o.id));
     return json({ ok: true }, 200, origin);
   }
 
@@ -859,6 +874,7 @@ async function mailTeacher(env, o, extra) {
     '· 只回答上面那個問題，不要擴散到其他主題',
     '· 不做醫療、法律、投資的具體判斷',
     '· 牌陣照片可以上傳，最多 8 張',
+    '· 本服務不含追問，一次回覆完整回答',
     '',
     '寫好之後按「交稿」，平台審閱通過才會寄給客人。',
     '',
@@ -900,8 +916,13 @@ async function mailCustomerDone(env, o, reply) {
 async function mailCustomerReading(env, o) {
   await mailCustomer(env, o, '你的解讀完成了', [
     o.name + '，', '', '你問的是：', o.q, '', '───', '', o.draft, '', '───', '',
-    '本次服務包含一次免費追問，可以在查詢頁面提出。',
-    '讀完之後如果願意留幾句感想，也可以在同一頁寫下來。'
+    '讀完之後如果想說點什麼，可以到查詢頁面留言。', '',
+    '　公開評價　會匿名顯示在' + o.teacher + '的頁面上，',
+    '　　　　　　讓下一個猶豫要不要來的人知道這裡是什麼樣子',
+    '',
+    '　給老師的話　不會公開，只有' + o.teacher + '和我們看得到',
+    '',
+    '兩欄都是選填，不寫也完全沒關係。'
   ].join('\n'));
 }
 
@@ -1307,7 +1328,7 @@ function card(o){
   }
 
   if(o.st === 'sent'){
-    h += '<div class="hint">已於 '+fmt(o.sent_at)+' 寄出，等待客人追問或自然結案。</div>';
+    h += '<div class="hint">已於 '+fmt(o.sent_at)+' 寄出。客人可以留評價，之後手動結案即可。</div>';
     h += '<details><summary>看稿件</summary><div class="reading">'+esc(o.draft)+'</div></details>';
     h += '<div class="btns" style="margin-top:10px">'+b(o.id,'close','ghost','手動結案')+'</div>';
   }
@@ -1333,8 +1354,14 @@ function card(o){
   }
 
   if(o.review){
-    h += '<div class="warn" style="margin-top:12px">客人評價（'+(o.review.ok?'已通過':'待審')+'）：'
-       + esc(o.review.text)+'</div>';
+    if(o.review.text){
+      h += '<div class="warn" style="margin-top:12px">公開評價（'+(o.review.ok?'已通過':'待審')+'）：'
+         + esc(o.review.text)+'</div>';
+    }
+    if(o.review.note){
+      h += '<div class="warn" style="margin-top:8px;border-left-color:var(--go);color:#B9D9C2">'
+         + '想給老師的話（不公開）：<br>'+esc(o.review.note)+'</div>';
+    }
   }
   if(o.log && o.log.length){
     h += '<details><summary>紀錄（'+o.log.length+'）</summary><div class="logs">'
@@ -1457,8 +1484,12 @@ function reviewCard(o){
   h += '<dl><dt>老師</dt><dd>'+esc(o.teacher)+'</dd>'
      + '<dt>問的是</dt><dd>'+esc(o.q)+'</dd></dl>';
   h += '<label>類別</label><input id="rt_'+o.id+'" value="'+esc(r.topic)+'">';
-  h += '<label>評價內容（可修改錯字，但不要改變意思）</label>';
+  h += '<label>公開評價（可修改錯字，但不要改變意思）</label>';
   h += '<textarea id="rx_'+o.id+'" rows="3">'+esc(r.text)+'</textarea>';
+  if(r.note){
+    h += '<label>想給老師的話（不公開，不會出現在網站上）</label>';
+    h += '<div class="bg">'+esc(r.note)+'</div>';
+  }
   h += '<div class="btns">'
      + '<button class="b ghost" onclick="saveReview(\\''+o.id+'\\')">存修改</button>'
      + (r.ok
@@ -1664,6 +1695,13 @@ function card(o){
   }
   if(o.st === 'sent' || o.st === 'done'){
     h += '<div class="hint">已寄給客人。</div>';
+    if(o.review && o.review.note){
+      h += '<div class="warn" style="border-left-color:var(--go);color:#B9D9C2">'
+         + '客人想跟你說：<br>' + esc(o.review.note) + '</div>';
+    }
+    if(o.review && o.review.text){
+      h += '<div class="hint" style="margin-top:8px">公開評價：' + esc(o.review.text) + '</div>';
+    }
     h += '<details><summary>看內容</summary><div class="reading">'+esc(o.draft)+'</div></details>';
   }
   return h + '</div>';
@@ -1865,12 +1903,7 @@ function show(o){
     }
   }
 
-  if(o.st === 'sent'){
-    h += '<label style="margin-top:16px">你還有一次免費追問</label>';
-    h += '<textarea id="fu" rows="4" placeholder="針對上面的解讀，你還想問什麼？"></textarea>';
-    h += '<div class="btns"><button class="b ok" onclick="sendFu()">送出追問</button></div>';
-    h += '<div class="hint" style="margin-top:9px">追問只有一次，送出後不能修改。</div>';
-  }
+
   if(o.followup) h += '<div class="warn" style="margin-top:14px">你的追問：'+esc(o.followup)+'</div>';
   if(['fu_wait','fu_review','fu_doing'].indexOf(o.st) >= 0)
     h += '<div class="hint">老師正在回覆你的追問。</div>';
@@ -1881,14 +1914,23 @@ function show(o){
   if(['sent','fu_wait','fu_review','fu_doing','done'].indexOf(o.st) >= 0){
     if(o.hasReview){
       h += '<div class="hint" style="margin-top:18px;border-top:1px solid #3E2C5C;padding-top:16px">'
-         + '謝謝你留下感想，我們收到了。</div>';
+         + '謝謝你留下的話，我們收到了。</div>';
     } else {
       h += '<div style="margin-top:20px;border-top:1px solid #3E2C5C;padding-top:18px">';
-      h += '<label>留幾句話給 ' + esc(o.teacher) + '</label>';
-      h += '<div class="hint">會匿名顯示在老師的頁面上，讓下一個猶豫的人知道這裡是什麼樣子。<br>'
-         + '不寫也完全沒關係。</div>';
+      h += '<div class="q" style="font-size:16px;margin-bottom:6px">讀完之後，想說點什麼嗎</div>';
+      h += '<div class="hint">兩欄都是選填，寫一個就好，不寫也完全沒關係。</div>';
+
+      h += '<label style="margin-top:16px">公開評價</label>';
+      h += '<div class="hint">會匿名顯示在 ' + esc(o.teacher)
+         + ' 的頁面上，讓下一個猶豫的人知道這裡是什麼樣子。</div>';
       h += '<div class="tabs" style="padding:6px 0 10px" id="topics"></div>';
       h += '<textarea id="rv" rows="4" maxlength="200" placeholder="兩三句話就夠了。哪一段讓你有感覺、或跟你原本想的不一樣？"></textarea>';
+
+      h += '<label style="margin-top:14px">想給 ' + esc(o.teacher) + ' 的話</label>';
+      h += '<div class="hint">這一欄不會公開，只有老師和我們看得到。<br>'
+         + '想謝謝老師、或有些話不方便公開講，都可以寫在這裡。</div>';
+      h += '<textarea id="rvn" rows="4" maxlength="500" placeholder="想單獨跟老師說的話……"></textarea>';
+
       h += '<div class="btns"><button class="b ok" onclick="sendReview()">送出</button></div>';
       h += '</div>';
     }
@@ -1915,8 +1957,9 @@ function pickTopic(el){
 }
 function sendReview(){
   var t = document.getElementById('rv').value.trim();
-  if(t.length < 10){ alert('再多寫一點點'); return }
-  post('/api/oracle/order/review', { id:ID, email:MAIL, text:t, topic:TOPIC })
+  var n = document.getElementById('rvn').value.trim();
+  if(t.length + n.length < 4){ alert('再多寫幾個字就好'); return }
+  post('/api/oracle/order/review', { id:ID, email:MAIL, text:t, note:n, topic:TOPIC })
     .then(look).catch(function(){ alert('沒有成功，請重試') });
 }
 function another(){
@@ -1980,7 +2023,7 @@ function done(d){
   + '<dl style="grid-template-columns:6em 1fr;text-align:left;margin-top:16px">'
   + '<dt>訂單編號</dt><dd style="font-family:ui-monospace,monospace">' + esc(NO) + '</dd></dl>'
   + '<p class="hint" style="margin-top:14px">完成後會寄到你填的信箱。'
-  + '這個編號請留著，之後查進度和提出追問都會用到。</p>'
+  + '這個編號請留著，查詢進度會用到。</p>'
   + '<a class="b ok" style="display:block;text-decoration:none;margin-top:16px" '
   + 'href="/oracle/order?id=' + encodeURIComponent(NO) + '">查詢進度</a>'
   + '</div>';
