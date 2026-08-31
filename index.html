@@ -1,6 +1,17 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
+<script>
+/* 相談室測試模式。網址帶 ?test=1 進站就記住，?test=0 關掉。
+   一定要在這裡執行——抽籤時網址會被改寫成 #start，參數就沒了。 */
+(function(){
+  try{
+    var q = new URLSearchParams(location.search).get('test');
+    if(q === '1') localStorage.setItem('uw.talk.test','1');
+    if(q === '0') localStorage.removeItem('uw.talk.test');
+  }catch(e){}
+})();
+</script>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-71RMD00WPJ"></script>
   <script>
@@ -1310,14 +1321,8 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
     // 抽籤過程中網址會被改寫成 #start，?test=1 會不見。
     // 所以進站時看到一次就記起來，這一整次瀏覽都算測試模式。
     const TALK_TEST = (function(){
-      try{
-        if(new URLSearchParams(location.search).get("test") === "1"){
-          sessionStorage.setItem("uw.talk.test","1");
-        }
-        return sessionStorage.getItem("uw.talk.test") === "1";
-      }catch(e){
-        return new URLSearchParams(location.search).get("test") === "1";
-      }
+      try{ return localStorage.getItem("uw.talk.test") === "1" }
+      catch(e){ return false }
     })();
 
     if(TALK_LIVE || TALK_TEST){
