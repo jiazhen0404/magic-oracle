@@ -30,7 +30,7 @@
 
 import { ECPAY_URL, makeTradeNo, taipeiStamp, checkMac } from './ecpay.js';
 
-const BUILD = '0830-dbda72';   /* 版本標記，三個頁面下方都會顯示 */
+const BUILD = '0831-3801d5';   /* 版本標記，三個頁面下方都會顯示 */
 const PRICE = 399;
 const DEEP_CREDIT = 99;                  /* 已買延伸籤可折抵，前端傳 hasDeep */
 const MODEL = 'claude-sonnet-5';
@@ -797,7 +797,7 @@ function base(env) { return env.WORKER_URL || ''; }
 
 async function mailAdmin(env, subject, text) {
   await sendMail(env, env.ADMIN_EMAIL, '[未完籤所] ' + subject,
-    text + '\n\n後台：' + base(env) + '/admin');
+    text + '\n\n後台：' + base(env) + '/oracle/admin');
 }
 
 async function mailTeacher(env, o, extra) {
@@ -824,14 +824,14 @@ async function mailTeacher(env, o, extra) {
     '撰寫規範：500–800 字。以未完籤所名義發出，請勿署名或留下任何個人聯絡方式。',
     '只回答上述問題，不擴散到其他主題。不做醫療、法律、投資的具體判斷。',
     '',
-    '老師端：' + base(env) + '/teacher'
+    '老師端：' + base(env) + '/oracle/teacher'
   ].join('\n');
   await sendMail(env, addr, '[未完籤所] 案件 ' + o.id, body);
 }
 
 async function mailCustomer(env, o, subject, text) {
   await sendMail(env, o.email, '[未完籤所] ' + subject,
-    text + '\n\n查詢進度：' + base(env) + '/order?id=' + o.id);
+    text + '\n\n查詢進度：' + base(env) + '/oracle/order?id=' + o.id);
 }
 
 async function mailCustomerRevise(env, o) {
