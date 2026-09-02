@@ -983,9 +983,14 @@ const DEEP_CREDIT = 99;          /* 已購未完深解可折抵 */
 let hasDeep = false;
 let deepToken = '';
 
+/* 折抵暫停中。要恢復把 false 改成 true，
+   同時要把 src/oracle.js 的 DEEP_CREDIT 改回 99，兩邊一起才有用。 */
+const CREDIT_ON = false;
+
 /* 買過 99 元延伸籤的人，瀏覽器裡會有一張解鎖憑證。
    這裡只負責找出來，能不能折抵由後端驗證。 */
 (function findDeepToken(){
+  if(!CREDIT_ON) return;
   try{
     for(let i=0;i<localStorage.length;i++){
       const k = localStorage.key(i);

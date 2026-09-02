@@ -32,7 +32,9 @@ import { ECPAY_URL, makeTradeNo, taipeiStamp, checkMac } from './ecpay.js';
 
 const BUILD = '0831-0a0899';   /* 版本標記，三個頁面下方都會顯示 */
 const PRICE = 399;
-const DEEP_CREDIT = 99;                  /* 已買延伸籤可折抵，前端傳 hasDeep */
+/* 折抵暫停中。設 0 之後不管前端傳什麼都收滿 399。
+   要恢復改回 99，同時要把 oracle.html 的 CREDIT_ON 改成 true。 */
+const DEEP_CREDIT = 0;                   /* 已買延伸籤可折抵，前端傳 hasDeep */
 const MODEL = 'claude-sonnet-5';
 const MAX_TURNS = 10;
 const MAX_CHARS = 800;
@@ -250,6 +252,7 @@ async function createOracleOrder(request, env, url, origin) {
 /* 延伸籤的解鎖憑證存在 unlock:<token>，一年有效。
    拿得出有效憑證就代表真的買過 99 元，可以折抵。 */
 async function checkDeepCredit(env, token) {
+  if (DEEP_CREDIT <= 0) return false;   /* 折抵暫停中，憑證不會被標記用掉 */
   if (!token || !/^[A-Za-z0-9]{20,60}$/.test(token)) return false;
   try {
     const raw = await env.ORDERS.get('unlock:' + token);
