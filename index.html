@@ -1130,7 +1130,7 @@ function Nav({screen,go}){
     const on = id==="draw" && ["think","theme","drawing","result"].includes(screen) || id===screen;
     const goTalk = function(){
       try{ gtag("event","talk_entry_click",{button_location:"global_nav",mode:window.TALK_LIVE?"live":"test"}) }catch(e){}
-      location.href = window.TALK_LIVE ? "/oracle.html" : "/oracle.html?test=1";
+      location.href = "/oracle.html";
     };
     return /*#__PURE__*/React.createElement("button",{key:id,className:on?"on":"",onClick:id==="talk"?goTalk:()=>go(id)},
       /*#__PURE__*/React.createElement("span",null,/*#__PURE__*/React.createElement(Ico,{size:20})),
@@ -1435,8 +1435,7 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
         send("talk_entry_click",{theme:theme,theme_label:themeLabels[theme]||theme,
           subtheme:subtheme,fortune_number:fortuneNumber,fortune_title:title,
           button_location:"result_after_extended",mode:TALK_LIVE?"live":"test"});
-        // 測試時一併把測試老師帶過去
-        location.href = TALK_LIVE ? "/oracle.html" : "/oracle.html?test=1";
+        location.href = "/oracle.html";
       });
       section.insertAdjacentElement("afterend",talk);
     }
