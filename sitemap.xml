@@ -295,4 +295,34 @@
     <loc>https://unfinished.tw/privacy/</loc>
     <lastmod>2026-08-29</lastmod>
   </url>
+  <url>
+    <loc>https://unfinished.tw/love/ambiguity/</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://unfinished.tw/love/ambiguity/hot-and-cold/</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://unfinished.tw/love/ambiguity/how-long-to-wait/</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://unfinished.tw/love/ambiguity/not-initiating/</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://unfinished.tw/love/ambiguity/texting-no-commitment/</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>

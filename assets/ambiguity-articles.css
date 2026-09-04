@@ -1,0 +1,80 @@
+
+:root{
+  --ww-bg:#0d0918;
+  --ww-bg2:#171026;
+  --ww-gold:#d9bd82;
+  --ww-text:#f4eef6;
+  --ww-body:#ddd4e2;
+  --ww-muted:#9d91aa;
+  --ww-line:rgba(217,189,130,.18);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 16% 0%,rgba(146,74,167,.16),transparent 30%),
+    radial-gradient(circle at 88% 20%,rgba(187,68,143,.09),transparent 24%),
+    linear-gradient(180deg,var(--ww-bg2),var(--ww-bg));
+  color:var(--ww-text);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  line-height:1.9;
+}
+a{color:inherit}
+.wa-wrap{width:min(1120px,calc(100% - 44px));margin:auto}
+.wa-hero{padding:74px 0 50px;border-bottom:1px solid rgba(255,255,255,.06)}
+.wa-crumb{font-size:12px;color:var(--ww-muted);margin-bottom:18px}
+.wa-crumb a{text-decoration:none;color:var(--ww-muted)}
+.wa-kicker{font-size:12px;color:var(--ww-gold);letter-spacing:.14em;margin-bottom:12px}
+.wa-hero h1{
+  margin:0 0 22px;max-width:900px;
+  color:#f4e8c9;font-family:"Noto Serif TC","Songti TC",serif;
+  font-size:clamp(36px,5vw,60px);line-height:1.3;font-weight:600;
+}
+.wa-lead{margin:0;max-width:780px;color:#d9cfde;font-size:19px}
+.wa-layout{display:grid;grid-template-columns:minmax(0,760px) 220px;gap:72px;padding:62px 0 100px}
+.wa-article{min-width:0}
+.wa-article p{font-size:17px;color:var(--ww-body);margin:0 0 19px}
+.wa-article .wa-opening{font-size:18px;color:#e8dfe9}
+.wa-article h2{
+  margin:56px 0 20px;color:#f1e5c8;
+  font-family:"Noto Serif TC","Songti TC",serif;font-size:30px;line-height:1.48;font-weight:600;
+}
+.wa-quote{
+  margin:34px 0;padding:4px 0 4px 24px;border-left:2px solid var(--ww-gold);
+  font-family:"Noto Serif TC","Songti TC",serif;font-size:22px;line-height:1.8;color:#f4e9ef;
+}
+.wa-toc{position:sticky;top:92px;align-self:start;font-size:12px;color:var(--ww-muted)}
+.wa-toc b{display:block;color:#d9cfde;margin-bottom:10px}
+.wa-toc a{display:block;text-decoration:none;padding:7px 0;color:var(--ww-muted)}
+.wa-toc a:hover{color:var(--ww-gold)}
+.wa-faq{margin-top:64px;border-top:1px solid var(--ww-line)}
+.wa-faq details{padding:18px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.wa-faq summary{cursor:pointer;color:#eee1c7;font-weight:700}
+.wa-faq p{margin-top:12px;color:#c8bdce}
+.wa-related{margin-top:68px}
+.wa-related a{display:block;text-decoration:none;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.06);color:#d9cfdd}
+.wa-related a:hover{color:var(--ww-gold)}
+.wa-cta{margin-top:72px;padding-top:36px;border-top:1px solid rgba(217,189,130,.34)}
+.wa-cta h2{margin-top:0}
+.wa-btn{
+  display:inline-block;margin-top:10px;padding:12px 23px;border:1px solid rgba(217,189,130,.62);
+  border-radius:999px;text-decoration:none;color:#f0ddb4;background:rgba(103,73,140,.18)
+}
+.wa-note,.wa-refs{margin-top:46px;padding-top:20px;border-top:1px solid rgba(255,255,255,.06);font-size:13px;color:var(--ww-muted)}
+.wa-refs p{font-size:13px;color:#aa9db1}.wa-refs a{color:#d5c28f}
+.wa-hub{max-width:820px;padding:54px 0 100px}
+.wa-item{padding:30px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.wa-item small{color:var(--ww-gold);letter-spacing:.1em}
+.wa-item h2{margin:7px 0 10px;font-family:"Noto Serif TC","Songti TC",serif;font-size:29px;line-height:1.45;color:#f1e5c8}
+.wa-item h2 a{text-decoration:none}
+.wa-item p{margin:0;color:#c9bdcf;font-size:16px}
+.wa-more{display:inline-block;margin-top:11px;color:#dbc58f;text-decoration:none;font-size:13px}
+@media(max-width:900px){
+  .wa-layout{grid-template-columns:1fr;gap:0}
+  .wa-toc{display:none}
+  .wa-hero{padding:50px 0 38px}
+  .wa-hero h1{font-size:39px}
+  .wa-lead{font-size:16px}
+  .wa-article p{font-size:16px}
+}
