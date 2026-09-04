@@ -65,6 +65,9 @@ export default {
       if (path === '/api/resend-pdf' && request.method === 'POST') {
         return await resendPdf(request, env, url);
       }
+      if (path === '/api/feedback' && request.method === 'POST') {
+        return await sendFeedback(request, env);
+      }
       if (path === '/api/health') {
         return json({
           ok: true,
@@ -88,6 +91,74 @@ export default {
     return env.ASSETS.fetch(request);
   },
 };
+
+
+/* ── 使用者意見回饋：Cloudflare Worker → Resend HTTP API ── */
+async function sendFeedback(request, env) {
+  if (!env.RESEND_API_KEY) {
+    console.error('RESEND_API_KEY is missing');
+    return json({ ok: false, error: 'feedback_not_configured' }, 503);
+  }
+
+  let body = {};
+  const contentType = request.headers.get('content-type') || '';
+  try {
+    if (contentType.includes('application/json')) {
+      body = await request.json();
+    } else {
+      const form = await request.formData();
+      for (const [k, v] of form.entries()) body[k] = String(v);
+    }
+  } catch {
+    return json({ ok: false, error: 'bad_request' }, 400);
+  }
+
+  // Honeypot
+  if (String(body.website || '').trim()) return json({ ok: true });
+
+  const clean = (v, max) => String(v || '').trim().slice(0, max);
+  const name = clean(body.name, 80);
+  const email = clean(body.email, 160);
+  const type = clean(body.type, 40);
+  const message = clean(body.message, 5000);
+
+  if (!message) return json({ ok: false, error: '請填寫回饋內容' }, 400);
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return json({ ok: false, error: 'Email 格式不正確' }, 400);
+  }
+
+  const payload = {
+    from: env.MAIL_FROM || '未完籤所 <hello@unfinished.tw>',
+    to: [env.ADMIN_EMAIL || 'jiazhen0404@gmail.com'],
+    subject: `[未完籤所意見回饋] ${type || '其他'}`,
+    text:
+`稱呼：${name || '未填'}
+Email：${email || '未填'}
+回饋類型：${type || '其他'}
+
+內容：
+${message}`
+  };
+  if (email) payload.reply_to = email;
+
+  const r = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${env.RESEND_API_KEY}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  });
+
+  const result = await r.json().catch(() => ({}));
+  if (!r.ok) {
+    console.error('Resend feedback error', r.status, JSON.stringify(result));
+    return json({ ok: false, error: result.message || '寄送失敗' }, 502);
+  }
+
+  console.log('Feedback email sent via Resend', result.id || '');
+  return json({ ok: true });
+}
 
 /* ══════════════════════════════════════════════════════════
    一、建立訂單
