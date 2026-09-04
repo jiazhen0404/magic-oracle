@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>意見回饋｜未完籤所</title>
+<meta name="description" content="未完籤所意見回饋頁。歡迎告訴我們使用上的問題、建議、內容想法或其他想說的話。">
+<link rel="canonical" href="https://unfinished.tw/feedback/">
+<link rel="stylesheet" href="/assets/site-header.css">
+<link rel="stylesheet" href="/assets/feedback.css">
+</head>
+<body>
+
+<header class="ww-site-header">
+  <div class="ww-header-inner">
+    <a class="ww-logo" href="/">未 完 籤 所</a>
+    <nav class="ww-pill-nav" aria-label="主要導覽">
+      <a href="/love/">愛情</a>
+      <a href="/work/">工作</a>
+      <a href="/life/">人生</a>
+      <a href="/pet/">寵物</a>
+      <a href="/love/ambiguity/">關係文章</a>
+    </nav>
+    <div class="ww-header-actions">
+      <a href="/#about">關於</a>
+      <a class="ww-primary" href="/#start">開始抽籤</a>
+    </div>
+    <button class="ww-menu-toggle" type="button" aria-label="開啟選單" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<nav class="ww-mobile-menu" aria-label="手機版導覽">
+  <a href="/love/">愛情</a>
+  <a href="/work/">工作</a>
+  <a href="/life/">人生</a>
+  <a href="/pet/">寵物</a>
+  <a href="/love/ambiguity/">關係文章</a>
+  <a href="/#about">關於未完籤所</a>
+  <a href="/feedback/">意見回饋</a>
+  <a href="/#start">開始抽籤 →</a>
+</nav>
+
+<section class="fb-hero">
+  <div class="fb-wrap">
+    <div class="fb-kicker">FEEDBACK · 未完籤所</div>
+    <h1>有什麼想告訴我們的？</h1>
+    <p>如果你在使用未完籤所時遇到問題、覺得哪裡可以更好，或只是有一個想法想分享，都可以寫在這裡。</p>
+  </div>
+</section>
+
+<main class="fb-wrap">
+  <form class="fb-card" id="feedbackForm">
+    <input name="website" id="website" type="text" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+    <div class="fb-row">
+      <div class="fb-field">
+        <label for="name">你的稱呼</label>
+        <input id="name" name="name" type="text" placeholder="怎麼稱呼你？">
+      </div>
+      <div class="fb-field">
+        <label for="email">你的 Email</label>
+        <input id="email" name="email" type="email" placeholder="若希望收到回覆，可以留下 Email">
+      </div>
+    </div>
+
+    <div class="fb-field">
+      <label for="type">回饋類型</label>
+      <select id="type" name="type">
+        <option value="使用問題">使用問題</option>
+        <option value="內容建議">內容建議</option>
+        <option value="功能建議">功能建議</option>
+        <option value="合作提案">合作提案</option>
+        <option value="其他">其他</option>
+      </select>
+    </div>
+
+    <div class="fb-field">
+      <label for="message">想說的話</label>
+      <textarea id="message" name="message" required placeholder="把你遇到的情況、建議或想法寫下來就可以。"></textarea>
+      <div class="fb-help">送出後會直接寄到未完籤所，不需要開啟 Email App。</div>
+    </div>
+
+    <div class="fb-actions">
+      <div class="fb-email">也可以直接寄到：<a href="mailto:jiazhen0404@gmail.com">jiazhen0404@gmail.com</a></div>
+      <button class="fb-submit" id="feedbackSubmit" type="submit">送出回饋 →</button>
+    </div>
+  </form>
+  <div id="feedbackStatus" class="fb-note" role="status" aria-live="polite"></div>
+
+  <div class="fb-note">為了保護你的隱私，請不要在回饋內容中填寫密碼、付款資訊或其他敏感資料。</div>
+</main>
+
+<script src="/assets/site-header.js"></script>
+<script>
+document.getElementById('feedbackForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const form = e.currentTarget;
+  const button = document.getElementById('feedbackSubmit');
+  const status = document.getElementById('feedbackStatus');
+  const payload = {
+    name: document.getElementById('name').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    type: document.getElementById('type').value,
+    message: document.getElementById('message').value.trim(),
+    website: document.getElementById('website').value
+  };
+  if (!payload.message) {
+    status.textContent = '請先填寫想說的話。';
+    return;
+  }
+  button.disabled = true;
+  button.textContent = '正在送出…';
+  status.textContent = '';
+  try {
+    const r = await fetch('/api/feedback', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await r.json().catch(()=>({}));
+    if (!r.ok || !data.ok) throw new Error(data.error || '送出失敗');
+    form.reset();
+    status.textContent = '✓ 已收到你的回饋，謝謝你願意告訴我們。';
+  } catch (err) {
+    status.textContent = '目前無法送出：' + err.message + '。你也可以直接寄到 jiazhen0404@gmail.com';
+  } finally {
+    button.disabled = false;
+    button.textContent = '送出回饋 →';
+  }
+});
+
+</body>
+</html>
