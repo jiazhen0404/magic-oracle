@@ -234,6 +234,59 @@ const APP_INDEX = path.join(__dirname,"index.html");
 // static files. (The old public/index.html is a legacy embedded landing build.)
 app.use("/assets", express.static(path.join(__dirname,"assets"), { maxAge: "30d", immutable: true }));
 app.use("/data", express.static(path.join(__dirname,"data"), { maxAge: "5m" }));
+
+// ── 未完籤所｜意見回饋 API（必須在 static / fallback 之前） ──
+app.post(
+  "/api/feedback",
+  express.json({ limit: "30kb" }),
+  express.urlencoded({ extended: false, limit: "30kb" }),
+  async (req, res) => {
+    const wantsJson = req.is("application/json") ||
+      String(req.get("accept") || "").includes("application/json");
+    const fail = (code, msg) => wantsJson
+      ? res.status(code).json({ok:false,error:msg})
+      : res.redirect(303, "/feedback/?sent=0");
+
+    try {
+      console.log("POST /api/feedback received");
+      const body=req.body || {};
+      if (body.website) return wantsJson ? res.json({ok:true}) : res.redirect(303,"/feedback/?sent=1");
+
+      const clean=(v,n)=>String(v||"").trim().slice(0,n);
+      const name=clean(body.name,80), email=clean(body.email,160);
+      const type=clean(body.type,40), message=clean(body.message,5000);
+      if(!message) return fail(400,"請填寫回饋內容");
+      if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return fail(400,"Email 格式不正確");
+
+      const user=process.env.FEEDBACK_EMAIL_USER;
+      const pass=process.env.FEEDBACK_EMAIL_PASS;
+      if(!user || !pass){
+        console.error("Feedback env missing");
+        return fail(503,"回饋信箱尚未完成設定");
+      }
+
+      const transporter=nodemailer.createTransport({
+        service:"gmail",
+        auth:{user,pass}
+      });
+
+      await transporter.sendMail({
+        from:`"未完籤所網站" <${user}>`,
+        to:"jiazhen0404@gmail.com",
+        replyTo:email || undefined,
+        subject:`[未完籤所意見回饋] ${type || "其他"}`,
+        text:`稱呼：${name || "未填"}\nEmail：${email || "未填"}\n回饋類型：${type || "其他"}\n\n內容：\n${message}`
+      });
+
+      console.log("Feedback email sent successfully");
+      return wantsJson ? res.json({ok:true}) : res.redirect(303,"/feedback/?sent=1");
+    } catch(err){
+      console.error("Feedback email error:", err && (err.stack || err.message || err));
+      return fail(500,"寄送失敗，請稍後再試");
+    }
+  }
+);
+
 app.use(express.static(PUBLIC_DIR, {
   index: false,
   setHeaders(res, filePath){
@@ -273,79 +326,6 @@ app.get("*", (req,res,next)=>{
 });
 
 
-// ── 未完籤所｜意見回饋寄信 API ─────────────────────────────
-// 支援 AJAX JSON 與一般 HTML form POST；即使前端 JavaScript 失效也能送出。
-app.post(
-  "/api/feedback",
-  express.json({ limit: "30kb" }),
-  express.urlencoded({ extended: false, limit: "30kb" }),
-  async (req, res) => {
-    const wantsJson =
-      req.is("application/json") ||
-      String(req.get("accept") || "").includes("application/json");
-
-    const respondError = (status, message) => {
-      if (wantsJson) return res.status(status).json({ ok: false, error: message });
-      return res.redirect(303, "/feedback/?sent=0");
-    };
-
-    try {
-      const { name = "", email = "", type = "", message = "", website = "" } = req.body || {};
-
-      if (website) {
-        if (wantsJson) return res.json({ ok: true });
-        return res.redirect(303, "/feedback/?sent=1");
-      }
-
-      const clean = (v, max) => String(v || "").trim().slice(0, max);
-      const safeName = clean(name, 80);
-      const safeEmail = clean(email, 160);
-      const safeType = clean(type, 40);
-      const safeMessage = clean(message, 5000);
-
-      if (!safeMessage) return respondError(400, "請填寫回饋內容");
-      if (safeEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(safeEmail)) {
-        return respondError(400, "Email 格式不正確");
-      }
-
-      const user = process.env.FEEDBACK_EMAIL_USER;
-      const pass = process.env.FEEDBACK_EMAIL_PASS;
-      if (!user || !pass) {
-        console.error("Feedback mail env vars are missing.");
-        return respondError(503, "回饋信箱尚未完成設定");
-      }
-
-      const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: { user, pass }
-      });
-
-      await transporter.verify();
-
-      await transporter.sendMail({
-        from: `"未完籤所網站" <${user}>`,
-        to: "jiazhen0404@gmail.com",
-        replyTo: safeEmail || undefined,
-        subject: `[未完籤所意見回饋] ${safeType || "其他"}`,
-        text:
-`稱呼：${safeName || "未填"}
-Email：${safeEmail || "未填"}
-回饋類型：${safeType || "其他"}
-
-內容：
-${safeMessage}`
-      });
-
-      console.log("Feedback email sent successfully.");
-
-      if (wantsJson) return res.json({ ok: true });
-      return res.redirect(303, "/feedback/?sent=1");
-    } catch (err) {
-      console.error("Feedback email error:", err && (err.stack || err.message || err));
-      return respondError(500, "寄送失敗，請稍後再試");
-    }
-  }
-);
 
 app.listen(PORT,()=>{
   console.log(`Magic Oracle running at http://localhost:${PORT}`);
