@@ -77,7 +77,8 @@ body{
   justify-content:center;cursor:pointer;transition:border-color .2s,opacity .2s}
 .icon-btn:hover{border-color:var(--lit)}
 .icon-btn[hidden]{visibility:hidden;display:flex}
-.brand{display:flex;align-items:center;gap:9px;white-space:nowrap}
+.brand{display:flex;align-items:center;gap:9px;white-space:nowrap;text-decoration:none;cursor:pointer;transition:opacity .2s}
+.brand:hover{opacity:.78}
 .brand-mark{height:34px;width:auto;display:block}
 .brand span{font-family:var(--serif);font-size:clamp(17px,4.2vw,22px);font-weight:600;
   color:var(--gold);letter-spacing:.13em;text-indent:.13em}
@@ -440,10 +441,10 @@ textarea::placeholder{color:#5E4E7E}
 
   <div class="top">
     <button class="icon-btn" id="topBack" aria-label="回到上一步" onclick="back()">‹</button>
-    <div class="brand">
+    <a class="brand" href="/" id="brandHome" title="回到未完籤所首頁">
       <img src="/assets/logo-mark.png" alt="" class="brand-mark">
       <span>未完籤所</span>
-    </div>
+    </a>
     <button class="pill-btn">? 查看流程</button>
   </div>
 
@@ -945,6 +946,13 @@ function go(n){
   window.scrollTo({top:0,behavior:'smooth'});
   if(n===4&&S.round===0&&!S.result)setTimeout(()=>document.getElementById('say').focus(),320);
 }
+/* 標題回首頁。已經開始填就先確認一次，不然辛苦打的字會不見。
+   已付款（step 7）不攔，那時候離開沒有損失。 */
+document.getElementById('brandHome').addEventListener('click', function(e){
+  if(S.step > 0 && S.step < 7){
+    if(!confirm('回到首頁的話，這次填的內容不會保留。確定要離開嗎？')) e.preventDefault();
+  }
+});
 function back(){
   if(S.step>0&&S.step<7)go(S.step-1);
 }
@@ -983,9 +991,14 @@ const DEEP_CREDIT = 99;          /* 已購未完深解可折抵 */
 let hasDeep = false;
 let deepToken = '';
 
+/* 折抵暫停中。要恢復把 false 改成 true，
+   同時要把 src/oracle.js 的 DEEP_CREDIT 改回 99，兩邊一起才有用。 */
+const CREDIT_ON = false;
+
 /* 買過 99 元延伸籤的人，瀏覽器裡會有一張解鎖憑證。
    這裡只負責找出來，能不能折抵由後端驗證。 */
 (function findDeepToken(){
+  if(!CREDIT_ON) return;
   try{
     for(let i=0;i<localStorage.length;i++){
       const k = localStorage.key(i);

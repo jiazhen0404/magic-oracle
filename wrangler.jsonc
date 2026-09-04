@@ -25,9 +25,9 @@
     "CF_ACCOUNT_ID": "52b866ad397c38a72b9ef7c4a24622b1",
 
     // ── 真人占卜（399 元）──
-    // 測試期間不填，就是測試模式，用測試卡不會真的扣款。
-    // 要正式收款時把下面這行的註解拿掉：
-    // "ORACLE_ECPAY_MODE": "production",
+    // production = 正式收款，會真的扣款
+    // 要改回測試，把下一行整行刪掉，或值改成 "stage"
+    "ORACLE_ECPAY_MODE": "production",
 
     // ── 寄信 ──
     // MAIL_FROM 必須用 Resend 驗證過的網域，不然會被拒絕（403）
