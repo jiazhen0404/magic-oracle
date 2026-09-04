@@ -153,5 +153,80 @@
 })();
 </script>
 
+
+<script>
+(() => {
+  const form = document.getElementById('feedbackForm');
+  if (!form) return;
+
+  // Clone form to remove any older submit listeners that could leave the UI stuck.
+  const cleanForm = form.cloneNode(true);
+  form.parentNode.replaceChild(cleanForm, form);
+
+  const btn = cleanForm.querySelector('button[type="submit"], input[type="submit"]');
+  let status = document.getElementById('feedbackStatus');
+  if (!status) {
+    status = document.createElement('div');
+    status.id = 'feedbackStatus';
+    status.setAttribute('role', 'status');
+    status.setAttribute('aria-live', 'polite');
+    status.style.cssText =
+      'margin-top:14px;font-size:14px;line-height:1.7;text-align:left;display:none;';
+    cleanForm.appendChild(status);
+  }
+
+  const originalText = btn
+    ? (btn.tagName === 'INPUT' ? btn.value : btn.textContent)
+    : '送出回饋 →';
+
+  const setButtonText = (text) => {
+    if (!btn) return;
+    if (btn.tagName === 'INPUT') btn.value = text;
+    else btn.textContent = text;
+  };
+
+  cleanForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (cleanForm.dataset.sending === '1') return;
+
+    cleanForm.dataset.sending = '1';
+    if (btn) btn.disabled = true;
+    setButtonText('正在送出…');
+    status.style.display = 'none';
+    status.textContent = '';
+
+    try {
+      const response = await fetch('/api/feedback', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(cleanForm)
+      });
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.ok) {
+        throw new Error(data.error || '送出失敗，請稍後再試。');
+      }
+
+      cleanForm.reset();
+      status.textContent = '✓ 回饋已送出。謝謝你願意告訴我們，你的意見會成為未完籤所下一次調整的參考。';
+      status.style.display = 'block';
+      setButtonText('已送出 ✓');
+
+      window.setTimeout(() => {
+        setButtonText(originalText);
+        if (btn) btn.disabled = false;
+      }, 2200);
+    } catch (err) {
+      status.textContent = '送出時發生問題，請稍後再試。';
+      status.style.display = 'block';
+      setButtonText(originalText);
+      if (btn) btn.disabled = false;
+    } finally {
+      cleanForm.dataset.sending = '0';
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
