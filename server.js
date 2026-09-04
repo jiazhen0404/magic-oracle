@@ -258,6 +258,13 @@ app.get(/^\/(love|work|choice|life|pet)(?:\/([a-z0-9-]+))?(?:\/([a-z0-9-]+))?\/?
   res.sendFile(filePath, err=>{ if(err) next(); });
 });
 
+
+// 意見回饋頁
+app.get(["/feedback", "/feedback/"], (req, res) => {
+  res.setHeader("Cache-Control","no-cache, no-store, must-revalidate");
+  res.sendFile(path.join(__dirname, "feedback", "index.html"));
+});
+
 // App fallback: query-string entries and non-file routes still load the oracle UI.
 app.get("*", (req,res,next)=>{
   if(req.path.startsWith("/api/")) return next();
