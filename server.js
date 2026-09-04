@@ -274,58 +274,78 @@ app.get("*", (req,res,next)=>{
 
 
 // ── 未完籤所｜意見回饋寄信 API ─────────────────────────────
-// Render 環境變數：FEEDBACK_EMAIL_USER / FEEDBACK_EMAIL_PASS
-// Gmail 請使用 Google「應用程式密碼」，不要填一般登入密碼。
-app.post("/api/feedback", express.json({ limit: "30kb" }), async (req, res) => {
-  try {
-    const { name = "", email = "", type = "", message = "", website = "" } = req.body || {};
+// 支援 AJAX JSON 與一般 HTML form POST；即使前端 JavaScript 失效也能送出。
+app.post(
+  "/api/feedback",
+  express.json({ limit: "30kb" }),
+  express.urlencoded({ extended: false, limit: "30kb" }),
+  async (req, res) => {
+    const wantsJson =
+      req.is("application/json") ||
+      String(req.get("accept") || "").includes("application/json");
 
-    // Honeypot：正常使用者看不到；機器人若填寫就靜默丟棄。
-    if (website) return res.json({ ok: true });
+    const respondError = (status, message) => {
+      if (wantsJson) return res.status(status).json({ ok: false, error: message });
+      return res.redirect(303, "/feedback/?sent=0");
+    };
 
-    const clean = (v, max) => String(v || "").trim().slice(0, max);
-    const safeName = clean(name, 80);
-    const safeEmail = clean(email, 160);
-    const safeType = clean(type, 40);
-    const safeMessage = clean(message, 5000);
+    try {
+      const { name = "", email = "", type = "", message = "", website = "" } = req.body || {};
 
-    if (!safeMessage) return res.status(400).json({ ok: false, error: "請填寫回饋內容" });
-    if (safeEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(safeEmail)) {
-      return res.status(400).json({ ok: false, error: "Email 格式不正確" });
-    }
+      if (website) {
+        if (wantsJson) return res.json({ ok: true });
+        return res.redirect(303, "/feedback/?sent=1");
+      }
 
-    const user = process.env.FEEDBACK_EMAIL_USER;
-    const pass = process.env.FEEDBACK_EMAIL_PASS;
-    if (!user || !pass) {
-      console.error("Feedback mail env vars are missing.");
-      return res.status(503).json({ ok: false, error: "回饋信箱尚未完成設定" });
-    }
+      const clean = (v, max) => String(v || "").trim().slice(0, max);
+      const safeName = clean(name, 80);
+      const safeEmail = clean(email, 160);
+      const safeType = clean(type, 40);
+      const safeMessage = clean(message, 5000);
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: { user, pass }
-    });
+      if (!safeMessage) return respondError(400, "請填寫回饋內容");
+      if (safeEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(safeEmail)) {
+        return respondError(400, "Email 格式不正確");
+      }
 
-    await transporter.sendMail({
-      from: `"未完籤所網站" <${user}>`,
-      to: "jiazhen0404@gmail.com",
-      replyTo: safeEmail || undefined,
-      subject: `[未完籤所意見回饋] ${safeType || "其他"}`,
-      text:
+      const user = process.env.FEEDBACK_EMAIL_USER;
+      const pass = process.env.FEEDBACK_EMAIL_PASS;
+      if (!user || !pass) {
+        console.error("Feedback mail env vars are missing.");
+        return respondError(503, "回饋信箱尚未完成設定");
+      }
+
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: { user, pass }
+      });
+
+      await transporter.verify();
+
+      await transporter.sendMail({
+        from: `"未完籤所網站" <${user}>`,
+        to: "jiazhen0404@gmail.com",
+        replyTo: safeEmail || undefined,
+        subject: `[未完籤所意見回饋] ${safeType || "其他"}`,
+        text:
 `稱呼：${safeName || "未填"}
 Email：${safeEmail || "未填"}
 回饋類型：${safeType || "其他"}
 
 內容：
 ${safeMessage}`
-    });
+      });
 
-    return res.json({ ok: true });
-  } catch (err) {
-    console.error("Feedback email error:", err);
-    return res.status(500).json({ ok: false, error: "寄送失敗，請稍後再試" });
+      console.log("Feedback email sent successfully.");
+
+      if (wantsJson) return res.json({ ok: true });
+      return res.redirect(303, "/feedback/?sent=1");
+    } catch (err) {
+      console.error("Feedback email error:", err && (err.stack || err.message || err));
+      return respondError(500, "寄送失敗，請稍後再試");
+    }
   }
-});
+);
 
 app.listen(PORT,()=>{
   console.log(`Magic Oracle running at http://localhost:${PORT}`);

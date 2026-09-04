@@ -51,7 +51,7 @@
 </section>
 
 <main class="fb-wrap">
-  <form class="fb-card" id="feedbackForm">
+  <form class="fb-card" id="feedbackForm" action="/api/feedback" method="POST">
     <input name="website" id="website" type="text" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
     <div class="fb-row">
       <div class="fb-field">
@@ -93,42 +93,64 @@
 
 <script src="/assets/site-header.js"></script>
 <script>
-document.getElementById('feedbackForm').addEventListener('submit', async function(e){
-  e.preventDefault();
-  const form = e.currentTarget;
+(function(){
+  const form = document.getElementById('feedbackForm');
   const button = document.getElementById('feedbackSubmit');
   const status = document.getElementById('feedbackStatus');
-  const payload = {
-    name: document.getElementById('name').value.trim(),
-    email: document.getElementById('email').value.trim(),
-    type: document.getElementById('type').value,
-    message: document.getElementById('message').value.trim(),
-    website: document.getElementById('website').value
-  };
-  if (!payload.message) {
-    status.textContent = '請先填寫想說的話。';
-    return;
-  }
-  button.disabled = true;
-  button.textContent = '正在送出…';
-  status.textContent = '';
-  try {
-    const r = await fetch('/api/feedback', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(payload)
-    });
-    const data = await r.json().catch(()=>({}));
-    if (!r.ok || !data.ok) throw new Error(data.error || '送出失敗');
-    form.reset();
+
+  // Show result after a native form POST redirect.
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('sent') === '1') {
     status.textContent = '✓ 已收到你的回饋，謝謝你願意告訴我們。';
-  } catch (err) {
-    status.textContent = '目前無法送出：' + err.message + '。你也可以直接寄到 jiazhen0404@gmail.com';
-  } finally {
-    button.disabled = false;
-    button.textContent = '送出回饋 →';
+    history.replaceState({}, '', window.location.pathname);
+  } else if (params.get('sent') === '0') {
+    status.textContent = '目前無法送出，請稍後再試。你也可以直接寄到 jiazhen0404@gmail.com';
+    history.replaceState({}, '', window.location.pathname);
   }
-});
+
+  if (!form || !window.fetch) return;
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+
+    const message = document.getElementById('message').value.trim();
+    if (!message) {
+      status.textContent = '請先填寫想說的話。';
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = '正在送出…';
+    status.textContent = '';
+
+    const payload = {
+      name: document.getElementById('name').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      type: document.getElementById('type').value,
+      message,
+      website: document.getElementById('website').value
+    };
+
+    try {
+      const r = await fetch('/api/feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type':'application/json',
+          'Accept':'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await r.json().catch(()=>({}));
+      if (!r.ok || !data.ok) throw new Error(data.error || '送出失敗');
+      form.reset();
+      status.textContent = '✓ 已收到你的回饋，謝謝你願意告訴我們。';
+    } catch (err) {
+      // If AJAX fails, submit the same form normally to the server.
+      status.textContent = '正在改用備援方式送出…';
+      form.submit();
+    }
+  });
+})();
 </script>
 
 </body>
