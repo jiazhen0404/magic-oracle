@@ -1691,7 +1691,7 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
       oracle.href='/oracle.html';
       oracle.setAttribute('aria-label','前往真人占卜');
       oracle.innerHTML='<div class="topic-no">02 · REAL ORACLE</div>'+
-        '<div class="home-oracle-portrait-wrap"><img class="home-oracle-portrait" src="/assets/teachers/james.png" alt="真人占卜師" loading="lazy"></div>'+
+        '<div class="home-oracle-portrait-wrap"><img class="home-oracle-portrait" src="/assets/home/real-oracle-tarot.png" alt="五張塔羅牌攤開的真人占卜意象" loading="lazy"></div>'+
         '<div class="topic-title">真人占卜</div>'+
         '<div class="topic-copy">如果你的問題有更多背景與細節，可以交給真人占卜師親自解讀。</div>'+
         '<div class="topic-action">看看真人占卜 →</div>'+
@@ -1711,6 +1711,53 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
         '<div class="topic-action">填寫問卷・抽限定籤 →</div>'+
         '<div class="topic-countdown">限定回信 · 完成即抽</div>';
       grid.appendChild(card);
+    }
+
+
+    if(!grid.querySelector('.home-line-card')){
+      var line=document.createElement('a');
+      line.className='topic-card home-line-card';
+      line.href='https://line.me/R/ti/p/@017vwhwj?utm_source=web&utm_medium=guidance_carousel&utm_campaign=line_add';
+      line.setAttribute('aria-label','加入未完籤所 LINE 官方帳號');
+      line.innerHTML='<div class="topic-no">04 · LINE OFFICIAL</div>'+ 
+        '<div class="home-line-icon-wrap"><img class="home-line-icon" src="/assets/line/line-icon.png" alt="LINE" loading="lazy"></div>'+ 
+        '<div class="topic-title">在 LINE 裡，也可以抽籤</div>'+ 
+        '<div class="topic-copy">加入好友後直接在對話中抽籤，不用另外開網站，也不用註冊。</div>'+ 
+        '<div class="topic-action">加入 LINE 好友 →</div>'+ 
+        '<div class="topic-countdown">抽籤更方便 · 開放通知不錯過</div>';
+      line.addEventListener('click',function(){try{gtag('event','line_add_click',{button_location:'home_guidance_carousel'})}catch(e){}});
+      grid.appendChild(line);
+    }
+
+    var section=grid.closest('.weekly-topics-section');
+    if(section && !section.querySelector('.guidance-arrow')){
+      var prev=document.createElement('button');
+      prev.type='button';
+      prev.className='guidance-arrow prev';
+      prev.setAttribute('aria-label','上一張');
+      prev.innerHTML='‹';
+      var next=document.createElement('button');
+      next.type='button';
+      next.className='guidance-arrow next';
+      next.setAttribute('aria-label','下一張');
+      next.innerHTML='›';
+      section.appendChild(prev);
+      section.appendChild(next);
+
+      function step(dir){
+        var first=grid.querySelector('.topic-card');
+        var amount=first ? first.getBoundingClientRect().width + 12 : grid.clientWidth*.8;
+        grid.scrollBy({left:dir*amount,behavior:'smooth'});
+      }
+      function updateArrows(){
+        prev.disabled=grid.scrollLeft<=3;
+        next.disabled=grid.scrollLeft+grid.clientWidth>=grid.scrollWidth-3;
+      }
+      prev.addEventListener('click',function(){step(-1)});
+      next.addEventListener('click',function(){step(1)});
+      grid.addEventListener('scroll',updateArrows,{passive:true});
+      window.addEventListener('resize',updateArrows);
+      setTimeout(updateArrows,80);
     }
   }
   addExtraCards();
