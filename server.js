@@ -217,6 +217,11 @@ for (const [shortPath, destination] of Object.entries(SHORT_LINKS)) {
   app.get(shortPath, (req, res) => res.redirect(302, destination));
 }
 
+// 「未完文章」入口保留 /articles/，但目前先進入已有文章的曖昧系列。
+app.get(["/articles", "/articles/"], (req,res)=>{
+  return res.redirect(302, "/love/ambiguity/");
+});
+
 // Legacy SEO entry links used ?entry=breakup. Always send them into the real oracle flow.
 app.get("/", (req,res,next)=>{
   if(req.query && req.query.entry){

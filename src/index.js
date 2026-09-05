@@ -43,6 +43,12 @@ export default {
     const path = url.pathname;
 
     try {
+      // 「未完文章」首頁入口維持 /articles/，實際先帶讀者到目前已有內容的曖昧系列。
+      // 分類只放在文章區選單第二層，不額外讓使用者先經過空的分類總覽。
+      if ((path === '/articles' || path === '/articles/') && request.method === 'GET') {
+        return Response.redirect(new URL('/love/ambiguity/', url).toString(), 302);
+      }
+
       // 真人占卜。不是它的路徑會回 null，繼續往下走
       const oracle = await oracleRoutes(request, env, ctx, url);
       if (oracle) return oracle;
