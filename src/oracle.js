@@ -1553,6 +1553,16 @@ if(KEY){
 }
 document.getElementById('pw').addEventListener('keydown', function(e){ if(e.key==='Enter') login() });
 </script><div style="text-align:center;padding:22px 0 8px;font-size:11px;color:#5A5468;font-family:ui-monospace,monospace">build ${BUILD}</div>
+
+<style id="site-footer-v1">
+.site-footer{background:transparent;border-top:1px solid rgba(217,189,130,.18);color:#9d91aa;font-size:13px;padding:40px 20px;text-align:center;width:100%;box-sizing:border-box}
+.site-footer nav{display:flex;justify-content:center;gap:24px;flex-wrap:wrap}
+.site-footer a{color:#9d91aa;text-decoration:none;font-size:13px}
+.site-footer a:hover{color:#d9bd82}
+.site-footer p{margin:20px 0 0;font-size:13px}
+@media(max-width:760px){.site-footer nav{flex-direction:column;align-items:center;gap:16px}}
+</style>
+<footer class="site-footer"><nav aria-label="網站資訊"><a href="/privacy/">隱私政策</a><a href="/terms/">服務條款</a><a href="/refund/">退款說明</a><a href="mailto:jiazhen0404@gmail.com">聯絡我們</a></nav><p>© 2026 未完籤所 MAGIC ORACLE</p></footer>
 </body></html>`;
 
 const PAGE_TEACHER = `<!doctype html><html lang="zh-Hant"><head>
@@ -1825,6 +1835,16 @@ if(KEY){
 }
 document.getElementById('pw').addEventListener('keydown', function(e){ if(e.key==='Enter') login() });
 </script><div style="text-align:center;padding:22px 0 8px;font-size:11px;color:#5A5468;font-family:ui-monospace,monospace">build ${BUILD}</div>
+
+<style id="site-footer-v1">
+.site-footer{background:transparent;border-top:1px solid rgba(217,189,130,.18);color:#9d91aa;font-size:13px;padding:40px 20px;text-align:center;width:100%;box-sizing:border-box}
+.site-footer nav{display:flex;justify-content:center;gap:24px;flex-wrap:wrap}
+.site-footer a{color:#9d91aa;text-decoration:none;font-size:13px}
+.site-footer a:hover{color:#d9bd82}
+.site-footer p{margin:20px 0 0;font-size:13px}
+@media(max-width:760px){.site-footer nav{flex-direction:column;align-items:center;gap:16px}}
+</style>
+<footer class="site-footer"><nav aria-label="網站資訊"><a href="/privacy/">隱私政策</a><a href="/terms/">服務條款</a><a href="/refund/">退款說明</a><a href="mailto:jiazhen0404@gmail.com">聯絡我們</a></nav><p>© 2026 未完籤所 MAGIC ORACLE</p></footer>
 </body></html>`;
 
 const PAGE_ORDER = `<!doctype html><html lang="zh-Hant"><head>
@@ -1983,6 +2003,16 @@ function sendFu(){
 }
 document.getElementById('mail').addEventListener('keydown', function(e){ if(e.key==='Enter') look() });
 </script><div style="text-align:center;padding:22px 0 8px;font-size:11px;color:#5A5468;font-family:ui-monospace,monospace">build ${BUILD}</div>
+
+<style id="site-footer-v1">
+.site-footer{background:transparent;border-top:1px solid rgba(217,189,130,.18);color:#9d91aa;font-size:13px;padding:40px 20px;text-align:center;width:100%;box-sizing:border-box}
+.site-footer nav{display:flex;justify-content:center;gap:24px;flex-wrap:wrap}
+.site-footer a{color:#9d91aa;text-decoration:none;font-size:13px}
+.site-footer a:hover{color:#d9bd82}
+.site-footer p{margin:20px 0 0;font-size:13px}
+@media(max-width:760px){.site-footer nav{flex-direction:column;align-items:center;gap:16px}}
+</style>
+<footer class="site-footer"><nav aria-label="網站資訊"><a href="/privacy/">隱私政策</a><a href="/terms/">服務條款</a><a href="/refund/">退款說明</a><a href="mailto:jiazhen0404@gmail.com">聯絡我們</a></nav><p>© 2026 未完籤所 MAGIC ORACLE</p></footer>
 </body></html>`;
 
 /* ══════════════════════════════════════════════════
@@ -2043,6 +2073,16 @@ function slow(){
 }
 poll();
 </script><div style="text-align:center;padding:22px 0 8px;font-size:11px;color:#5A5468;font-family:ui-monospace,monospace">build ${BUILD}</div>
+
+<style id="site-footer-v1">
+.site-footer{background:transparent;border-top:1px solid rgba(217,189,130,.18);color:#9d91aa;font-size:13px;padding:40px 20px;text-align:center;width:100%;box-sizing:border-box}
+.site-footer nav{display:flex;justify-content:center;gap:24px;flex-wrap:wrap}
+.site-footer a{color:#9d91aa;text-decoration:none;font-size:13px}
+.site-footer a:hover{color:#d9bd82}
+.site-footer p{margin:20px 0 0;font-size:13px}
+@media(max-width:760px){.site-footer nav{flex-direction:column;align-items:center;gap:16px}}
+</style>
+<footer class="site-footer"><nav aria-label="網站資訊"><a href="/privacy/">隱私政策</a><a href="/terms/">服務條款</a><a href="/refund/">退款說明</a><a href="mailto:jiazhen0404@gmail.com">聯絡我們</a></nav><p>© 2026 未完籤所 MAGIC ORACLE</p></footer>
 </body></html>`;
 
 
