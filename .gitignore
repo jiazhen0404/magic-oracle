@@ -1,0 +1,22 @@
+# 相依套件
+node_modules/
+
+# 環境變數與密鑰（env.example 是範本，要留著）
+.env
+.env.*
+!env.example
+
+# Cloudflare Wrangler 本機狀態
+.wrangler/
+
+# 執行紀錄
+*.log
+npm-debug.log*
+
+# Python 快取（scripts/）
+__pycache__/
+*.pyc
+
+# 作業系統雜訊
+.DS_Store
+Thumbs.db
