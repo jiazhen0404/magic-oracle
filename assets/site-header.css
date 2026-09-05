@@ -15,10 +15,10 @@
 }
 .ww-pill-nav{display:flex;align-items:center;gap:12px}
 .ww-pill-nav a,.ww-header-actions a{
-  min-width:64px; height:29px; padding:0 15px; display:inline-flex;
+  min-width:64px; height:32px; padding:0 15px; display:inline-flex;
   align-items:center; justify-content:center; border:1px solid rgba(224,196,139,.48);
   border-radius:999px; text-decoration:none; color:#e8dfe9;
-  font-size:12px; letter-spacing:.04em; transition:.22s ease;
+  font-size:13px; letter-spacing:.04em; transition:.22s ease;
   background:rgba(24,13,39,.10);
 }
 .ww-pill-nav a:hover,.ww-header-actions a:hover{
@@ -26,7 +26,8 @@
   background:rgba(217,189,130,.08); transform:translateY(-1px);
 }
 .ww-header-actions{justify-self:end;display:flex;gap:12px}
-.ww-header-actions .ww-primary{color:#f4dfae;border-color:rgba(235,205,143,.72)}
+.ww-header-actions .ww-primary{color:#1a1230;background:linear-gradient(135deg,#e8c982,#d9bd82);border-color:rgba(235,205,143,.9);font-weight:500}
+.ww-header-actions .ww-primary:hover{background:linear-gradient(135deg,#f2d795,#e3c88f);color:#1a1230}
 .ww-menu-toggle{
   display:none; justify-self:end; width:42px; height:42px; padding:8px;
   border:0; background:transparent; cursor:pointer;
