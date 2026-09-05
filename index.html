@@ -1690,7 +1690,7 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
       oracle.className='topic-card home-real-oracle-card';
       oracle.href='/oracle.html';
       oracle.setAttribute('aria-label','前往真人占卜');
-      oracle.innerHTML='<div class="topic-no">02 · REAL ORACLE</div>'+
+      oracle.innerHTML='<div class="topic-no">03 · REAL ORACLE</div>'+
         '<div class="home-oracle-portrait-wrap"><img class="home-oracle-portrait" src="/assets/home/real-oracle-tarot.png" alt="五張塔羅牌攤開的真人占卜意象" loading="lazy"></div>'+
         '<div class="topic-title">真人占卜</div>'+
         '<div class="topic-copy">如果你的問題有更多背景與細節，可以交給真人占卜師親自解讀。</div>'+
@@ -1704,7 +1704,7 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
       card.className='topic-card home-survey-card';
       card.href='/survey/';
       card.setAttribute('aria-label','填寫未完籤所使用體驗問卷，完成後抽限定籤');
-      card.innerHTML='<div class="topic-no">03 · LIMITED REPLY</div>'+
+      card.innerHTML='<div class="topic-no">04 · LIMITED REPLY</div>'+
         '<div class="home-survey-orb" aria-hidden="true"></div>'+
         '<div class="topic-title">留下你的使用感受</div>'+
         '<div class="topic-copy">用 3 分鐘告訴我們真實體驗，完成後抽一支只屬於填答者的限定籤。</div>'+
@@ -1719,14 +1719,15 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
       line.className='topic-card home-line-card';
       line.href='https://line.me/R/ti/p/@017vwhwj?utm_source=web&utm_medium=guidance_carousel&utm_campaign=line_add';
       line.setAttribute('aria-label','加入未完籤所 LINE 官方帳號');
-      line.innerHTML='<div class="topic-no">04 · LINE OFFICIAL</div>'+ 
+      line.innerHTML='<div class="topic-no">02 · LINE OFFICIAL</div>'+ 
         '<div class="home-line-icon-wrap"><img class="home-line-icon" src="/assets/line/line-icon.png" alt="LINE" loading="lazy"></div>'+ 
         '<div class="topic-title">在 LINE 裡，也可以抽籤</div>'+ 
         '<div class="topic-copy">加入好友後直接在對話中抽籤，不用另外開網站，也不用註冊。</div>'+ 
         '<div class="topic-action">加入 LINE 好友 →</div>'+ 
         '<div class="topic-countdown">抽籤更方便 · 開放通知不錯過</div>';
       line.addEventListener('click',function(){try{gtag('event','line_add_click',{button_location:'home_guidance_carousel'})}catch(e){}});
-      grid.appendChild(line);
+      var oracleCard=grid.querySelector('.home-real-oracle-card');
+      if(oracleCard) grid.insertBefore(line,oracleCard); else grid.appendChild(line);
     }
 
     var section=grid.closest('.weekly-topics-section');
