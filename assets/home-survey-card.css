@@ -7,3 +7,15 @@
 .home-survey-card:hover{border-color:rgba(232,201,135,.65);transform:translateY(-2px)}
 .home-survey-card{transition:transform .2s,border-color .2s}
 @media(max-width:700px){.weekly-topic-grid{flex-direction:column;align-items:center}.weekly-topics-section{width:min(88%,430px)}.home-survey-orb{width:118px;height:108px}}
+
+/* Three-card guidance row: Guanyin / Real Oracle / Survey */
+@media(min-width:701px){
+  .weekly-topics-section{width:min(94%,980px)}
+  .weekly-topic-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:stretch}
+  .weekly-topic-grid .topic-card,.weekly-topic-grid .home-survey-card,.weekly-topic-grid .home-real-oracle-card{width:100%;min-width:0}
+}
+.home-real-oracle-card{text-decoration:none;color:inherit;cursor:pointer;transition:transform .2s,border-color .2s}
+.home-real-oracle-card:hover{border-color:rgba(232,201,135,.65);transform:translateY(-2px)}
+.home-oracle-portrait-wrap{width:118px;height:112px;margin:5px auto 2px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;border-radius:58px 58px 22px 22px;background:radial-gradient(circle at 50% 28%,rgba(225,194,255,.22),rgba(120,76,160,.06) 48%,transparent 72%)}
+.home-oracle-portrait{width:104px;height:108px;object-fit:cover;object-position:center top;filter:drop-shadow(0 0 16px rgba(216,186,255,.18))}
+@media(max-width:700px){.home-oracle-portrait-wrap{width:118px;height:108px}.home-oracle-portrait{width:102px;height:104px}}
