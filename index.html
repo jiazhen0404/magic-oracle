@@ -1690,7 +1690,7 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
       oracle.className='topic-card home-real-oracle-card';
       oracle.href='/oracle.html';
       oracle.setAttribute('aria-label','前往真人占卜');
-      oracle.innerHTML='<div class="topic-no">03 · REAL ORACLE</div>'+
+      oracle.innerHTML='<div class="topic-no">04 · REAL ORACLE</div>'+
         '<div class="home-oracle-portrait-wrap"><img class="home-oracle-portrait" src="/assets/home/real-oracle-tarot.png" alt="五張塔羅牌攤開的真人占卜意象" loading="lazy"></div>'+
         '<div class="topic-title">真人占卜</div>'+
         '<div class="topic-copy">如果你的問題有更多背景與細節，可以交給真人占卜師親自解讀。</div>'+
@@ -1704,7 +1704,7 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
       card.className='topic-card home-survey-card';
       card.href='/survey/';
       card.setAttribute('aria-label','填寫未完籤所使用體驗問卷，完成後抽限定籤');
-      card.innerHTML='<div class="topic-no">04 · LIMITED REPLY</div>'+
+      card.innerHTML='<div class="topic-no">03 · LIMITED REPLY</div>'+
         '<div class="home-survey-orb" aria-hidden="true"></div>'+
         '<div class="topic-title">留下你的使用感受</div>'+
         '<div class="topic-copy">用 3 分鐘告訴我們真實體驗，完成後抽一支只屬於填答者的限定籤。</div>'+
@@ -1728,6 +1728,13 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
       line.addEventListener('click',function(){try{gtag('event','line_add_click',{button_location:'home_guidance_carousel'})}catch(e){}});
       var oracleCard=grid.querySelector('.home-real-oracle-card');
       if(oracleCard) grid.insertBefore(line,oracleCard); else grid.appendChild(line);
+    }
+
+    // 固定首頁卡片順序：觀音 → LINE → 問卷 → 真人占卜
+    var surveyCard=grid.querySelector('.home-survey-card');
+    var realOracleCard=grid.querySelector('.home-real-oracle-card');
+    if(surveyCard && realOracleCard && surveyCard.nextElementSibling !== realOracleCard){
+      grid.insertBefore(surveyCard,realOracleCard);
     }
 
     var section=grid.closest('.weekly-topics-section');
