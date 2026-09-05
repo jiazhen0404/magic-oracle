@@ -111,7 +111,7 @@ export default {
 const SURVEY_MULTI_FIELDS = ['issues', 'benefits', 'missing', 'noBuyReasons', 'buyMotivators', 'wantedFeatures'];
 const randomHex = bytes => Array.from(crypto.getRandomValues(new Uint8Array(bytes)), n => n.toString(16).padStart(2, '0')).join('').toUpperCase();
 const SURVEY_ALLOWED = [
-  'topic', 'distress', 'source', 'categoryEase', 'flowClarity', 'device',
+  'nickname', 'email', 'topic', 'distress', 'source', 'categoryEase', 'flowClarity', 'device',
   'matchScore', 'readability', 'extendedAwareness', 'age', 'relationship', 'oneChange'
 ];
 
@@ -127,9 +127,12 @@ async function submitSurvey(request, env) {
   for (const key of SURVEY_MULTI_FIELDS) {
     answer[key] = Array.isArray(body[key]) ? body[key].slice(0, 12).map(v => clean(v, 120)) : [];
   }
-  if (!answer.topic || !answer.distress || !answer.source || !answer.categoryEase ||
+  if (!answer.nickname || !answer.email || !answer.topic || !answer.distress || !answer.source || !answer.categoryEase ||
       !answer.flowClarity || !answer.device || !answer.matchScore || !answer.readability) {
     return json({ ok: false, error: '請完成所有必填題目' }, 400);
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(answer.email)) {
+    return json({ ok: false, error: '請輸入有效的 Email' }, 400);
   }
 
   const id = 'SR' + Date.now().toString(36).toUpperCase() + randomHex(4);
