@@ -276,6 +276,7 @@ textarea::placeholder{color:var(--text-faint)}
 .result-survey-action{color:var(--gold);font-size:12px;letter-spacing:.06em}
 .guanyin-band{width:min(92%,720px);margin:10px auto 72px;padding:8px 0 24px}
 .home .oracle-service-band{margin-bottom:72px}
+@media(max-width:760px){.home .oracle-service-band{margin-bottom:36px}.home-inner{padding-bottom:0}}
 .guanyin-band-inner{display:flex;justify-content:center}
 .guanyin-band-inner .topic-card{width:100%}
 .weekly-topics-section{width:min(92%,760px);margin:10px auto 110px;padding:8px 0 24px}.weekly-topics-head{text-align:center;margin:8px 0 18px}.weekly-topics-kicker{font-size:11px;letter-spacing:.32em;color:var(--gold);margin-bottom:7px}.weekly-topics-heading{font-size:19px;letter-spacing:.18em;color:#f5ead8}
@@ -1667,7 +1668,7 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
 <script src="/assets/site-header.js"></script>
 
 <style id="site-footer-v1">
-.site-footer{background:transparent;border-top:1px solid rgba(217,189,130,.18);color:#9d91aa;font-size:13px;padding:40px 20px;text-align:center;width:100%;box-sizing:border-box}
+.site-footer{background:linear-gradient(180deg,rgba(9,6,20,0),rgba(9,6,20,.72) 16%,rgba(9,6,20,.86));border-top:1px solid rgba(217,189,130,.32);color:#9d91aa;font-size:13px;padding:44px 20px 40px;text-align:center;width:100%;box-sizing:border-box}
 .site-footer-inner{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:30px 24px;width:min(100%,1000px);margin:0 auto;text-align:left}
 .site-footer-col{display:flex;flex-direction:column;gap:11px;min-width:0}
 .site-footer-h{color:#d9bd82;font-size:13px;letter-spacing:.14em;margin-bottom:3px}
