@@ -1661,6 +1661,28 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
 })();
 </script>
 
+<link rel="stylesheet" href="/assets/home-survey-card.css">
+<script>
+(function(){
+  function addSurveyCard(){
+    var grid=document.querySelector('.weekly-topic-grid');
+    if(!grid||grid.querySelector('.home-survey-card'))return;
+    var card=document.createElement('a');
+    card.className='topic-card home-survey-card';
+    card.href='/survey/';
+    card.setAttribute('aria-label','填寫未完籤所使用體驗問卷，完成後抽限定籤');
+    card.innerHTML='<div class="topic-no">02 · LIMITED REPLY</div>'+
+      '<div class="home-survey-orb" aria-hidden="true"></div>'+
+      '<div class="topic-title">留下你的使用感受</div>'+
+      '<div class="topic-copy">用 3 分鐘告訴我們真實體驗，完成後抽一支只屬於填答者的限定籤。</div>'+
+      '<div class="topic-action">填寫問卷・抽限定籤 →</div>'+
+      '<div class="topic-countdown">限定回信 · 完成即抽</div>';
+    grid.appendChild(card);
+  }
+  addSurveyCard();
+  new MutationObserver(addSurveyCard).observe(document.getElementById('root'),{childList:true,subtree:true});
+})();
+</script>
 <script src="/assets/site-header.js"></script>
 </body>
 </html>

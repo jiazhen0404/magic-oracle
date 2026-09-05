@@ -1,0 +1,9 @@
+.weekly-topic-grid{align-items:stretch}
+.weekly-topic-grid .topic-card,.weekly-topic-grid .home-survey-card{width:min(100%,360px)}
+.home-survey-card{text-decoration:none;color:inherit;cursor:pointer}
+.home-survey-orb{width:128px;height:118px;margin:4px auto 2px;display:grid;place-items:center;position:relative}
+.home-survey-orb:before{content:'';width:94px;height:94px;border-radius:50%;background:radial-gradient(circle at 34% 28%,#fff 0,#efd8f2 18%,#a568b0 58%,#4b285b 100%);box-shadow:0 0 24px rgba(223,170,216,.34),inset -10px -13px 18px rgba(45,20,56,.28)}
+.home-survey-orb:after{content:'✦';position:absolute;color:#fff2bd;font-size:29px;text-shadow:0 0 12px #fff}
+.home-survey-card:hover{border-color:rgba(232,201,135,.65);transform:translateY(-2px)}
+.home-survey-card{transition:transform .2s,border-color .2s}
+@media(max-width:700px){.weekly-topic-grid{flex-direction:column;align-items:center}.weekly-topics-section{width:min(88%,430px)}.home-survey-orb{width:118px;height:108px}}

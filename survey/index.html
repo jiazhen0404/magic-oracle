@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>使用體驗調查｜未完籤所</title>
+<meta name="description" content="未完籤所使用體驗調查。留下真實感受，完成後可抽一支問卷限定籤。">
+<link rel="canonical" href="https://unfinished.tw/survey/">
+<link rel="stylesheet" href="/assets/site-header.css"><link rel="stylesheet" href="/assets/survey.css">
+</head>
+<body>
+<header class="ww-site-header"><div class="ww-header-inner"><a class="ww-logo" href="/">未 完 籤 所</a><nav class="ww-pill-nav" aria-label="主要導覽"><a href="/love/">愛情</a><a href="/work/">工作</a><a href="/life/">人生</a><a href="/pet/">寵物</a><a href="/articles/">文章分類</a></nav><div class="ww-header-actions"><a href="/#about">關於</a><a class="ww-primary" href="/#start">開始抽籤</a></div><button class="ww-menu-toggle" type="button" aria-label="開啟選單"><span></span><span></span><span></span></button></div></header>
+<nav class="ww-mobile-menu"><a href="/love/">愛情</a><a href="/work/">工作</a><a href="/life/">人生</a><a href="/pet/">寵物</a><a href="/articles/">文章分類</a><a href="/survey/">使用體驗調查</a></nav>
+<section class="sv-hero"><div class="sv-wrap"><div class="sv-kicker">USER EXPERIENCE · 3 MIN</div><h1>你的感受，會讓未完籤所更完整</h1><p>謝謝你來到這裡。這份問卷約需 3 分鐘，完成後可以抽一支只有填答者才能獲得的限定籤。</p><div class="sv-progress"><span id="progressBar"></span></div><small id="progressText">第 1／4 部分</small></div></section>
+<main class="sv-wrap"><form id="surveyForm" class="sv-card">
+<input name="website" type="text" tabindex="-1" autocomplete="off" class="sv-hp">
+
+<section class="sv-step active" data-step="1"><div class="sv-step-label">01 · 這次為什麼來？</div>
+<fieldset><legend>1. 你這次主要想詢問哪一類問題？<b>*</b></legend><div class="options" data-name="topic"></div></fieldset>
+<fieldset><legend>2. 抽籤以前，這件事困擾你的程度？<b>*</b></legend><div class="scale" data-name="distress" data-left="只是有點好奇" data-right="困擾我很久"></div></fieldset>
+<fieldset><legend>3. 你從哪裡知道未完籤所？<b>*</b></legend><div class="options compact" data-name="source"></div></fieldset>
+</section>
+
+<section class="sv-step" data-step="2"><div class="sv-step-label">02 · 網站使用體驗</div>
+<fieldset><legend>4. 你是否能順利找到適合自己的抽籤分類？<b>*</b></legend><div class="options" data-name="categoryEase"></div></fieldset>
+<fieldset><legend>5. 整個抽籤流程是否清楚？<b>*</b></legend><div class="options" data-name="flowClarity"></div></fieldset>
+<fieldset><legend>6. 使用過程中遇到哪些問題？</legend><div class="options compact checks" data-name="issues"></div></fieldset>
+<fieldset><legend>7. 你主要使用什麼裝置？<b>*</b></legend><div class="options compact" data-name="device"></div></fieldset>
+</section>
+
+<section class="sv-step" data-step="3"><div class="sv-step-label">03 · 籤文內容感受</div>
+<fieldset><legend>8. 這次抽到的籤，與你的情況符合程度？<b>*</b></legend><div class="scale" data-name="matchScore" data-left="完全不符合" data-right="非常貼近"></div></fieldset>
+<fieldset><legend>9. 籤文是否容易理解？<b>*</b></legend><div class="options" data-name="readability"></div></fieldset>
+<fieldset><legend>10. 籤文對你最大的幫助是什麼？</legend><div class="options checks" data-name="benefits"></div></fieldset>
+<fieldset><legend>11. 你覺得目前的籤文還缺少什麼？</legend><div class="options checks" data-name="missing"></div></fieldset>
+</section>
+
+<section class="sv-step" data-step="4"><div class="sv-step-label">04 · 付費與未來功能</div>
+<fieldset><legend>12. 你是否注意到「延伸籤 NT$99」？</legend><div class="options" data-name="extendedAwareness"></div></fieldset>
+<fieldset><legend>13. 如果沒有購買，主要原因是什麼？</legend><div class="options checks" data-name="noBuyReasons"></div></fieldset>
+<fieldset><legend>14. 什麼內容會提高你購買延伸籤的意願？</legend><div class="options checks" data-name="buyMotivators"></div></fieldset>
+<fieldset><legend>15. 最希望未完籤所增加什麼？<small>最多選 3 項</small></legend><div class="options checks" data-name="wantedFeatures" data-max="3"></div></fieldset>
+<fieldset><legend>16. 如果只能修改一件事，你最希望我們改善什麼？</legend><textarea name="oneChange" maxlength="1500" placeholder="任何真實感受都很有幫助"></textarea></fieldset>
+<details><summary>選填：關於你</summary><fieldset><legend>年齡範圍</legend><div class="options compact" data-name="age"></div></fieldset><fieldset><legend>目前感情狀態</legend><div class="options compact" data-name="relationship"></div></fieldset></details>
+</section>
+
+<div id="formError" class="sv-error" role="alert"></div><div class="sv-actions"><button type="button" id="prevBtn" class="secondary">← 上一步</button><button type="button" id="nextBtn">下一步 →</button><button type="submit" id="submitBtn">送出並取得限定籤 →</button></div>
+</form></main>
+<script src="/assets/site-header.js"></script><script src="/assets/survey.js"></script>
+</body></html>

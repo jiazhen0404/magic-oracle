@@ -24,6 +24,7 @@
  */
 
 import EXTENDED from './extended-love.json';
+import SURVEY_FORTUNES from './survey-fortunes.json';
 import { buildPdfHtml } from './pdf-template.js';
 import { oracleRoutes, oraclePaid } from './oracle.js';
 
@@ -74,6 +75,15 @@ export default {
       if (path === '/api/feedback' && request.method === 'POST') {
         return await sendFeedback(request, env);
       }
+      if (path === '/api/survey' && request.method === 'POST') {
+        return await submitSurvey(request, env);
+      }
+      if (path === '/api/survey/admin' && request.method === 'GET') {
+        return await surveyAdmin(request, env, url);
+      }
+      if (path === '/api/survey/reward' && request.method === 'POST') {
+        return await surveyReward(request, env);
+      }
       if (path === '/api/health') {
         return json({
           ok: true,
@@ -97,6 +107,88 @@ export default {
     return env.ASSETS.fetch(request);
   },
 };
+
+const SURVEY_MULTI_FIELDS = ['issues', 'benefits', 'missing', 'noBuyReasons', 'buyMotivators', 'wantedFeatures'];
+const randomHex = bytes => Array.from(crypto.getRandomValues(new Uint8Array(bytes)), n => n.toString(16).padStart(2, '0')).join('').toUpperCase();
+const SURVEY_ALLOWED = [
+  'topic', 'distress', 'source', 'categoryEase', 'flowClarity', 'device',
+  'matchScore', 'readability', 'extendedAwareness', 'age', 'relationship', 'oneChange'
+];
+
+async function submitSurvey(request, env) {
+  if (!env.ORDERS) return json({ ok: false, error: 'survey_not_configured' }, 503);
+  let body;
+  try { body = await request.json(); } catch { return json({ ok: false, error: 'bad_json' }, 400); }
+  if (String(body.website || '').trim()) return json({ ok: true });
+
+  const clean = (v, max = 300) => String(v == null ? '' : v).trim().slice(0, max);
+  const answer = {};
+  for (const key of SURVEY_ALLOWED) answer[key] = clean(body[key], key === 'oneChange' ? 1500 : 300);
+  for (const key of SURVEY_MULTI_FIELDS) {
+    answer[key] = Array.isArray(body[key]) ? body[key].slice(0, 12).map(v => clean(v, 120)) : [];
+  }
+  if (!answer.topic || !answer.distress || !answer.source || !answer.categoryEase ||
+      !answer.flowClarity || !answer.device || !answer.matchScore || !answer.readability) {
+    return json({ ok: false, error: '請完成所有必填題目' }, 400);
+  }
+
+  const id = 'SR' + Date.now().toString(36).toUpperCase() + randomHex(4);
+  const rewardToken = crypto.randomUUID().replace(/-/g, '');
+  const record = { id, createdAt: new Date().toISOString(), ...answer };
+  await Promise.all([
+    env.ORDERS.put('survey:' + id, JSON.stringify(record)),
+    env.ORDERS.put('survey-reward:' + rewardToken, JSON.stringify({ id, used: false, createdAt: record.createdAt }), { expirationTtl: 60 * 60 * 24 * 30 })
+  ]);
+  return json({ ok: true, id, rewardToken });
+}
+
+async function surveyAdmin(request, env, url) {
+  if (!env.ADMIN_KEY || request.headers.get('X-Admin-Key') !== env.ADMIN_KEY) {
+    return json({ error: 'unauthorized' }, 401);
+  }
+  if (!env.ORDERS) return json({ error: 'survey_not_configured' }, 503);
+  const rows = [];
+  let cursor;
+  do {
+    const listed = await env.ORDERS.list({ prefix: 'survey:', cursor, limit: 1000 });
+    const values = await Promise.all(listed.keys.map(k => env.ORDERS.get(k.name, 'json')));
+    values.forEach(v => { if (v) rows.push(v); });
+    cursor = listed.list_complete ? undefined : listed.cursor;
+  } while (cursor && rows.length < 10000);
+  rows.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+  return json({ ok: true, total: rows.length, rewardCount: rows.filter(r => r.rewardClaimedAt).length, rows });
+}
+
+async function surveyReward(request, env) {
+  if (!env.ORDERS) return json({ error: 'survey_not_configured' }, 503);
+  let body;
+  try { body = await request.json(); } catch { return json({ error: 'bad_json' }, 400); }
+  const token = String(body.token || '');
+  if (!/^[a-f0-9]{32}$/i.test(token)) return json({ error: 'invalid_token' }, 400);
+  const rewardKey = 'survey-reward:' + token;
+  const reward = await env.ORDERS.get(rewardKey, 'json');
+  if (!reward) return json({ error: 'expired_token' }, 404);
+
+  let fortuneId = reward.fortuneId;
+  if (!fortuneId) {
+    const random = crypto.getRandomValues(new Uint32Array(1))[0];
+    fortuneId = SURVEY_FORTUNES[random % SURVEY_FORTUNES.length].id;
+    reward.fortuneId = fortuneId;
+    reward.used = true;
+    reward.claimedAt = new Date().toISOString();
+    await env.ORDERS.put(rewardKey, JSON.stringify(reward), { expirationTtl: 60 * 60 * 24 * 30 });
+    const surveyKey = 'survey:' + reward.id;
+    const survey = await env.ORDERS.get(surveyKey, 'json');
+    if (survey) {
+      survey.rewardClaimedAt = reward.claimedAt;
+      survey.rewardFortuneId = fortuneId;
+      await env.ORDERS.put(surveyKey, JSON.stringify(survey));
+    }
+  }
+  const fortune = SURVEY_FORTUNES.find(x => x.id === fortuneId);
+  if (!fortune) return json({ error: 'fortune_not_found' }, 500);
+  return json({ ok: true, fortune });
+}
 
 
 /* ── 使用者意見回饋：Cloudflare Worker → Resend HTTP API ── */
