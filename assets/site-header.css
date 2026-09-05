@@ -59,3 +59,24 @@ body.ww-menu-open .ww-menu-toggle span:nth-child(3){transform:translateY(-7px) r
   .ww-pill-nav,.ww-header-actions{display:none}
   .ww-menu-toggle{display:block}
 }
+
+/* Editorial article taxonomy dropdown */
+.ww-nav-group{position:relative;display:flex;align-items:center}
+.ww-nav-trigger{cursor:default}
+.ww-subnav{display:none;position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);min-width:150px;padding:8px;background:rgba(20,12,33,.97);border:1px solid rgba(224,196,139,.35);border-radius:14px;box-shadow:0 16px 40px rgba(0,0,0,.28)}
+.ww-nav-group:hover .ww-subnav,.ww-nav-group:focus-within .ww-subnav{display:block}
+.ww-subnav a{display:flex!important;min-width:0!important;height:auto!important;padding:10px 12px!important;border:0!important;border-radius:9px!important;justify-content:flex-start!important;white-space:nowrap;background:transparent!important}
+.ww-subnav a:hover{background:rgba(217,189,130,.09)!important;transform:none!important}
+.ww-mobile-section{padding:15px 4px 6px;color:#d9bd7e;font-size:13px;letter-spacing:.14em}
+.ww-mobile-sub{padding-left:16px!important;font-size:18px!important}
+/* taxonomy hubs */
+.ww-taxonomy{max-width:1040px;margin:0 auto;padding:56px 24px 88px;color:#eee4ef}
+.ww-taxonomy .crumb{font-size:13px;color:#ad9fb3;margin-bottom:30px}.ww-taxonomy .crumb a{color:#d8c18f;text-decoration:none}
+.ww-taxonomy h1{font-family:"Noto Serif TC","Songti TC",serif;font-size:clamp(34px,5vw,58px);font-weight:500;margin:0 0 14px;color:#f4e8ef}
+.ww-taxonomy .lead{max-width:720px;line-height:1.9;color:#cfc2d1;margin-bottom:42px}
+.ww-category-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.ww-category-card{display:block;padding:26px;border:1px solid rgba(224,196,139,.28);border-radius:18px;text-decoration:none;background:rgba(255,255,255,.025);transition:.2s ease}
+.ww-category-card:hover{border-color:rgba(224,196,139,.65);transform:translateY(-2px)}
+.ww-category-card h2{margin:0 0 8px;color:#f2dfb2;font-size:22px;font-family:"Noto Serif TC","Songti TC",serif}.ww-category-card p{margin:0;color:#bfb2c3;line-height:1.7;font-size:14px}
+.ww-empty{margin-top:34px;padding:34px;border:1px dashed rgba(224,196,139,.32);border-radius:18px;text-align:center;color:#bfb2c3}.ww-empty strong{display:block;color:#ead9ae;font-size:18px;margin-bottom:8px}
+@media(max-width:720px){.ww-category-grid{grid-template-columns:1fr}.ww-taxonomy{padding-top:36px}}

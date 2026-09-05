@@ -331,4 +331,27 @@
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
+
+  <url><loc>https://unfinished.tw/articles/</loc></url>
+  <url><loc>https://unfinished.tw/articles/love/</loc></url>
+  <url><loc>https://unfinished.tw/articles/love/breakup/</loc></url>
+  <url><loc>https://unfinished.tw/articles/love/unrequited/</loc></url>
+  <url><loc>https://unfinished.tw/articles/love/relationship/</loc></url>
+  <url><loc>https://unfinished.tw/articles/love/marriage/</loc></url>
+  <url><loc>https://unfinished.tw/articles/work/</loc></url>
+  <url><loc>https://unfinished.tw/articles/work/job-search/</loc></url>
+  <url><loc>https://unfinished.tw/articles/work/career-change/</loc></url>
+  <url><loc>https://unfinished.tw/articles/work/workplace/</loc></url>
+  <url><loc>https://unfinished.tw/articles/work/business/</loc></url>
+  <url><loc>https://unfinished.tw/articles/work/confused/</loc></url>
+  <url><loc>https://unfinished.tw/articles/life/</loc></url>
+  <url><loc>https://unfinished.tw/articles/life/confusion/</loc></url>
+  <url><loc>https://unfinished.tw/articles/life/decisions/</loc></url>
+  <url><loc>https://unfinished.tw/articles/life/growth/</loc></url>
+  <url><loc>https://unfinished.tw/articles/life/emotions/</loc></url>
+  <url><loc>https://unfinished.tw/articles/pet/</loc></url>
+  <url><loc>https://unfinished.tw/articles/pet/together/</loc></url>
+  <url><loc>https://unfinished.tw/articles/pet/behavior/</loc></url>
+  <url><loc>https://unfinished.tw/articles/pet/care/</loc></url>
+  <url><loc>https://unfinished.tw/articles/pet/loss/</loc></url>
 </urlset>
