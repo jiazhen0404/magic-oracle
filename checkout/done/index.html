@@ -129,8 +129,11 @@ async function unlock(slipId){
       body: JSON.stringify({ tradeNo })
     });
     if(!r.ok) throw new Error('unlock ' + r.status);
-    const { token, slipId: sid } = await r.json();
+    const { token, slipId: sid, countPurchase } = await r.json();
     const id = sid || slipId;
+
+    // 伺服器說這筆還沒被記過，才送 purchase。見下方 reportPurchase。
+    if(countPurchase) reportPurchase(id);
 
     try{ localStorage.setItem('unfinished.unlock.' + id, token); }catch(e){}
 
@@ -143,6 +146,43 @@ async function unlock(slipId){
     show('ok','付款成功','謝謝你，款項已經收到。',
          '解鎖時出了點狀況。請來信 hello@unfinished.tw 並附上下方訂單編號，我們會立刻替你處理。');
   }
+}
+
+/* ── GA4：purchase ──
+   兩道關卡都過了才送：
+     1. /api/order-status 回 paid。那個狀態只有綠界 ReturnURL 通知、
+        且 CheckMacValue 驗章與金額都對得上時才會寫進 KV。
+     2. /api/unlock 回 countPurchase: true。去重旗標記在訂單上，
+        所以重新整理、回上一頁、換分頁、換裝置都不會被算成第二筆。
+
+   參數形狀跟 index.html 的 OracleCommerce.purchase 一致 —— 這一頁是
+   另一份文件，讀不到那支模組，但事件名稱與欄位刻意寫成同一套，
+   不是另外開一套追蹤架構。
+
+   已知會漏記：使用者付款成功後直接關掉視窗、沒有回到這一頁。
+   要補這一段需要 server-side Measurement Protocol，見施工報告。 */
+function reportPurchase(slipId){
+  try{
+    const m = /^love_([a-z-]+)_(\d{3})$/.exec(slipId || '');
+    if(!m || !tradeNo) return;
+
+    const SUB = { breakup:'失戀中', flirting:'曖昧中', relationship:'關係中',
+                  single:'單身中', fortune:'桃花運勢' };
+    const subtheme = SUB[m[1]] || '';
+    const num = String(parseInt(m[2], 10));
+    const b = { theme:'love', theme_label:'愛情', subtheme:subtheme,
+                fortune_number:num, fortune_title:'' };
+
+    gtag('event','purchase', Object.assign({}, b, {
+      transaction_id: tradeNo,          // 綠界的 MerchantTradeNo，同一筆訂單永遠同一個
+      currency:'TWD', value:99,
+      items:[{ item_id:'extended_love_' + num,
+               item_name:'延伸解籤・' + (subtheme || 'love'),
+               item_category:'love', item_category2:subtheme,
+               price:99, quantity:1 }]
+    }));
+    gtag('event','purchase_love', b);
+  }catch(e){ console.warn('GA4 purchase 送出失敗', e); }
 }
 
 function show(kind, t, b, s){

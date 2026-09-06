@@ -185,8 +185,11 @@ footer{text-align:center;color:var(--faint);font-size:12px;margin-top:56px}
   gtag("event","extended_page_view",{page_state:state,utm_source:src,utm_medium:med,
        theme:theme,subtheme:sub,fortune_number:n,fortune_title:slip});
 
+  // 這裡送 extended_checkout_click（跟解籤結果頁那顆按鈕同一個事件名），
+  // 不送 begin_checkout —— begin_checkout 統一在 /checkout/ 那一頁送。
+  // 兩邊都送的話，走「解籤頁 → /extended/ → /checkout/」的人會被算兩次。
   if(buy) buy.addEventListener("click",function(){
-    gtag("event","begin_checkout",{button_location:"extended_page",price_shown:99,
+    gtag("event","extended_checkout_click",{button_location:"extended_page",price_shown:99,
          slip_id:slipId,utm_source:src,utm_medium:med,
          theme:theme,subtheme:sub,fortune_number:n,fortune_title:slip});
   });

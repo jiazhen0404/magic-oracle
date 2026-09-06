@@ -172,6 +172,35 @@ const SLIP_ID  = params.get('id') || '';
 const QUESTION = sessionStorage.getItem('oracle.question') || '';
 const DRAWN_AT = sessionStorage.getItem('oracle.drawnAt') || new Date().toISOString();
 
+/* ── GA4：begin_checkout ──
+   放在這一頁載入時，而不是各個「購買」按鈕上。原因是進到結帳的路有三條
+   （解籤結果頁、/extended/、LINE 卡片），按鈕上綁會漏掉 LINE 那條，
+   三個地方都綁又會重複計算。這一頁是唯一的交會點。
+   參數形狀刻意跟 index.html 的 OracleCommerce 一致，
+   否則 view_item → begin_checkout → purchase 在 GA4 裡會對不起來。 */
+(function(){
+  const m = /^love_([a-z-]+)_(\d{3})$/.exec(SLIP_ID);
+  if(!m) return;                    // 網址壞掉就不送，寧可少一筆也不要髒資料
+
+  const key = 'oracle_begin_checkout:' + SLIP_ID;
+  try{ if(sessionStorage.getItem(key) === '1') return; }catch(e){}   // 重新整理不重複送
+  try{ sessionStorage.setItem(key, '1'); }catch(e){}
+
+  const subtheme = SITU[m[1]] || '';
+  const num = String(parseInt(m[2], 10));
+  const b = { theme:'love', theme_label:'愛情', subtheme:subtheme,
+              fortune_number:num, fortune_title:'' };
+
+  gtag('event','begin_checkout', Object.assign({}, b, {
+    currency:'TWD', value:99,
+    items:[{ item_id:'extended_love_' + num,
+             item_name:'延伸解籤・' + (subtheme || 'love'),
+             item_category:'love', item_category2:subtheme,
+             price:99, quantity:1 }]
+  }));
+  gtag('event','checkout_love', b);
+})();
+
 const nameEl = document.getElementById('slipName');
 const metaEl = document.getElementById('slipMeta');
 

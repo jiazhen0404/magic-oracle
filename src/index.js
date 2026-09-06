@@ -469,9 +469,18 @@ async function issueUnlock(request, env) {
   const order = JSON.parse(raw);
   if (order.status !== 'paid') return json({ error: 'not_paid', status: order.status }, 402);
 
+  // GA4 的 purchase 只能記一次。去重記在訂單上而不是瀏覽器裡，
+  // 因為使用者會重新整理成功頁、回上一頁、換分頁、甚至換一台裝置開同一個網址，
+  // localStorage 擋不住這些。第一個問到的人才會拿到 countPurchase: true。
+  const countPurchase = !order.gaPurchaseReportedAt;
+  if (countPurchase) order.gaPurchaseReportedAt = new Date().toISOString();
+
   // 同一筆訂單重複索取，就把同一張憑證給回去，不會一直長出新的
   if (order.unlockToken) {
-    return json({ token: order.unlockToken, slipId: order.slipId });
+    if (countPurchase) {
+      await env.ORDERS.put('order:' + tradeNo, JSON.stringify(order), { expirationTtl: ORDER_TTL });
+    }
+    return json({ token: order.unlockToken, slipId: order.slipId, countPurchase });
   }
 
   const token = randomToken();
@@ -484,7 +493,7 @@ async function issueUnlock(request, env) {
   order.unlockToken = token;
   await env.ORDERS.put('order:' + tradeNo, JSON.stringify(order), { expirationTtl: ORDER_TTL });
 
-  return json({ token, slipId: order.slipId });
+  return json({ token, slipId: order.slipId, countPurchase });
 }
 
 /* ══════════════════════════════════════════════════════════
