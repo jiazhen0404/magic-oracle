@@ -123,7 +123,7 @@ const SURVEY_MULTI_FIELDS = ['issues', 'benefits', 'missing', 'noBuyReasons', 'b
 const randomHex = bytes => Array.from(crypto.getRandomValues(new Uint8Array(bytes)), n => n.toString(16).padStart(2, '0')).join('').toUpperCase();
 const SURVEY_ALLOWED = [
   'nickname', 'email', 'topic', 'distress', 'source', 'categoryEase', 'flowClarity', 'device',
-  'matchScore', 'readability', 'extendedAwareness', 'age', 'relationship', 'oneChange'
+  'matchScore', 'readability', 'extendedAwareness', 'returnIntent', 'age', 'relationship', 'oneChange'
 ];
 
 async function submitSurvey(request, env) {
