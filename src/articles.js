@@ -37,8 +37,10 @@ export function mdToHtml(md, links, drawSub) {
       const t2 = links[key.trim()];
       return t2 ? `<a href="/${t2}/">${key.trim()}</a>` : `${key.trim()}`;
     });
-    return s.replace(/([^]+)/g,
-      (m, k) => `<span class="todo">[INTERNAL_LINK: ${k}]</span>`);
+    // 目標還沒寫的內鏈：輸出成 HTML 註解，讀者看不到，grep 得到；
+    // 補上 slug 重新發布就會變成真連結。之前是可見的 <span class="todo">。
+    return s.replace(/\s*([^]+)/g,
+      (m, k) => `<!-- TODO internal link: ${k} -->`);
   };
 
   const out = []; let buf = [], ul = [], ol = [], q = [];
