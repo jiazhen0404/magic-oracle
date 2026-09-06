@@ -118,12 +118,18 @@ function clusterGrid(current, siblings) {
 }
 
 export function renderPage(a, links, siblings) {
+  const LABEL = { articles: '文章分類', love: '愛情', work: '工作', life: '人生', pet: '毛孩',
+                  breakup: '分手', unrequited: '單戀', relationship: '戀愛關係', marriage: '婚姻' };
   const url = `https://unfinished.tw/${a.slug}/`;
   const crumbLast = a.crumb || (a.h1.includes('？') ? a.h1.split('？')[0] + '？' : a.h1);
-  const parts = a.slug.split('/');           // love/breakup/xxx
+  // slug 逐段組出麵包屑，標籤查表，查不到就用該段的原文
+  const parts = a.slug.split('/').slice(0, -1);   // 去掉文章自身那一段
   const crumbs = [`<a href="/">首頁</a>`];
-  if (parts[0]) crumbs.push(`<a href="/${parts[0]}/">愛情</a>`);
-  if (parts[1]) crumbs.push(`<a href="/${parts[0]}/${parts[1]}/">失戀／分手</a>`);
+  let acc = '';
+  for (const seg of parts) {
+    acc += '/' + seg;
+    crumbs.push(`<a href="${acc}/">${esc(LABEL[seg] || seg)}</a>`);
+  }
   crumbs.push(esc(crumbLast));
 
   const ld = [
@@ -132,11 +138,11 @@ export function renderPage(a, links, siblings) {
       mainEntityOfPage: { '@type': 'WebPage', '@id': url },
       publisher: { '@type': 'Organization', name: '未完籤所', url: 'https://unfinished.tw/' } },
     { '@context': 'https://schema.org', '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: '首頁', item: 'https://unfinished.tw/' },
-        { '@type': 'ListItem', position: 2, name: '愛情', item: 'https://unfinished.tw/love/' },
-        { '@type': 'ListItem', position: 3, name: '失戀／分手', item: 'https://unfinished.tw/love/breakup/' },
-        { '@type': 'ListItem', position: 4, name: crumbLast, item: url }] }];
+      itemListElement: [{ '@type': 'ListItem', position: 1, name: '首頁', item: 'https://unfinished.tw/' }]
+        .concat(a.slug.split('/').slice(0, -1).map((seg, i, arr) => ({
+          '@type': 'ListItem', position: i + 2, name: LABEL[seg] || seg,
+          item: 'https://unfinished.tw/' + arr.slice(0, i + 1).join('/') + '/' })))
+        .concat([{ '@type': 'ListItem', position: a.slug.split('/').length + 1, name: crumbLast, item: url }]) }];
 
   return `<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">` +
     `<title>${escAttr(a.title)}</title>` +

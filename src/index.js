@@ -45,10 +45,13 @@ export default {
     const path = url.pathname;
 
     try {
-      // 「未完文章」首頁入口維持 /articles/，實際先帶讀者到目前已有內容的曖昧系列。
-      // 分類只放在文章區選單第二層，不額外讓使用者先經過空的分類總覽。
-      if ((path === '/articles' || path === '/articles/') && request.method === 'GET') {
-        return Response.redirect(new URL('/love/ambiguity/', url).toString(), 302);
+      // 分手系列文章 2026-09 從抽籤路徑搬到文章分類下。舊網址永久轉址。
+      // 靜態資源會先於 Worker 被送出，所以這裡只在舊檔案已刪除時才會執行到。
+      const MOVED_ARTICLES = ['how-to-get-over-a-breakup','will-we-get-back-together','should-you-go-no-contact','how-long-no-contact','ex-suddenly-contacted-me'];
+      const movedMatch = path.match(/^\/love\/breakup\/([a-z-]+)\/?$/);
+      if (movedMatch && MOVED_ARTICLES.includes(movedMatch[1])) {
+        return Response.redirect(
+          new URL('/articles/love/breakup/' + movedMatch[1] + '/', url).toString(), 301);
       }
 
       // 真人占卜。不是它的路徑會回 null，繼續往下走
