@@ -95,6 +95,16 @@ button:disabled{opacity:.45;cursor:default}
       <div id="msg"></div>
     </div>
   </div>
+
+  <div id="pv" hidden style="position:fixed;inset:0;z-index:50;background:#0b0718;display:flex;flex-direction:column">
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line)">
+      <span style="color:var(--gold);font-size:13px;letter-spacing:.08em">預覽</span>
+      <span style="color:var(--faint);font-size:12px">這是實際會產生的頁面，尚未寫入任何地方</span>
+      <button id="pvClose" style="margin-left:auto">關閉預覽</button>
+    </div>
+    <iframe id="pvFrame" style="flex:1;width:100%;border:0;background:#160d2c"></iframe>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -115,7 +125,7 @@ const write = a => FIELDS.forEach(f => $('f_' + f).value = a && a[f] != null ? a
 
 async function load() {
   const { res, data } = await api('/api/articles');
-  if (!res.ok) { say(data.error || '讀取失敗', false); return; }
+  if (!res.ok) { say('列表讀取失敗（' + res.status + '）：' + (data.error || ''), false); return; }
   $('list').innerHTML = (data.articles || []).map(a =>
     `<div class="item${current === a.slug ? ' on' : ''}" data-slug="${a.slug}">
        <b>${a.h1 || a.title}</b><span>/${a.slug}/</span>
@@ -134,7 +144,7 @@ async function load() {
 
 async function open(slug) {
   const { res, data } = await api('/api/articles/item?slug=' + encodeURIComponent(slug));
-  if (!res.ok) { say(data.error || '讀取失敗', false); return; }
+  if (!res.ok) { say('讀取失敗（' + res.status + ' ' + (data.error || '') + '）slug=' + slug, false); return; }
   current = slug; write(data.article); load(); say('已載入 /' + slug + '/', true);
 }
 
@@ -151,16 +161,18 @@ $('new').onclick = () => { current = null; write({ eyebrow: '失戀／分手', d
 
 $('save').onclick = async () => {
   const { res, data } = await api('/api/articles/save', { method: 'POST', body: JSON.stringify(read()) });
-  if (!res.ok) return say(data.error || '儲存失敗', false);
+  if (!res.ok) return say('儲存失敗（' + res.status + '）：' + (data.error || ''), false);
   current = read().slug; say('已儲存草稿', true); load();
 };
 
 $('preview').onclick = async () => {
   const { res, data } = await api('/api/articles/preview', { method: 'POST', body: JSON.stringify(read()) });
-  if (!res.ok) return say('預覽失敗', false);
-  const w = window.open('', '_blank');
-  w.document.write(data); w.document.close();
+  if (!res.ok) return say('預覽失敗（' + res.status + '）：' + (data && data.error || ''), false);
+  $('pvFrame').srcdoc = data;
+  $('pv').hidden = false;
+  say('預覽中。關閉後可以繼續編輯。', true);
 };
+$('pvClose').onclick = () => { $('pv').hidden = true; $('pvFrame').srcdoc = ''; };
 
 $('publish').onclick = async () => {
   const a = read();
