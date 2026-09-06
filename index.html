@@ -1367,11 +1367,19 @@ async function downloadFortuneCard(fortune,format="story",question="",showQuesti
   const filename=`未完籤所_${isSquare?"分享":"完整"}籤卡_第${String(fortune.n).padStart(3,"0")}籤_${fortune.t}.png`;
   const file=new File([blob],filename,{type:"image/png"});
   const isLikelyMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||((navigator.maxTouchPoints||0)>1&&window.innerWidth<1100);
-  const canNativeShare=isLikelyMobile&&!!navigator.share&&!!navigator.canShare&&navigator.canShare({files:[file]});
+  const shareTitle=`未完籤所｜第 ${String(fortune.n).padStart(3,"0")} 籤 ${fortune.t}`;
+  const shareUrl=`https://unfinished.tw/?utm_source=share&utm_medium=oracle_card&utm_campaign=${encodeURIComponent(fortune.theme||"oracle")}`;
+  /* 圖片上雖然印了網址，但那是文字，收到的人要自己打。帶上 url 才會是可點的連結。
+     只是有些平台不接受 files+url 同時給，canShare 會回 false——那種情況要退回只送圖片，
+     不然加了網址反而讓原本能分享的手機變成只能下載。 */
+  const sharePayloadWithUrl={files:[file],title:shareTitle,url:shareUrl};
+  const sharePayloadFilesOnly={files:[file],title:shareTitle};
+  const canNativeShare=isLikelyMobile&&!!navigator.share&&!!navigator.canShare&&navigator.canShare(sharePayloadFilesOnly);
+  const sharePayload=(canNativeShare&&navigator.canShare(sharePayloadWithUrl))?sharePayloadWithUrl:sharePayloadFilesOnly;
   if(canNativeShare){
     try{
-      await navigator.share({files:[file],title:`未完籤所｜第 ${String(fortune.n).padStart(3,"0")} 籤 ${fortune.t}`});
-      trackOracleEvent("share_oracle_card",{format:format,theme:fortune.theme||"",subtheme:fortune.sub||"",fortune_number:fortune.n||"",question_visible:showQuestion?"yes":"no",card_version:"mystic_frame_v2"});
+      await navigator.share(sharePayload);
+      trackOracleEvent("share_oracle_card",{format:format,theme:fortune.theme||"",subtheme:fortune.sub||"",fortune_number:fortune.n||"",question_visible:showQuestion?"yes":"no",card_version:"mystic_frame_v2",link_attached:sharePayload.url?"yes":"no"});
       return;
     }catch(err){
       if(err&&err.name==="AbortError")return;
