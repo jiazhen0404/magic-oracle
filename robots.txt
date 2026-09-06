@@ -9,5 +9,7 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /survey/admin/
 
 Sitemap: https://unfinished.tw/sitemap.xml

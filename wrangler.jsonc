@@ -33,6 +33,9 @@
     // MAIL_FROM 必須用 Resend 驗證過的網域，不然會被拒絕（403）
     "MAIL_FROM": "未完籤所 <hello@unfinished.tw>",
     "ADMIN_EMAIL": "jiazhen0404@gmail.com",
+    // ── 文章後台發布用（不是密鑰，token 要用 wrangler secret put）──
+    "GITHUB_REPO": "jiazhen0404/magic-oracle",
+
     "SITE_URL": "https://unfinished.tw",
     "WORKER_URL": "https://unfinished.tw",
 
@@ -43,6 +46,17 @@
     "MAIL_IRIS": "b0960691947@gmail.com",
     "MAIL_JAMES": "mysticat7779@gmail.com"
   },
+
+  // ── 文章後台資料庫（D1）──
+  // 建立方式：npx wrangler d1 create unfinished-articles
+  // 指令會印出 database_id，貼到下面那行
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "unfinished-articles",
+      "database_id": ""
+    }
+  ],
 
   "kv_namespaces": [
     {

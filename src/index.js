@@ -27,6 +27,7 @@ import EXTENDED from './extended-love.json';
 import SURVEY_FORTUNES from './survey-fortunes.json';
 import { buildPdfHtml } from './pdf-template.js';
 import { oracleRoutes, oraclePaid } from './oracle.js';
+import { articleRoutes } from './articles.js';
 
 const PRICE = 99;                       // 售價，改這裡就好
 const ORDER_TTL = 60 * 60 * 24;         // 訂單暫存 24 小時後自動消失
@@ -74,6 +75,10 @@ export default {
       }
       if (path === '/api/feedback' && request.method === 'POST') {
         return await sendFeedback(request, env);
+      }
+      if (path.startsWith('/api/articles')) {
+        const r = await articleRoutes(request, env, url);
+        if (r) return r;
       }
       if (path === '/api/survey' && request.method === 'POST') {
         return await submitSurvey(request, env);

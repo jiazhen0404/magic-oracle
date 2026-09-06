@@ -1,0 +1,187 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>文章後台｜未完籤所</title><meta name="robots" content="noindex,nofollow">
+<style>
+:root{--gold:#d9bd82;--soft:#d7cfe2;--faint:#a89ab8;--line:rgba(217,189,130,.28)}
+*{box-sizing:border-box}
+body{margin:0;background:#120c22;color:#f3edf7;font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;line-height:1.7}
+.wrap{max-width:1180px;margin:auto;padding:26px 20px 80px}
+h1{font-size:20px;color:var(--gold);letter-spacing:.1em;margin:0 0 4px}
+.sub{color:var(--faint);font-size:13px;margin-bottom:22px}
+.gate{max-width:420px;margin:80px auto;text-align:center}
+.cols{display:grid;grid-template-columns:300px minmax(0,1fr);gap:22px;align-items:start}
+input,textarea,select,button{font-family:inherit;font-size:14px}
+input,textarea,select{width:100%;background:#1b1233;color:#f3edf7;border:1px solid var(--line);border-radius:9px;padding:9px 11px}
+textarea{min-height:440px;line-height:1.85;resize:vertical}
+label{display:block;font-size:12px;color:var(--faint);margin:12px 0 4px;letter-spacing:.04em}
+button{cursor:pointer;border-radius:999px;padding:9px 18px;border:1px solid var(--line);background:#2a1c4a;color:#f1e5c8}
+button.primary{background:linear-gradient(180deg,#8168ad,#50387d);border-color:rgba(217,189,130,.6);color:#fff}
+button:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+.list{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.item{padding:11px 13px;border-bottom:1px solid rgba(217,189,130,.14);cursor:pointer}
+.item:last-child{border-bottom:0}
+.item:hover{background:rgba(217,189,130,.07)}
+.item.on{background:rgba(129,104,173,.28)}
+.item b{display:block;font-size:13.5px;color:#f1e5c8;font-weight:600}
+.item span{display:block;font-size:11.5px;color:var(--faint);word-break:break-all}
+.tag{display:inline-block;font-size:11px;padding:1px 8px;border-radius:999px;margin-top:4px}
+.tag.published{background:rgba(88,160,110,.28);color:#a8e0be}
+.tag.draft{background:rgba(217,189,130,.18);color:var(--gold)}
+.msg{margin-top:14px;font-size:13px;padding:10px 13px;border-radius:9px;white-space:pre-wrap;word-break:break-all}
+.msg.ok{background:rgba(88,160,110,.16);color:#a8e0be}
+.msg.err{background:rgba(200,90,90,.16);color:#f0b4b4}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.links{margin-top:26px;border-top:1px solid var(--line);padding-top:16px}
+.links table{width:100%;border-collapse:collapse;font-size:13px}
+.links td{padding:6px 4px;border-bottom:1px solid rgba(217,189,130,.12);vertical-align:middle}
+.links input{padding:6px 9px}
+.hint{color:var(--faint);font-size:12px;margin-top:6px}
+@media(max-width:860px){.cols{grid-template-columns:1fr}.two{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+
+<div id="gate" class="gate">
+  <h1>文章後台</h1>
+  <div class="sub">請輸入管理金鑰</div>
+  <input id="key" type="password" placeholder="ADMIN_KEY" autocomplete="off">
+  <div class="row" style="justify-content:center"><button class="primary" id="enter">進入</button></div>
+  <div id="gateMsg"></div>
+</div>
+
+<div id="app" hidden>
+  <h1>文章後台</h1>
+  <div class="sub">存稿在 D1，發布會產生靜態 HTML 並 commit 進 repo，Cloudflare 隨後自動部署。</div>
+
+  <div class="cols">
+    <div>
+      <button id="new" style="width:100%">＋ 新文章</button>
+      <div class="list" id="list" style="margin-top:12px"></div>
+
+      <div class="links">
+        <div style="color:var(--gold);font-size:13px;letter-spacing:.08em">內鏈標記對應</div>
+        <div class="hint">正文寫 <code>[INTERNAL_LINK: 鍵]</code>，這裡填目標 slug 就會變成真連結；留空則保留待補標記。</div>
+        <table id="linkTable"></table>
+        <div class="two" style="margin-top:8px">
+          <input id="newKey" placeholder="新的鍵，例：放不下前任">
+          <input id="newTarget" placeholder="目標 slug，可留空">
+        </div>
+        <div class="row"><button id="addLink">新增／更新對應</button></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="two">
+        <div><label>slug（不含前後斜線）</label><input id="f_slug" placeholder="love/breakup/xxx"></div>
+        <div><label>狀態</label><select id="f_status"><option value="draft">草稿</option><option value="published">已發布</option></select></div>
+      </div>
+      <label>SEO Title（瀏覽器分頁標題）</label><input id="f_title">
+      <label>H1（頁面大標）</label><input id="f_h1">
+      <label>Meta Description</label><textarea id="f_description" style="min-height:70px"></textarea>
+      <div class="two">
+        <div><label>主關鍵字（也用作叢集卡片副標）</label><input id="f_keyword"></div>
+        <div><label>麵包屑最後一層（留空自動由 H1 推導）</label><input id="f_crumb"></div>
+      </div>
+      <div class="two">
+        <div><label>Hero 眉標</label><input id="f_eyebrow" value="失戀／分手"></div>
+        <div><label>免費抽籤 CTA 預選情境</label><input id="f_draw_sub" value="失戀中"></div>
+      </div>
+      <label>正文（markdown：## / ### / - / 1. / &gt; / **粗體** / [INTERNAL_LINK: 鍵] / [CTA：免費抽籤] / [CTA：了解真人占卜]）</label>
+      <textarea id="f_body_md"></textarea>
+
+      <div class="row">
+        <button class="primary" id="save">儲存草稿</button>
+        <button id="preview">預覽</button>
+        <button id="publish">發布並 commit</button>
+      </div>
+      <div id="msg"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+let KEY = sessionStorage.getItem('uw_admin_key') || '';
+let current = null;
+
+const api = async (path, opts = {}) => {
+  const res = await fetch(path, { ...opts, headers: { 'X-Admin-Key': KEY, 'content-type': 'application/json', ...(opts.headers || {}) } });
+  const ct = res.headers.get('content-type') || '';
+  return { res, data: ct.includes('json') ? await res.json() : await res.text() };
+};
+const say = (t, ok) => { const m = $('msg'); m.className = 'msg ' + (ok ? 'ok' : 'err'); m.textContent = t; };
+
+const FIELDS = ['slug','status','title','h1','description','keyword','crumb','eyebrow','draw_sub','body_md'];
+const read = () => Object.fromEntries(FIELDS.map(f => [f, $('f_' + f).value]));
+const write = a => FIELDS.forEach(f => $('f_' + f).value = a && a[f] != null ? a[f] : '');
+
+async function load() {
+  const { res, data } = await api('/api/articles');
+  if (!res.ok) { say(data.error || '讀取失敗', false); return; }
+  $('list').innerHTML = (data.articles || []).map(a =>
+    `<div class="item${current === a.slug ? ' on' : ''}" data-slug="${a.slug}">
+       <b>${a.h1 || a.title}</b><span>/${a.slug}/</span>
+       <span class="tag ${a.status}">${a.status === 'published' ? '已發布' : '草稿'}</span></div>`).join('')
+    || '<div class="item"><span>還沒有文章</span></div>';
+  $('list').querySelectorAll('.item[data-slug]').forEach(el =>
+    el.onclick = () => open(el.dataset.slug));
+  $('linkTable').innerHTML = (data.links || []).map(l =>
+    `<tr><td style="color:#f1e5c8">${l.key}</td>
+      <td><input data-key="${l.key}" value="${l.target_slug || ''}" placeholder="尚未設定"></td></tr>`).join('');
+  $('linkTable').querySelectorAll('input').forEach(inp => inp.onchange = async () => {
+    await api('/api/articles/link', { method: 'POST', body: JSON.stringify({ key: inp.dataset.key, target_slug: inp.value.trim() || null }) });
+    say('內鏈對應已更新：' + inp.dataset.key, true);
+  });
+}
+
+async function open(slug) {
+  const { res, data } = await api('/api/articles/item?slug=' + encodeURIComponent(slug));
+  if (!res.ok) { say(data.error || '讀取失敗', false); return; }
+  current = slug; write(data.article); load(); say('已載入 /' + slug + '/', true);
+}
+
+$('enter').onclick = async () => {
+  KEY = $('key').value.trim();
+  const { res } = await api('/api/articles');
+  if (!res.ok) { $('gateMsg').className = 'msg err'; $('gateMsg').textContent = '金鑰不正確'; return; }
+  sessionStorage.setItem('uw_admin_key', KEY);
+  $('gate').hidden = true; $('app').hidden = false; load();
+};
+$('key').onkeydown = e => { if (e.key === 'Enter') $('enter').click(); };
+
+$('new').onclick = () => { current = null; write({ eyebrow: '失戀／分手', draw_sub: '失戀中', status: 'draft' }); say('新文章，填好後按儲存草稿', true); };
+
+$('save').onclick = async () => {
+  const { res, data } = await api('/api/articles/save', { method: 'POST', body: JSON.stringify(read()) });
+  if (!res.ok) return say(data.error || '儲存失敗', false);
+  current = read().slug; say('已儲存草稿', true); load();
+};
+
+$('preview').onclick = async () => {
+  const { res, data } = await api('/api/articles/preview', { method: 'POST', body: JSON.stringify(read()) });
+  if (!res.ok) return say('預覽失敗', false);
+  const w = window.open('', '_blank');
+  w.document.write(data); w.document.close();
+};
+
+$('publish').onclick = async () => {
+  const a = read();
+  if (!a.slug) return say('請先填 slug', false);
+  if (!confirm('發布會直接 commit 進 GitHub repo，Cloudflare 會自動部署到 unfinished.tw。\n\n/' + a.slug + '/\n\n確定發布？')) return;
+  const s = await api('/api/articles/save', { method: 'POST', body: JSON.stringify(a) });
+  if (!s.res.ok) return say(s.data.error || '儲存失敗', false);
+  say('發布中…', true);
+  const { res, data } = await api('/api/articles/publish', { method: 'POST', body: JSON.stringify({ slug: a.slug }) });
+  if (!res.ok) return say('發布失敗：' + (data.error || ''), false);
+  say('已發布\ncommit ' + (data.commit || '').slice(0, 7) + '\nsitemap ' + (data.sitemapCommit || '無需更新') + '\n' + data.url + '\n\nCloudflare 部署通常需要 1–3 分鐘。', true);
+  load();
+};
+
+$('addLink').onclick = async () => {
+  const key = $('newKey').value.trim();
+  if (!key) return say('請填鍵', false);
+  await api('/api/articles/link', { method: 'POST', body: JSON.stringify({ key, target_slug: $('newTarget').value.trim() || null }) });
+  $('newKey').value = ''; $('newTarget').value = ''; say('已新增對應', true); load();
+};
+
+if (KEY) { $('gate').hidden = true; $('app').hidden = false; load(); }
+</script>
+</div></body></html>
