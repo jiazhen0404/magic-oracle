@@ -765,6 +765,19 @@ function magicOraclePay(){
 .extended-preview-btn:active{transform:translateY(1px)}
 .extended-preview-btn[disabled]{cursor:default;opacity:.78}
 .extended-preview-thanks{margin-top:12px;color:#e6c98f;font-size:12px;line-height:1.7}
+.extended-preview-toc-btn{margin:0 0 12px;padding:9px 18px;border:1px solid rgba(199,156,82,.42);
+  border-radius:999px;background:none;color:#e6d5b0;font-family:inherit;font-size:12.5px;
+  letter-spacing:.06em;cursor:pointer;transition:border-color .2s,color .2s}
+.extended-preview-toc-btn:hover{border-color:rgba(199,156,82,.8);color:#f6e9c8}
+.extended-preview-toc-btn[disabled]{opacity:.6;cursor:default}
+.extended-preview-toc{margin:0 0 16px;padding:15px 16px;border:1px solid rgba(199,156,82,.24);
+  border-radius:14px;background:rgba(16,10,27,.5);text-align:left}
+.extended-preview-toc-meta{color:var(--gold);font-size:11.5px;letter-spacing:.1em;margin-bottom:10px}
+.extended-preview-toc ul{list-style:none;margin:0;padding:0}
+.extended-preview-toc li{position:relative;padding:5px 0 5px 20px;color:var(--text-soft);
+  font-size:13px;line-height:1.7}
+.extended-preview-toc li::before{content:"✓";position:absolute;left:0;color:var(--gold);font-size:12px}
+.extended-preview-toc-more{margin-top:8px;padding-left:20px;color:#9d8ba8;font-size:12px}
 .donate-inline-title{
   color:var(--gold);font-size:15px;letter-spacing:.2em;margin-bottom:6px;
 }
@@ -1491,15 +1504,76 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
     const slipId=(theme==="love"&&extSlug&&extNo>0)?("love_"+extSlug+"_"+String(extNo).padStart(3,"0")):"";
 
     if(slipId){
+      // 原本這裡寫「約 1300 字」，但 170 支的實際字數是 783～2165，
+      // 對大多數籤來說是誇大的。改成由目錄顯示每支籤自己的真實數字。
       section.innerHTML='<div class="extended-preview-kicker">完整解籤 · NT$ 99</div>'
         +'<div class="extended-preview-title">想知道這支籤，如何對應你現在的處境？</div>'
-        +'<div class="extended-preview-copy">為這一支籤寫的完整解讀：情境解析、對方或環境的可能反應、後續走向，以及你現在能採取的具體行動。約 1300 字，另附一份 PDF 寄到你信箱。</div>'
+        +'<div class="extended-preview-copy">為這一支籤寫的完整解讀：情境解析、對方或環境的可能反應、後續走向，以及你現在能採取的具體行動。另附一份 PDF 寄到你信箱。</div>'
+        +'<button type="button" class="extended-preview-toc-btn">看看這支籤會解讀什麼</button>'
+        +'<div class="extended-preview-toc" hidden></div>'
         +'<button type="button" class="extended-preview-btn">閱讀完整解籤　NT$ 99</button>';
       const buy=section.querySelector(".extended-preview-btn");
+      const tocBtn=section.querySelector(".extended-preview-toc-btn");
+      const toc=section.querySelector(".extended-preview-toc");
       try{sessionStorage.setItem("oracle.drawnAt",new Date().toISOString());}catch(e){}
+
+      const ctx={theme:theme,theme_label:themeLabels[theme]||theme,subtheme:subtheme,
+        fortune_number:fortuneNumber,fortune_title:title,slip_id:slipId,fortune_id:slipId};
+
+      /* 目錄。點了才抓、才顯示、才送事件 —— 抽完籤沒點的人不會被算進
+         「真的主動看了商品內容」那一群，這是這條漏斗要分開的兩件事。
+         後端只回小標題與數量，正文一個字都不會經過這裡。 */
+      tocBtn.addEventListener("click",function(){
+        if(tocBtn.disabled)return;
+        tocBtn.disabled=true;
+
+        // 主動點「看延伸籤」。原本這兩個事件只在非愛情的「即將開放」分支送，
+        // 可購買的愛情籤反而沒有 —— 漏斗第二層對能買的籤是空的。
+        send("extended_reading_interest",Object.assign({},ctx,
+          {button_location:"result_after_fortune",interest_version:"toc_v1"}));
+        if(theme!=="unknown")send("extended_interest_"+theme,ctx);
+
+        tocBtn.textContent="載入中⋯";
+        fetch("/api/extended-outline?id="+encodeURIComponent(slipId),{cache:"no-store"})
+          .then(function(r){ if(!r.ok)throw new Error(r.status); return r.json(); })
+          .then(function(d){
+            const titles=d.titles||[];
+            const SHOW=5;
+            const meta=document.createElement("div");
+            meta.className="extended-preview-toc-meta";
+            meta.textContent="完整內容約 "+d.approxWordCount+" 字・共 "+d.sectionCount+" 個解讀章節";
+            const ul=document.createElement("ul");
+            titles.slice(0,SHOW).forEach(function(t){
+              const li=document.createElement("li");
+              li.textContent=t;               // 用 textContent，不用 innerHTML
+              ul.appendChild(li);
+            });
+            toc.appendChild(meta); toc.appendChild(ul);
+            if(titles.length>SHOW){
+              const more=document.createElement("div");
+              more.className="extended-preview-toc-more";
+              more.textContent="⋯⋯還有 "+(titles.length-SHOW)+" 個章節";
+              toc.appendChild(more);
+            }
+            toc.hidden=false;
+            tocBtn.hidden=true;
+
+            // 目錄「真的顯示出來」之後才送。抓失敗就不會走到這裡。
+            send("extended_preview_view",Object.assign({},ctx,{
+              section_count:d.sectionCount, approx_word_count:d.approxWordCount,
+              price:99, currency:"TWD"}));
+          })
+          .catch(function(err){
+            console.warn("延伸籤目錄載入失敗",err);
+            tocBtn.textContent="看看這支籤會解讀什麼";
+            tocBtn.disabled=false;          // 讓使用者可以再試一次
+          });
+      });
+
       buy.addEventListener("click",function(){
-        send("extended_checkout_click",{theme:theme,theme_label:themeLabels[theme]||theme,subtheme:subtheme,
-          fortune_number:fortuneNumber,fortune_title:title,slip_id:slipId,button_location:"result_after_fortune"});
+        send("extended_checkout_click",Object.assign({},ctx,
+          {button_location:"result_after_fortune",price:99,currency:"TWD",
+           saw_outline:toc.hidden?"no":"yes"}));
         location.href="/checkout/?id="+encodeURIComponent(slipId);
       });
     }else{

@@ -73,6 +73,9 @@ export default {
       if (path === '/api/extended' && request.method === 'GET') {
         return await readExtended(request, url, env);
       }
+      if (path === '/api/extended-outline' && request.method === 'GET') {
+        return extendedOutline(url);
+      }
       if (path === '/api/resend-pdf' && request.method === 'POST') {
         return await resendPdf(request, env, url);
       }
@@ -500,6 +503,36 @@ async function issueUnlock(request, env) {
    五、讀取延伸解籤全文
    沒有有效憑證就回 402，前端據此顯示「尚未解鎖」。
    ══════════════════════════════════════════════════════════ */
+
+/* 延伸解籤的「目錄」——只有小標題與數量，不含任何一段正文。
+   不需要憑證，因為這是給還沒付款的人看的商品說明。
+
+   ★ 這個端點永遠只能碰 sections[].title。
+     不要為了「順便」把 paragraphs、poem、outcomeDetail 加進來——
+     那些是付費內容，只能由 /api/extended 憑憑證回傳。
+     章節數與字數是每支籤各自算出來的，寫死一個數字對大部分籤都是錯的
+     （實際章節數 3～10，字數 783～2165）。 */
+function extendedOutline(url) {
+  const slipId = url.searchParams.get('id') || '';
+  if (!/^love_[a-z-]{3,20}_\d{3}$/.test(slipId)) return json({ error: 'bad_slip_id' }, 400);
+
+  const slip = EXTENDED.find((x) => x.id === slipId);
+  if (!slip) return json({ error: 'not_found' }, 404);
+
+  const sections = slip.sections || [];
+  const words = sections.reduce(
+    (n, s) => n + (s.paragraphs || []).join('').length,
+    0
+  );
+
+  return json({
+    id: slip.id,
+    sectionCount: sections.length,
+    // 無條件捨去到百位，避免看起來像逐字計算過的精確數字
+    approxWordCount: Math.max(100, Math.floor(words / 100) * 100),
+    titles: sections.map((s) => s.title),
+  });
+}
 
 async function readExtended(request, url, env) {
   const slipId = url.searchParams.get('id') || '';
