@@ -118,8 +118,12 @@ function clusterGrid(current, siblings) {
 }
 
 export function renderPage(a, links, siblings) {
-  const LABEL = { articles: '文章分類', love: '愛情', work: '工作', life: '人生', pet: '毛孩',
-                  breakup: '分手', unrequited: '單戀', relationship: '戀愛關係', marriage: '婚姻' };
+  const LABEL = {
+    articles: '文章分類', love: '愛情', work: '工作', life: '人生', pet: '毛孩', choice: '選擇',
+    breakup: '分手', unrequited: '單戀', relationship: '戀愛關係', marriage: '婚姻', ambiguity: '曖昧',
+    'job-search': '求職', 'career-change': '轉職', workplace: '職場', business: '創業', confused: '工作迷惘',
+    confusion: '人生迷惘', decisions: '選擇與決定', growth: '自我成長', emotions: '情緒整理',
+    together: '毛孩相處', behavior: '毛孩行為', care: '飼養與陪伴', loss: '毛孩離世' };
   const url = `https://unfinished.tw/${a.slug}/`;
   const crumbLast = a.crumb || (a.h1.includes('？') ? a.h1.split('？')[0] + '？' : a.h1);
   // slug 逐段組出麵包屑，標籤查表，查不到就用該段的原文
@@ -131,6 +135,9 @@ export function renderPage(a, links, siblings) {
     crumbs.push(`<a href="${acc}/">${esc(LABEL[seg] || seg)}</a>`);
   }
   crumbs.push(esc(crumbLast));
+  const parentSeg = parts[parts.length - 1] || '';
+  const parentUrl = parts.length ? '/' + parts.join('/') + '/' : '/';
+  const parentLabel = LABEL[parentSeg] || parentSeg || '未完籤所';
 
   const ld = [
     { '@context': 'https://schema.org', '@type': 'Article', headline: a.h1, description: a.description,
@@ -162,7 +169,7 @@ export function renderPage(a, links, siblings) {
     `<div class="eyebrow">✦ ${esc(a.eyebrow || '失戀／分手')} ✦</div><h1>${esc(a.h1)}</h1></section>\n\n` +
     mdToHtml(a.body_md, links, a.draw_sub) + '\n\n' +
     clusterGrid(a.slug, siblings) +
-    `<footer>✦ 未完籤所 · MAGIC ORACLE ✦<br><a href="/love/breakup/">失戀／分手</a> · <a href="/">unfinished.tw</a></footer></div>\n` +
+    `<footer>✦ 未完籤所 · MAGIC ORACLE ✦<br><a href="${parentUrl}">${esc(parentLabel)}</a> · <a href="/">unfinished.tw</a></footer></div>\n` +
     SITE_FOOTER + `\n</body></html>\n`;
 }
 

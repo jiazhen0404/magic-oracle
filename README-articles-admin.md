@@ -28,6 +28,21 @@ npx wrangler d1 create unfinished-articles
 npx wrangler d1 execute unfinished-articles --remote --file=src/articles.sql
 ```
 
+## 2b. 匯入已上線的五篇文章（選用，但建議）
+
+後台的列表是讀 D1 的，剛建好的資料庫是空的，所以看不到網站上已經存在的文章。
+這份 seed 從已上線的頁面反推出草稿內容，匯入後就能在後台直接編輯它們：
+
+```
+npx wrangler d1 execute unfinished-articles --remote --file=src/articles-seed.sql
+```
+
+會寫入 5 篇分手系列文章，以及 8 條內鏈標記對應（其中 3 條的目標留空，因為那些
+文章還沒寫）。重複執行是安全的，同 slug 會覆蓋而不是新增。
+
+> 正文是從 HTML 反推回 markdown 的，段落與標題都對得上，但不保證和原稿逐字相同。
+> 之後從後台重新發布時，產生的頁面會以資料庫裡這份為準。
+
 ## 3. 設定兩個 secret
 
 **ADMIN_KEY** —— 後台登入用。如果 `/survey/admin/` 已經在用同一組，這步可以跳過。
