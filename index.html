@@ -777,7 +777,6 @@ function magicOraclePay(){
 .extended-preview-toc li{position:relative;padding:5px 0 5px 20px;color:var(--text-soft);
   font-size:13px;line-height:1.7}
 .extended-preview-toc li::before{content:"✓";position:absolute;left:0;color:var(--gold);font-size:12px}
-.extended-preview-toc-more{margin-top:8px;padding-left:20px;color:#9d8ba8;font-size:12px}
 .donate-inline-title{
   color:var(--gold);font-size:15px;letter-spacing:.2em;margin-bottom:6px;
 }
@@ -1538,23 +1537,16 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
           .then(function(r){ if(!r.ok)throw new Error(r.status); return r.json(); })
           .then(function(d){
             const titles=d.titles||[];
-            const SHOW=5;
             const meta=document.createElement("div");
             meta.className="extended-preview-toc-meta";
             meta.textContent="完整內容約 "+d.approxWordCount+" 字・共 "+d.sectionCount+" 個解讀章節";
             const ul=document.createElement("ul");
-            titles.slice(0,SHOW).forEach(function(t){
+            titles.forEach(function(t){          // 全部列出，不截斷
               const li=document.createElement("li");
-              li.textContent=t;               // 用 textContent，不用 innerHTML
+              li.textContent=t;                  // 用 textContent，不用 innerHTML
               ul.appendChild(li);
             });
             toc.appendChild(meta); toc.appendChild(ul);
-            if(titles.length>SHOW){
-              const more=document.createElement("div");
-              more.className="extended-preview-toc-more";
-              more.textContent="⋯⋯還有 "+(titles.length-SHOW)+" 個章節";
-              toc.appendChild(more);
-            }
             toc.hidden=false;
             tocBtn.hidden=true;
 
