@@ -777,6 +777,9 @@ function magicOraclePay(){
 .extended-preview-toc li{position:relative;padding:5px 0 5px 20px;color:var(--text-soft);
   font-size:13px;line-height:1.7}
 .extended-preview-toc li::before{content:"✓";position:absolute;left:0;color:var(--gold);font-size:12px}
+/* PDF 是附註，不是賣點——字級與顏色都刻意壓在目錄與 CTA 之下 */
+.extended-preview-note{margin:0 auto 14px;max-width:300px;color:#9d8ba8;font-size:11.5px;line-height:1.75}
+.extended-preview-lead{margin:0 auto 12px;max-width:300px;color:var(--text-soft);font-size:13px;line-height:1.75}
 .donate-inline-title{
   color:var(--gold);font-size:15px;letter-spacing:.2em;margin-bottom:6px;
 }
@@ -1505,15 +1508,21 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
     if(slipId){
       // 原本這裡寫「約 1300 字」，但 170 支的實際字數是 783～2165，
       // 對大多數籤來說是誇大的。改成由目錄顯示每支籤自己的真實數字。
+      /* PDF 那句與 CTA 承接句都跟著目錄一起出現，不在展開前顯示——
+         兩句都指向下面的章節（「這些問題」），沒有目錄時無所指。 */
       section.innerHTML='<div class="extended-preview-kicker">完整解籤 · NT$ 99</div>'
-        +'<div class="extended-preview-title">想知道這支籤，如何對應你現在的處境？</div>'
-        +'<div class="extended-preview-copy">為這一支籤寫的完整解讀：情境解析、對方或環境的可能反應、後續走向，以及你現在能採取的具體行動。另附一份 PDF 寄到你信箱。</div>'
+        +'<div class="extended-preview-title">如果你想再往下看，這支籤還會解讀這些事</div>'
+        +'<div class="extended-preview-copy">延伸籤會沿著你剛剛抽到的籤意繼續往下解讀，每一支籤的內容都不同。</div>'
         +'<button type="button" class="extended-preview-toc-btn">看看這支籤會解讀什麼</button>'
         +'<div class="extended-preview-toc" hidden></div>'
+        +'<div class="extended-preview-note" hidden>購買後可完整閱讀，並附 PDF 寄送至信箱保存。</div>'
+        +'<div class="extended-preview-lead" hidden>想知道這些問題在你的這支籤裡怎麼解讀？</div>'
         +'<button type="button" class="extended-preview-btn">閱讀完整解籤　NT$ 99</button>';
       const buy=section.querySelector(".extended-preview-btn");
       const tocBtn=section.querySelector(".extended-preview-toc-btn");
       const toc=section.querySelector(".extended-preview-toc");
+      const note=section.querySelector(".extended-preview-note");
+      const lead=section.querySelector(".extended-preview-lead");
       try{sessionStorage.setItem("oracle.drawnAt",new Date().toISOString());}catch(e){}
 
       const ctx={theme:theme,theme_label:themeLabels[theme]||theme,subtheme:subtheme,
@@ -1549,6 +1558,8 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
             toc.appendChild(meta); toc.appendChild(ul);
             toc.hidden=false;
             tocBtn.hidden=true;
+            note.hidden=false;   // PDF 附註，層級刻意低於目錄與 CTA
+            lead.hidden=false;   // CTA 上方的承接句
 
             // 目錄「真的顯示出來」之後才送。抓失敗就不會走到這裡。
             send("extended_preview_view",Object.assign({},ctx,{
