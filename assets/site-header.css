@@ -14,6 +14,17 @@
   letter-spacing:.18em; white-space:nowrap;
 }
 .ww-pill-nav{display:flex;align-items:center;gap:12px}
+.ww-header-actions a.ww-social{
+  min-width:32px; width:32px; padding:0;
+  display:inline-flex; align-items:center; justify-content:center;
+  color:#e8dfe9;
+}
+.ww-header-actions a.ww-social:hover{color:#fff0c9}
+.ww-social img,.ww-social svg{width:17px;height:17px;display:block}
+.ww-social svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ww-mobile-menu a.ww-social-m{display:flex;align-items:center;gap:9px}
+.ww-mobile-menu .ww-social-m img,.ww-mobile-menu .ww-social-m svg{width:18px;height:18px;flex:0 0 auto}
+.ww-mobile-menu .ww-social-m svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .ww-nav-divider{
   width:1px; height:18px;
   background:rgba(224,196,139,.28);
