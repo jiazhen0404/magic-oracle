@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>延伸解籤｜即將開放｜未完籤所</title>
-<meta name="description" content="抽到的那支籤說中了，卻沒說完。延伸解籤會把這支籤對應到你此刻的處境：情境解析、對方或環境的可能反應、後續走向，以及你現在能做的具體行動。即將開放。">
+<title>延伸解籤｜未完籤所</title>
+<meta name="description" content="抽到的那支籤說中了，卻沒說完。延伸解籤會把這支籤對應到你此刻的處境：情境解析、對方或環境的可能反應、後續走向，以及你現在能做的具體行動。NT$99，解籤 PDF 寄到你的信箱。">
 <link rel="canonical" href="https://unfinished.tw/extended/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="未完籤所 · MAGIC ORACLE">
-<meta property="og:title" content="延伸解籤｜即將開放">
-<meta property="og:description" content="抽到的那支籤說中了，卻沒說完。延伸解籤會把這支籤對應到你此刻的處境。即將開放。">
+<meta property="og:title" content="延伸解籤｜未完籤所">
+<meta property="og:description" content="抽到的那支籤說中了，卻沒說完。延伸解籤會把這支籤對應到你此刻的處境。NT$99，解籤 PDF 寄到你的信箱。">
 <meta property="og:url" content="https://unfinished.tw/extended/">
 <meta property="og:image" content="https://unfinished.tw/assets/og-cover.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -93,12 +93,11 @@ footer{text-align:center;color:var(--faint);font-size:12px;margin-top:56px}
   <div class="fromline" id="fromline" hidden></div>
   <p class="lead" id="lead">有時候抽到的那支籤說中了，卻沒說完。<br>你知道它在講什麼，但不知道接下來該怎麼辦。</p>
   <div class="price">NT$ <b>99</b> ／ 單次</div>
-  <div class="pill">尚未開放</div>
   <div style="margin-top:22px">
-    <button type="button" class="cta" id="wait">開放時通知我</button>
-    <div class="thanks" id="thanks" role="status" hidden>已記下你。開放時會在 LINE 通知你。</div>
+    <a class="cta" id="buy" href="#" hidden>解鎖這支籤的延伸解籤</a>
+    <a class="cta" id="draw" href="/?theme=love#start" hidden>先免費抽一支籤</a>
   </div>
-  <div class="note">先登記不需付費，也不會向你索取任何個人資料。</div>
+  <div class="note" id="ctaNote">解籤 PDF 會寄到你填的信箱。付款前不需要註冊帳號。</div>
 </section>
 
 <h2>延伸解籤會多給什麼</h2>
@@ -116,9 +115,9 @@ footer{text-align:center;color:var(--faint);font-size:12px;margin-top:56px}
   延伸解籤是另一份更長的閱讀，不是解鎖你原本就該看到的內容。
 </div>
 
-<h2>為什麼還沒開放</h2>
-<p>內容已經寫好了，還在確認每一份讀起來都對得起這個價格。與其先收錢再慢慢補，不如晚一點開。</p>
-<p>如果你現在按下「開放時通知我」，我們會知道有人在等——那會直接影響它多快能上線。</p>
+<h2>怎麼拿到</h2>
+<p>抽一支籤 → 在解籤結果頁點延伸解籤 → 填信箱、刷卡 → 解籤 PDF 寄到你的信箱。</p>
+<p>那份 PDF 是你永久保存的版本，換手機或清掉瀏覽器紀錄都不會不見。你填的信箱與問題只用來寄這一份，寄出後就會刪掉。</p>
 
 <div style="text-align:center;margin-top:34px">
   <a class="cta-line" href="https://line.me/R/ti/p/@017vwhwj" id="lineAdd">加入 LINE，先免費抽一支</a>
@@ -130,8 +129,10 @@ footer{text-align:center;color:var(--faint);font-size:12px;margin-top:56px}
 <p>不會。延伸解籤是一份完整的內容，看完就是看完了，沒有下一層要解鎖。</p></div>
 <div class="faq"><b>跟免費抽到的籤是同一支嗎？</b>
 <p>是。延伸解籤不會替你換一支更好的籤，而是把你抽到的那一支，讀得更深。</p></div>
-<div class="faq"><b>登記之後會收到廣告嗎？</b>
-<p>不會。只有正式開放的時候會通知一次。</p></div>
+<div class="faq"><b>目前有哪些主題可以買？</b>
+<p>只有愛情。愛情的 170 支籤每一支都有對應的延伸解籤；工作、人生、毛孩、選擇還沒有。</p></div>
+<div class="faq"><b>可以退款嗎？</b>
+<p>依法規，數位內容在你同意後立即提供，不適用七日解除權。付款前的確認頁會再說明一次，你同意了才會進入付款。詳見<a href="/privacy/#refund">退款說明</a>。</p></div>
 
 <footer>✦ 未完籤所 · MAGIC ORACLE ✦<br><a href="/">unfinished.tw</a> · <a href="/privacy/">隱私權政策</a></footer>
 
@@ -139,43 +140,64 @@ footer{text-align:center;color:var(--faint);font-size:12px;margin-top:56px}
 
 <script>
 (function(){
-  var KEY="extended_waitlist_v1";
-  var btn=document.getElementById("wait"), thanks=document.getElementById("thanks");
   var q=new URLSearchParams(location.search);
   var src=q.get("utm_source")||"direct", med=q.get("utm_medium")||"none";
   var slip=q.get("slip")||"", theme=q.get("theme")||"", sub=q.get("sub")||"", n=q.get("n")||"";
+
+  // 延伸籤的唯一識別是「分類_情境_籤號」，例如 love_breakup_051。
+  // 籤號不是連號（失戀中 35 支，編號散在 1~72；桃花運勢是 101~130），
+  // 所以要用網址帶來的 n 補零，不能用第幾支去推。
+  var SITU={"失戀中":"breakup","曖昧中":"flirting","關係中":"relationship",
+            "單身中":"single","桃花運勢":"fortune"};
+  var situ = theme==="love" ? SITU[sub] : null;
+  var slipId = (situ && /^[0-9]{1,3}$/.test(n)) ? "love_"+situ+"_"+("00"+n).slice(-3) : null;
+
+  var buy=document.getElementById("buy"), draw=document.getElementById("draw"),
+      note=document.getElementById("ctaNote"), lead=document.getElementById("lead");
 
   // 從 LINE 帶著籤過來的，先接住那支籤，別讓他覺得跳到不相干的頁面
   if(slip){
     var box=document.getElementById("fromline");
     box.innerHTML="你剛剛抽到的是"+(sub?"（"+sub+"）":"")+"<b>〈"+slip+"〉</b>";
     box.hidden=false;
-    var lead=document.getElementById("lead");
     if(lead) lead.innerHTML="這支籤說中了，卻沒說完。<br>延伸解籤會把它放回你現在的處境裡展開。";
   }
 
-  function done(){
-    btn.textContent="✓ 已記下你";
-    btn.disabled=true;
-    thanks.hidden=false;
+  var state;
+  if(slipId){
+    // 帶著一支買得到的愛情籤過來
+    state="ready";
+    buy.href="/checkout/?id="+encodeURIComponent(slipId);
+    buy.hidden=false;
+  } else if(slip){
+    // 帶了籤，但不是愛情——沒有對應的延伸解籤可以賣
+    state="unsupported_theme";
+    draw.hidden=false;
+    draw.textContent="去抽一支愛情籤";
+    note.textContent="延伸解籤目前只有愛情主題，其他主題還沒有。";
+  } else {
+    // 沒帶籤（例如從 footer 或搜尋進來）
+    state="no_slip";
+    draw.hidden=false;
+    note.textContent="延伸解籤是針對你抽到的那一支寫的，所以要先有一支籤。";
   }
-  try{ if(localStorage.getItem(KEY)==="1") done(); }catch(e){}
 
-  btn.addEventListener("click",function(){
-    try{
-      if(localStorage.getItem(KEY)==="1"){ done(); return; }
-      localStorage.setItem(KEY,"1");
-    }catch(e){}
-    var p={button_location:"waitlist_page",interest_version:"waitlist_v1",
-           utm_source:src,utm_medium:med,price_shown:99,
-           theme:theme,subtheme:sub,fortune_number:n,fortune_title:slip};
-    gtag("event","extended_reading_interest",p);
-    gtag("event","extended_waitlist_signup",p);
-    done();
+  gtag("event","extended_page_view",{page_state:state,utm_source:src,utm_medium:med,
+       theme:theme,subtheme:sub,fortune_number:n,fortune_title:slip});
+
+  if(buy) buy.addEventListener("click",function(){
+    gtag("event","begin_checkout",{button_location:"extended_page",price_shown:99,
+         slip_id:slipId,utm_source:src,utm_medium:med,
+         theme:theme,subtheme:sub,fortune_number:n,fortune_title:slip});
+  });
+
+  if(draw) draw.addEventListener("click",function(){
+    gtag("event","extended_draw_click",{button_location:"extended_page",page_state:state,
+         utm_source:src,utm_medium:med});
   });
 
   document.getElementById("lineAdd").addEventListener("click",function(){
-    gtag("event","line_add_click",{button_location:"waitlist_page",utm_source:src,utm_medium:med});
+    gtag("event","line_add_click",{button_location:"extended_page",utm_source:src,utm_medium:med});
   });
 })();
 </script>
