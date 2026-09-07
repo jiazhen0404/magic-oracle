@@ -808,6 +808,16 @@ function magicOraclePay(){
   font-size:13.5px;line-height:1.7}
 .extended-preview-peek li::before{content:"✓";position:absolute;left:0;color:var(--gold);font-size:12px}
 .extended-preview-peek-more{margin-top:6px;padding-left:20px;color:#9d8ba8;font-size:12px}
+/* 逐支籤的專屬文案：鉤子（沿用 title 樣式）＋ 5 點 ＋ 收尾句。
+   5 點是這一區的主體，字級與章節清單一致；收尾句是一句話的態度，給金色。 */
+.extended-preview-bullets-head{margin:0 auto 8px;max-width:310px;text-align:left;
+  color:var(--gold);font-size:11.5px;letter-spacing:.1em}
+.extended-preview-bullets{list-style:none;margin:0 auto 14px;padding:0;max-width:310px;text-align:left}
+.extended-preview-bullets li{position:relative;padding:4px 0 4px 20px;color:var(--text);
+  font-size:13.5px;line-height:1.7}
+.extended-preview-bullets li::before{content:"✓";position:absolute;left:0;color:var(--gold);font-size:12px}
+.extended-preview-closing{margin:0 auto 16px;max-width:310px;color:#f0dfae;
+  font-family:"Noto Serif TC","Songti TC",serif;font-size:13.5px;line-height:1.85}
 .extended-preview-toc ul{list-style:none;margin:0;padding:0}
 .extended-preview-toc li{position:relative;padding:5px 0 5px 20px;color:var(--text-soft);
   font-size:13px;line-height:1.7}
@@ -1634,11 +1644,47 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
         fortune:{seen:"這陣子的桃花走向",q1:"桃花會從哪裡來？",tail:"可能出現的機會"}
       };
       const pitch=PITCH[extSlug]||PITCH.breakup;
+
+      /* 逐支籤的專屬銷售文案。
+         ★ key 一定要用完整 ID，不能用籤號。
+           籤號不唯一——「暖燈」在失戀／曖昧／關係／單身都是第 60 籤，
+           四支內容完全不同。用籤號當 key 會一稿四投。
+         施工單給的編號跟站上差 12（它的 041 = 站上的 053），
+         下面是用籤名逐支比對出來的對應，不是照它的編號填的。
+         沒有專屬文案的籤，走上面 PITCH 的通用版本。 */
+      const SALES={
+        "love_flirting_053":{h:"他明明對你有好感，為什麼一到關鍵時刻，就退回朋友的位置？",b:["他不敢表態，可能在害怕什麼","哪些陪伴與主動，才算超過普通朋友","你給出好感訊號後，該觀察什麼","這段關係接下來可能怎麼發展","什麼情況值得再等，什麼情況該停止單方面推進"],c:"你可以讓他知道門是開的，但不必替他走完靠近你的路。"},
+        "love_flirting_054":{h:"他對你有好感，卻還在認識其他人。你是他的選擇，還是其中一個選項？",b:["他目前為什麼仍保留其他選擇","多方認識與不願承諾，差別在哪裡","哪些行動代表他開始認真選擇你","什麼時候適合談專一與關係方向","如果他一直不願收斂選擇，你該怎麼決定"],c:"你不需要比所有人更努力，才值得被清楚選擇。"},
+        "love_flirting_055":{h:"他對你有好感，卻一直被前任影響。這段曖昧，還有機會往前嗎？",b:["他現在對你的好感，和前任的影響如何交錯","他說「已經放下了」，可以怎麼觀察","前任再次出現時，哪些反應值得注意","這段關係可能因什麼事情出現轉折","你該給多少空間，又該在哪裡設下界線"],c:"你可以理解他的過去，但不必一直站在他的過去裡等。"},
+        "love_flirting_056":{h:"你們最近越來越親密，但他真的準備好交往了嗎？",b:["他現在的熱情，和承諾意願是不是同一件事","快速升溫後，哪些反應最能看出真心","親密、佔有慾與真正的關係責任怎麼分","你放慢速度後，這段關係可能怎麼變","接下來該觀察哪些行動，才值得繼續投入"],c:"心動可以很快，信任與承諾卻需要一起跟上。"},
+        "love_flirting_057":{h:"以前那麼熱絡，現在卻只剩你在找話題。這段曖昧，是不是正在結束？",b:["他現在為什麼不再積極推進","忙碌與心意轉淡，可以怎麼分辨","哪些互動代表他仍想繼續認識","這段關係接下來較可能怎麼走","什麼時候該停止追逐，把注意力收回來"],c:"不要再用以前的熱度，替現在的沉默找答案。"},
+        "love_flirting_058":{h:"你們明明互相喜歡，卻一直在等對方先開口。這段關係，快要明朗了嗎？",b:["他現在對你的好感與顧慮","雙向曖昧會出現哪些具體訊號","近期可能出現什麼讓關係更明確的進展","你該怎麼回應，才不必一直互相試探","如果有距離、工作等阻礙，下一步該怎麼確認"],c:"這段關係需要的，也許不是更多暗示，而是有人願意把心意變成行動。"},
+        "love_flirting_059":{h:"他最近開始主動了。這個好消息，真的代表你們有機會嗎？",b:["他現在的好感可能正在怎麼改變","近期可能出現哪些邀約或靠近訊號","好消息之後，關係可能怎麼發展","網路曖昧或見面不多時，該確認哪些現實","怎麼分辨真正的進展，和自己想像中的戀愛"],c:"開心可以，但真正值得期待的，是這份好感能不能走進現實。"},
+        "love_flirting_060":{h:"他比以前更穩定、更關心你，卻還是不願意交往。這樣算有進展嗎？",b:["他現在為什麼想靠近，卻仍抗拒承諾","哪些改善是真的，哪些只是曖昧變深","你提出關係期待後，該觀察什麼","這段關係接下來有沒有正式化的可能","合理觀察期該怎麼設定，才不會一直延期"],c:"你可以為他的進步高興，也可以保留自己想要一段明確關係的標準。"},
+        "love_flirting_061":{h:"你們相處得很好，但他到底把你當朋友，還是有可能成為戀人？",b:["他目前對你的定位更接近朋友還是戀愛","哪些親密互動，其實不一定代表喜歡","朋友關係可能在什麼情況下轉變","如果你想確認心意，可以怎麼開口","若答案仍是朋友，該怎麼決定是否繼續等待"],c:"重要的人，不一定會成為戀人。這支籤想幫你分清楚，這段關係現在真正站在哪裡。"},
+        "love_flirting_062":{h:"他不是沒有好感，只是一直說還沒準備好。這段等待，真的有期限嗎？",b:["他現在可能還在顧慮什麼","慢熱與無限拖延，差別在哪裡","等待期間哪些進展才值得相信","這段關係接下來可能怎麼發展","什麼時候該重新評估，而不是一直等下去"],c:"慢一點沒有關係，但值得等待的關係，應該讓你看得見它正在往前。"},
+        "love_relationship_010":{h:"你們的關係可能正要進入下一個階段。近期那個轉折，會把你們帶到哪裡？",b:["他最近為什麼開始把你放進更多生活安排","近期所謂的「好消息」可能以什麼方式出現","同居、旅行、見家人或談未來，真正代表什麼","一次表態後，哪些後續行動才證明關係真的往前","你該怎麼接住這次靠近，又不過早把它當成最後答案"],c:"真正的推進，不只是他說了一句好聽的話，而是開始把你當成需要一起商量未來的人。"}
+      };
+      const sales=SALES[slipId]||null;
+      const esc=function(t){return String(t).replace(/[&<>]/g,function(c){
+        return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});};
+      /* 有專屬文案就用它的鉤子＋5 點＋收尾句；沒有的就走通用版本。
+         有專屬文案時不另外列前三章——那 5 點已經在講「會帶你看什麼」，
+         再列一次真實章節只是重複。想看真實章節仍然可以點「看完整目錄」。 */
+      const bodyHtml=sales
+        ? '<div class="extended-preview-title">'+esc(sales.h)+'</div>'
+          +'<div class="extended-preview-bullets-head">延伸籤會帶你看：</div>'
+          +'<ul class="extended-preview-bullets">'
+          +sales.b.map(function(t){return "<li>"+esc(t)+"</li>";}).join("")
+          +'</ul>'
+          +'<div class="extended-preview-closing">'+esc(sales.c)+'</div>'
+        : '<div class="extended-preview-title">這支籤，還有更深一層的答案。</div>'
+          +'<div class="extended-preview-copy">你已經看見'+pitch.seen+'。<br>但你真正想知道的，也許是：</div>'
+          +'<div class="extended-preview-asks"><span>'+pitch.q1+'</span><span>這次的轉折代表什麼？</span><span>我現在該怎麼做？</span></div>'
+          +'<div class="extended-preview-copy">完整解籤會沿著你剛剛抽到的籤意，繼續拆解可能的發展、'+pitch.tail+'，以及你適合採取的下一步。</div>';
+
       section.innerHTML='<div class="extended-preview-kicker">完整解籤 · NT$ 99</div>'
-        +'<div class="extended-preview-title">這支籤，還有更深一層的答案。</div>'
-        +'<div class="extended-preview-copy">你已經看見'+pitch.seen+'。<br>但你真正想知道的，也許是：</div>'
-        +'<div class="extended-preview-asks"><span>'+pitch.q1+'</span><span>這次的轉折代表什麼？</span><span>我現在該怎麼做？</span></div>'
-        +'<div class="extended-preview-copy">完整解籤會沿著你剛剛抽到的籤意，繼續拆解可能的發展、'+pitch.tail+'，以及你適合採取的下一步。</div>'
+        +bodyHtml
         +'<div class="extended-preview-peek" hidden></div>'
         +'<button type="button" class="extended-preview-toc-btn" hidden>看完整目錄</button>'
         +'<div class="extended-preview-toc" hidden></div>'
@@ -1673,6 +1719,8 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
           outline=d;
           const titles=d.titles||[];
           if(!titles.length)return;
+          // 有專屬文案的籤：不重複列章節，但仍然可以展開看真實目錄
+          if(sales){ tocBtn.hidden=false; return; }
           peek.appendChild(div("extended-preview-peek-head","這支籤的完整解讀會回答："));
           const ul=document.createElement("ul");
           titles.slice(0,PEEK_N).forEach(function(t){ ul.appendChild(li(t)); });
