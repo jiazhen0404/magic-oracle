@@ -79,6 +79,9 @@ export default {
       if (path === '/api/extended-availability' && request.method === 'GET') {
         return extendedAvailability();
       }
+      if (path === '/api/notify-me' && request.method === 'POST') {
+        return await notifyMe(request, env);
+      }
       if (path === '/api/resend-pdf' && request.method === 'POST') {
         return await resendPdf(request, env, url);
       }
@@ -512,6 +515,59 @@ async function issueUnlock(request, env) {
    五、讀取延伸解籤全文
    沒有有效憑證就回 402，前端據此顯示「尚未解鎖」。
    ══════════════════════════════════════════════════════════ */
+
+/* 候補名單。「這一類的深度解讀還在寫，想先知道嗎？」
+   個資規則比照訂單，不放寬：
+
+     · 需求紀錄（分類＋情境＋時間）不含個資，留著看哪一類最多人要
+     · 信箱分開存，寄出通知後立刻刪除
+     · 沒寄成的 90 天自動過期
+
+   信箱之所以不跟需求紀錄放在一起，是為了讓「刪信箱」這件事乾淨——
+   刪掉信箱那一筆之後，需求統計仍然完整，不需要改寫既有紀錄。 */
+const NOTIFY_EMAIL_TTL = 60 * 60 * 24 * 90;   // 90 天
+
+async function notifyMe(request, env) {
+  if (!env.ORDERS) return json({ ok: false, error: 'not_configured' }, 503);
+
+  let body;
+  try { body = await request.json(); } catch { return json({ ok: false, error: 'bad_json' }, 400); }
+
+  // 蜜罐。機器人會填，真人看不到這個欄位。假裝成功，不給它回饋。
+  if (String(body.website || '').trim()) return json({ ok: true });
+
+  const clean = (v, max) => String(v == null ? '' : v).trim().slice(0, max);
+  const category = clean(body.category, 20);
+  const scenario = clean(body.scenario, 20);
+  const email = clean(body.email, 254);
+
+  if (!category) return json({ ok: false, error: 'bad_category' }, 400);
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+    return json({ ok: false, error: '這個信箱看起來不太對，再確認一次好嗎？' }, 400);
+  }
+  if (body.consent !== true) {
+    return json({ ok: false, error: 'consent_required' }, 400);
+  }
+
+  const id = 'NM' + Date.now().toString(36).toUpperCase() + randomHex(4);
+  const now = new Date().toISOString();
+
+  await Promise.all([
+    // 不含個資，留著
+    env.ORDERS.put(
+      'notify:' + id,
+      JSON.stringify({ id, category, scenario, createdAt: now, notifiedAt: null })
+    ),
+    // 個資，單獨存、會過期、寄出後刪
+    env.ORDERS.put(
+      'notify-email:' + id,
+      JSON.stringify({ id, email, createdAt: now }),
+      { expirationTtl: NOTIFY_EMAIL_TTL }
+    ),
+  ]);
+
+  return json({ ok: true });
+}
 
 /* 哪些籤買得到延伸解籤。前端問這裡，不要自己寫死「分類 == 愛情」——
    下一批延伸籤寫完會變成情境層級，寫死的話每次都要改前端。

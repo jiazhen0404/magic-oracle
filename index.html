@@ -771,6 +771,20 @@ function magicOraclePay(){
 .extended-preview-btn:active{transform:translateY(1px)}
 .extended-preview-btn[disabled]{cursor:default;opacity:.78}
 .extended-preview-thanks{margin-top:12px;color:#e6c98f;font-size:12px;line-height:1.7}
+/* 候補表單。字級不低於 12px（施工單 3-6 的可讀性下限），
+   輸入框與按鈕高度 ≥ 44px（3-4 的觸控下限）。 */
+.notify-form{display:flex;flex-direction:column;gap:11px;margin-top:4px;text-align:left}
+.notify-email{width:100%;min-height:46px;padding:12px 16px;border:1px solid rgba(199,156,82,.4);
+  border-radius:12px;background:rgba(16,10,27,.5);color:var(--text);font-family:inherit;font-size:14px}
+.notify-email::placeholder{color:#8d7d99}
+.notify-email:focus{outline:none;border-color:rgba(199,156,82,.85)}
+.notify-consent{display:flex;gap:9px;align-items:flex-start;color:var(--text-soft);
+  font-size:12px;line-height:1.75;cursor:pointer}
+.notify-consent input{margin-top:4px;flex:0 0 auto;width:16px;height:16px;accent-color:#c79c52}
+.notify-consent a{color:var(--gold)}
+.notify-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.notify-msg{font-size:12.5px;line-height:1.7;color:#e2a9a9;min-height:1px}
+.notify-msg.ok{color:#e6c98f}
 .extended-preview-toc-btn{margin:0 0 12px;padding:9px 18px;border:1px solid rgba(199,156,82,.42);
   border-radius:999px;background:none;color:#e6d5b0;font-family:inherit;font-size:12.5px;
   letter-spacing:.06em;cursor:pointer;transition:border-color .2s,color .2s}
@@ -1664,18 +1678,63 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
         location.href="/checkout/?id="+encodeURIComponent(slipId);
       });
     }else{
-      section.innerHTML='<div class="extended-preview-kicker">COMING SOON · 即將開放</div><div class="extended-preview-title">想知道這支籤，如何對應你現在的處境？</div><div class="extended-preview-copy">完整延伸解籤將包含情境解析、對方或環境的可能反應、後續走向，以及你現在能採取的具體行動。</div><button type="button" class="extended-preview-btn">我想看完整延伸解籤</button><div class="extended-preview-thanks" role="status" hidden>已記下你的期待，正式開放時會在這裡出現。</div>';
+      /* 候補區塊。原本這裡只把「有人想要」記在 sessionStorage 裡就結束了，
+         關掉分頁就沒了，也沒有辦法在寫好之後通知任何人——等於白收。
+         現在真的留下需求與（可選的）信箱。 */
+      section.innerHTML='<div class="extended-preview-kicker">還在寫</div>'
+        +'<div class="extended-preview-title">這一類的深度解讀還在寫。想先知道嗎？</div>'
+        +'<div class="extended-preview-copy">寫好的時候寄一封信給你，就這一封。之後不會再收到別的東西。</div>'
+        +'<form class="notify-form" novalidate>'
+        +'<input type="email" class="notify-email" placeholder="你的信箱" autocomplete="email" required>'
+        +'<label class="notify-consent"><input type="checkbox" class="notify-agree"><span>我已閱讀並同意<a href="/privacy/#privacy" target="_blank" rel="noopener">隱私權政策</a>。信箱只用於這一次通知，寄出後即刪除；90 天內沒有開放也會自動刪除。</span></label>'
+        +'<input type="text" class="notify-hp" tabindex="-1" autocomplete="off" aria-hidden="true">'
+        +'<button type="submit" class="extended-preview-btn">寫好的時候通知我</button>'
+        +'<div class="notify-msg" role="status"></div>'
+        +'</form>';
+      const form=section.querySelector(".notify-form");
+      const emailEl=section.querySelector(".notify-email");
+      const agreeEl=section.querySelector(".notify-agree");
+      const hpEl=section.querySelector(".notify-hp");
+      const msgEl=section.querySelector(".notify-msg");
       const button=section.querySelector(".extended-preview-btn");
-      const thanks=section.querySelector(".extended-preview-thanks");
-      function showSent(){button.textContent="✓ 已記下，我想看完整解析";button.disabled=true;thanks.hidden=false;}
+
+      function showSent(){
+        form.querySelectorAll("input,button").forEach(function(el){el.disabled=true;});
+        emailEl.hidden=true; section.querySelector(".notify-consent").hidden=true;
+        button.hidden=true;
+        msgEl.textContent="已經記下你了。寫好的時候會寄信給你。";
+        msgEl.className="notify-msg ok";
+      }
       if(sessionStorage.getItem(storageKey)==="1")showSent();
-      button.addEventListener("click",function(){
-        if(sessionStorage.getItem(storageKey)==="1"){showSent();return;}
-        sessionStorage.setItem(storageKey,"1");
-        const params={theme:theme,theme_label:themeLabels[theme]||theme,subtheme:subtheme,fortune_number:fortuneNumber,fortune_title:title,button_location:"result_after_fortune",interest_version:"preview_v1"};
-        send("extended_reading_interest",params);
-        if(theme!=="unknown")send("extended_interest_"+theme,params);
-        showSent();
+
+      form.addEventListener("submit",function(e){
+        e.preventDefault();
+        msgEl.className="notify-msg";
+        if(!emailEl.checkValidity()||!emailEl.value.trim()){
+          msgEl.textContent="請填一個收得到信的信箱。"; emailEl.focus(); return;
+        }
+        if(!agreeEl.checked){ msgEl.textContent="請先勾選同意。"; agreeEl.focus(); return; }
+        button.disabled=true; button.textContent="送出中⋯";
+        const params={theme:theme,theme_label:themeLabels[theme]||theme,subtheme:subtheme,
+          fortune_number:fortuneNumber,fortune_title:title,fortune_id:fid,
+          button_location:"result_after_fortune",interest_version:"notify_v1"};
+        fetch("/api/notify-me",{method:"POST",cache:"no-store",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({category:theme,scenario:situationSlugs[subtheme]||"",
+            email:emailEl.value.trim(),consent:agreeEl.checked,website:hpEl.value})})
+          .then(function(r){return r.json().then(function(d){return{ok:r.ok&&d.ok,d:d};});})
+          .then(function(res){
+            if(!res.ok)throw new Error(res.d&&res.d.error||"送出失敗");
+            try{sessionStorage.setItem(storageKey,"1");}catch(e){}
+            send("notify_me_submit",params);
+            send("extended_reading_interest",params);
+            if(theme!=="unknown")send("extended_interest_"+theme,params);
+            showSent();
+          })
+          .catch(function(err){
+            msgEl.textContent=String(err.message||"目前無法送出，請稍後再試。");
+            button.disabled=false; button.textContent="寫好的時候通知我";
+          });
       });
     }
     // 付費區插在「具體建議」之後、「分享／再抽一次」之前。
