@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "check:release": "node scripts/check-release.mjs"
   },
   "dependencies": {
     "dotenv": "^16.4.5",

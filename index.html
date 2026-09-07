@@ -1206,7 +1206,16 @@ async function draw(theme,sub){
 }
 function trackOracleEvent(name,params){
   try{
-    if(typeof window.gtag==="function") window.gtag("event",name,params||{});
+    const p=params||{};
+    /* 所有帶籤支的事件一律補上唯一 ID。
+       籤號本身不唯一——愛情 170 支只有 65 種籤號，籤號 1 就同時存在於
+       失戀／曖昧／關係／單身四個情境，只記 fortune_number 無法回推是哪一支。
+       在這個共同管道補，才不會有哪個事件被漏掉。 */
+    if(!p.fortune_id && typeof window.oracleFortuneId==="function"){
+      const id=window.oracleFortuneId(p.theme,p.subtheme,p.fortune_number);
+      if(id) p.fortune_id=id;
+    }
+    if(typeof window.gtag==="function") window.gtag("event",name,p);
   }catch(e){ console.warn("GA4 oracle event tracking failed",name,e); }
 }
 const WEEKLY_ORACLES=[{"n":1,"t":"星軌正在靠近","sub":"本週宇宙來信","yu":"你等待的事情開始移動了，只是第一個訊號可能很小。","msg":"你已經等了一段時間，而這週的重點不是立刻得到終點答案，而是看見事情重新開始流動。先前沒有回音、沒有進展的地方，可能終於出現一點縫隙。","rx":"你可能收到延遲已久的回覆、重新被提起的邀約，或發現某個原本停住的計畫有人開始處理。變化未必很大，但會讓你知道事情並沒有消失。","fw":"留意那些「比前幾週多了一點」的變化：多一句回覆、多一次主動、多一個確認。小幅前進就是這支籤真正的訊號。","sa":"收到進展時先回應眼前這一步，不急著追問最後結果。","theme":"weekly"},{"n":2,"t":"不必追趕","sub":"本週宇宙來信","yu":"有些答案越追越遠，停下來反而看得清楚。","msg":"這週宇宙想把你從「一定要現在知道」的焦躁裡拉回來。你可能太用力盯著某個人、某件事或某個結果，以至於生活的其他部分都被擠到旁邊。","rx":"回覆可能變慢、約定可能延後，或你期待的進度暫時沒有明顯變化。也可能是你突然發現，自己其實已經很累，不想再一直確認。","fw":"如果你又忍不住反覆查看訊息、數對方多久沒回，或一直想再問一次同樣的問題，這就是提醒你收手的訊號。","sa":"替等待設一個期限，期限以前不追問、不重抽，把注意力放回自己的生活。","theme":"weekly"},{"n":3,"t":"門已經開了","sub":"本週宇宙來信","yu":"機會不是沒有來，而是在等你跨出第一步。","msg":"這週不是被動等待的一週。你可能已經隱約知道自己想試什麼，只是一直用「還沒準備好」拖住自己。宇宙來信不是保證成功，而是提醒你：條件已經足夠讓你開始。","rx":"可能出現新的工作、合作、邀請、課程、社交場合，或一個你以前不敢接觸的選項。也可能沒有誰來敲門，而是你終於想主動寄出那封信。","fw":"當你對某件事同時感到緊張又期待，而且它並沒有明顯危險時，這通常比「完全不害怕」更值得留意。","sa":"這週主動完成一件拖很久的第一步：詢問、投遞、報名、邀約或開口。","theme":"weekly"},{"n":4,"t":"有人正在離場","sub":"本週宇宙來信","yu":"有些關係變淡，不一定是失去，也可能是在替新的位置騰空。","msg":"這週你可能更清楚地感受到某段關係、習慣或生活階段正在退場。它未必伴隨正式告別，有時只是你們不再像以前那樣靠近。不要急著把所有淡去都解讀成自己的失敗。","rx":"聯絡頻率可能下降、共同話題變少，某個原本固定出現的人開始缺席；也可能反過來，是你突然不再想追著某段關係跑。","fw":"留意「不再勉強後反而比較輕鬆」的感覺。那份鬆動可能比捨不得更接近你的真實答案。","sa":"不必立刻切斷什麼，但停止單方面維持。把空出來的時間留給仍願意靠近你的人與事。","theme":"weekly"},{"n":5,"t":"你漏看了一個訊號","sub":"本週宇宙來信","yu":"答案可能早就出現，只是它不像你預想的樣子。","msg":"你可能一直等待某一種特定答案，所以把其他已經發生的事當成雜訊。這週適合少一點想像，多看現實裡重複出現的行動與結果。","rx":"一句被你忽略的提醒、同一件事再次發生、某個人持續做出相同選擇，或一個你原本沒放在心上的機會再次出現。","fw":"真正值得注意的訊號通常會重複，而且能在現實中被驗證；只出現一次、全靠猜測的巧合不用急著賦予意義。","sa":"寫下這週重複出現三次以上的人、事或感受，再問自己它們共同指向什麼。","theme":"weekly"},{"n":6,"t":"暫緩決定","sub":"本週宇宙來信","yu":"現在知道的還不夠多，這週不適合逼自己立刻選邊。","msg":"有些猶豫不是你不夠果斷，而是資訊真的還沒到齊。這週如果涉及去留、合作、關係或重大支出，先讓事情多透露一點細節。","rx":"條件可能臨時更改、對方補充新的資訊，或你會知道一件原本不知道的事。原本看似只有 A、B 兩個選項，也可能出現第三條路。","fw":"當一個決定必須靠你忽略疑點、說服自己「應該沒事」才能做下去時，就是暫緩的訊號。","sa":"能延後的決定先延後幾天；列出你還缺哪三項資訊，先把它們查清楚。","theme":"weekly"},{"n":7,"t":"好消息在路上","sub":"本週宇宙來信","yu":"你擔心的事情，有機會收到比預期更好的回應。","msg":"這週的能量偏向確認、回覆與推進。它不代表所有願望都會實現，但至少有一件讓你掛心的事情，可能從未知變得比較明朗。","rx":"可能收到通知、邀約、核准、工作或合作答覆，也可能有人終於願意把一句你等很久的話說清楚。","fw":"留意正式通知、陌生來電、信箱與久未聯絡的人。好消息有時很普通，不一定帶著戲劇性的登場。","sa":"收到好消息先確認時間、條件與下一步，再安心慶祝；別因為興奮漏掉重要細節。","theme":"weekly"},{"n":8,"t":"別再替他找理由","sub":"本週宇宙來信","yu":"理解一個人，不代表要替他的每一次缺席辯護。","msg":"這週宇宙要你看的不是對方「可能在想什麼」，而是他實際做了什麼。你可能已經花太多力氣替某段關係、合作或承諾補上合理解釋。","rx":"承諾再次延後、說法前後不同、需要你的時候才出現，或嘴上說重視卻沒有相應行動。這也可能發生在朋友或工作關係，不只感情。","fw":"如果你發現每次受傷後，都是你負責替對方想出一個理由讓自己留下，這就是最需要注意的訊號。","sa":"這週只記錄行動，不替任何人補充台詞。等一週後再看，答案會比猜測清楚。","theme":"weekly"},{"n":9,"t":"金流開始轉動","sub":"本週宇宙來信","yu":"停滯的資源開始有小幅度流動，先別嫌它來得慢。","msg":"這不是暴富籤，而是「開始回穩」的訊息。工作、收入或資源分配可能出現一些改善，真正重要的是讓這股流動留下來，而不是一有進帳就全部消耗。","rx":"可能出現小額收入、舊款入帳、退款、案子回覆、新客戶詢問，或找到一個能降低固定支出的方式。","fw":"留意金額不大但可重複的機會。能持續的小收入，這週比一次性的意外之財更值得重視。","sa":"整理一次本月收入與固定支出；有新收入時先留下一部分，不急著把它視為可花用的餘額。","theme":"weekly"},{"n":10,"t":"先把自己收回來","sub":"本週宇宙來信","yu":"你不是做得不夠，而是已經消耗太久。","msg":"你可能已經撐著很多事情一段時間了。表面仍照常處理工作、關係與責任，心裡卻沒有真正休息。這週宇宙不是叫你再努力，而是提醒你別把所有人的需求都背在身上。","rx":"你可能突然不想社交、對原本在意的事情短暫無感，或只想安靜待著。某些非緊急的事情也可能自然延後，逼你慢下來。","fw":"如果這週反覆出現「我真的不想再處理了」的念頭，先別急著責怪自己。它可能只是提醒你需要重新分配力氣。","sa":"少答應一件其實不想做的事；把一件不是現在非解決不可的問題留到下週。","theme":"weekly"},{"n":11,"t":"舊門關上了","sub":"本週宇宙來信","yu":"有一件事正在真正走向結束，承認它反而會輕一點。","msg":"這封來信可能不是你最想收到的。某個人、機會、期待或舊版本的生活，已經很難再回到原來的位置。這週重要的不是證明它曾經值得，而是承認現在已經不同。","rx":"你可能得到一個明確答案、發現某個機會不再適用，或忽然意識到自己其實已經不想繼續等。","fw":"當你想到「如果它真的不回來，我是不是也能往前？」而心裡第一次出現一點平靜，那就是門正在關上的訊號。","sa":"收起一個讓你反覆回頭的東西：舊對話、待辦、承諾或期待。不是抹掉過去，而是停止讓它佔據現在。","theme":"weekly"},{"n":12,"t":"意料之外的人","sub":"本週宇宙來信","yu":"這週的轉折，可能不是來自你一直等待的那個人。","msg":"你的注意力可能長期固定在熟悉的人或熟悉的路上，因此沒看見旁邊正在形成的新連結。這週適合對「原本沒列入考慮」的人多一點開放。","rx":"朋友介紹、久未聯絡的人、陌生訊息、新同事、新客戶或偶然坐在你旁邊的人，都可能帶來資訊或新的可能。","fw":"如果某個新連結讓你覺得相處意外自然，而不是需要用力表現自己，可以多觀察一下。","sa":"不要因為「不是原本想的那個人」就立刻關門。給新的連結一次完整對話的機會。","theme":"weekly"},{"n":13,"t":"再等一下","sub":"本週宇宙來信","yu":"不是沒有結果，而是這件事還沒走到可以定案的位置。","msg":"這週比較像過程中的空白頁。事情仍在發展，但現在逼問結果，很可能只得到暫時、模糊甚至之後會改變的答案。","rx":"進度比預期慢、回覆模糊、行程延後，或某件事看似沒有動靜，其實仍有人在處理。","fw":"留意「還需要確認」「之後再通知」「目前尚未決定」這類訊息。它們代表未定，不等於拒絕。","sa":"替等待設一個明確期限。期限以前正常生活；期限到了仍無進展，再決定是否離開。","theme":"weekly"},{"n":14,"t":"這次換你選擇","sub":"本週宇宙來信","yu":"你以為自己在等別人決定，其實主導權正在回到你手上。","msg":"過去你可能很希望被某個人、某家公司或某個機會選中。但這週局勢可能出現變化，讓你第一次有空間反問：即使它現在回來，我還真的想要嗎？","rx":"曾經冷淡的人重新靠近、舊機會再次出現，或同時有兩個以上選項讓你比較。","fw":"當曾經夢寐以求的東西真的靠近，你卻沒有想像中興奮，這份遲疑值得被尊重。","sa":"不要立刻答應。用「現在的我」重新列一次條件，而不是替「以前很想要的我」完成願望。","theme":"weekly"},{"n":15,"t":"不要回頭確認","sub":"本週宇宙來信","yu":"有些答案你其實已經知道，只是不甘心它是真的。","msg":"這週最容易消耗你的，是反覆確認一個已經出現很多次的答案。你可能希望再看一次、再問一次，就能得到不同結論，但重複並不一定帶來新的資訊。","rx":"你可能又看到熟悉的模式：同樣的失約、同樣的冷淡、同樣的問題，或自己再次回到同一個焦慮循環。","fw":"如果你不是因為有新資訊而重新考慮，只是因為不喜歡原本的答案，那就是該停下來的訊號。","sa":"這週不要為同一件事重抽、重問或重查。把七天當成觀察期，只接受新的事實。","theme":"weekly"},{"n":16,"t":"有人正在靠近","sub":"本週宇宙來信","yu":"你的生活圈裡，正在形成一個新的連結。","msg":"這不一定只代表桃花。它也可能是一個願意理解你的朋友、合作夥伴、客戶，或一個慢慢變熟的人。這週的重點是「穩定靠近」，不是突然熱烈。","rx":"有人增加聯絡頻率、主動邀約、記得你提過的小事，或開始對你的生活表現持續而具體的興趣。","fw":"真正值得留意的靠近通常讓你比較安心，而不是一直猜。對方的行動會有連續性，而不是忽冷忽熱。","sa":"先享受認識的過程，不急著替關係命名。觀察對方是否能穩定出現在日常裡。","theme":"weekly"},{"n":17,"t":"一次小小的冒險","sub":"本週宇宙來信","yu":"新的答案，有時藏在你從沒走過的路上。","msg":"你最近的生活可能太固定，連思考也開始沿著同一條路打轉。這週不需要做巨大的改變，只要讓自己接觸一點和平常不同的東西。","rx":"臨時邀約、短程出門、新店、新課程、新場合或第一次嘗試的活動，都可能帶來意外的心情轉換或新認識。","fw":"當你第一反應是「我平常不會去」，但第二個念頭其實有點期待，那就是值得考慮的訊號。","sa":"選一件風險可控、花費可承受，而且讓你好奇的事去做一次。","theme":"weekly"},{"n":18,"t":"保留一點距離","sub":"本週宇宙來信","yu":"不是所有靠近，都需要立刻相信。","msg":"這週可能出現很吸引你的機會或人物，但資訊還沒有完全透明。宇宙不是叫你拒絕，而是提醒你：喜歡和信任可以有不同速度。","rx":"對方可能過度熱情、很快要求承諾，合作條件有細節說不清楚，或某件事看起來太好，卻一直催你立刻決定。","fw":"如果你只是要求多一點時間或資訊，對方就開始施壓、讓你內疚或害怕錯過，這就是需要拉開距離的訊號。","sa":"重要承諾、金錢與個人資訊先不要急著交出去。至少隔一晚，再用事實重新檢查一次。","theme":"weekly"},{"n":19,"t":"比想像中順利","sub":"本週宇宙來信","yu":"你腦中預演了很多最壞結果，但現實可能沒有那麼糟。","msg":"這週適合處理一件你因為害怕而拖延的事情。真正開始後，你可能發現困難仍然存在，但沒有想像中巨大。","rx":"一場原本害怕的對話比預期平和、工作順利完成、對方願意配合，或原本擔心的阻礙最後沒有發生。","fw":"如果你已經準備得差不多，唯一阻止你的只剩「萬一很糟怎麼辦」，那可能就是該開始的訊號。","sa":"挑一件拖最久、其實已具備條件的事，在這週完成第一個不可逆的小步驟。","theme":"weekly"},{"n":20,"t":"答案正在形成","sub":"本週宇宙來信","yu":"現在沒有清楚結論，本身也是一種訊息。","msg":"你正處在舊狀態鬆動、新狀態尚未成形的中間地帶。這種時候最難受，因為什麼都不像答案。但這週不需要急著替自己下定義。","rx":"想法可能反覆、事情忽好忽壞、外界給你的訊息也不一致。今天想留下，明天又想離開，都是過渡期可能出現的狀態。","fw":"當你每隔幾天就得到不同結論，代表現在更適合記錄變化，而不是選一個答案逼自己相信。","sa":"這週只記錄，不定案。每天用一句話寫下感受，七天後再看哪些東西始終沒有改變。","theme":"weekly"}];
@@ -1433,18 +1442,49 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
   const themeByLabel={"愛情":"love","工作":"work","選擇":"choice","生活":"life","毛孩心語":"pet","本月主題籤":"monthly","隨機一籤":"random"};
   const themeLabels={love:"愛情",work:"工作",choice:"選擇",life:"生活",pet:"毛孩心語",monthly:"本月主題籤",random:"隨機一籤"};
   const situationSlugs={
-    "失戀中":"breakup","曖昧中":"ambiguous","關係中":"relationship","單身中":"single","桃花運勢":"peach_blossom",
+    // 愛情這五個的 slug 一律跟付費端（src/extended-love.json 的 id）一致。
+    // 原本 GA4 這邊寫 ambiguous / peach_blossom，跟結帳用的 flirting / fortune
+    // 是兩套，fortune_id 會對不上結帳編號。以付費端為準，因為那條不能斷。
+    "失戀中":"breakup","曖昧中":"flirting","關係中":"relationship","單身中":"single","桃花運勢":"fortune",
     "迷惘中":"confused","求職中":"job_search","轉職中":"career_change","職場中":"workplace","創業中":"business",
     "兩難中":"dilemma","決定中":"decision","方向中":"direction","迷茫中":"lost","家庭中":"family","夢想中":"dream","日常中":"daily",
     "陪伴中":"together","擔心中":"worried","思念中":"missing","離別中":"passed_away","我該不該告白":"confess","需要繼續等他嗎":"wait-for-him","我該轉換跑道嗎":"career-switch","隨機訊息":"random_message"
   };
   const situationThemes={
-    breakup:"love",ambiguous:"love",relationship:"love",single:"love",peach_blossom:"love",
+    breakup:"love",flirting:"love",relationship:"love",single:"love",fortune:"love",
     confused:"work",job_search:"work",career_change:"work",workplace:"work",business:"work",
     dilemma:"choice",decision:"choice",direction:"choice",lost:"life",family:"life",dream:"life",daily:"life",
     together:"pet",worried:"pet",missing:"pet",passed_away:"pet",confess:"monthly","wait-for-him":"monthly","career-switch":"monthly",random_message:"random"
   };
   function send(name,params){if(typeof trackOracleEvent==="function")trackOracleEvent(name,params||{});}
+
+  /* 唯一 ID：分類_情境_籤號補三位，例如 love_breakup_051。
+     跟結帳網址 /checkout/?id= 用的是同一組編號，所以 GA4 裡的
+     fortune_id 可以直接對到付費紀錄。
+     掛到 window 上，是為了讓 React 內部與 trackOracleEvent 都拿得到。 */
+  function fortuneId(theme,situation,number){
+    const slug=situationSlugs[situation]||"";
+    const n=parseInt(number,10);
+    if(!theme||theme==="unknown"||!slug||!(n>0))return "";
+    return theme+"_"+slug+"_"+String(n).padStart(3,"0");
+  }
+  window.oracleFortuneId=fortuneId;
+
+  /* 「真的被看到」的判斷規則，抽出來是為了可以被測試——
+     IntersectionObserver 本身沒辦法在無頭環境裡驗證。
+     規則：可見比例達 ratio 才開始計時，中途離開就取消重來，
+     連續停留滿 ms 才算數，而且一輩子只算一次。
+     回傳 true 代表已經送出、呼叫端可以收掉觀察器。 */
+  function makeDwellTracker(ratio,ms,onFire){
+    let dwell=null,sent=false;
+    return {update:function(isIntersecting,visibleRatio){
+      if(sent)return true;
+      if(isIntersecting&&visibleRatio>=ratio){
+        if(!dwell)dwell=setTimeout(function(){sent=true;dwell=null;onFire();},ms);
+      }else if(dwell){clearTimeout(dwell);dwell=null;}
+      return false;
+    },get sent(){return sent;}};
+  }
   function rememberTheme(theme){if(theme)sessionStorage.setItem("oracle_selected_theme",theme);}
   function currentTheme(situation){
     const slug=situationSlugs[situation]||"";
@@ -1495,6 +1535,7 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
     const numberText=(frame.querySelector(".gold-label")?.textContent||"").trim();
     const fortuneNumber=(numberText.match(/\d+/)||[])[0]||"";
     const theme=currentTheme(subtheme);
+    const fid=fortuneId(theme,subtheme,fortuneNumber);
     const storageKey="extended_reading_interest:"+[fortuneNumber,title,subtheme].join("|");
     const section=document.createElement("section");
     section.className="extended-preview";
@@ -1600,6 +1641,25 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
     const actionsRow=frame.querySelector(".actions");
     if(actionsRow){ actionsRow.insertAdjacentElement("beforebegin",section); }
     else { frame.insertAdjacentElement("afterend",section); }
+
+    /* extended_entry_view —— 這一批的核心指標：到底有多少人真的看到延伸籤入口。
+       必須是「捲進視窗」才送，不是「渲染完成」就送。站上既有的
+       paywall_view_love 是渲染即送，所以它回答不了這個問題。
+       條件：一半以上進入視窗，並且停留滿 1 秒。捲太快掃過去不算。
+       一次結果頁只送一次；再抽一支會產生新的區塊，那才是新的一次。 */
+    if("IntersectionObserver" in window){
+      const tracker=makeDwellTracker(0.5,1000,function(){
+        send("extended_entry_view",{theme:theme,theme_label:themeLabels[theme]||theme,
+          subtheme:subtheme,fortune_number:fortuneNumber,fortune_title:title,
+          fortune_id:fid,has_extended:slipId?"yes":"no"});
+      });
+      const io=new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(tracker.update(e.isIntersecting,e.intersectionRatio)) io.disconnect();
+        });
+      },{threshold:[0,0.5,1]});
+      io.observe(section);
+    }
 
     // 真人占卜入口原本在這裡再插一個 .talk-band，與下方 React 的
     // .oracle-service-band 重複賣同一個服務（FIX-02）。已移除，

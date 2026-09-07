@@ -76,6 +76,9 @@ export default {
       if (path === '/api/extended-outline' && request.method === 'GET') {
         return extendedOutline(url);
       }
+      if (path === '/api/extended-availability' && request.method === 'GET') {
+        return extendedAvailability();
+      }
       if (path === '/api/resend-pdf' && request.method === 'POST') {
         return await resendPdf(request, env, url);
       }
@@ -107,6 +110,12 @@ export default {
           hasCfAccount: Boolean(env.CF_ACCOUNT_ID),
           hasCfToken: Boolean(env.CF_API_TOKEN),
           hasResendKey: Boolean(env.RESEND_API_KEY),
+          // 這是「線上現在跑的是哪一版」。由 Cloudflare 自己填，
+          // 不需要人工維護版號，所以不會有忘記更新的問題。
+          // scripts/check-release.mjs 用 deployedAt 跟最新 commit 的時間比對，
+          // 抓出「建置完成但沒推上線」——那個坑害過問卷 8 筆回覆是空的。
+          versionId: env.CF_VERSION?.id || null,
+          deployedAt: env.CF_VERSION?.timestamp || null,
         });
       }
     } catch (err) {
@@ -504,6 +513,26 @@ async function issueUnlock(request, env) {
    沒有有效憑證就回 402，前端據此顯示「尚未解鎖」。
    ══════════════════════════════════════════════════════════ */
 
+/* 哪些籤買得到延伸解籤。前端問這裡，不要自己寫死「分類 == 愛情」——
+   下一批延伸籤寫完會變成情境層級，寫死的話每次都要改前端。
+   直接從 EXTENDED 算，資料長出什麼就回什麼。 */
+function extendedAvailability() {
+  const situations = {};
+  for (const slip of EXTENDED) {
+    const m = /^([a-z]+)_([a-z-]+)_(\d{3})$/.exec(slip.id);
+    if (!m) continue;
+    const key = m[1] + '_' + m[2];
+    (situations[key] = situations[key] || []).push(m[3]);
+  }
+  return json({
+    total: EXTENDED.length,
+    // 「這個分類_情境有幾支、籤號是哪些」——前端據此判斷手上這支買不買得到
+    situations: Object.fromEntries(
+      Object.entries(situations).map(([k, v]) => [k, { count: v.length, numbers: v.sort() }])
+    ),
+  });
+}
+
 /* 延伸解籤的「目錄」——只有小標題與數量，不含任何一段正文。
    不需要憑證，因為這是給還沒付款的人看的商品說明。
 
@@ -519,7 +548,13 @@ function extendedOutline(url) {
   const slip = EXTENDED.find((x) => x.id === slipId);
   if (!slip) return json({ error: 'not_found' }, 404);
 
-  const sections = slip.sections || [];
+  // 只留真的有內容的章節。資料裡有兩支籤（love_flirting_072、
+  // love_relationship_072）最後一節是分類標籤、0 段落，會讓買家看到
+  // 一個叫「愛情・關係中」的空章節，章節數也會多算一節。
+  // 在這裡擋掉，之後再出現同類的髒資料也不會漏到畫面上。
+  const sections = (slip.sections || []).filter(
+    (s) => s.title && (s.paragraphs || []).join('').trim().length > 0
+  );
   const words = sections.reduce(
     (n, s) => n + (s.paragraphs || []).join('').length,
     0

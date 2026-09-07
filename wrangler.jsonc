@@ -58,6 +58,13 @@
     }
   ],
 
+  // ── 讓 /api/health 知道「線上跑的是哪一版」──
+  // Cloudflare 自動填入版本 id 與部署時間，不需要人工維護版號。
+  // scripts/check-release.mjs 用它抓「建置完成但沒推上線」。
+  "version_metadata": {
+    "binding": "CF_VERSION"
+  },
+
   "kv_namespaces": [
     {
       "binding": "ORDERS",
