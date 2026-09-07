@@ -131,11 +131,18 @@ export default {
   },
 };
 
-const SURVEY_MULTI_FIELDS = ['issues', 'benefits', 'missing', 'noBuyReasons', 'buyMotivators', 'wantedFeatures'];
+/* 舊欄位（missing / noBuyReasons / buyMotivators / extendedAwareness）留著不刪。
+   問卷 2.0 已經不再問這幾題，但既有回覆裡有值，留在清單裡才不會在讀取或
+   匯出時被當成不認識的欄位。新題目一律用新的 key，不改寫舊欄位的意義。 */
+const SURVEY_MULTI_FIELDS = ['issues', 'benefits', 'missing', 'noBuyReasons', 'buyMotivators', 'wantedFeatures',
+  'free_fortune_remaining_questions', 'extended_buyer_improvement'];
 const randomHex = bytes => Array.from(crypto.getRandomValues(new Uint8Array(bytes)), n => n.toString(16).padStart(2, '0')).join('').toUpperCase();
 const SURVEY_ALLOWED = [
   'nickname', 'email', 'topic', 'distress', 'source', 'categoryEase', 'flowClarity', 'device',
-  'matchScore', 'readability', 'extendedAwareness', 'returnIntent', 'age', 'relationship', 'oneChange'
+  'matchScore', 'readability', 'extendedAwareness', 'returnIntent', 'age', 'relationship', 'oneChange',
+  // 問卷 2.0
+  'extended_fortune_status', 'extended_value_clarity',
+  'extended_no_purchase_primary_reason', 'extended_top_value'
 ];
 
 async function submitSurvey(request, env) {
