@@ -767,6 +767,13 @@ function magicOraclePay(){
 .talk-note{margin-top:11px;font-size:11.5px;color:var(--text-soft);letter-spacing:.04em}
 .extended-preview-title{margin-top:9px;font-family:"Noto Serif TC","Songti TC",serif;font-size:19px;line-height:1.55;color:var(--text)}
 .extended-preview-copy{margin:10px auto 16px;max-width:310px;color:var(--text-soft);font-size:12.5px;line-height:1.85}
+/* 三個核心問題。要比說明文字醒目（14.5px vs 12.5px、金色 vs 灰紫），
+   但不能蓋過 19px 的主標——它們是主標的支撐，不是另一個標題。 */
+.extended-preview-asks{display:flex;flex-direction:column;gap:7px;margin:0 auto 16px;
+  max-width:310px;text-align:left}
+.extended-preview-asks span{position:relative;padding-left:16px;color:#f0dfae;
+  font-family:"Noto Serif TC","Songti TC",serif;font-size:14.5px;line-height:1.6}
+.extended-preview-asks span::before{content:"—";position:absolute;left:0;color:var(--gold);opacity:.65}
 .extended-preview-btn{width:100%;min-height:48px;padding:11px 16px;border:1px solid var(--gold);border-radius:999px;color:#fff7df;background:linear-gradient(110deg,rgba(147,92,41,.88),rgba(89,48,85,.92));font-size:13.5px;letter-spacing:.06em;box-shadow:0 7px 22px rgba(0,0,0,.22);cursor:pointer}
 .extended-preview-btn:active{transform:translateY(1px)}
 .extended-preview-btn[disabled]{cursor:default;opacity:.78}
@@ -1608,14 +1615,27 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
       // 對大多數籤來說是誇大的。改成由目錄顯示每支籤自己的真實數字。
       /* PDF 那句與 CTA 承接句都跟著目錄一起出現，不在展開前顯示——
          兩句都指向下面的章節（「這些問題」），沒有目錄時無所指。 */
+      /* 三個問題依情境換。施工單說不要把「他還會主動嗎」套到工作、人生、毛孩——
+         但同樣的問題在愛情內部就發生了：桃花運勢 30 支裡只有 2 支的章節提到
+         對方，那一類問的是「會遇到誰」，不是「他在想什麼」。單身也一樣。 */
+      const PITCH={
+        breakup:{seen:"這段關係可能的走向",q1:"他還會主動嗎？",tail:"對方的反應"},
+        flirting:{seen:"這段關係可能的走向",q1:"他還會主動嗎？",tail:"對方的反應"},
+        relationship:{seen:"這段關係可能的走向",q1:"他還會主動嗎？",tail:"對方的反應"},
+        single:{seen:"這段時間的方向",q1:"我會遇到什麼樣的人？",tail:"可能出現的人"},
+        fortune:{seen:"這陣子的桃花走向",q1:"桃花會從哪裡來？",tail:"可能出現的機會"}
+      };
+      const pitch=PITCH[extSlug]||PITCH.breakup;
       section.innerHTML='<div class="extended-preview-kicker">完整解籤 · NT$ 99</div>'
-        +'<div class="extended-preview-title">如果你想再往下看，這支籤還會解讀這些事</div>'
-        +'<div class="extended-preview-copy">延伸籤會沿著你剛剛抽到的籤意繼續往下解讀，每一支籤的內容都不同。</div>'
+        +'<div class="extended-preview-title">這支籤，還有更深一層的答案。</div>'
+        +'<div class="extended-preview-copy">你已經看見'+pitch.seen+'。<br>但你真正想知道的，也許是：</div>'
+        +'<div class="extended-preview-asks"><span>'+pitch.q1+'</span><span>這次的轉折代表什麼？</span><span>我現在該怎麼做？</span></div>'
+        +'<div class="extended-preview-copy">完整解籤會沿著你剛剛抽到的籤意，繼續拆解可能的發展、'+pitch.tail+'，以及你適合採取的下一步。</div>'
         +'<button type="button" class="extended-preview-toc-btn">看看這支籤會解讀什麼</button>'
         +'<div class="extended-preview-toc" hidden></div>'
         +'<div class="extended-preview-note" hidden>購買後可完整閱讀，並附 PDF 寄送至信箱保存。</div>'
         +'<div class="extended-preview-lead" hidden>想知道這些問題在你的這支籤裡怎麼解讀？</div>'
-        +'<button type="button" class="extended-preview-btn">閱讀完整解籤　NT$ 99</button>';
+        +'<button type="button" class="extended-preview-btn">解鎖這支籤的完整解讀　NT$ 99</button>';
       const buy=section.querySelector(".extended-preview-btn");
       const tocBtn=section.querySelector(".extended-preview-toc-btn");
       const toc=section.querySelector(".extended-preview-toc");
