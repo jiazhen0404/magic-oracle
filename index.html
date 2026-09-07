@@ -800,6 +800,14 @@ function magicOraclePay(){
 .extended-preview-toc{margin:0 0 16px;padding:15px 16px;border:1px solid rgba(199,156,82,.24);
   border-radius:14px;background:rgba(16,10,27,.5);text-align:left}
 .extended-preview-toc-meta{color:var(--gold);font-size:11.5px;letter-spacing:.1em;margin-bottom:10px}
+/* 不用點就看得到的前三章。視覺上比完整目錄輕——它是預告不是清單。 */
+.extended-preview-peek{margin:0 auto 14px;max-width:310px;text-align:left}
+.extended-preview-peek-head{color:var(--gold);font-size:11.5px;letter-spacing:.1em;margin-bottom:8px}
+.extended-preview-peek ul{list-style:none;margin:0;padding:0}
+.extended-preview-peek li{position:relative;padding:4px 0 4px 20px;color:var(--text);
+  font-size:13.5px;line-height:1.7}
+.extended-preview-peek li::before{content:"✓";position:absolute;left:0;color:var(--gold);font-size:12px}
+.extended-preview-peek-more{margin-top:6px;padding-left:20px;color:#9d8ba8;font-size:12px}
 .extended-preview-toc ul{list-style:none;margin:0;padding:0}
 .extended-preview-toc li{position:relative;padding:5px 0 5px 20px;color:var(--text-soft);
   font-size:13px;line-height:1.7}
@@ -1631,7 +1639,8 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
         +'<div class="extended-preview-copy">你已經看見'+pitch.seen+'。<br>但你真正想知道的，也許是：</div>'
         +'<div class="extended-preview-asks"><span>'+pitch.q1+'</span><span>這次的轉折代表什麼？</span><span>我現在該怎麼做？</span></div>'
         +'<div class="extended-preview-copy">完整解籤會沿著你剛剛抽到的籤意，繼續拆解可能的發展、'+pitch.tail+'，以及你適合採取的下一步。</div>'
-        +'<button type="button" class="extended-preview-toc-btn">看看這支籤會解讀什麼</button>'
+        +'<div class="extended-preview-peek" hidden></div>'
+        +'<button type="button" class="extended-preview-toc-btn" hidden>看完整目錄</button>'
         +'<div class="extended-preview-toc" hidden></div>'
         +'<div class="extended-preview-note" hidden>購買後可完整閱讀，並附 PDF 寄送至信箱保存。</div>'
         +'<div class="extended-preview-lead" hidden>想知道這些問題在你的這支籤裡怎麼解讀？</div>'
@@ -1646,49 +1655,64 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);co
       const ctx={theme:theme,theme_label:themeLabels[theme]||theme,subtheme:subtheme,
         fortune_number:fortuneNumber,fortune_title:title,slip_id:slipId,fortune_id:slipId};
 
-      /* 目錄。點了才抓、才顯示、才送事件 —— 抽完籤沒點的人不會被算進
-         「真的主動看了商品內容」那一群，這是這條漏斗要分開的兩件事。
-         後端只回小標題與數量，正文一個字都不會經過這裡。 */
+      const peek=section.querySelector(".extended-preview-peek");
+      const PEEK_N=3;
+      let outline=null;
+
+      const li=function(t){const e=document.createElement("li");e.textContent=t;return e;};
+      const div=function(cls,t){const e=document.createElement("div");e.className=cls;e.textContent=t;return e;};
+
+      /* 前三個章節直接露出，不用點。
+         這是整個付費區唯一能證明「不是罐頭內容」的東西——標題來自這支籤
+         自己的資料（/api/extended-outline），不是共用文案，所以也不可能
+         把愛情的章節套到別的分類：別的分類根本走候補分支，不會執行到這裡。
+         抓失敗就什麼都不顯示，區塊其餘部分照常運作。 */
+      fetch("/api/extended-outline?id="+encodeURIComponent(slipId),{cache:"no-store"})
+        .then(function(r){ if(!r.ok)throw new Error(r.status); return r.json(); })
+        .then(function(d){
+          outline=d;
+          const titles=d.titles||[];
+          if(!titles.length)return;
+          peek.appendChild(div("extended-preview-peek-head","這支籤的完整解讀會回答："));
+          const ul=document.createElement("ul");
+          titles.slice(0,PEEK_N).forEach(function(t){ ul.appendChild(li(t)); });
+          peek.appendChild(ul);
+          const rest=titles.length-PEEK_N;
+          if(rest>0){
+            peek.appendChild(div("extended-preview-peek-more","⋯⋯還有 "+rest+" 個解讀章節"));
+            tocBtn.hidden=false;          // 還有沒露出的章節，才需要展開
+          }
+          peek.hidden=false;
+        })
+        .catch(function(err){ console.warn("延伸籤目錄載入失敗",err); });
+
+      /* 展開完整目錄。
+         extended_preview_view 仍然只在「使用者主動展開」時才送——
+         上面自動露出的三條不算，否則這個指標會從「真的想看商品內容的人」
+         變成「所有抽到愛情籤的人」，跟 paywall_view_love 就沒有差別了。 */
       tocBtn.addEventListener("click",function(){
-        if(tocBtn.disabled)return;
+        if(tocBtn.disabled||!outline)return;
         tocBtn.disabled=true;
 
-        // 主動點「看延伸籤」。原本這兩個事件只在非愛情的「即將開放」分支送，
-        // 可購買的愛情籤反而沒有 —— 漏斗第二層對能買的籤是空的。
         send("extended_reading_interest",Object.assign({},ctx,
-          {button_location:"result_after_fortune",interest_version:"toc_v1"}));
+          {button_location:"result_after_fortune",interest_version:"peek_v1"}));
         if(theme!=="unknown")send("extended_interest_"+theme,ctx);
 
-        tocBtn.textContent="載入中⋯";
-        fetch("/api/extended-outline?id="+encodeURIComponent(slipId),{cache:"no-store"})
-          .then(function(r){ if(!r.ok)throw new Error(r.status); return r.json(); })
-          .then(function(d){
-            const titles=d.titles||[];
-            const meta=document.createElement("div");
-            meta.className="extended-preview-toc-meta";
-            meta.textContent="完整內容約 "+d.approxWordCount+" 字・共 "+d.sectionCount+" 個解讀章節";
-            const ul=document.createElement("ul");
-            titles.forEach(function(t){          // 全部列出，不截斷
-              const li=document.createElement("li");
-              li.textContent=t;                  // 用 textContent，不用 innerHTML
-              ul.appendChild(li);
-            });
-            toc.appendChild(meta); toc.appendChild(ul);
-            toc.hidden=false;
-            tocBtn.hidden=true;
-            note.hidden=false;   // PDF 附註，層級刻意低於目錄與 CTA
-            lead.hidden=false;   // CTA 上方的承接句
+        const titles=outline.titles||[];
+        toc.appendChild(div("extended-preview-toc-meta",
+          "完整內容約 "+outline.approxWordCount+" 字・共 "+outline.sectionCount+" 個解讀章節"));
+        const ul=document.createElement("ul");
+        titles.forEach(function(t){ ul.appendChild(li(t)); });   // 全部列出，不截斷
+        toc.appendChild(ul);
+        toc.hidden=false;
+        peek.hidden=true;      // 換成完整版，不要兩份並存
+        tocBtn.hidden=true;
+        note.hidden=false;     // PDF 附註，層級刻意低於目錄與 CTA
+        lead.hidden=false;     // CTA 上方的承接句
 
-            // 目錄「真的顯示出來」之後才送。抓失敗就不會走到這裡。
-            send("extended_preview_view",Object.assign({},ctx,{
-              section_count:d.sectionCount, approx_word_count:d.approxWordCount,
-              price:99, currency:"TWD"}));
-          })
-          .catch(function(err){
-            console.warn("延伸籤目錄載入失敗",err);
-            tocBtn.textContent="看看這支籤會解讀什麼";
-            tocBtn.disabled=false;          // 讓使用者可以再試一次
-          });
+        send("extended_preview_view",Object.assign({},ctx,{
+          section_count:outline.sectionCount, approx_word_count:outline.approxWordCount,
+          price:99, currency:"TWD"}));
       });
 
       buy.addEventListener("click",function(){
