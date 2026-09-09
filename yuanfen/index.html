@@ -325,55 +325,34 @@ body.reading .lock-mark{
 
 /* 頁首拱門 */
 
-/* ── 主要按鈕：起盤（三段式，任意寬度不變形） ── */
-.btn-start{
-  position:relative; display:block; width:min(460px,100%); margin:0 auto;
-  aspect-ratio:1365/368; padding:0 96px 0 108px;
-  /* 備援：素材載不到時仍是一顆看得出來的按鈕 */
-  border:1px solid var(--gold); border-radius:999px;
-  background-color:rgba(217,189,130,.12);
-  background-image:
-    url('assets/btn-start-l.webp'),
-    url('assets/btn-start-r.webp'),
-    url('assets/btn-start-m.webp');
-  background-position:left center, right center, center center;
-  background-size:auto 100%, auto 100%, auto 100%;
-  background-repeat:no-repeat, no-repeat, repeat-x;
-  color:#58381f; font-family:var(--serif); font-size:clamp(21px,5vw,28px);
-  font-weight:500; letter-spacing:.3em; text-indent:.3em;
+/* ── 兩顆主要按鈕：文字已在素材上，HTML 端不放字 ── */
+.btn-img{
+  display:block; border:0; padding:0; background:transparent;
   cursor:pointer; -webkit-tap-highlight-color:transparent;
-  filter:drop-shadow(0 8px 26px rgba(0,0,0,.4));
+  width:min(480px,100%); margin:0 auto;
+  background-repeat:no-repeat; background-position:center; background-size:contain;
+  filter:drop-shadow(0 10px 30px rgba(0,0,0,.45));
   transition:filter .25s, transform .12s;
 }
-.btn-start:hover{filter:drop-shadow(0 8px 30px rgba(217,189,130,.3)) brightness(1.05)}
-.btn-start:active{transform:translateY(1px)}
-.btn-start:focus-visible{outline:2px solid var(--gold); outline-offset:8px}
+.btn-img span{                       /* 給螢幕閱讀器與素材載不到時 */
+  position:absolute; width:1px; height:1px; overflow:hidden;
+  clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap;
+}
+.btn-img:hover{filter:drop-shadow(0 10px 34px rgba(217,189,130,.34)) brightness(1.05)}
+.btn-img:active{transform:translateY(1px)}
+.btn-img:focus-visible{outline:2px solid var(--gold); outline-offset:10px; border-radius:999px}
+.btn-img[disabled]{filter:grayscale(.5) brightness(.75); cursor:default}
 
-/* ── 付費按鈕：整張使用（框體非等寬，不能切） ── */
-.btn-unlock{
-  position:relative; display:block; width:min(520px,100%); margin:0 auto;
-  aspect-ratio:1456/456; padding:0 130px 0 150px;
-  border:1px solid var(--gold); border-radius:999px;
-  background-color:rgba(217,189,130,.12);
-  background-image:url('assets/btn-unlock.webp');
-  background-position:center; background-size:100% 100%; background-repeat:no-repeat;
-  cursor:pointer; -webkit-tap-highlight-color:transparent;
-  filter:drop-shadow(0 8px 26px rgba(0,0,0,.4));
-  transition:filter .25s, transform .12s;
+#go{aspect-ratio:1365/368; background-image:url('assets/btn-start.webp')}
+#u-cta{aspect-ratio:1456/461; background-image:url('assets/btn-unlock.webp'); width:min(520px,100%)}
+
+/* 展開後：按鈕收起，改用一行文字 */
+.expanded-note{
+  display:none; text-align:center; color:var(--gold-soft);
+  font-family:var(--serif); font-size:17px; letter-spacing:.2em; margin:6px 0 0;
 }
-.btn-unlock b{
-  display:block; color:#58381f; font-family:var(--serif);
-  font-size:clamp(19px,4.6vw,26px); font-weight:500; letter-spacing:.2em;
-  line-height:1.2;
-}
-.btn-unlock small{
-  display:block; color:#8a5f3c; font-family:var(--sans);
-  font-size:clamp(11px,2.6vw,14px); letter-spacing:.1em; margin-top:8px;
-}
-.btn-unlock:hover{filter:drop-shadow(0 8px 30px rgba(217,189,130,.3)) brightness(1.05)}
-.btn-unlock:active{transform:translateY(1px)}
-.btn-unlock:focus-visible{outline:2px solid var(--gold); outline-offset:8px}
-.btn-unlock[disabled],.btn-start[disabled]{filter:grayscale(.45) brightness(.8); cursor:default}
+body.reading .expanded-note{display:block}
+body.reading #u-cta{display:none}
 
 /* 起盤動畫：羅盤 */
 .cta-wrap{display:flex; justify-content:center; margin-top:30px}
@@ -567,7 +546,7 @@ details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offse
       </div>
     </div>
 
-    <button class="btn-start" id="go">開始測算</button>
+    <button class="btn-img" id="go"><span>開始測算</span></button>
     <p class="err" id="err" role="status"></p>
     <p class="privacy">不用註冊，不用留 email。兩組生日不會被儲存，也不會離開你的裝置——計算全部在這個頁面完成，關掉就不存在了。</p>
     <div class="promise">
@@ -621,7 +600,8 @@ details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offse
       <p class="toc-h">目錄</p>
       <ol id="u-list"></ol>
       <p class="price-note" id="u-price"></p>
-      <button class="btn-unlock" id="u-cta"><b>解讀完整內容</b><small id="u-cta-sub">NT$199 · 19 段專屬報告</small></button>
+      <button class="btn-img" id="u-cta"><span>解讀完整內容 NT$199</span></button>
+      <p class="expanded-note">已展開　往下閱讀</p>
       <p class="preview-note">預覽模式：此版本尚未接金流，點擊可直接展開。</p>
     </div>
     <div id="r-report">
@@ -3225,8 +3205,6 @@ function reveal(a, b) {
   last = { result: r, a: freeA, b: freeB, full: yuanfen(a, b), scene };
   $('r-report').classList.remove('on');
   document.body.classList.remove('reading');
-  $('u-cta').querySelector('b').textContent = '解讀完整內容';
-  $('u-cta').querySelector('small').textContent = 'NT$199 · 19 段專屬報告';
   $('u-cta').disabled = false;
 
   $('r-score').textContent = '0';
@@ -3417,8 +3395,6 @@ $('u-cta').addEventListener('click', () => {
   });
   box.classList.add('on');
   document.body.classList.add('reading');
-  $('u-cta').querySelector('b').textContent = '已展開';
-  $('u-cta').querySelector('small').textContent = '往下閱讀';
   $('u-cta').disabled = true;
   box.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
