@@ -99,8 +99,17 @@ if (url.pathname.startsWith('/yuanfen')) return env.ASSETS.fetch(request);
 | 事件 | 時機 | 參數 |
 |---|---|---|
 | `yuanfen_draw` | 起盤完成 | `band`、`tempo`、`has_hour` |
+| `yuanfen_feedback` | 使用者按下準確度回饋 | `tempo`、`rating`（準／有點像／不太對） |
 | `yuanfen_share` | 儲存圖片／分享 | `band`、`tempo`、`method` |
 | `yuanfen_unlock` | 付款完成 | `band`、`tempo` |
+
+**加一個一鍵的準確度回饋。** 在免費結果頁的節奏標籤旁放一行：
+
+```
+這段描述準嗎？　⚪ 滿準的　⚪ 有點像　⚪ 不太對
+```
+
+不用填任何東西，只回傳 `tempo` 與選項。三個月後就有足夠樣本回答「哪一型最不準」——這是唯一能真正校準判讀的方式，靠身邊案例校不出來（七種節奏 × 十種格局，每型至少要幾十組，而且會偏向同一個圈子）。
 
 **`tempo` 這個參數最值得埋**——它會告訴你「轟轟烈烈」跟「平淡如水」哪一種人比較願意付錢。這比分數帶更有行動意義。
 

@@ -22,8 +22,11 @@ const bundle = ORDER.map(strip).join('\n\n/* ───────────�
 fs.writeFileSync('engine.bundle.js', bundle);
 
 const html = fs.readFileSync('index.html', 'utf8');
-const i = html.indexOf('<script>') + 8;
+/* 注入點要從「介面」分隔線往回找，不能從檔案開頭找第一個 <script>。
+   <head> 裡只要有任何一個不帶屬性的 <script>（例如 GA4 的初始化），
+   從開頭找就會把 CSS 與整個 head 一起吃掉。踩過一次，別再改回 indexOf。 */
 const j = html.indexOf('/* ───────────────────────── 介面 ─────────────────────────');
+const i = html.lastIndexOf('<script>', j) + 8;
 if (i < 8 || j < 0) { console.error('找不到注入點，index.html 結構被改過'); process.exit(1); }
 const out = html.slice(0, i) + '\n' + bundle + '\n\n' + html.slice(j);
 fs.writeFileSync('index.html', out);

@@ -59,8 +59,10 @@ const TEMPO = {
       '你們是反覆的那一種。有一陣子熱、有一陣子淡，而且你常常抓不到是從哪一句話開始變的。',
     arc:
       '這種節奏最耗人，因為它沒有事件。沒有吵架、沒有誰做錯，就是溫度自己上上下下，' +
-      '所以你連要問什麼都不知道。往後這個循環會繼續，除非有一次你們把「我不太確定你的意思」講出來。' +
-      '講出來那次會有點尷尬，但那是唯一能停下循環的方式。',
+      '所以你連要問什麼都不知道。在還沒確定關係的階段，這個循環特別危險——' +
+      '因為每一次冷掉都不需要理由，也不需要交代，' +
+      '而反覆幾次之後，通常不是有人喊停，是有人先累了。' +
+      '要停下循環只有一個方法：把「我不太確定你的意思」講出來。那次會有點尷尬，但它是分水嶺。',
     note: '你反覆確認他的意思，不是因為你多疑，是這段緣真的訊號不穩。'
   },
 
@@ -90,6 +92,23 @@ const TEMPO = {
     note: '你們差的不是喜歡的程度，是能不能在同一段時間裡都有餘力。'
   },
 
+  /* 一見傾心 —— 交叉多合又多沖：吸引與摩擦同時存在 */
+  magnetic: {
+    name: '一見傾心',
+    intro:
+      '你們是一開始就強烈吸引的那一種。盤上有幾組交會得很深的地方，' +
+      '那讓你在很早的階段就有一種「就是他了」的確定感——那個確定不是錯覺，它是有根據的。',
+    arc:
+      '但同一張盤上，摩擦的地方也不少，而且跟吸引的地方不是同一處。' +
+      '這代表你們的好與難是分開存在的，不會互相抵銷：很好的時候是真的很好，' +
+      '卡住的時候也是真的卡住。' +
+      '要特別講一件事——這種配置在已經在一起的關係裡可以慢慢磨，' +
+      '因為有承諾撐著，磨過去就好了；但在還沒確定的階段，摩擦沒有東西可以撐。' +
+      '所以你們最可能的結局不是吵散，是在某一次卡住之後就慢慢沒有下文，' +
+      '而且兩個人都會覺得很可惜。',
+    note: '吸引力強不代表走得下去。曖昧期的摩擦沒有承諾可以撐，卡住就容易沒有下文。'
+  },
+
   /* 平淡如水 —— 全平 */
   plain: {
     name: '平淡如水',
@@ -107,18 +126,30 @@ const TEMPO = {
 /**
  * @param d  result.dimensions
  */
-function tempo(d) {
+/**
+ * @param d  result.dimensions
+ * @param cx cross(result) 的結果；沒給就只看同柱（相容舊呼叫）
+ */
+function tempo(d, cx) {
   const w = d.wendu.key, c = d.changdu.key;
+  const sweet = cx ? cx.sweet : 0;
+  const harsh = cx ? cx.harsh : 0;
 
-  // 合得來但節奏錯開 → 相見恨晚（優先於單看日支）
+  // 交叉同時多合又多沖 → 一見傾心。這一型優先，因為它是最強的體感
+  if (sweet >= 1 && harsh >= 3)              return { key: 'magnetic', ...TEMPO.magnetic };
+  // 交叉幾乎全是沖害 → 撞上的
+  if (harsh >= 4 && sweet === 0)             return { key: 'fierce',   ...TEMPO.fierce };
+
+  // 合得來但節奏錯開 → 相見恨晚
   if ((w === 'liuhe' || w === 'sanhe') && (c === 'liuchong' || c === 'xing'))
     return { key: 'mistimed', ...TEMPO.mistimed };
 
-  if (w === 'liuchong' || w === 'xing')      return { key: 'fierce',   ...TEMPO.fierce };
-  if (w === 'liuhe')                         return { key: 'instant',  ...TEMPO.instant };
-  if (w === 'sanhe' || c === 'sanhe')        return { key: 'slowburn', ...TEMPO.slowburn };
-  if (w === 'liuhai')                        return { key: 'wavering', ...TEMPO.wavering };
-  if (w === 'same' || w === 'zixing')        return { key: 'mirror',   ...TEMPO.mirror };
+  if (w === 'liuchong' || w === 'xing' || w === 'po') return { key: 'fierce',   ...TEMPO.fierce };
+  if (w === 'liuhe')                                  return { key: 'instant',  ...TEMPO.instant };
+  if (w === 'sanhe')                                  return { key: 'slowburn', ...TEMPO.slowburn };
+  if (w === 'liuhai')                                 return { key: 'wavering', ...TEMPO.wavering };
+  if (w === 'same' || w === 'zixing')                 return { key: 'mirror',   ...TEMPO.mirror };
+  if (sweet >= 2)                                     return { key: 'slowburn', ...TEMPO.slowburn };
   return { key: 'plain', ...TEMPO.plain };
 }
 
