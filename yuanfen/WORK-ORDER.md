@@ -18,10 +18,12 @@
 
 正確結果：
   緣分指數  72
+  機會      偏低，但不是不可能（卡在摩擦）
   節奏      一見傾心
   主動方    他先動心
   三維度    48 / 78 / 90
-  報告段數  21
+  報告段數  23（不填時辰）／ 24（有時辰）
+  部別      6 個
 ```
 
 線上目前顯示 **73 分、平淡如水** → 那是舊版。
@@ -92,6 +94,8 @@ grep -c "magnetic" src/tempo.js     # 應 ≥ 2
 | **格局** | `src/shape.js` | 順不順、對不對等 → 前三段敘事（10 種） |
 | **節奏** | `src/tempo.js` | 怎麼開始的 → 第 02 段（8 種） |
 | **主動方** | `src/initiator.js` | 誰先動心／誰先出手 → 第 03 段（5×3） |
+| **機會** | `src/chance.js` | 走到一起的機會分級、卡點、翻盤條件 |
+| **下一步** | `src/movefirst.js` | 接下來該由誰先開口、什麼方式、什麼時機 |
 | **相遇** | `src/encounter.js` | 在什麼場合遇上、多久才顯現 → 第 03 段 |
 | **維度** | `src/copy.js` | 溫度／重量／長度各一段（9×5×9 key） |
 | **風味** | `src/flavour.js` | 綁在命盤上的個人化句（日支 12／日干 10／納音 30） |
@@ -127,11 +131,14 @@ grep -c "magnetic" src/tempo.js     # 應 ≥ 2
 
 ### 2. GA4 事件 ＋ 準確度回饋
 
+`chance` 的分級也要當參數埋——**它會告訴你「機會很低」的人是不是反而更願意付錢**。直覺上焦慮的人付費意願更高，但這要資料證實。
+
+
 主站已有 GA4，這頁還沒埋。
 
 | 事件 | 時機 | 參數 |
 |---|---|---|
-| `yuanfen_draw` | 起盤完成 | `band`、`tempo`、`has_hour` |
+| `yuanfen_draw` | 起盤完成 | `band`、`tempo`、`chance`、`has_hour` |
 | `yuanfen_feedback` | 按下準確度回饋 | `tempo`、`rating` |
 | `yuanfen_share` | 儲存圖片／分享 | `band`、`tempo`、`method` |
 | `yuanfen_unlock` | 付款完成 | `band`、`tempo` |
