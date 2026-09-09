@@ -22,6 +22,7 @@ const { SELF_POSITION, SELF_BLIND, VALUES, READING, KEEP, svPick } = require('./
 const { takeaway } = require('./takeaway');
 const { narrate } = require('./shape');
 const { tempo } = require('./tempo');
+const { encounter } = require('./encounter');
 
 /* ---------- 1. 這段緣現在停在哪裡 ---------- */
 
@@ -246,6 +247,7 @@ function pillarTable(result) {
   const A = result.debug.A, B = result.debug.B;
   const rows = [
     { label: '年柱', a: A.year, b: B.year, use: '緣的長度（年支關係）' },
+    { label: '月柱', a: A.month, b: B.month, use: '由節氣定界，本版不參與計分' },
     { label: '日柱', a: A.day,  b: B.day,  use: '緣的溫度（日支）、緣的重量（日干）' }
   ];
   if (A.hour && B.hour) {
@@ -283,6 +285,7 @@ function report(result, names = { A: '你', B: '他' }) {
   // 敘事由盤面格局決定，不由分數排名決定
   const nar = narrate(d);
   const tp = tempo(d);
+  const en = encounter(d.changdu.key, tp.key);
   const zl = d.zhongliang.key;
 
   const ev = eventsFor(result, b.label)
@@ -299,9 +302,11 @@ function report(result, names = { A: '你', B: '他' }) {
 
   const sections = [
     { part: P1, title: '你們的緣分，究竟有多深？', table: pillarTable(result),
-      note: '底下每一段都從這張表推出來。沒有列月柱，因為這套算法沒有用到它。' },
+      note: '立春時刻由太陽黃經實算，不是固定 2/4；月柱由節氣定界。本版計分只用年、日、時三柱，月柱列出供對照。' },
     { part: P1, title: '你們是怎麼開始的？',
       body: tp.intro + tp.arc + tp.note },
+    { part: P1, title: '你們是在什麼樣的場合遇上的？',
+      body: en.place + en.timing },
     { part: P1, title: '你們現在，到底算是什麼？', body: nar.now },
     { part: P1, title: '明明有感覺，為什麼就是差那一步？',     body: nar.weak },
     { part: P1, title: '你們之間，最值得珍惜的是什麼？',     body: nar.strong },
@@ -333,7 +338,7 @@ function report(result, names = { A: '你', B: '他' }) {
   );
 
   // 每段掛上「這一段的重點」
-  const ctx = { band: b.label, weak, strong, zl, tempo: tp.name,
+  const ctx = { band: b.label, weak, strong, zl, tempo: tp.name, place: d.changdu.key,
                 wendu: d.wendu.key, changdu: d.changdu.key,
                 midu: d.midu ? d.midu.key : null };
   sections.forEach(s => { s.takeaway = takeaway(s.title, ctx); });

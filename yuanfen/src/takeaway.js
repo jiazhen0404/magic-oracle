@@ -26,6 +26,18 @@ const T = {
     平淡如水: '淡不是沒有可能，是還沒有人決定要讓它變濃。'
   },
 
+  /* 新增 相遇的場合 —— 年支 key */
+  place: {
+    liuhe:   '你們不是刻意認識的，那種緣通常也不會刻意斷。',
+    sanhe:   '會反覆見面的地方，感情才有機會慢慢長出來。',
+    same:    '同溫層讓你們熟得快，也讓你們少了一個檢查的角度。',
+    ping:    '靠媒介認識的關係，也需要媒介才能維持。',
+    zixing:  '在彼此都不自在的時候遇見，那份辨認很真，但不等於適合。',
+    liuhai:  '一開始就不在陽光下的關係，往後也不容易攤開。',
+    xing:    '你們很早就看到對方認真的樣子，那既是吸引也是摩擦的來源。',
+    liuchong:'沒有必然性的相遇，每一次見面都是有人促成的。'
+  },
+
   /* 02 你們現在的狀態 —— 分數帶 */
   now: {
     緣滿: '太順的關係最大的風險，是沒有人覺得需要努力。',
@@ -205,10 +217,11 @@ const T = {
 
 /* 段落 title → 取哪一組、用哪個 key */
 function takeaway(section, ctx) {
-  const { band, weak, strong, zl, wendu, changdu, midu, tempo } = ctx;
+  const { band, weak, strong, zl, wendu, changdu, midu, tempo, place } = ctx;
   const map = {
     '你們的緣分，究竟有多深？':                 () => T.table,
     '你們是怎麼開始的？':                       () => T.tempo[ctx.tempo],
+    '你們是在什麼樣的場合遇上的？':             () => T.place[ctx.place],
     '你們現在，到底算是什麼？':       () => T.now[band],
     '明明有感覺，為什麼就是差那一步？':           () => T.weak[weak],
     '你們之間，最值得珍惜的是什麼？':           () => T.strong[strong],

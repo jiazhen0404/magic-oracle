@@ -75,10 +75,12 @@ h1{font-family:var(--serif);
 .sc-row select option{background:var(--panel); color:var(--cream)}
 
 .upsell{
-  margin-top:40px; border-top:1px solid var(--line); padding-top:30px;
+  margin-top:48px; border-top:1px solid var(--line); padding-top:42px;
 }
-.upsell h2{font-family:var(--serif); text-align:center; font-size:24px; font-weight:400; color:var(--gold-soft); letter-spacing:.08em; margin:0 0 16px}
-.upsell p{margin:0 0 14px; color:var(--cream); opacity:.92; font-size:16px}
+.upsell h2{font-family:var(--serif); text-align:center; font-size:26px; font-weight:400;
+  color:var(--gold-soft); letter-spacing:.14em; margin:0 0 20px}
+.upsell p{margin:0 auto 14px; color:var(--cream); opacity:.9; font-size:16px;
+  max-width:30em; text-align:center; line-height:2.05}
 .upsell ul{margin:18px 0 0; padding:0; list-style:none}
 .upsell li{color:var(--muted); font-size:14.5px; padding:7px 0 7px 20px; position:relative}
 .upsell li::before{content:''; }
@@ -119,7 +121,8 @@ h1{font-family:var(--serif);
   border:1px solid var(--line); border-radius:3px; padding:2px 7px; margin-left:9px;
   white-space:nowrap; vertical-align:2px;
 }
-.upsell .toc-h{color:var(--gold-soft); font-family:var(--serif); font-size:17px; letter-spacing:.24em; margin:30px 0 0; text-align:center}
+.upsell .toc-h{color:var(--gold-soft); font-family:var(--serif); font-size:17px;
+  letter-spacing:.24em; margin:38px 0 0; text-align:center}
 .upsell ol li.part{
   counter-increment:none; border-bottom:0; padding:22px 0 6px 0;
   color:var(--gold); font-size:12.5px; letter-spacing:.1em;
@@ -234,7 +237,8 @@ button.draw:focus-visible{outline:2px solid var(--gold); outline-offset:3px}
   color:var(--muted); font-size:13px; line-height:1.95;
 }
 .promise b{display:block; color:var(--gold-soft); font-weight:400; font-size:13.5px; margin-bottom:6px}
-.price-note{color:var(--gold-soft); font-family:var(--serif); font-size:16px; margin:26px 0 0; line-height:1.9; text-align:center}
+.price-note{color:var(--gold-soft); font-family:var(--serif); font-size:16px;
+  margin:32px 0 22px; line-height:1.9; text-align:center}
 .basis-why{color:var(--muted); font-size:12.5px; margin:14px 0 0; line-height:1.8; opacity:.85}
 
 /* ══════════════════ 鑲金邊區塊 ══════════════════ */
@@ -311,6 +315,7 @@ button.draw:focus-visible{outline:2px solid var(--gold); outline-offset:3px}
 /* 鎖頭 */
 .lock-mark{
   display:block; width:44px; height:57px; margin:0 auto 14px;
+  flex:none;
   background:url('assets/lock.webp') no-repeat center/contain;
   transition:opacity .3s;
 }
@@ -392,13 +397,16 @@ body.reading #u-cta{display:none}
 
 /* 付費區：花環 */
 .upsell{position:relative}
-.upsell .wreath{
-  position:absolute; top:-30px; left:50%; transform:translateX(-50%);
-  width:min(300px,70vw); aspect-ratio:900/866;
-  background:url('assets/wreath-circle.webp') no-repeat center/contain;
-  opacity:.55; pointer-events:none; z-index:0;
+.upsell .seal{
+  position:relative; width:186px; height:180px; margin:0 auto 22px;
+  display:flex; align-items:center; justify-content:center;
 }
-.upsell > *{position:relative; z-index:1}
+.upsell .seal::before{
+  content:''; position:absolute; inset:0;
+  background:url('assets/wreath-circle.webp') no-repeat center/contain;
+  opacity:.85; pointer-events:none;
+}
+.upsell .seal .lock-mark{margin:0; width:46px; height:60px; position:relative}
 
 /* 報告：情侶插畫與角落飾 */
 #r-report .cover{
@@ -452,6 +460,12 @@ body.reading .corner{opacity:.36}
   line-height:2.1; opacity:.92;
 }
 .summary{margin:32px 0 0; color:var(--cream); opacity:.94}
+.warn-note{
+  margin-top:22px; padding:16px 20px; border:1px solid var(--warn);
+  border-radius:3px; background:rgba(232,180,180,.07);
+  color:var(--warn); font-size:14.5px; line-height:1.95;
+}
+
 .gap{
   margin-top:26px; padding:22px 24px; border:1px solid var(--line);
   border-left:2px solid var(--gold); border-radius:3px;
@@ -568,6 +582,7 @@ details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offse
       <p class="tempo-line" id="r-tempo-line"></p>
     </div>
     <p class="summary" id="r-summary"></p>
+    <p class="warn-note" id="r-warn" hidden></p>
     <div class="gap" id="r-gap" hidden></div>
     <div class="rule" aria-hidden="true"><i></i></div>
     <div class="dims" id="r-dims"></div>
@@ -588,8 +603,7 @@ details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offse
       <div id="r-basis"></div>
     </details>
     <div class="upsell" id="r-upsell" hidden>
-      <span class="wreath" aria-hidden="true"></span>
-      <span class="lock-mark" aria-hidden="true"></span>
+      <div class="seal" aria-hidden="true"><span class="lock-mark"></span></div>
       <h2 id="u-title"></h2>
       <p id="u-lead"></p>
       <div class="feats" aria-hidden="true">
@@ -620,10 +634,141 @@ details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offse
 
 <script>
 /* =========================================================================
+   未完籤所 · 節氣計算
+   -------------------------------------------------------------------------
+   要了生辰就要算對。原本立春用 2/4 近似，但立春實際落在 2/3–2/5：
+   2021 年是 2/3 22:58、2025 年是 2/3 22:10——那兩年 2/3 出生的人，
+   年柱會整整差一年，連帶整份報告全錯。
+
+   這裡直接算太陽視黃經（Meeus 低精度公式，誤差約 ±15 分鐘），
+   解出黃經抵達指定角度的時刻。誤差只影響出生在交節前後 15 分鐘的人，
+   比 ±1 天好上兩個數量級。
+
+   附帶好處：24 節氣全部算得出來，所以月柱也能排了。
+   ========================================================================= */
+
+const TZ = 8;                         // 台灣 UTC+8
+
+/* 儒略日（含小數，UTC） */
+function toJD(y, m, d, hourUTC) {
+  if (m <= 2) { y -= 1; m += 12; }
+  const A = Math.floor(y / 100);
+  const B = 2 - A + Math.floor(A / 4);
+  return Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1))
+       + d + B - 1524.5 + (hourUTC || 0) / 24;
+}
+
+function fromJD(jd) {
+  const z = Math.floor(jd + 0.5);
+  const f = jd + 0.5 - z;
+  let a = z;
+  if (z >= 2299161) {
+    const alpha = Math.floor((z - 1867216.25) / 36524.25);
+    a = z + 1 + alpha - Math.floor(alpha / 4);
+  }
+  const b = a + 1524;
+  const c = Math.floor((b - 122.1) / 365.25);
+  const dd = Math.floor(365.25 * c);
+  const e = Math.floor((b - dd) / 30.6001);
+  const day = b - dd - Math.floor(30.6001 * e) + f;
+  const month = e < 14 ? e - 1 : e - 13;
+  const year = month > 2 ? c - 4716 : c - 4715;
+  return { y: year, m: month, d: Math.floor(day), hour: (day - Math.floor(day)) * 24 };
+}
+
+/* 太陽視黃經（度）。Meeus 低精度，誤差約 0.01° ≒ 15 分鐘 */
+function solarLongitude(jd) {
+  const n = jd - 2451545.0;
+  const L = 280.460 + 0.9856474 * n;
+  const g = (357.528 + 0.9856003 * n) * Math.PI / 180;
+  let lam = L + 1.915 * Math.sin(g) + 0.020 * Math.sin(2 * g);
+  lam %= 360;
+  return lam < 0 ? lam + 360 : lam;
+}
+
+/* 解出某年太陽黃經抵達 target 度的 JD（UTC）。用二分法。 */
+function termJD(year, target) {
+  // 以目標角度估算大致日期：黃經 0° 約在 3/20
+  const approxDay = ((target + 360 - 280) % 360) / 0.9856 + 1;   // 自 1/1 起算
+  let lo = toJD(year, 1, 1, 0) + approxDay - 8;
+  let hi = lo + 16;
+  const diff = jd => {
+    let x = solarLongitude(jd) - target;
+    if (x > 180) x -= 360;
+    if (x < -180) x += 360;
+    return x;
+  };
+  if (diff(lo) > 0) { lo -= 20; hi -= 20; }
+  for (let i = 0; i < 60; i++) {
+    const mid = (lo + hi) / 2;
+    if (diff(lo) * diff(mid) <= 0) hi = mid; else lo = mid;
+  }
+  return (lo + hi) / 2;
+}
+
+/* 節氣的當地時間（台灣） */
+function termLocal(year, target) {
+  return fromJD(termJD(year, target) + TZ / 24);
+}
+
+/* ---------- 十二節（決定月柱的分界） ---------- */
+/* 立春 315、驚蟄 345、清明 15、立夏 45、芒種 75、小暑 105、
+   立秋 135、白露 165、寒露 195、立冬 225、大雪 255、小寒 285 */
+const JIE = [
+  { name: '立春', deg: 315, zhi: 2 },   // 寅
+  { name: '驚蟄', deg: 345, zhi: 3 },
+  { name: '清明', deg: 15,  zhi: 4 },
+  { name: '立夏', deg: 45,  zhi: 5 },
+  { name: '芒種', deg: 75,  zhi: 6 },
+  { name: '小暑', deg: 105, zhi: 7 },
+  { name: '立秋', deg: 135, zhi: 8 },
+  { name: '白露', deg: 165, zhi: 9 },
+  { name: '寒露', deg: 195, zhi: 10 },
+  { name: '立冬', deg: 225, zhi: 11 },
+  { name: '大雪', deg: 255, zhi: 0 },   // 子
+  { name: '小寒', deg: 285, zhi: 1 }    // 丑
+];
+
+/* 某年立春的當地時刻 */
+function lichun(year) { return termLocal(year, 315); }
+
+/**
+ * 判斷某個當地日期時刻是否已過該年立春。
+ * @param hour 當地時（0–23），未給時以中午 12 點估
+ */
+function afterLichun(y, m, d, hour) {
+  if (m > 2) return true;
+  if (m < 2) return false;
+  const lc = lichun(y);
+  if (d !== lc.d) return d > lc.d;
+  return (hour === undefined ? 12 : hour) >= lc.hour;
+}
+
+/**
+ * 月支：由出生時刻落在哪兩個節之間決定。
+ * 回傳 { zhi, jie } —— zhi 為地支序（0=子）
+ */
+function monthZhi(y, m, d, hour) {
+  const t = toJD(y, m, d, (hour === undefined ? 12 : hour) - TZ);
+  // 找出最後一個已過的節（含跨年，所以往前多看一年）
+  let best = null;
+  for (const yr of [y - 1, y]) {
+    for (const j of JIE) {
+      const jd = termJD(yr, j.deg);
+      if (jd <= t && (!best || jd > best.jd)) best = { jd, zhi: j.zhi, jie: j.name };
+    }
+  }
+  return best;
+}
+
+/* ───────────────────────── */
+
+/* =========================================================================
    未完籤所 · 緣分指數 Scoring Engine  (MVP: 只吃 年/月/日，不需時辰)
    -------------------------------------------------------------------------
    純函數：同一組輸入永遠得到同一組分數。無隨機、無時間依賴。
    ========================================================================= */
+
 
 const GAN = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
 const ZHI = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
@@ -655,10 +800,26 @@ function dayPillar(y, m, d) {
   return { gan: n % 10, zhi: n % 12 };
 }
 
-// 年柱：以立春為界（MVP 用 2/4 近似，誤差 ±1 天，見 README）
-function yearPillar(y, m, d) {
-  const yy = (m < 2 || (m === 2 && d < 4)) ? y - 1 : y;
-  return { gan: ((yy - 4) % 10 + 10) % 10, zhi: ((yy - 4) % 12 + 12) % 12, year: yy };
+// 年柱：以立春為界。立春時刻由太陽黃經 315° 實算，非固定 2/4。
+function yearPillar(y, m, d, hour) {
+  const yy = afterLichun(y, m, d, hour) ? y : y - 1;
+  const p = { gan: ((yy - 4) % 10 + 10) % 10, zhi: ((yy - 4) % 12 + 12) % 12, year: yy };
+  // 生在立春當天又沒給時辰，年柱有一半機率會判錯——標記出來，讓介面提醒
+  if (m === 2 && hour === undefined) {
+    const lc = lichun(y);
+    if (d === lc.d) p.uncertain = true;
+  }
+  return p;
+}
+
+// 月柱：月支由節氣分界決定，月干用五虎遁從年干推
+// 五虎遁：甲己之年丙作首、乙庚之歲戊為頭、丙辛必定尋庚起、丁壬壬位順行流、戊癸何方發甲寅之上好追求
+function monthPillar(y, m, d, hour, yearGan) {
+  const mz = monthZhi(y, m, d, hour);
+  const zhi = mz.zhi;
+  const yinGan = (yearGan % 5) * 2 + 2;               // 該年寅月的天干
+  const offset = ((zhi - 2) % 12 + 12) % 12;          // 自寅月起算
+  return { gan: (yinGan + offset) % 10, zhi, jie: mz.jie };
 }
 
 // 時柱：時支由小時直接對照，時干用五鼠遁從日干推
@@ -795,7 +956,8 @@ function clamp(n, lo = 0, hi = 100) { return Math.max(lo, Math.min(hi, n)); }
 
 function pillars(y, m, d, hour) {
   const day = dayPillar(y, m, d);
-  const p = { year: yearPillar(y, m, d), day };
+  const year = yearPillar(y, m, d, hour);
+  const p = { year, day, month: monthPillar(y, m, d, hour, year.gan) };
   if (hour !== undefined && hour !== null && hour !== '') {
     p.hour = hourPillar(day.gan, Number(hour));
   }
@@ -838,6 +1000,8 @@ function yuanfen(a, b) {
     const o = {
       year: GAN[P.year.gan] + ZHI[P.year.zhi],
       day:  GAN[P.day.gan]  + ZHI[P.day.zhi],
+      month: GAN[P.month.gan] + ZHI[P.month.zhi],
+      jie: P.month.jie,
       nayin: na,
       // 以下是盤面細節，供文案取用——不參與計分，只影響措辭
       yearGan: P.year.gan, yearZhi: P.year.zhi,
@@ -854,6 +1018,7 @@ function yuanfen(a, b) {
   return {
     total: Math.round(raw),
     hasHour,
+    uncertainYear: !!(A.year.uncertain || B.year.uncertain),
     weights: W,
     dimensions,
     debug: { A: pillarText(A, changdu.na), B: pillarText(B, changdu.nb) }
@@ -1075,6 +1240,102 @@ function tempo(d) {
   if (w === 'liuhai')                        return { key: 'wavering', ...TEMPO.wavering };
   if (w === 'same' || w === 'zixing')        return { key: 'mirror',   ...TEMPO.mirror };
   return { key: 'plain', ...TEMPO.plain };
+}
+
+/* ───────────────────────── */
+
+/* =========================================================================
+   未完籤所 · 相遇的方式與時機
+   -------------------------------------------------------------------------
+   合盤裡沒有「你們在哪裡認識」這個欄位，但也不需要問——
+   問了再講回去等於承認算不出來。命理的做法是把它當成判讀來說，
+   說中了才是準，說不中使用者也只會覺得「這次比較不準」，不會覺得被騙。
+
+   兩個來源：
+     場合  年支關係（年柱主大環境、背景、圈子）
+     時機  節奏（tempo）——多久才會顯現、哪個階段是關鍵
+
+   語氣一律用「多半／通常／傾向」，不用斷定句。
+   這不是保守，是因為它本來就是機率描述。
+   ========================================================================= */
+
+/* ---------- 相遇的場合：由年支關係推 ---------- */
+const PLACE = {
+  liuhe:
+    '你們多半不是刻意認識的，而是在某個本來就會碰到的地方遇上——透過熟人、在原本就有的圈子裡，' +
+    '或是某個雙方都常出現的場合。年支相合的緣分很少靠刻意安排，' +
+    '通常是「怎麼以前沒發現有這個人」的那一種。',
+  sanhe:
+    '你們多半是在一個需要長時間共處的環境裡認識的——工作、學校、社團，' +
+    '總之是那種會反覆見面、不需要特地約的地方。年支三合的緣是「聚」出來的，' +
+    '所以最初往往沒有什麼特別的印象，是後來才慢慢有的。',
+  same:
+    '你們多半來自很相似的背景或圈子。同溫層裡遇見的人，一開始就有大量共同語言，' +
+    '所以熟得比一般人快。這種相遇的特徵是很難說出「哪一天認識的」，' +
+    '因為在真正認識之前，你們可能已經知道彼此的存在很久了。',
+  ping:
+    '你們的相遇沒有特別的緣由——不是同一個圈子、也沒有非碰到不可的理由，' +
+    '多半是透過某個中介：一個朋友、一個平台、一次活動。' +
+    '年支平和的緣分靠的是媒介，所以維持也需要媒介，這一點後面會再提到。',
+  zixing:
+    '你們多半是在某個彼此都不太自在的場合認識的——可能是一個你們都不算適應的環境，' +
+    '或是一段兩個人狀態都不太好的時期。這種時候遇見的人容易產生連結，' +
+    '因為同樣的不自在會互相辨認。',
+  liuhai:
+    '你們的相遇多半帶著一點不那麼公開的成分——可能是網路上先認識，' +
+    '可能是有一段時間只有你們兩個知道，也可能是在某種不方便說明的關係裡。' +
+    '年支相害的緣分很少從一開始就攤在陽光下。',
+  xing:
+    '你們多半是在有壓力或有競爭的環境裡認識的——工作上的往來、' +
+    '同一件事情的兩端、或是某種需要各自表態的場合。' +
+    '這種相遇會讓你們很早就看到對方認真的樣子，那既是吸引，也是後來摩擦的來源。',
+  liuchong:
+    '你們的相遇多半是偶然的、短暫交錯的——一次臨時的場合、一段本來不會重疊的時間，' +
+    '或是某個人生轉折點上剛好碰到。年支相沖的緣分沒有必然性，' +
+    '所以每一次能見到面都是有人刻意促成的。'
+};
+
+/* ---------- 相遇的時機：由節奏推 ---------- */
+const TIMING = {
+  fierce:
+    '時機上，你們的感覺來得很快——多半在前幾次接觸就已經定調，' +
+    '而且那個定調不一定是好感，也可能是「這個人有點難搞」。' +
+    '這種緣的關鍵期在第一次真正的摩擦，不在剛開始的熱度。',
+  instant:
+    '時機上，你們大概第一次好好說話就對上了。這種緣不需要暖身期，' +
+    '所以真正的關鍵不是何時開始有感覺，而是何時有人願意把「很聊得來」推進到下一步。' +
+    '拖得越久，越容易停在朋友的位置。',
+  slowburn:
+    '時機上，你們的感覺是後來才有的——多半在認識超過半年之後才慢慢浮現，' +
+    '而且你可能說不出是哪一刻開始的。如果現在還沒有那種心動的感覺，那很正常，' +
+    '你們的緣本來就不在前段發生。',
+  wavering:
+    '時機上，你們的溫度多半一直在變，所以很難指出一個「開始」。' +
+    '這種緣的關鍵不是某個時間點，是某一次終於把話講清楚的對話——' +
+    '在那之前，熱過幾次都還是會回到原點。',
+  mirror:
+    '時機上，你們很早就覺得熟悉，但真正靠近的時間會拖很久。' +
+    '相似讓人一開始就放鬆，也讓人一直不覺得需要主動。' +
+    '這種緣的關鍵期，往往是其中一方的生活出現變動的時候。',
+  mistimed:
+    '時機上，你們的問題通常不是有沒有感覺，是有沒有餘力。' +
+    '這種緣常常在一方剛好忙、剛好在別的階段、剛好沒空的時候出現，' +
+    '所以關鍵期會落在某一次兩個人終於都有時間的空檔——那個空檔不會太長。',
+  plain:
+    '時機上，你們多半沒有明顯的起點，感覺是靠次數累積出來的。' +
+    '這種緣不會有一個「就是那天」的時刻，' +
+    '它的關鍵在於見面的頻率——密度夠高才會變濃，斷了就會慢慢淡掉。'
+};
+
+/**
+ * @param changduKey  result.dimensions.changdu.key
+ * @param tempoKey    tempo(d).key
+ */
+function encounter(changduKey, tempoKey) {
+  return {
+    place: PLACE[changduKey] || PLACE.ping,
+    timing: TIMING[tempoKey] || TIMING.plain
+  };
 }
 
 /* ───────────────────────── */
@@ -2364,6 +2625,18 @@ const T = {
     平淡如水: '淡不是沒有可能，是還沒有人決定要讓它變濃。'
   },
 
+  /* 新增 相遇的場合 —— 年支 key */
+  place: {
+    liuhe:   '你們不是刻意認識的，那種緣通常也不會刻意斷。',
+    sanhe:   '會反覆見面的地方，感情才有機會慢慢長出來。',
+    same:    '同溫層讓你們熟得快，也讓你們少了一個檢查的角度。',
+    ping:    '靠媒介認識的關係，也需要媒介才能維持。',
+    zixing:  '在彼此都不自在的時候遇見，那份辨認很真，但不等於適合。',
+    liuhai:  '一開始就不在陽光下的關係，往後也不容易攤開。',
+    xing:    '你們很早就看到對方認真的樣子，那既是吸引也是摩擦的來源。',
+    liuchong:'沒有必然性的相遇，每一次見面都是有人促成的。'
+  },
+
   /* 02 你們現在的狀態 —— 分數帶 */
   now: {
     緣滿: '太順的關係最大的風險，是沒有人覺得需要努力。',
@@ -2543,10 +2816,11 @@ const T = {
 
 /* 段落 title → 取哪一組、用哪個 key */
 function takeaway(section, ctx) {
-  const { band, weak, strong, zl, wendu, changdu, midu, tempo } = ctx;
+  const { band, weak, strong, zl, wendu, changdu, midu, tempo, place } = ctx;
   const map = {
     '你們的緣分，究竟有多深？':                 () => T.table,
     '你們是怎麼開始的？':                       () => T.tempo[ctx.tempo],
+    '你們是在什麼樣的場合遇上的？':             () => T.place[ctx.place],
     '你們現在，到底算是什麼？':       () => T.now[band],
     '明明有感覺，為什麼就是差那一步？':           () => T.weak[weak],
     '你們之間，最值得珍惜的是什麼？':           () => T.strong[strong],
@@ -2585,6 +2859,7 @@ function takeaway(section, ctx) {
      6 需要留意的地方        最低維度
      7 你現在適合怎麼做      重量 key
    ========================================================================= */
+
 
 
 
@@ -2819,6 +3094,7 @@ function pillarTable(result) {
   const A = result.debug.A, B = result.debug.B;
   const rows = [
     { label: '年柱', a: A.year, b: B.year, use: '緣的長度（年支關係）' },
+    { label: '月柱', a: A.month, b: B.month, use: '由節氣定界，本版不參與計分' },
     { label: '日柱', a: A.day,  b: B.day,  use: '緣的溫度（日支）、緣的重量（日干）' }
   ];
   if (A.hour && B.hour) {
@@ -2856,6 +3132,7 @@ function report(result, names = { A: '你', B: '他' }) {
   // 敘事由盤面格局決定，不由分數排名決定
   const nar = narrate(d);
   const tp = tempo(d);
+  const en = encounter(d.changdu.key, tp.key);
   const zl = d.zhongliang.key;
 
   const ev = eventsFor(result, b.label)
@@ -2872,9 +3149,11 @@ function report(result, names = { A: '你', B: '他' }) {
 
   const sections = [
     { part: P1, title: '你們的緣分，究竟有多深？', table: pillarTable(result),
-      note: '底下每一段都從這張表推出來。沒有列月柱，因為這套算法沒有用到它。' },
+      note: '立春時刻由太陽黃經實算，不是固定 2/4；月柱由節氣定界。本版計分只用年、日、時三柱，月柱列出供對照。' },
     { part: P1, title: '你們是怎麼開始的？',
       body: tp.intro + tp.arc + tp.note },
+    { part: P1, title: '你們是在什麼樣的場合遇上的？',
+      body: en.place + en.timing },
     { part: P1, title: '你們現在，到底算是什麼？', body: nar.now },
     { part: P1, title: '明明有感覺，為什麼就是差那一步？',     body: nar.weak },
     { part: P1, title: '你們之間，最值得珍惜的是什麼？',     body: nar.strong },
@@ -2906,7 +3185,7 @@ function report(result, names = { A: '你', B: '他' }) {
   );
 
   // 每段掛上「這一段的重點」
-  const ctx = { band: b.label, weak, strong, zl, tempo: tp.name,
+  const ctx = { band: b.label, weak, strong, zl, tempo: tp.name, place: d.changdu.key,
                 wendu: d.wendu.key, changdu: d.changdu.key,
                 midu: d.midu ? d.midu.key : null };
   sections.forEach(s => { s.takeaway = takeaway(s.title, ctx); });
@@ -3154,8 +3433,12 @@ const readDate = p => {
   return o;
 };
 
+const TODAY = new Date();
+
 function validate(x, who) {
   if (!x.y || !x.m || !x.d) return who + '的生日還沒填完。';
+  const t = new Date(x.y, x.m - 1, x.d);
+  if (t > TODAY) return who + '的生日不能是未來的日期。';
   if (x.y < 1900 || x.y > 2100) return who + '的出生年要在 1900 到 2100 之間。';
   if (x.m < 1 || x.m > 12) return who + '的月份不對。';
   const dim = [31, (x.y % 4 === 0 && x.y % 100 !== 0) || x.y % 400 === 0 ? 29 : 28,
@@ -3248,6 +3531,7 @@ function reveal(a, b) {
   const TOC_DESC = {
     '你們的緣分，究竟有多深？':                 '雙方年柱、日柱與納音攤開來看，每一根柱用在哪個判斷',
     '你們是怎麼開始的？':                       '這段緣的節奏——撞上的、一拍即合的，還是慢慢長出來的',
+    '你們是在什麼樣的場合遇上的？':             '從年支推出來的相遇方式，以及這種緣多久才會顯現',
     '你們現在，到底算是什麼？':       '這段關係目前的整體位置',
     '明明有感覺，為什麼就是差那一步？':           '三個維度裡最低的那一個，以及它正在消耗什麼',
     '你們之間，最值得珍惜的是什麼？':           '最高的那一個維度，也是你們可以依靠的東西',
@@ -3288,6 +3572,15 @@ function reveal(a, b) {
   $('r-disclaim').textContent = bothHours
     ? '緣分指數以雙方年柱、日柱與時柱推算，為未完籤所的自動判讀，供你參考與自省之用。'
     : '緣分指數以雙方年柱與日柱推算，為未完籤所的自動判讀，供你參考與自省之用。沒有時辰不影響上面的結果，也不會少給你任何一段。';
+
+  const warn = $('r-warn');
+  if (r.uncertainYear) {
+    warn.hidden = false;
+    warn.textContent = '有一方剛好生在立春當天。立春是年柱的分界，'
+      + '交節前後年柱差一整年——補上出生時辰才算得準。';
+  } else {
+    warn.hidden = true;
+  }
 
   $('r-share').hidden = true;
   buildCard();
