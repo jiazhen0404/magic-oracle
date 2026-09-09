@@ -88,7 +88,8 @@ async function drawCard(canvas, data) {
   // 盤外
   let y = CARD.MED_Y + mh - 58;
   y += centred(ctx, '緣分指數 ' + data.total, y, 28, CARD.MUTED, 6, CARD_FONT.sans) + 26;
-  y += centred(ctx, data.headline, y, 44, CARD.GOLDS, 6) + 34;
+  y += centred(ctx, data.headline, y, 44, CARD.GOLDS, 6) + 12;
+  if (data.tempo) y += centred(ctx, data.tempo, y, 26, CARD.GOLD, 10, CARD_FONT.sans) + 26;
   y += centred(ctx, data.poem[0], y, 36, CARD.CREAM, 0) + 16;
   y += centred(ctx, data.poem[1], y, 36, CARD.CREAM, 0) + 40;
 
@@ -117,6 +118,7 @@ function cardData(result, birth) {
   return {
     total: result.total,
     headline: b.label + ' · ' + b.title,
+    tempo: tempo(result.dimensions).name,
     poem: lines,
     dims: [result.dimensions.wendu, result.dimensions.zhongliang, result.dimensions.changdu]
             .map(d => ({ name: d.name, score: d.score }))

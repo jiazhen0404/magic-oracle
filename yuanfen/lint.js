@@ -11,6 +11,7 @@
    ========================================================================= */
 
 const copy = require('./src/copy');
+const SCENES = copy.SCENES || ['交往'];
 
 /* ---------- 概念群：語意重複的偵測基礎 ---------- */
 /* 字面不同但講同一件事的詞，歸在同一群。這是抓「換句話說」的關鍵。 */
@@ -86,7 +87,7 @@ const RULES = [
       if (!open) return null;
       const openPos = PAT.posTone.test(open), openNeg = PAT.negTone.test(open);
       // 先移除被否定的子句，否則「不會累積成問題」會被當成負面
-      const body = (core + close).replace(/(不會|不再|沒有|不容易|不至於)[^，。；]{0,10}/g, '');
+      const body = (core + close).replace(/(不會|不再|不是|並非|沒有|不容易|不至於)[^，。；]{0,10}/g, '');
       const bodyNeg = /(不對等|消耗|退讓|越來越小|磨|受不了|吵|僵住|走散|爆|拉扯|很硬|累|沒被看見|吞回去)/.test(body);
       const bodyPos = /(難得|很順|默契|信任|禁得起|放心|厚)/.test(body);   // 「舒服」在本產品常指對方舒服＝使用者累，不列入
       if (openPos && bodyNeg && !bodyPos) return '開場正面，內文負面';
@@ -128,10 +129,11 @@ function lint() {
 
   for (const [dim, obj] of blocks)
     for (const [key, v] of Object.entries(obj))
+      for (const scene of SCENES)
       for (const open of v.open)
         for (const close of v.close) {
           combos++;
-          const ctx = { open, core: v.core, close };
+          const ctx = { open, core: copy.coreOf(v, scene), close };
           for (const r of RULES) {
             const msg = r.check(ctx);
             if (msg) found.push({ rule: r.id, dim, key, open, msg });
