@@ -1,0 +1,3146 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>緣分指數｜未完籤所 MAGIC ORACLE</title>
+<meta name="description" content="輸入兩個人的生日，看這段緣的溫度、重量與長度。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cactus+Classical+Serif&family=Lato:wght@300;400;700&family=Noto+Sans+TC:wght@200..500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#100b25; --bg2:#1a1030; --panel:#241943;
+  --line:rgba(217,189,130,.22); --line-soft:rgba(217,189,130,.11);
+  --gold:#d9bd82; --gold-soft:#f1e5c8; --cream:#f4ecd6;
+  --muted:#a89ab8; --warn:#e8b4b4;
+  --serif:"Cactus Classical Serif","Noto Serif TC",serif;   /* 標題・籤文・數字 */
+  --sans:"Noto Sans TC",system-ui,sans-serif;               /* 內文・表單・UI */
+  --latin:Lato,system-ui,sans-serif;                        /* 英文與數字 */
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--cream);
+  font-family:var(--sans);
+  font-weight:300; line-height:2.05; font-size:16.5px;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(1px 1px at 18% 22%, rgba(241,229,200,.5), transparent),
+    radial-gradient(1px 1px at 72% 14%, rgba(241,229,200,.35), transparent),
+    radial-gradient(1px 1px at 41% 68%, rgba(241,229,200,.3), transparent),
+    radial-gradient(1px 1px at 87% 54%, rgba(241,229,200,.4), transparent),
+    radial-gradient(1px 1px at 8% 81%, rgba(241,229,200,.3), transparent),
+    radial-gradient(900px 600px at 50% -10%, rgba(60,36,110,.55), transparent 70%);
+}
+.wrap{position:relative; z-index:2; max-width:660px; margin:0 auto; padding:56px 22px 110px}
+
+/* ── 標頭 ── */
+.brand{font-family:var(--latin); font-size:11.5px; letter-spacing:.36em; color:var(--gold); opacity:.8; text-align:center}
+h1{font-family:var(--serif);
+  font-size:clamp(34px,8vw,44px); font-weight:400; letter-spacing:.18em;
+  color:var(--gold-soft); margin:14px 0 4px; text-align:center;
+  text-shadow:0 0 26px rgba(217,189,130,.22);
+}
+.lede{color:var(--cream); opacity:.82; font-size:15.5px; margin:0 auto; max-width:26em; text-align:center; line-height:2.1}
+
+/* ── 輸入 ── */
+.ask{}
+.field{margin-bottom:22px}
+.field label{display:block; font-size:15px; color:var(--gold-soft); margin-bottom:11px; letter-spacing:.1em}
+.field .hint{color:var(--muted); font-size:12.5px; margin-left:.6em}
+.dates{display:flex; gap:8px}
+.dates input{
+  flex:1; min-width:0; background:rgba(0,0,0,.32); border:1px solid var(--line);
+  border-radius:4px; color:var(--cream); font-family:inherit; font-size:19px;
+  padding:14px 12px; text-align:center; -moz-appearance:textfield;
+}
+.dates input::-webkit-outer-spin-button,.dates input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.dates input::placeholder{color:var(--muted); opacity:.55}
+.dates input:focus{outline:2px solid var(--gold); outline-offset:1px; border-color:transparent}
+.sc-row{margin-top:12px}
+.sc-row select{
+  width:100%; background:rgba(0,0,0,.32); border:1px solid var(--line);
+  border-radius:4px; color:var(--cream); font-family:inherit; font-size:16px;
+  padding:13px 14px; -webkit-appearance:none; appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,var(--gold) 50%),
+                   linear-gradient(135deg,var(--gold) 50%,transparent 50%);
+  background-position:calc(100% - 19px) calc(50% + 1px), calc(100% - 13px) calc(50% + 1px);
+  background-size:6px 6px, 6px 6px; background-repeat:no-repeat;
+}
+.sc-row select:focus{outline:2px solid var(--gold); outline-offset:1px; border-color:transparent}
+.sc-row select option{background:var(--panel); color:var(--cream)}
+
+.upsell{
+  margin-top:40px; border-top:1px solid var(--line); padding-top:30px;
+}
+.upsell h2{font-family:var(--serif); text-align:center; font-size:24px; font-weight:400; color:var(--gold-soft); letter-spacing:.08em; margin:0 0 16px}
+.upsell p{margin:0 0 14px; color:var(--cream); opacity:.92; font-size:16px}
+.upsell ul{margin:18px 0 0; padding:0; list-style:none}
+.upsell li{color:var(--muted); font-size:14.5px; padding:7px 0 7px 20px; position:relative}
+.upsell li::before{content:''; }
+.upsell ol{
+  margin:22px 0 0; padding:22px 20px; list-style:none; counter-reset:toc;
+  border:1px solid var(--line); border-radius:3px;
+  background:linear-gradient(180deg,rgba(36,25,67,.5),rgba(26,16,48,.25));
+  box-shadow:0 0 0 1px rgba(217,189,130,.05) inset;
+}
+.upsell ol li{
+  counter-increment:toc; color:var(--cream); font-family:var(--serif);
+  font-size:17.5px; letter-spacing:.04em; line-height:1.6;
+  padding:15px 0 15px 52px; position:relative;
+  border-bottom:1px solid var(--line-soft);
+}
+.upsell ol li:last-child{border-bottom:0; padding-bottom:2px}
+.upsell ol li::before{
+  content:counter(toc,decimal-leading-zero);
+  position:absolute; left:0; top:16px; width:34px; height:34px; line-height:32px;
+  text-align:center; color:var(--gold); font-family:var(--latin);
+  font-size:13px; letter-spacing:.04em;
+  border:1px solid var(--line); border-radius:50%;
+  background:rgba(217,189,130,.05);
+}
+.upsell ol li:hover::before{border-color:var(--gold); color:var(--gold-soft)}
+.upsell ol li span{
+  display:block; color:var(--muted); font-family:var(--sans);
+  font-size:13px; margin-top:5px; line-height:1.85;
+}
+.upsell ol li.part{
+  counter-increment:none; border-bottom:0; padding:26px 0 8px 0;
+  color:var(--gold); font-family:var(--sans); font-size:13px; letter-spacing:.18em;
+}
+.upsell ol li.part:first-child{padding-top:4px}
+.upsell ol li.part::before{content:''; border:0; background:none}
+.upsell ol li em{
+  font-style:normal; color:var(--gold); font-size:11.5px; letter-spacing:.08em;
+  border:1px solid var(--line); border-radius:3px; padding:2px 7px; margin-left:9px;
+  white-space:nowrap; vertical-align:2px;
+}
+.upsell .toc-h{color:var(--gold-soft); font-family:var(--serif); font-size:17px; letter-spacing:.24em; margin:30px 0 0; text-align:center}
+.upsell ol li.part{
+  counter-increment:none; border-bottom:0; padding:22px 0 6px 0;
+  color:var(--gold); font-size:12.5px; letter-spacing:.1em;
+}
+.upsell ol li.part:first-child{padding-top:8px}
+.upsell ol li.part::before{content:''}
+.upsell ol li em{
+  font-style:normal; color:var(--muted); font-size:11.5px; letter-spacing:.06em;
+  border:1px solid var(--line); border-radius:3px; padding:1px 6px; margin-left:8px;
+  white-space:nowrap;
+}
+
+#r-report .part-h{
+  color:var(--gold); font-size:12.5px; letter-spacing:.12em;
+  margin:0 0 26px; padding-bottom:10px; border-bottom:1px solid var(--line);
+}
+#r-report section.first-of-part{margin-top:52px}
+.upsell .cta{
+  display:block; width:100%; margin-top:26px; padding:15px; text-align:center;
+  background:transparent; border:1px solid var(--gold); border-radius:5px;
+  color:var(--gold-soft); font-family:var(--latin);
+  font-size:15px; letter-spacing:.18em; cursor:pointer;
+}
+.upsell .cta:hover{background:rgba(217,189,130,.1)}
+.upsell .preview-note{
+  margin-top:14px; color:var(--muted); font-size:12px; opacity:.7; text-align:center;
+}
+
+.share{margin-top:40px; padding:30px 26px 26px; border:1px solid var(--line); border-radius:3px;
+  background:linear-gradient(180deg,rgba(36,25,67,.45),rgba(26,16,48,.22)); text-align:center}
+.share h2{font-family:var(--serif); font-size:20px; font-weight:400; color:var(--gold-soft);
+  letter-spacing:.16em; margin:0 0 12px; text-align:center}
+.share canvas{
+  position:absolute; width:1px; height:1px; overflow:hidden;
+  clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap;
+}
+.share .hint{color:var(--muted); font-size:13px; margin:0 0 18px; line-height:1.9}
+.share .acts{display:flex; gap:12px; margin-top:4px}
+.share button{
+  flex:1; padding:16px; cursor:pointer; background:rgba(217,189,130,.05);
+  border:1px solid var(--gold); border-radius:3px; color:var(--gold-soft);
+  font-family:var(--serif); font-size:17px; letter-spacing:.16em;
+  transition:background .25s;
+}
+.share button:hover{background:rgba(217,189,130,.1)}
+.share button:focus-visible{outline:2px solid var(--gold); outline-offset:3px}
+.share .msg{color:var(--muted); font-size:12.5px; margin-top:12px; min-height:1.4em; text-align:center}
+
+#r-report{display:none; margin-top:44px; border-top:1px solid var(--line); padding-top:34px}
+#r-report.on{display:block; animation:rise .8s cubic-bezier(.2,.7,.2,1) both}
+#r-report .rep-head{color:var(--muted); font-size:12.5px; letter-spacing:.14em; margin:0 0 30px}
+#r-report section{margin-bottom:52px}
+#r-report h3{font-family:var(--serif);
+  font-size:23px; font-weight:400; color:var(--gold-soft); letter-spacing:.1em;
+  line-height:1.6; margin:0 0 20px; padding-bottom:14px;
+  border-bottom:1px solid var(--line-soft);
+}
+#r-report p{margin:0; color:var(--cream); opacity:.93; font-size:16.5px}
+#r-report ul{margin:0; padding:0; list-style:none}
+#r-report li{
+  color:var(--cream); opacity:.9; font-size:15px; padding:9px 0 9px 24px; position:relative;
+}
+#r-report li::before{content:'○'; position:absolute; left:2px; color:var(--gold); font-size:11px; top:14px}
+#r-report table{width:100%; border-collapse:collapse; font-size:14.5px}
+#r-report thead th{
+  color:var(--muted); font-weight:400; font-size:12.5px; letter-spacing:.08em;
+  text-align:left; padding:0 0 10px; border-bottom:1px solid var(--line);
+}
+#r-report thead th.p{text-align:center; width:22%}
+#r-report tbody td{padding:13px 0; border-bottom:1px solid var(--line-soft); vertical-align:middle}
+#r-report tbody tr:last-child td{border-bottom:0}
+#r-report td.lab{color:var(--muted); font-size:13px; width:20%}
+#r-report td.p{
+  text-align:center; color:var(--gold-soft); font-size:19px; letter-spacing:.16em;
+}
+#r-report td.use{color:var(--muted); font-size:12px; line-height:1.65; padding-left:14px}
+#r-report .takeaway{
+  margin-top:26px; padding:18px 20px 18px 50px; position:relative;
+  border:1px solid var(--line); border-radius:5px;
+  background:rgba(217,189,130,.045);
+  color:var(--gold-soft); font-family:var(--serif);
+  font-size:15px; line-height:1.9;
+}
+#r-report .takeaway::before{
+  content:''; position:absolute; left:14px; top:15px; width:26px; height:24px;
+  background:url('assets/rule-star.webp') no-repeat center/contain; opacity:.9;
+}
+#r-report .takeaway b{
+  display:block; color:var(--muted); font-family:var(--sans);
+  font-size:11.5px; font-weight:400; letter-spacing:.14em; margin-bottom:7px;
+}
+
+#r-report .tnote{color:var(--muted); font-size:12.5px; margin:16px 0 0; line-height:1.8; opacity:.85}
+@media (max-width:420px){
+  #r-report td.use{display:none}
+  #r-report td.lab{width:26%}
+  #r-report td.p{font-size:18px; letter-spacing:.1em}
+}
+
+button.draw{
+  width:100%; margin-top:8px; padding:15px; cursor:pointer;
+  background:transparent; border:1px solid var(--gold); border-radius:5px;
+  color:var(--gold-soft); font-family:var(--latin);
+  font-size:15.5px; letter-spacing:.22em; transition:background .35s ease, color .35s ease;
+}
+button.draw:hover{background:rgba(217,189,130,.1)}
+button.draw:focus-visible{outline:2px solid var(--gold); outline-offset:3px}
+.err{color:var(--warn); font-size:13px; min-height:1.5em; margin-top:10px}
+.privacy{color:var(--muted); font-size:12px; margin-top:16px; line-height:1.7; opacity:.8}
+.promise{
+  margin-top:22px; padding:16px 18px; border:1px solid var(--line-soft); border-radius:5px;
+  color:var(--muted); font-size:13px; line-height:1.95;
+}
+.promise b{display:block; color:var(--gold-soft); font-weight:400; font-size:13.5px; margin-bottom:6px}
+.price-note{color:var(--gold-soft); font-family:var(--serif); font-size:16px; margin:26px 0 0; line-height:1.9; text-align:center}
+.basis-why{color:var(--muted); font-size:12.5px; margin:14px 0 0; line-height:1.8; opacity:.85}
+
+/* ══════════════════ 鑲金邊區塊 ══════════════════ */
+.panel{
+  position:relative; margin-top:34px; padding:34px 26px 30px;
+  border:1px solid var(--line); border-radius:3px;
+  background:linear-gradient(180deg, rgba(36,25,67,.55), rgba(26,16,48,.3));
+  box-shadow:0 0 0 1px rgba(217,189,130,.06) inset, 0 18px 50px rgba(0,0,0,.28);
+}
+/* 四角小金角 */
+.panel::before,.panel::after{
+  content:''; position:absolute; width:14px; height:14px; pointer-events:none;
+  border:1px solid var(--gold); opacity:.55;
+}
+.panel::before{top:-1px; left:-1px; border-right:0; border-bottom:0}
+.panel::after{bottom:-1px; right:-1px; border-left:0; border-top:0}
+.panel > .corner-b,.panel > .corner-c{
+  position:absolute; width:14px; height:14px; border:1px solid var(--gold); opacity:.55;
+}
+.panel > .corner-b{top:-1px; right:-1px; border-left:0; border-bottom:0}
+.panel > .corner-c{bottom:-1px; left:-1px; border-right:0; border-top:0}
+
+.panel-h{
+  font-family:var(--serif); font-size:19px; color:var(--gold-soft);
+  letter-spacing:.16em; text-align:center; margin:0 0 26px;
+}
+
+/* ══════════════════ 視覺元件 ══════════════════ */
+
+/* 背景星點：固定在視窗，不隨捲動 */
+.starfield{position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden}
+.starfield i{
+  position:absolute; display:block; background-repeat:no-repeat; background-size:contain;
+  opacity:.5;
+}
+.starfield i.a{background-image:url('assets/star-a.webp')}
+.starfield i.b{background-image:url('assets/star-b.webp')}
+.starfield i.c{background-image:url('assets/star-c.webp')}
+.starfield i:nth-child(1){width:34px;height:38px; top:9%;  left:8%}
+.starfield i:nth-child(2){width:22px;height:31px; top:17%; left:82%; opacity:.38}
+.starfield i:nth-child(3){width:16px;height:21px; top:31%; left:19%; opacity:.32}
+.starfield i:nth-child(4){width:26px;height:29px; top:44%; left:90%; opacity:.42}
+.starfield i:nth-child(5){width:18px;height:25px; top:58%; left:6%;  opacity:.35}
+.starfield i:nth-child(6){width:14px;height:19px; top:70%; left:76%; opacity:.3}
+.starfield i:nth-child(7){width:24px;height:27px; top:83%; left:14%; opacity:.4}
+.starfield i:nth-child(8){
+  width:30px;height:34px; top:26%; left:63%;
+  animation:breathe 8s ease-in-out infinite;   /* 只有這一顆會動 */
+}
+@keyframes breathe{0%,100%{opacity:.25}50%{opacity:.7}}
+
+/* 飾線：中央飾件 + CSS 直線，任何寬度都不失真 */
+.rule{display:flex; align-items:center; gap:16px; margin:38px 0}
+.rule::before,.rule::after{
+  content:''; flex:1; height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent); opacity:.5;
+}
+.rule i{display:block; width:52px; height:48px; flex:none;
+  background:url('assets/rule-star.webp') no-repeat center/contain; opacity:.85}
+.rule.moon i{width:112px; height:55px; background-image:url('assets/rule-moon.webp')}
+
+/* 付費區三個特色 */
+.feats{display:flex; justify-content:center; gap:22px; margin:10px 0 28px}
+.feats div{flex:1; max-width:130px; text-align:center}
+.feats span{display:block; height:68px; background-repeat:no-repeat;
+  background-position:center bottom; background-size:contain; margin-bottom:10px}
+.feats .f1 span{background-image:url('assets/ico-books.webp')}
+.feats .f2 span{background-image:url('assets/ico-crystal.webp')}
+.feats .f3 span{background-image:url('assets/ico-envelope.webp')}
+.feats b{display:block; color:var(--gold-soft); font-family:var(--serif);
+  font-size:18px; font-weight:400; letter-spacing:.06em}
+.feats em{display:block; font-style:normal; color:var(--muted); font-size:11.5px; margin-top:3px}
+
+/* 鎖頭 */
+.lock-mark{
+  display:block; width:44px; height:57px; margin:0 auto 14px;
+  background:url('assets/lock.webp') no-repeat center/contain;
+  transition:opacity .3s;
+}
+body.reading .lock-mark{
+  background-image:url('assets/unlock.webp'); height:53px;
+  animation:unlockShake .4s ease;
+}
+@keyframes unlockShake{
+  0%,100%{transform:none} 25%{transform:rotate(-6deg)} 60%{transform:rotate(4deg)}
+}
+
+
+/* 頁首拱門 */
+
+/* ── 主要按鈕：起盤（三段式，任意寬度不變形） ── */
+.btn-start{
+  position:relative; display:block; width:min(460px,100%); margin:0 auto;
+  aspect-ratio:1365/368; padding:0 96px 0 108px;
+  /* 備援：素材載不到時仍是一顆看得出來的按鈕 */
+  border:1px solid var(--gold); border-radius:999px;
+  background-color:rgba(217,189,130,.12);
+  background-image:
+    url('assets/btn-start-l.webp'),
+    url('assets/btn-start-r.webp'),
+    url('assets/btn-start-m.webp');
+  background-position:left center, right center, center center;
+  background-size:auto 100%, auto 100%, auto 100%;
+  background-repeat:no-repeat, no-repeat, repeat-x;
+  color:#58381f; font-family:var(--serif); font-size:clamp(21px,5vw,28px);
+  font-weight:500; letter-spacing:.3em; text-indent:.3em;
+  cursor:pointer; -webkit-tap-highlight-color:transparent;
+  filter:drop-shadow(0 8px 26px rgba(0,0,0,.4));
+  transition:filter .25s, transform .12s;
+}
+.btn-start:hover{filter:drop-shadow(0 8px 30px rgba(217,189,130,.3)) brightness(1.05)}
+.btn-start:active{transform:translateY(1px)}
+.btn-start:focus-visible{outline:2px solid var(--gold); outline-offset:8px}
+
+/* ── 付費按鈕：整張使用（框體非等寬，不能切） ── */
+.btn-unlock{
+  position:relative; display:block; width:min(520px,100%); margin:0 auto;
+  aspect-ratio:1456/456; padding:0 130px 0 150px;
+  border:1px solid var(--gold); border-radius:999px;
+  background-color:rgba(217,189,130,.12);
+  background-image:url('assets/btn-unlock.webp');
+  background-position:center; background-size:100% 100%; background-repeat:no-repeat;
+  cursor:pointer; -webkit-tap-highlight-color:transparent;
+  filter:drop-shadow(0 8px 26px rgba(0,0,0,.4));
+  transition:filter .25s, transform .12s;
+}
+.btn-unlock b{
+  display:block; color:#58381f; font-family:var(--serif);
+  font-size:clamp(19px,4.6vw,26px); font-weight:500; letter-spacing:.2em;
+  line-height:1.2;
+}
+.btn-unlock small{
+  display:block; color:#8a5f3c; font-family:var(--sans);
+  font-size:clamp(11px,2.6vw,14px); letter-spacing:.1em; margin-top:8px;
+}
+.btn-unlock:hover{filter:drop-shadow(0 8px 30px rgba(217,189,130,.3)) brightness(1.05)}
+.btn-unlock:active{transform:translateY(1px)}
+.btn-unlock:focus-visible{outline:2px solid var(--gold); outline-offset:8px}
+.btn-unlock[disabled],.btn-start[disabled]{filter:grayscale(.45) brightness(.8); cursor:default}
+
+/* 起盤動畫：羅盤 */
+.cta-wrap{display:flex; justify-content:center; margin-top:30px}
+.ornate{font-weight:500}
+.ornate.big{--frame:.66; font-size:26px; letter-spacing:.3em}
+
+#casting{
+  display:none; position:fixed; inset:0; z-index:50;
+  background:rgba(16,11,37,.94); backdrop-filter:blur(2px);
+  align-items:center; justify-content:center; flex-direction:column; gap:26px;
+}
+#casting.on{display:flex}
+#casting .compass{
+  width:150px; aspect-ratio:286/506;
+  background:url('assets/compass.webp') no-repeat center/contain;
+  animation:spin 8s linear infinite, fadein .5s ease both;
+}
+#casting p{color:var(--muted); font-size:13px; letter-spacing:.2em; margin:0; animation:fadein .8s ease both}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+
+/* 結果：徽章包住分數 */
+.medallion{
+  position:relative; width:min(400px,88vw); margin:0 auto;
+  aspect-ratio:750/900;
+  background:url('assets/medallion.webp') no-repeat center/contain;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+}
+.medallion .score{
+  font-family:var(--serif); font-size:clamp(56px,15vw,86px); color:#5a3a28;
+  line-height:1; margin:0; transform:translateY(-6%);
+}
+.medallion .score-label{
+  font-family:var(--sans); font-size:11.5px; letter-spacing:.28em;
+  color:#9a7156; margin:0 0 6px; transform:translateY(-6%);
+}
+
+/* 付費區：花環 */
+.upsell{position:relative}
+.upsell .wreath{
+  position:absolute; top:-30px; left:50%; transform:translateX(-50%);
+  width:min(300px,70vw); aspect-ratio:900/866;
+  background:url('assets/wreath-circle.webp') no-repeat center/contain;
+  opacity:.55; pointer-events:none; z-index:0;
+}
+.upsell > *{position:relative; z-index:1}
+
+/* 報告：情侶插畫與角落飾 */
+#r-report .cover{
+  display:block; width:min(300px,74vw); margin:0 auto 30px;
+  aspect-ratio:1/1; background:url('assets/couple-circle.webp') no-repeat center/contain;
+}
+.corner{
+  position:fixed; width:min(360px,46vw); aspect-ratio:700/674;
+  opacity:.22; pointer-events:none; z-index:0;
+  transition:opacity .6s ease;
+}
+body.reading .corner{opacity:.36}
+.corner.tl{top:0; left:0; background:url('assets/corner-tl.webp') no-repeat left top/contain}
+.corner.br{bottom:0; right:0; background:url('assets/corner-br.webp') no-repeat right bottom/contain}
+
+@media (max-width:420px){
+  .ornate{--frame:.44; font-size:18px; min-width:0; width:100%; padding:5px 8px}
+  .corner{opacity:.2}
+}
+@media (prefers-reduced-motion:reduce){
+  #casting .compass{animation:fadein .3s ease both}
+  .ornate:active{transform:none}
+}
+
+/* ── 結果 ── */
+#out{display:none; margin-top:46px}
+#out.on{display:block; animation:rise .9s cubic-bezier(.2,.7,.2,1) both}
+@keyframes rise{from{opacity:0; transform:translateY(14px)} to{opacity:1; transform:none}}
+
+.verdict{text-align:center; padding-top:10px}
+.verdict .name{font-family:var(--serif);
+  font-size:clamp(30px,7.5vw,38px); letter-spacing:.2em; color:var(--gold-soft);
+  margin:0; font-weight:400; text-shadow:0 0 22px rgba(217,189,130,.2);
+}
+.verdict .num{
+  font-family:var(--sans); font-size:15px; letter-spacing:.2em;
+  color:var(--gold); margin-top:14px; opacity:.9;
+}
+.verdict .poem{font-family:var(--serif);
+  color:var(--cream); font-size:18px; margin:26px auto 0; max-width:26em;
+  line-height:2.1; opacity:.92;
+}
+.summary{margin:32px 0 0; color:var(--cream); opacity:.94}
+.gap{
+  margin-top:26px; padding:22px 24px; border:1px solid var(--line);
+  border-left:2px solid var(--gold); border-radius:3px;
+  background:rgba(217,189,130,.055); color:var(--gold-soft);
+  font-family:var(--serif); font-size:16.5px; line-height:2;
+}
+
+/* ── 三個維度：以量尺呈現 ── */
+.dims{margin-top:34px; padding:8px 24px 12px; border:1px solid var(--line); border-radius:3px;
+  background:linear-gradient(180deg,rgba(36,25,67,.42),rgba(26,16,48,.2))}
+.dim{padding:26px 0; border-bottom:1px solid var(--line-soft)}
+.dim:last-child{border-bottom:0}
+.dim-top{display:flex; align-items:baseline; justify-content:space-between; gap:12px}
+.dim-name{font-family:var(--serif); font-size:19px; color:var(--gold-soft); letter-spacing:.12em}
+.dim-num{font-family:var(--latin); font-size:22px; color:var(--gold); letter-spacing:.06em}
+.scale{position:relative; height:1px; background:var(--line); margin:16px 0 18px}
+.scale i{
+  position:absolute; top:-3px; width:7px; height:7px; margin-left:-3.5px;
+  background:var(--gold); border-radius:50%;
+  box-shadow:0 0 9px rgba(217,189,130,.85);
+}
+.dim p{margin:0; color:var(--cream); opacity:.9; font-size:16px}
+
+/* ── 算式 ── */
+details.basis{margin-top:34px; border-top:1px solid var(--line); padding-top:22px}
+details.basis summary{
+  cursor:pointer; color:var(--muted); font-size:13.5px; letter-spacing:.08em; list-style:none;
+}
+details.basis summary::-webkit-details-marker{display:none}
+details.basis summary::before{content:'＋　'; color:var(--gold); opacity:.7}
+details.basis[open] summary::before{content:'－　'}
+details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offset:3px}
+.brow{margin-top:22px; font-size:13.5px}
+.brow .bh{display:flex; justify-content:space-between; color:var(--gold-soft); letter-spacing:.06em}
+.brow .bl{color:var(--muted); margin-top:5px; line-height:1.85}
+.btotal{
+  margin-top:26px; padding-top:18px; border-top:1px solid var(--line-soft);
+  color:var(--gold); font-size:13.5px; letter-spacing:.04em;
+}
+.disclaim{margin-top:40px; color:var(--muted); font-size:12px; opacity:.7; line-height:1.8}
+
+@media (max-width:420px){
+  .wrap{padding:34px 18px 80px}
+  .verdict .name{font-size:27px}
+  .dates{gap:6px}
+  .dates input{padding:11px 6px; font-size:14.5px}
+}
+@media (prefers-reduced-motion:reduce){
+  #out.on{animation:none}
+  *{transition:none !important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="starfield" aria-hidden="true">
+    <i class="a"></i><i class="b"></i><i class="c"></i><i class="a"></i>
+    <i class="b"></i><i class="c"></i><i class="b"></i><i class="a"></i>
+  </div>
+  <div class="corner tl"></div>
+  <div class="corner br"></div>
+
+  <p class="brand">MAGIC ORACLE</p>
+  <h1>緣分指數</h1>
+  <div class="rule moon" aria-hidden="true"><i></i></div>
+  <p class="lede">這不是算你的姻緣運，是算你們兩個人之間的事。不需要你單身，也不需要你想結婚——只要有一段關係讓你想弄清楚。</p>
+
+  <div class="ask panel">
+    <span class="corner-b"></span><span class="corner-c"></span>
+    <p class="panel-h">請輸入兩個人的生日</p>
+    <div class="field">
+      <label for="a-y">你的生日 <span class="hint">西元年／月／日</span></label>
+      <div class="dates">
+        <input id="a-y" type="number" inputmode="numeric" placeholder="1994" aria-label="你的出生年">
+        <input id="a-m" type="number" inputmode="numeric" placeholder="3" aria-label="你的出生月">
+        <input id="a-d" type="number" inputmode="numeric" placeholder="12" aria-label="你的出生日">
+      </div>
+      <div class="sc-row">
+        <select id="a-sc" aria-label="你的出生時辰"></select>
+      </div>
+    </div>
+    <div class="field">
+      <label for="b-y">對方的生日</label>
+      <div class="dates">
+        <input id="b-y" type="number" inputmode="numeric" placeholder="1992" aria-label="對方的出生年">
+        <input id="b-m" type="number" inputmode="numeric" placeholder="11" aria-label="對方的出生月">
+        <input id="b-d" type="number" inputmode="numeric" placeholder="5" aria-label="對方的出生日">
+      </div>
+      <div class="sc-row">
+        <select id="b-sc" aria-label="對方的出生時辰"></select>
+      </div>
+    </div>
+    <button class="btn-start" id="go">開始測算</button>
+    <p class="err" id="err" role="status"></p>
+    <p class="privacy">不用註冊，不用留 email。兩組生日不會被儲存，也不會離開你的裝置——計算全部在這個頁面完成，關掉就不存在了。</p>
+    <div class="promise">
+      <b>免費的部分不會遮任何一句話</b>
+      分數怎麼算的、你們卡在哪裡、接下來往哪個方向走，全部給你，沒有馬賽克也沒有「付費後解鎖」。付費的是更深的一層，不是被藏起來的那一層。
+    </div>
+  </div>
+
+  <div id="out">
+    <div class="verdict">
+      <div class="medallion">
+        <p class="score-label">緣分指數</p>
+        <p class="score" id="r-score">0</p>
+      </div>
+      <p class="name" id="r-name"></p>
+      <p class="num" id="r-num"></p>
+      <p class="poem" id="r-poem"></p>
+    </div>
+    <p class="summary" id="r-summary"></p>
+    <div class="gap" id="r-gap" hidden></div>
+    <div class="rule" aria-hidden="true"><i></i></div>
+    <div class="dims" id="r-dims"></div>
+    <div class="share" id="r-share" hidden>
+      <h2>把這張籤存起來</h2>
+      <p class="hint">會產生一張帶花框的分享卡，含分數、等級與三個維度。</p>
+      <canvas id="card" width="1080" height="1350" aria-label="緣分指數分享卡"></canvas>
+      <div class="acts">
+        <button id="save-card">儲存圖片</button>
+        <button id="share-card">分享</button>
+      </div>
+      <p class="msg" id="share-msg"></p>
+    </div>
+
+    <details class="basis">
+      <summary>這個分數怎麼來的</summary>
+      <p class="basis-why">我們不放一張你看不懂的命盤。要看依據，這裡是完整的算法——每個維度取自哪兩根柱、判定是什麼、佔多少權重。</p>
+      <div id="r-basis"></div>
+    </details>
+    <div class="upsell" id="r-upsell" hidden>
+      <span class="wreath" aria-hidden="true"></span>
+      <span class="lock-mark" aria-hidden="true"></span>
+      <h2 id="u-title"></h2>
+      <p id="u-lead"></p>
+      <div class="feats" aria-hidden="true">
+        <div class="f1"><span></span><b>19 段</b><em>完整解讀</em></div>
+        <div class="f2"><span></span><b>約 2400 字</b><em>依盤面而定</em></div>
+        <div class="f3"><span></span><b>NT$199</b><em>一次付清</em></div>
+      </div>
+      <p class="toc-h">目錄</p>
+      <ol id="u-list"></ol>
+      <p class="price-note" id="u-price"></p>
+      <button class="btn-unlock" id="u-cta"><b>解讀完整內容</b><small id="u-cta-sub">NT$199 · 19 段專屬報告</small></button>
+      <p class="preview-note">預覽模式：此版本尚未接金流，點擊可直接展開。</p>
+    </div>
+    <div id="r-report">
+      <span class="cover" aria-hidden="true"></span>
+      <p class="rep-head" id="rep-head"></p>
+    </div>
+    <p class="disclaim" id="r-disclaim"></p>
+  </div>
+
+</div>
+
+<div id="casting" aria-hidden="true">
+  <span class="compass"></span>
+  <p>起　盤　中</p>
+</div>
+
+<script>
+/* =========================================================================
+   未完籤所 · 緣分指數 Scoring Engine  (MVP: 只吃 年/月/日，不需時辰)
+   -------------------------------------------------------------------------
+   純函數：同一組輸入永遠得到同一組分數。無隨機、無時間依賴。
+   ========================================================================= */
+
+const GAN = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+const ZHI = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+
+// 天干五行
+const GAN_WUXING = ['木','木','火','火','土','土','金','金','水','水'];
+// 天干陰陽（甲丙戊庚壬為陽）
+const GAN_YANG   = [true,false,true,false,true,false,true,false,true,false];
+
+// 五行相生：木→火→土→金→水→木
+const SHENG = { 木:'火', 火:'土', 土:'金', 金:'水', 水:'木' };
+// 五行相剋：木→土→水→火→金→木
+const KE    = { 木:'土', 土:'水', 水:'火', 火:'金', 金:'木' };
+
+/* ---------------- 干支曆 ---------------- */
+
+function jdn(y, m, d) {
+  const a = Math.floor((14 - m) / 12);
+  const yy = y + 4800 - a;
+  const mm = m + 12 * a - 3;
+  return d + Math.floor((153 * mm + 2) / 5) + 365 * yy
+       + Math.floor(yy / 4) - Math.floor(yy / 100) + Math.floor(yy / 400) - 32045;
+}
+
+// 日柱：以 2000-01-07 為甲子日校準
+const DAY_ANCHOR = jdn(2000, 1, 7);
+function dayPillar(y, m, d) {
+  const n = ((jdn(y, m, d) - DAY_ANCHOR) % 60 + 60) % 60;
+  return { gan: n % 10, zhi: n % 12 };
+}
+
+// 年柱：以立春為界（MVP 用 2/4 近似，誤差 ±1 天，見 README）
+function yearPillar(y, m, d) {
+  const yy = (m < 2 || (m === 2 && d < 4)) ? y - 1 : y;
+  return { gan: ((yy - 4) % 10 + 10) % 10, zhi: ((yy - 4) % 12 + 12) % 12, year: yy };
+}
+
+// 時柱：時支由小時直接對照，時干用五鼠遁從日干推
+// 五鼠遁：甲己起甲子、乙庚起丙子、丙辛起戊子、丁壬起庚子、戊癸起壬子
+function hourPillar(dayGan, hour) {
+  const zhi = Math.floor((hour + 1) / 2) % 12;      // 23:00–00:59 為子
+  const ziGan = (dayGan % 5) * 2;                   // 該日子時的天干
+  return { gan: (ziGan + zhi) % 10, zhi };
+}
+
+// 六十甲子納音（依 60 循環序，每 2 組共用一個納音五行）
+// 納音五行以 30 為週期，前後兩輪相同
+const NAYIN_HALF = ['金','金','火','火','木','木','土','土','金','金',
+                    '火','火','水','水','土','土','金','金','木','木',
+                    '水','水','土','土','火','火','木','木','水','水'];
+const NAYIN = NAYIN_HALF.concat(NAYIN_HALF);
+// 六十甲子納音名稱（30 個，每 2 組共用）
+const NAYIN_NAME = [
+  '海中金','爐中火','大林木','路旁土','劍鋒金','山頭火','澗下水','城頭土','白蠟金','楊柳木',
+  '泉中水','屋上土','霹靂火','松柏木','長流水','沙中金','山下火','平地木','壁上土','金箔金',
+  '覆燈火','天河水','大驛土','釵釧金','桑柘木','大溪水','沙中土','天上火','石榴木','大海水'
+];
+function jiaziIndex(gan, zhi) {
+  for (let i = 0; i < 60; i++) if (i % 10 === gan && i % 12 === zhi) return i;
+  return 0;
+}
+function nayinName(gan, zhi) { return NAYIN_NAME[Math.floor(jiaziIndex(gan, zhi) / 2)]; }
+
+function nayin(gan, zhi) {
+  // 由干支還原 60 序位
+  let i = 0;
+  for (; i < 60; i++) if (i % 10 === gan && i % 12 === zhi) break;
+  return NAYIN[i];
+}
+
+/* ---------------- 地支關係 ---------------- */
+
+const SANHE   = [[8,0,4], [11,3,7], [2,6,10], [5,9,1]];   // 申子辰 亥卯未 寅午戌 巳酉丑
+const LIUHE   = [[0,1],[2,11],[3,10],[4,9],[5,8],[6,7]];   // 子丑 寅亥 卯戌 辰酉 巳申 午未
+const LIUHAI  = [[0,7],[1,6],[2,5],[3,4],[8,11],[9,10]];   // 子未 丑午 寅巳 卯辰 申亥 酉戌
+const SANXING = [[2,5,8],[1,10,7]];                        // 寅巳申 丑戌未
+const ZIXING  = [4,6,9,11];                                // 辰午酉亥 自刑
+
+function pairIn(list, a, b) {
+  return list.some(p => (p[0] === a && p[1] === b) || (p[1] === a && p[0] === b));
+}
+function bothIn(groups, a, b) {
+  return groups.some(g => g.includes(a) && g.includes(b) && a !== b);
+}
+
+/**
+ * 地支關係判定，回傳 { key, score }
+ * score 0–100，越高代表關係越順。
+ */
+function zhiRelation(a, b) {
+  if (pairIn(LIUHE, a, b))                       return { key: 'liuhe',   score: 96 };
+  if (bothIn(SANHE, a, b))                       return { key: 'sanhe',   score: 90 };
+  if (a === b && ZIXING.includes(a))             return { key: 'zixing',  score: 52 };
+  if (a === b)                                   return { key: 'same',    score: 76 };
+  if (Math.abs(a - b) === 6)                     return { key: 'liuchong',score: 38 };
+  if (pairIn(LIUHAI, a, b))                      return { key: 'liuhai',  score: 48 };
+  if (bothIn(SANXING, a, b))                     return { key: 'xing',    score: 50 };
+  if ((a === 0 && b === 3) || (a === 3 && b === 0)) return { key: 'xing', score: 50 }; // 子卯相刑
+  return { key: 'ping', score: 70 };
+}
+
+/* ---------------- 五行關係 ---------------- */
+
+/**
+ * 回傳 A 相對 B 的五行關係。
+ * bihe 比和｜a_sheng_b A生B｜b_sheng_a B生A｜a_ke_b A剋B｜b_ke_a B剋A
+ */
+function wuxingRelation(wa, wb) {
+  if (wa === wb)        return 'bihe';
+  if (SHENG[wa] === wb) return 'a_sheng_b';
+  if (SHENG[wb] === wa) return 'b_sheng_a';
+  if (KE[wa]    === wb) return 'a_ke_b';
+  return 'b_ke_a';
+}
+
+/* ---------------- 三個子維度 ---------------- */
+
+// 緣的溫度：日支關係 —— 日常相處合不合、舒不舒服
+function scoreWendu(A, B) {
+  const r = zhiRelation(A.day.zhi, B.day.zhi);
+  return { score: r.score, key: r.key };
+}
+
+// 緣的重量：日干五行生剋方向 —— 誰在承擔、誰在退讓
+const ZHONGLIANG_BASE = {
+  bihe: 84, a_sheng_b: 72, b_sheng_a: 72, a_ke_b: 52, b_ke_a: 52
+};
+function scoreZhongliang(A, B) {
+  const wa = GAN_WUXING[A.day.gan], wb = GAN_WUXING[B.day.gan];
+  const rel = wuxingRelation(wa, wb);
+  let s = ZHONGLIANG_BASE[rel];
+  // 陰陽相配為調和，同陰陽則力道相衝
+  const yinyang = GAN_YANG[A.day.gan] !== GAN_YANG[B.day.gan];
+  s += yinyang ? 6 : -4;
+  return { score: clamp(s), key: rel, wa, wb, yinyang };
+}
+
+// 緣的長度：年支關係 + 年柱納音 —— 這段關係能走多遠
+const NAYIN_SCORE = { sheng: 90, bihe: 76, ke: 50 };
+function scoreChangdu(A, B) {
+  const rz = zhiRelation(A.year.zhi, B.year.zhi);
+  const na = nayin(A.year.gan, A.year.zhi);
+  const nb = nayin(B.year.gan, B.year.zhi);
+  const rel = wuxingRelation(na, nb);
+  const nKey = rel === 'bihe' ? 'bihe' : (rel.includes('sheng') ? 'sheng' : 'ke');
+  const score = Math.round(rz.score * 0.6 + NAYIN_SCORE[nKey] * 0.4);
+  return { score, key: rz.key, nayinKey: nKey, na, nb, nayinRel: rel };
+}
+
+// 緣的密度：時支關係 + 時干五行 —— 私下相處的樣子（需雙方時辰）
+function scoreMidu(A, B) {
+  const rz = zhiRelation(A.hour.zhi, B.hour.zhi);
+  const wa = GAN_WUXING[A.hour.gan], wb = GAN_WUXING[B.hour.gan];
+  const rel = wuxingRelation(wa, wb);
+  const gScore = { bihe: 80, a_sheng_b: 76, b_sheng_a: 76, a_ke_b: 54, b_ke_a: 54 }[rel];
+  return {
+    score: Math.round(rz.score * 0.6 + gScore * 0.4),
+    key: rz.key, ganKey: rel, wa, wb
+  };
+}
+
+/* ---------------- 總分 ---------------- */
+
+const WEIGHTS      = { wendu: 0.35, zhongliang: 0.30, changdu: 0.35 };
+// 有時辰時四維並存，密度佔 20%，其餘等比縮
+const WEIGHTS_HOUR = { wendu: 0.28, zhongliang: 0.24, changdu: 0.28, midu: 0.20 };
+
+function clamp(n, lo = 0, hi = 100) { return Math.max(lo, Math.min(hi, n)); }
+
+function pillars(y, m, d, hour) {
+  const day = dayPillar(y, m, d);
+  const p = { year: yearPillar(y, m, d), day };
+  if (hour !== undefined && hour !== null && hour !== '') {
+    p.hour = hourPillar(day.gan, Number(hour));
+  }
+  return p;
+}
+
+/**
+ * 主入口。a / b 為 {y, m, d} 或 {y, m, d, hour}（hour 為 0–23 的整數）。
+ * 雙方都給了 hour 才會啟用第四維度「緣的密度」；只有一方給等於沒給。
+ */
+function yuanfen(a, b) {
+  const A = pillars(a.y, a.m, a.d, a.hour);
+  const B = pillars(b.y, b.m, b.d, b.hour);
+  const hasHour = !!(A.hour && B.hour);
+  const W = hasHour ? WEIGHTS_HOUR : WEIGHTS;
+
+  const wendu      = scoreWendu(A, B);
+  const zhongliang = scoreZhongliang(A, B);
+  const changdu    = scoreChangdu(A, B);
+  const midu       = hasHour ? scoreMidu(A, B) : null;
+
+  let raw = wendu.score * W.wendu
+          + zhongliang.score * W.zhongliang
+          + changdu.score * W.changdu;
+  if (hasHour) raw += midu.score * W.midu;
+
+  const dimensions = {
+    wendu:      { name: '緣的溫度', score: wendu.score, key: wendu.key },
+    zhongliang: { name: '緣的重量', score: zhongliang.score, key: zhongliang.key,
+                  yinyang: zhongliang.yinyang, wa: zhongliang.wa, wb: zhongliang.wb },
+    changdu:    { name: '緣的長度', score: changdu.score, key: changdu.key,
+                  nayinKey: changdu.nayinKey }
+  };
+  if (hasHour) {
+    dimensions.midu = { name: '緣的密度', score: midu.score, key: midu.key,
+                        ganKey: midu.ganKey, wa: midu.wa, wb: midu.wb };
+  }
+
+  const pillarText = (P, na) => {
+    const o = {
+      year: GAN[P.year.gan] + ZHI[P.year.zhi],
+      day:  GAN[P.day.gan]  + ZHI[P.day.zhi],
+      nayin: na,
+      // 以下是盤面細節，供文案取用——不參與計分，只影響措辭
+      yearGan: P.year.gan, yearZhi: P.year.zhi,
+      dayGan:  P.day.gan,  dayZhi:  P.day.zhi,
+      nayinName: nayinName(P.year.gan, P.year.zhi)
+    };
+    if (P.hour) {
+      o.hour = GAN[P.hour.gan] + ZHI[P.hour.zhi];
+      o.hourGan = P.hour.gan; o.hourZhi = P.hour.zhi;
+    }
+    return o;
+  };
+
+  return {
+    total: Math.round(raw),
+    hasHour,
+    weights: W,
+    dimensions,
+    debug: { A: pillarText(A, changdu.na), B: pillarText(B, changdu.nb) }
+  };
+}
+
+/* ───────────────────────── */
+
+/* =========================================================================
+   未完籤所 · 盤面風味層
+   -------------------------------------------------------------------------
+   問題：兩個人 key 相同就讀到同一段判斷，變化只來自亂數種子。
+   解法：讓「算出來卻沒參與計分」的盤面資訊回到文字裡。
+
+     緣的溫度  ← 使用者日支（12 生肖）        你的相處風格
+     緣的重量  ← 使用者日干（10 天干）        你的給予方式
+     緣的長度  ← 使用者年柱納音（30 種）      這段緣的質地
+
+   這一層不影響分數，只影響措辭。但它是綁在命盤上的，
+   所以不同的盤真的會讀到不同的句子——這跟隨機變體是兩回事。
+   ========================================================================= */
+
+/* ---------- 日支 12：你在關係裡的相處風格 ---------- */
+const DAY_ZHI = [
+  /* 子 */ '你在關係裡是敏銳的那種，對方語氣一變你就察覺得到。',
+  /* 丑 */ '你在關係裡是慢熱的，決定要對一個人好之後就很難收回。',
+  /* 寅 */ '你在關係裡習慣往前推，不太能忍受停滯太久。',
+  /* 卯 */ '你在關係裡偏向柔和，不喜歡把事情弄僵。',
+  /* 辰 */ '你在關係裡想得比說得多，很多結論在心裡已經跑過好幾遍。',
+  /* 巳 */ '你在關係裡觀察力強，對方沒說的部分你通常也讀得到。',
+  /* 午 */ '你在關係裡是熱的那個，情緒來得快也去得快。',
+  /* 未 */ '你在關係裡容易替對方著想，有時候想得比對方自己還多。',
+  /* 申 */ '你在關係裡反應快，但也因此常常先一步替兩個人做好決定。',
+  /* 酉 */ '你在關係裡對細節敏感，一點不對勁就會放在心上。',
+  /* 戌 */ '你在關係裡是忠實的那種，一旦認定就不太動搖。',
+  /* 亥 */ '你在關係裡包容度高，但包容到某個界線之後會突然收手。'
+];
+
+/* ---------- 日干 10：你的給予方式 ---------- */
+const DAY_GAN = [
+  /* 甲 */ '你付出的方式是把事情扛起來，不太習慣讓對方擔心。',
+  /* 乙 */ '你付出的方式是配合與調整，柔軟但不代表沒有主張。',
+  /* 丙 */ '你付出的方式是把氣氛帶起來，你在的時候場子不會冷。',
+  /* 丁 */ '你付出的方式是細火慢燉，不張揚但一直在。',
+  /* 戊 */ '你付出的方式是提供穩定，讓對方知道有個地方不會塌。',
+  /* 己 */ '你付出的方式是承接，對方丟過來的情緒你多半都接得住。',
+  /* 庚 */ '你付出的方式是解決問題，你的關心常常表現成行動而不是話。',
+  /* 辛 */ '你付出的方式很講究，你在意的是給得對，不是給得多。',
+  /* 壬 */ '你付出的方式是流動的，你會順著對方的狀態調整自己。',
+  /* 癸 */ '你付出的方式很安靜，很多事你做了但不會說。'
+];
+
+/* ---------- 納音 30：這段緣的質地 ---------- */
+const NAYIN_FLAVOUR = {
+  海中金: '你的本命是海中金——藏得深，要挖得夠久才露得出來。',
+  爐中火: '你的本命是爐中火——需要有人添柴，也需要有人記得別讓它燒過頭。',
+  大林木: '你的本命是大林木——長得慢，但一旦成形就很難撼動。',
+  路旁土: '你的本命是路旁土——不顯眼，卻是所有人走過的地方。',
+  劍鋒金: '你的本命是劍鋒金——鋒利是天生的，收不收鞘才是你要學的。',
+  山頭火: '你的本命是山頭火——看得見很遠，也容易被風影響。',
+  澗下水: '你的本命是澗下水——聲音不大，但從沒停過。',
+  城頭土: '你的本命是城頭土——你習慣當那個擋在前面的人。',
+  白蠟金: '你的本命是白蠟金——外表溫潤，內裡比看起來硬。',
+  楊柳木: '你的本命是楊柳木——彎得下去，所以折不斷。',
+  泉中水: '你的本命是泉中水——源頭在很深的地方，不容易乾。',
+  屋上土: '你的本命是屋上土——你的存在感在於遮風擋雨，不在於被看見。',
+  霹靂火: '你的本命是霹靂火——來得很快，也常常讓身邊的人措手不及。',
+  松柏木: '你的本命是松柏木——四季不改，這是優點也是固執。',
+  長流水: '你的本命是長流水——不急，但走得比誰都遠。',
+  沙中金: '你的本命是沙中金——混在裡面不容易被認出來，要有心人才會挑。',
+  山下火: '你的本命是山下火——溫度剛好，靠近的人才感覺得到。',
+  平地木: '你的本命是平地木——沒有遮蔽，所以長得誠實。',
+  壁上土: '你的本命是壁上土——你是那個把結構撐住的部分。',
+  金箔金: '你的本命是金箔金——薄，但貼在哪裡就讓哪裡亮起來。',
+  覆燈火: '你的本命是覆燈火——你的光是給特定的人看的，不是給全場。',
+  天河水: '你的本命是天河水——遠、清、不容易接近，接近了就記得很久。',
+  大驛土: '你的本命是大驛土——你是別人停靠的地方，來來去去都經過你。',
+  釵釧金: '你的本命是釵釧金——你在意形狀，也在意被誰戴著。',
+  桑柘木: '你的本命是桑柘木——你的價值在於養別人，這件事你自己常忘記。',
+  大溪水: '你的本命是大溪水——有方向也有力氣，擋不太住。',
+  沙中土: '你的本命是沙中土——鬆，但也因此容納得下很多東西。',
+  天上火: '你的本命是天上火——你照的範圍很大，卻不一定照得到最近的人。',
+  石榴木: '你的本命是石榴木——開得晚，開了就很難忽視。',
+  大海水: '你的本命是大海水——深不見底，連你自己都不一定摸得清。'
+};
+
+/**
+ * @param debugA  result.debug.A（使用者這一方的盤面細節）
+ */
+function flavour(debugA) {
+  return {
+    wendu:      DAY_ZHI[debugA.dayZhi] || '',
+    zhongliang: DAY_GAN[debugA.dayGan] || '',
+    changdu:    NAYIN_FLAVOUR[debugA.nayinName] || ''
+  };
+}
+
+/* ───────────────────────── */
+
+/* =========================================================================
+   未完籤所 · 緣分指數 文案模板 v2
+   -------------------------------------------------------------------------
+   每段拆成三截：
+     open   包裝句（可變）
+     core   判斷句（固定，不可變 —— 這是分數的文字化）
+     close  收尾／建議（可變，必須帶預測或具體做法）
+
+   變體以「兩人生日」為種子抽選：同一組永遠得到同一句，A×B 與 B×A 相同。
+   往 open / close 陣列裡加句子就會自動生效，不需要改邏輯。
+   ========================================================================= */
+
+
+/* ---------- 種子與抽樣 ---------- */
+
+function seedOf(a, b) {
+  const k = [a, b].map(x => x.y * 10000 + x.m * 100 + x.d)
+                  .sort((p, q) => p - q).join('-');
+  let h = 2166136261;
+  for (let i = 0; i < k.length; i++) { h ^= k.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+
+// salt 讓同一顆種子在不同欄位抽到不相關的變體
+const SALT = { poem: 1, wendu: 2, zhongliang: 3, changdu: 4, summary: 5 };
+
+function pick(arr, seed, salt) {
+  if (!arr || !arr.length) return '';
+  if (arr.length === 1) return arr[0];
+  const h = (seed ^ Math.imul(salt, 2654435761)) >>> 0;
+  return arr[h % arr.length];
+}
+
+// 同一段的 open 與 close 用不同 salt，避免兩者連動
+function compose(block, seed, salt, allowOpen) {
+  // 開場句只給最需要被點出來的那一段用；三段都加會變成公式
+  const open  = allowOpen ? pick(block.open, seed, salt * 31) : '';
+  const close = pick(block.close, seed, salt * 97);
+  return [open, block.core, close].filter(Boolean).join('');
+}
+
+/* ---------- 總分分數帶 ---------- */
+
+const TOTAL_BANDS = [
+  { min: 90, label: '緣滿', title: '春暖花開',
+    poems: [
+      '不是花等到了春天，是它們本來就約好了。',
+      '有些相遇不需要理由，就像沒有人會問月亮為什麼圓。',
+      '花開的那天不會通知你；但你會知道，是今天。'
+    ,
+      '緣分深的那種，通常不吵不鬧，只是剛好一直都在。',
+      '星星不會因為你沒抬頭就不亮；有些緣分也是。'],
+    core: '你們之間的順，是連旁人都看得出來的那種。這段緣不需要誰特別用力，它自己會往前走。',
+    open: ['', '', ''],
+    close: [
+      '接下來的一段時間，你們會遇到幾件剛好對上的事，那不是巧合。真正要留意的，反而是你會不會因為太順而不去珍惜。',
+      '這種順不是永遠的，它有保存期限。趁還順的時候把重要的話說完，比在難的時候才開口容易得多。'
+    ,
+      '真正要練習的不是更愛，是別讓「一直都在」變成看不見。',
+      '你們的問題不是關係，是把注意力放在別的地方太久。趁順的時候多看對方一眼。'] },
+
+  { min: 80, label: '緣濃', title: '花好月圓',
+    poems: [
+      '好與圓都是難得同時發生的事；珍惜的方式，是別以為它會一直這樣。',
+      '月亮圓得剛剛好的那幾天，看的人總以為還有很多次。',
+      '花開得正好的時候，沒有人會想到要記住它的樣子。'
+    ,
+      '濃的東西不用久煮，但也最怕燒過頭。',
+      '濃的關係像酒，開了就要喝，放著不會更好。'],
+    core: '你們大方向是合的，濃度也夠——這種關係走起來有實感，不會空。',
+    open: ['', ''],
+    close: [
+      '摩擦多半出在細節而不是根本。你們需要偶爾重新對一下節奏，只要肯講，都過得去。',
+      '意見不合對你們不是壞事，是碰到了需要對齊的地方。談過的每一次，關係都會更穩一點。'
+    ,
+      '你們現在最該做的是把還沒說的說完，趁彼此都還願意聽。',
+      '你們有足夠的基礎談任何事，缺的只是找一個誰都不累的時候開口。'] },
+
+  { min: 70, label: '緣暖', title: '細水長流',
+    poems: [
+      '不急的水走得最遠，因為它從不跟石頭爭。',
+      '水不會一次把路走完；它只是每天都往前一點。',
+      '溫的東西留得久，燙的東西留不住手。'
+    ,
+      '慢慢來的關係沒有故事可以講，但走得久。',
+      '一天暖一點，一年之後就不是同一種溫度了。'],
+    core: '你們不是一見面就燒起來的那種，但也不會突然就沒了。',
+    open: ['', ''],
+    close: [
+      '這段關係會慢慢累積，越往後越穩；前期可能會有人嫌不夠熱烈，等時間拉長就會知道這種溫度才留得住。',
+      '往後一年你們會經歷幾件小事，每一件都不起眼，但加起來會讓你確定這個人是可以的。不用急著要一個答案。'
+    ,
+      '不用羨慕那些一見鍾情的人，他們要處理的問題你們早就處理完了。',
+      '你們的關係不會突然變好，也不會突然變壞，這種穩定本身就是一種保護。'] },
+
+  { min: 60, label: '緣淡', title: '雲淡風輕',
+    poems: [
+      '淡不是冷，是還沒有到需要用力的時候。',
+      '雲飄過去不留痕跡；但天空記得它來過。',
+      '不濃的那種，才有空間慢慢變濃。'
+    ,
+      '有些關係不是走不下去，是沒有人先開口說要往哪裡走。',
+      '沒有人先開口的關係，最後會變成沒有人記得要開口。'],
+    core: '你們沒有特別強的推力，也沒有明顯的擋。',
+    open: ['', ''],
+    close: [
+      '這段關係走得遠不遠，先天給的比重不高，接下來會取決於你們願意花多少心思在對方身上；主動權在手上，這其實不是壞消息。',
+      '這種關係最後不是斷掉的，是慢慢沒有下文。要它不淡下去，得有人願意主動，而且不只一次。'
+    ,
+      '維持現狀是最省力的，也是最容易讓一段關係悄悄過期的。',
+      '這種狀態可以維持很久，久到你們都忘了曾經有過別的可能。要不要打破它，是你們的選擇。'] },
+
+  { min: 50, label: '緣薄', title: '聚散有時',
+    poems: [
+      '有些人是來教你什麼是捨不得的，不是來留下的。',
+      '聚的時候沒有人在算日子；散的時候才發現一直有人在算。',
+      '不是所有一起走過的路，都要走到同一個地方。'
+    ,
+      '緣分薄不是沒有緣，是那條線比別人細。',
+      '細的線也是線，只是要換一種拿法。'],
+    core: '你們之間有一些天生就對不太上的地方，相處起來會比別人費力。',
+    open: ['', ''],
+    close: [
+      '這段關係會走到一個需要決定的時刻，而且不會太久；在那之前，先看懂卡在哪裡，而不是一直用更用力的方式去撐。',
+      '你們的中間地帶維持不了太久。問題被攤開之後，關係會很快明朗——不是變好就是收尾。'
+    ,
+      '細的線不代表會斷，但代表要小心拿。用力撐反而最容易斷。',
+      '你們之間的費力有具體的來源，不是命不好。找到那個來源，很多事情會鬆開。'] },
+
+  { min: 0, label: '緣散', title: '各自天涯',
+    poems: [
+      '天涯不是懲罰，是給了兩個人各自完整的地方。',
+      '有些路從一開始就是往兩個方向去的，走再久也不會交會。',
+      '不是誰把誰弄丟了；是風本來就吹往不同的地方。'
+    ,
+      '不是每一段緣都要走到最後才算數。',
+      '有些人是路過的風景，不是要一起走的路。'],
+    core: '你們的節奏、需要、承受方式都不在同一條線上，這不是誰的錯，是先天就對沖。',
+    open: ['', ''],
+    close: [
+      '這段關係若要繼續，得有人願意長期讓步；先問自己那個人是不是你，再決定要不要走下去。',
+      '往後這種不同步只會更明顯，不會隨相處變好。若你要留，就是選擇長期承擔這個落差；那是可以的選擇，但要清醒地選。'
+    ,
+      '如果你決定留下來，請是因為看清楚了才留，不是因為不敢走。',
+      '這段關係如果要繼續，需要的不是更努力，是換一種方式。原來那種已經證明無效了。'] }
+];
+
+/* ---------- 緣的溫度（日支關係） ---------- */
+
+const WENDU = {
+  liuhe: {
+    core: '你們在一起的時候，時間會過得比較快。話不用講完對方就接得上。',
+    open: ['', '先講一件你大概早就感覺到的事。', '有些事情不用比較就知道自己是幸運的。'],
+    close: [
+      '連沉默都不尷尬——這種舒服是天生的，不是誰努力來的。接下來相處只會更自然，你可以放心把節奏交出去一點。',
+      '你大概自己也說不上來為什麼。往後幾個月你們的默契還會再往上，不用刻意經營。'
+    ,
+      '這種順不是努力來的，所以也不用擔心哪天會消失。你們真正要練習的，反而是不要把它當成理所當然。',
+      '你們大概很少需要「談一談」，因為事情通常在變嚴重之前就過去了。這種關係最需要的不是溝通技巧，是別把它當成理所當然。',
+      '有一件事你可能沒想過：他在別人面前不見得是這樣。你看到的鬆，是他只在你面前才有的樣子。'] },
+  sanhe: {
+    core: '你們處得來，而且是那種越相處越順的類型。',
+    open: ['', '時間在這裡是幫忙的。', '有件事你可能還沒回頭看過。'],
+    close: [
+      '剛開始可能還有些客氣，往後會慢慢鬆開，變成不用解釋也知道對方在想什麼。日常的小摩擦不會累積成問題。',
+      '越熟越好相處，這在關係裡不常見。接下來你們會開始有一些只有彼此聽得懂的話，那是關係穩下來的徵兆。'
+    ,
+      '你們的關係走的是複利，每一次相處都在往上加。這種類型的關係，三年後會比現在好很多。',
+      '你們的默契不是天生的，是一次一次累積來的——所以它也會繼續往上累積。',
+      '如果你回想剛認識的時候，會發現那時候的客氣現在幾乎都不見了。這個方向不會逆轉。'] },
+  same: {
+    core: '你們太像了。像到看得懂對方的好，也看得懂對方的壞——包括那些你自己不太想承認的部分。',
+    open: ['', '接下來這段可能會有點刺。', '說一個你不一定願意承認的觀察。'],
+    close: [
+      '相處會很輕鬆，但也容易一起停在原地；偶爾需要有人先動。',
+      '你們的逃避方式一樣，所以難的時候容易一起停住。這種時候關係不會壞掉，但也不會往前，得有人先動。'
+    ,
+      '太像的兩個人容易變成室友。要維持張力，得刻意保留一點各自的空間，而不是什麼都一起。',
+      '最像的兩個人也最容易忽略對方，因為你會用自己的邏輯去推他，而那通常是對的——直到有一次不對。',
+      '你們的相似讓解釋變得多餘，但也讓確認變得稀少。偶爾問一次「你真的這樣想嗎」不會多餘。'] },
+  ping: {
+    core: '你們相處沒有特別順，也沒有特別卡。多數時候是舒服的，偶爾會有一兩個瞬間覺得對方怎麼會這樣想。',
+    open: ['', '誠實講，這裡沒有太戲劇性的東西。', '中間值有中間值的意義。'],
+    close: [
+      '這種距離其實好維持，不用急著把它變得更熱。',
+      '接下來不會有什麼劇烈的變化，這種平穩會持續一段時間；要更近一點的話得有人刻意去做，它不會自己發生。'
+    ,
+      '這種平穩最大的風險是被誤讀成沒感覺。它其實只是還沒被推一把，而推的那個人不會自己出現。',
+      '你們之間缺的不是感情，是共同經歷。一起做過的事越多，這一項就會越往上。',
+      '這種距離不會讓人受傷，但也不會讓人心動。要往哪一邊走，取決於誰願意先跨一步。'] },
+  zixing: {
+    core: '你們身上有同一個毛病，而且會在對方身上看得特別刺眼。相處時容易為了小事僵住，因為那件事其實是你自己也做不好的。',
+    open: ['', '要講得直白一點了。', '接下來這段，你們大概都心裡有數。'],
+    close: [
+      '這種卡會反覆出現，除非有一天你們願意一起承認。',
+      '同樣的爭執會用不同形式回來，核心不會變。它不會自己消失，除非有人願意先承認自己也一樣。'
+    ,
+      '你們吵的每一次都沒有贏家，因為兩個人都站不住腳。與其講道理，不如先講好哪些時候不談事情。',
+      '你們之間有一個誰都不提的話題。不提不是因為不重要，是因為兩個人都知道自己也站不住腳。',
+      '同樣的毛病讓你們互相理解，也讓你們互相縱容。理解是好事，縱容不是。'] },
+  liuhai: {
+    core: '你們之間有一種說不上來的消耗。表面上沒吵，但相處完會有點累，回家還會反覆想剛剛那句話是什麼意思。',
+    open: ['', '有一種累，是說不出口的那種。', '這裡是最容易被忽略的地方。'],
+    close: [
+      '這種感覺不會自己消失，需要把猜的部分講出來。',
+      '這種累會慢慢累積成距離。接下來會有一個你很想問卻沒問出口的時刻，那個時刻問了，關係就會鬆開。'
+    ,
+      '這種消耗有一個特徵：吵不起來。吵不起來的關係看起來很和平，其實是話都吞回去了。',
+      '你們相處時最耗神的部分是猜。猜他什麼意思、猜自己有沒有說錯，那個猜的過程比事情本身累。',
+      '這種消耗不會讓你們吵架，只會讓你們慢慢變得客氣。客氣是關係退燒最早的徵兆。'] },
+  xing: {
+    core: '你們容易在同一個地方撞到。不是價值觀不合，是表達的方式會刺到對方——你覺得只是實話，他聽起來像指責。',
+    open: ['', '先釐清一個常見的誤會。', '有時候問題不在感情，在別的地方。'],
+    close: [
+      '這種摩擦會重複發生，改口氣比改想法有用。',
+      '你們爭的其實都不是當下那件事。這個循環會一直重複，直到有人先講出真正在意的東西。'
+    ,
+      '你們刺到對方的時候多半沒有惡意，只是說話的方式剛好對不上。這種問題改語氣比改想法有效。',
+      '你們的爭執有一個固定的節奏：一句話、一個停頓、然後兩個人都不說話。認出那個節奏是解開它的第一步。',
+      '你們不缺理解，缺的是翻譯。同樣一件事換個說法，多半就不會撞上。'] },
+  liuchong: {
+    core: '你們是相反的兩種人。他快你慢、他要熱鬧你要安靜，什麼事都得先協調才能一起做。',
+    open: ['', '有件事早點知道比較好。', '接下來這段講的是先天差異。'],
+    close: [
+      '這種對沖不會隨時間變好，但如果你們都不強迫對方改，反而能各自留一塊空間。',
+      '接下來會有一件事必須一起決定，那時候差異會被放到最大。談的時候不要比誰對，先講各自不能讓的那一點。'
+    ,
+      '相反不代表不合。真正會出事的是有人開始為了配合而長期委屈自己，而那件事通常不會被說出來。',
+      '你們每一次一起做決定都在協調，這很累，但也代表你們一直在為對方讓路。',
+      '相反的兩個人看世界的角度是互補的。前提是願意聽，不是急著說服。'] }
+};
+
+/* ---------- 緣的重量（日干五行生剋方向） ---------- */
+/* {A}／{B} 由 render 替換為稱謂 */
+
+const ZHONGLIANG = {
+  bihe: {
+    core: '你們的力氣是平的。誰都沒有特別依賴誰，也沒有誰在偷偷撐著——這在關係裡很難得。',
+    open: ['', '先講好消息。', '這在關係裡不是理所當然的。'],
+    close: [
+      '要小心的是兩個人都太獨立，久了會忘記彼此需要。',
+      '這種平衡的風險是太客氣。等到有人真的撐不住的時候，願不願意開口，會決定這段關係停在哪裡。'
+    ,
+      '這種平衡很穩，但也很容易停在原地。關係要往前，需要有一次有人先示弱。',
+      '你們之間沒有虧欠，所以也沒有理所當然。這種關係要靠選擇維持，不能靠慣性。',
+      '兩個都很獨立的人在一起，最容易發生的不是爭吵，是各過各的。'] },
+  a_sheng_b: {
+    core: '這段關係裡，主要在給的人是{A}。你會下意識照顧他的情緒、配合他的節奏，而且做得太自然，連自己都沒發現。',
+    open: ['', '接下來這段值得多看兩眼。', '有些事情你可能一直沒讓自己看見。'],
+    close: [
+      '他會越來越舒服，你會越來越累——這個落差往後會更明顯，記得留一點給自己。',
+      '你給得太自然，所以他看不見。委屈會累積，而他到那時候都還會覺得一切都好——這不是冷漠，是資訊落差。'
+    ,
+      '你可能會想「我沒有覺得委屈啊」，那多半是真的——現在還沒有。這件事的問題在累積，不在當下。',
+      '你可能覺得這樣沒什麼——直到有一天你發現自己在數次數。開始數的那天，就是要講的時候。',
+      '你給的是心力不是東西，所以外人看不出來，他也看不出來。這件事只能你自己說。'] },
+  b_sheng_a: {
+    core: '這段關係裡，主要在給的人是{B}。他會替你擋掉一些事、順著你的步調走，而且不太會說。',
+    open: ['', '先說一件他不會主動講的事。', '有些人習慣把話留在心裡。'],
+    close: [
+      '你可能到某個時候才發現他為這段關係做了多少；那之前，別把他的體貼當成理所當然。',
+      '他做的事多半不會說。你會在某個時候才發現，而他要的從來不是感謝，是被看見。'
+    ,
+      '他的付出不會停，除非有一天他覺得沒被看見。安靜的人退場的時候，也一樣安靜。',
+      '他的方式是把事情做好，不是把話說滿。所以他的在乎要用看的，不是用聽的。',
+      '被照顧久了會失去敏感度，這不是你的錯，是人的通性。偶爾主動問一次就能補回來。'] },
+  a_ke_b: {
+    core: '這段關係裡，話語權比較常在{A}手上。你的意見容易變成決定，他的退讓常常沒有被看見。',
+    open: ['', '請放下一點防備來看這段。', '有一件事，他不會直接告訴你。'],
+    close: [
+      '他不是不介意，是暫時選擇不講；等他開始不講的事變多，關係就會開始冷。',
+      '他的退讓是有額度的。額度用完的時候，他會為了一件你覺得不重要的事變得很硬——那才是真正的問題浮出來。'
+    ,
+      '你不是錯的，你的判斷通常也真的比較好。但關係要的不是最佳解，是兩個人都有份。',
+      '你們之間很少爭執，那不是因為合，是因為有一方不爭了。',
+      '把決定權讓出來一部分，短期會比較沒效率，長期會換回一個願意參與的人。'] },
+  b_ke_a: {
+    core: '這段關係裡，退讓比較多的是{A}。你會為了不起爭執而把話吞回去，時間久了會覺得自己在這段關係裡越來越小。',
+    open: ['', '三個維度裡，這裡最需要留意。', '先講一件你心裡大概有數的事。'],
+    close: [
+      '這個狀態不會自動好轉，需要你先開口，而不是等他發現。',
+      '讓一次是體貼，讓成習慣就變成位置。這個模式還沒定下來，但每讓一次就更難改一次。'
+    ,
+      '你退讓是為了氣氛，這個出發點沒有問題。問題是氣氛保住了，而你在裡面越來越小。',
+      '你不是沒有意見，是把說出來的成本算得太高了。實際上那個成本沒有你想的高。',
+      '這個位置不是他安排的，是你們一起養成的——所以也可以一起改。'] }
+};
+
+/* 陰陽相配補語：比和沒有落差可補，另寫一句 */
+const ZHONGLIANG_YINYANG = {
+  bihe: '你們一剛一柔，平的同時還能互補，這種平衡不容易被外面的事打散。',
+  other: '你們的力道剛好互補，硬的時候有人軟，這讓上面那個落差沒有那麼難受。'
+};
+
+/* ---------- 緣的長度（年支關係 ＋ 年柱納音） ---------- */
+
+const CHANGDU = {
+  liuhe: {
+    core: '這段緣的底子很厚。你們是那種就算中間斷過，也還是會再遇到的關係；',
+    open: ['', '關於能走多遠，你們有本錢。', '接下來這段可以讓你放心一點。'],
+    close: ['時間對你們是幫忙的，不是考驗。', '就算隔了幾年沒聯絡，再見面也不會生疏。',
+      '這種底子讓你們禁得起變動。搬家、換工作、家人的意見，這些事很難把你們拆開。',
+      '你們之間有一種不用維持的連結。就算各自忙一陣子，回來還是找得到彼此的位置。',
+      '這種底子讓你們可以承受一次比較大的分歧，而不會因此散掉。'] },
+  sanhe: {
+    core: '這段緣有長線。往後幾年你們的人生節點會一直對得上——',
+    open: ['', '時間站在你們同一邊。', '有些事要拉長時間才看得出來。'],
+    close: ['換工作、搬家、做決定的時機，常常剛好碰在一起。',
+            '你們會在差不多的時間遇到差不多的關卡，這讓彼此比別人更懂對方在難什麼。',
+      '節點對得上的關係，會在對方最需要的時候剛好也在。這是很難得的東西，而且要幾年後才看得出來。',
+      '你們的人生會在幾個關鍵時刻交會，那些時刻不用刻意安排，它們自己會來。',
+      '同步的關係最舒服的地方是不用解釋為什麼現在很忙——因為對方也在忙同一種事。'] },
+  same: {
+    core: '你們是同一種節奏的人，人生階段也走得差不多。',
+    open: ['', '同步是雙面的。', '接下來這段有好也有壞。'],
+    close: ['這讓相處很同步，但也代表低潮會一起來；那種時候誰都沒力氣拉誰，要先講好。',
+            '好的時候一起好，難的時候一起難。要走長，得有一個人學會在低潮時還撐得住。',
+      '一起低潮的時候最危險，因為沒有人有餘力。這件事要在還好的時候先講好怎麼辦。',
+      '太像的兩個人會一起變好，也會一起停滯。差別在於有沒有人偶爾往外看一眼。',
+      '你們的節奏一致，所以少了拉扯，也少了推力。這種關係需要外部的刺激才會往前。'] },
+  ping: {
+    core: '這段緣沒有先天的長度，也沒有先天的限制。',
+    open: ['', '這裡的答案比較特別。', '接下來要講的可能跟你預期的不一樣。'],
+    close: ['能走多遠取決於後續的選擇。這其實是好事，代表主動權在你們手上，而不是在盤上。',
+            '這種緣是靠一次次選擇累積出來的，走多久就有多長。',
+      '沒有註定的關係，全靠選擇累積。這代表它不會自己變好，也不會自己壞掉。',
+      '沒有先天優勢的關係反而最誠實——它走到哪裡，就是你們真的做到哪裡。',
+      '這一項的分數不高不低，代表未來還沒被寫下來。這是空白，不是缺陷。'] },
+  zixing: {
+    core: '你們會在同一個關卡上一起卡住，而且是同一種原因。',
+    open: ['', '有一件事，你們遲早要處理。', '接下來這段卡在一個很具體的地方。'],
+    close: ['這段關係要走長，那件事遲早要攤開講。沒講之前，它會每隔一段時間就回來一次。',
+            '同樣的坎會再出現。哪一次你們沒有各自迴避，這段緣的長度就會拉開。',
+      '那件事每隔一段時間就會回來一次，而且每次都比上次更難開口。越早講越好。',
+      '那件事每次浮出來都會被繞開，而每繞開一次，下次開口的門檻就更高一點。',
+      '你們卡的地方其實不難解，難的是誰先承認它存在。'] },
+  liuhai: {
+    core: '這段緣中間會有耗損。不是大事，是一次一次的誤會和沒說出口的話堆起來的。',
+    open: ['', '有一種消耗不會痛，但會累積。', '接下來這段講的是損耗。'],
+    close: ['若你們願意在小事上就把話講清楚，長度會拉得比現在看起來遠很多。',
+            '磨損是慢慢來的，所以不容易察覺。願意在還不痛的時候就處理，這段緣可以走得比想像久。',
+      '耗損不會痛，所以不容易察覺。等到你覺得「什麼時候變成這樣的」，通常已經累積很久了。',
+      '損耗最麻煩的是它沒有事件。沒有事件就沒有處理的時機，只能靠有人主動創造那個時機。',
+      '你們之間沒有大問題，只有很多小問題沒有結案。'] },
+  xing: {
+    core: '這段緣會有拉扯期。往後會出現一段彼此都很硬的時間，那不是感情不夠，是你們都太想照自己的方式來。',
+    open: ['', '先把話說在前面。', '難走不等於走不下去。'],
+    close: ['撐過那段之後反而會穩。', '那段時間會很難，但過了就過了；這種關係是磨出來的，不是天生順的。',
+      '磨的過程會讓人懷疑是不是不適合。過了那段之後回頭看，那正是關係變穩的地方。',
+      '會磨的關係通常比一開始就順的關係更清楚彼此的底線，前提是磨完了還在。',
+      '那段拉扯期不會突然結束，會是慢慢鬆開的。你不會記得是哪一天好起來的。'] },
+  liuchong: {
+    core: '這段緣的變動大。你們的人生節奏常常錯開，一個在衝的時候另一個在休息，容易走著走著就分岔。',
+    open: ['', '接下來要講一件現實的事。', '這裡是你們最需要用力的地方。'],
+    close: ['要走長，得刻意把時間對回來，不能靠自然。',
+            '錯開的時候不代表沒感情，是真的忙不到一起。要留住這段緣，得有人固定把行事曆對一次。',
+      '節奏錯開不是感情問題，是行程問題。行程問題可以解，但要有人固定去對。',
+      '錯開的兩個人要走遠，靠的不是感情濃度，是行事曆。這句話聽起來不浪漫，但它是真的。',
+      '你們需要的不是更多相處時間，是更能對上的相處時間。'] }
+};
+
+const CHANGDU_NAYIN = {
+  sheng: ['而且你們的本命之氣是相生的——這段關係會讓彼此變成更好的樣子，而不是互相磨損。',
+          '你們的本命之氣相生，在一起會各自長出原本沒有的部分。'],
+  bihe:  ['你們的本命之氣同源，走的是同一條路；順的時候特別順，逆的時候也會一起逆。',
+          '本命之氣同源，你們看世界的方式很接近——這是理解的基礎，也是盲點的來源。'],
+  ke:    ['但你們的本命之氣相剋，先天就帶著一點互相消耗。這不代表走不遠，代表要走遠必須是有意識地走。',
+          '你們的本命之氣相剋，相處會比別人耗力。知道這件事本身就有幫助，因為你不會再以為是自己不夠好。']
+};
+
+/* ---------- 組裝 ---------- */
+
+function band(total) {
+  return TOTAL_BANDS.find(b => total >= b.min);
+}
+
+/**
+ * @param result  yuanfen() 的輸出
+ * @param birth   { a:{y,m,d}, b:{y,m,d} } —— 用來產生穩定種子
+ * @param names   { A:'你', B:'對方' }
+ */
+function render(result, birth, names = { A: '你', B: '對方' }) {
+  const d = result.dimensions;
+  const b = band(result.total);
+  const seed = seedOf(birth.a, birth.b);
+  const fill = s => s.replace(/\{A\}/g, names.A).replace(/\{B\}/g, names.B);
+
+  // 分數最低的維度才配開場句
+  const lowest = ['wendu', 'zhongliang', 'changdu']
+    .sort((a, b) => d[a].score - d[b].score)[0];
+
+  // 盤面風味：綁在命盤上，不同的盤真的會讀到不同的句子
+  const fl = flavour(result.debug.A);
+
+  let zl = fill(compose(ZHONGLIANG[d.zhongliang.key], seed, SALT.zhongliang,
+                        lowest === 'zhongliang'));
+  if (d.zhongliang.yinyang) zl += ZHONGLIANG_YINYANG[d.zhongliang.key === 'bihe' ? 'bihe' : 'other'];
+  zl += fl.zhongliang;                    // 盤面風味永遠放最後
+
+  const cd = compose(CHANGDU[d.changdu.key], seed, SALT.changdu, lowest === 'changdu')
+           + pick(CHANGDU_NAYIN[d.changdu.nayinKey], seed, SALT.changdu * 13)
+           + fl.changdu;
+
+  return {
+    total: result.total,
+    label: b.label,
+    title: b.title,
+    headline: b.label + '·' + b.title,
+    poem: pick(b.poems, seed, SALT.poem),
+    summary: compose(b, seed, SALT.summary, true),
+    sections: [
+      { name: '緣的溫度', score: d.wendu.score,
+        text: compose(WENDU[d.wendu.key], seed, SALT.wendu, lowest === 'wendu')
+              + fl.wendu },
+      { name: '緣的重量', score: d.zhongliang.score, text: zl },
+      { name: '緣的長度', score: d.changdu.score, text: cd }
+    ]
+  };
+}
+
+/* ───────────────────────── */
+
+/* =========================================================================
+   未完籤所 · 緣分指數 —— 算式揭露
+   -------------------------------------------------------------------------
+   把內部的判定 key 翻成使用者看得懂的依據，並解釋總分怎麼來的。
+   目的不是教命理，是讓分數看起來有來歷，而不是隨機數。
+   ========================================================================= */
+
+
+const ZHI_LABEL = {
+  liuhe:    { name: '六合', gloss: '天生合得來' },
+  sanhe:    { name: '三合', gloss: '越處越順' },
+  same:     { name: '同支', gloss: '同一種人' },
+  ping:     { name: '無刑衝合', gloss: '不特別順也不特別卡' },
+  zixing:   { name: '自刑', gloss: '同一個毛病' },
+  liuhai:   { name: '六害', gloss: '暗中消耗' },
+  xing:     { name: '相刑', gloss: '容易互相刺到' },
+  liuchong: { name: '六沖', gloss: '相反的兩種人' }
+};
+
+const WX_LABEL = {
+  bihe:      '比和',
+  a_sheng_b: '生',
+  b_sheng_a: '生',
+  a_ke_b:    '剋',
+  b_ke_a:    '剋'
+};
+
+/* 把五行關係寫成有方向的一句話 */
+function wxPhrase(rel, wa, wb, names) {
+  if (rel === 'bihe') return `同為${wa}，比和`;
+  if (rel === 'a_sheng_b') return `${names.A}的${wa} 生 ${names.B}的${wb}`;
+  if (rel === 'b_sheng_a') return `${names.B}的${wb} 生 ${names.A}的${wa}`;
+  if (rel === 'a_ke_b')    return `${names.A}的${wa} 剋 ${names.B}的${wb}`;
+  return `${names.B}的${wb} 剋 ${names.A}的${wa}`;
+}
+
+/**
+ * @param result  yuanfen() 的輸出（需含 debug 與 dimensions）
+ */
+function basis(result, names = { A: '你', B: '對方' }) {
+  const d = result.dimensions;
+  const A = result.debug.A, B = result.debug.B;
+
+  const wz = ZHI_LABEL[d.wendu.key];
+  const cz = ZHI_LABEL[d.changdu.key];
+
+  const nayinRel = { sheng: '相生', bihe: '同源', ke: '相剋' }[d.changdu.nayinKey];
+
+  const rows = [
+    { name: '緣的溫度', score: d.wendu.score, weight: WEIGHTS.wendu,
+      source: `日支　${A.day[1]} × ${B.day[1]}`,
+      verdict: `${wz.name}｜${wz.gloss}` },
+    { name: '緣的重量', score: d.zhongliang.score, weight: WEIGHTS.zhongliang,
+      source: `日干　${A.day[0]} × ${B.day[0]}`,
+      verdict: `${wxPhrase(d.zhongliang.key, d.zhongliang.wa, d.zhongliang.wb, names)}${d.zhongliang.yinyang ? '，陰陽相配' : '，同陰陽'}` },
+    { name: '緣的長度', score: d.changdu.score, weight: WEIGHTS.changdu,
+      source: `年支　${A.year[1]} × ${B.year[1]}　／　納音　${A.nayin} × ${B.nayin}`,
+      verdict: `${cz.name}｜納音${nayinRel}` }
+  ];
+
+  return { rows, total: result.total };
+}
+
+/* ---------- 落差偵測 ---------- */
+
+const GAP_THRESHOLD = 22;
+
+function gapNote(result, names = { A: '你', B: '對方' }) {
+  const d = result.dimensions;
+  const arr = [
+    { key: 'wendu', label: '相處', score: d.wendu.score },
+    { key: 'zhongliang', label: '位置', score: d.zhongliang.score },
+    { key: 'changdu', label: '走向', score: d.changdu.score }
+  ].sort((a, b) => b.score - a.score);
+
+  const hi = arr[0], lo = arr[2];
+  if (hi.score - lo.score < GAP_THRESHOLD) return null;
+
+  const TEXT = {
+    'wendu>zhongliang': '你們相處是好的——問題不在合不合，在位置不平等。這種組合最容易拖，因為日子過得下去，所以不會有人先提。',
+    'wendu>changdu':    '你們現在很好，但這段關係沒有先天的長度。好好相處不等於會一直在一起，這件事得靠後續刻意去做。',
+    'zhongliang>wendu': '你們的位置是對等的，卡在日常。不是誰欺負誰，是相處的細節一直磨；這種問題可以解，因為它不涉及誰要退讓。',
+    'zhongliang>changdu':'你們相處得公平，但走向不穩。彼此都沒有虧欠對方，只是人生節奏容易錯開。',
+    'changdu>wendu':    '這段緣的底子比你們現在的相處好。眼前的摩擦不代表這段關係的本質，別因為近期的不順就下結論。',
+    'changdu>zhongliang':'這段緣走得長，但走得不平。可以一直在一起，代價是有人要一直讓——先想清楚那個人是誰。'
+  };
+
+  return TEXT[`${hi.key}>${lo.key}`] || null;
+}
+
+/* ---------- 純文字排版（給頁面或分享卡用） ---------- */
+
+function renderBasis(result, names) {
+  const b = basis(result, names);
+  const lines = b.rows.map(r =>
+    `${r.name}　${String(r.score).padStart(2)}　×${Math.round(r.weight * 100)}%\n` +
+    `　依據：${r.source}\n` +
+    `　判定：${r.verdict}`
+  );
+  const calc = b.rows.map(r => `${r.score}×${Math.round(r.weight * 100)}%`).join(' ＋ ');
+  return lines.join('\n\n') + `\n\n總分　${calc} ＝ ${b.total}`;
+}
+
+/* ───────────────────────── */
+
+/* =========================================================================
+   未完籤所 · 緣分指數 —— 付費層素材：具體事件預測
+   -------------------------------------------------------------------------
+   這批句子原本寫在免費層，因為給得太多而搬上來。
+   免費層給「趨勢」（會變嚴重、會反覆出現），付費層給「事件」
+   （什麼時候、以什麼形式、發生什麼、之後會怎樣）。
+
+   這是付費報告「接下來會怎麼發展」那一段的骨架，不是完稿——
+   完稿要再展開近期／中段／之後三個時間層，並補上對方視角。
+   ========================================================================= */
+
+/* ---------- 由總分帶決定的主線事件 ---------- */
+const BAND_EVENTS = {
+  緣滿: '往後會有一段時間你們幾乎不用溝通就同步。這種順是有保存期限的，不是永遠，記得在還順的時候把重要的話說完。',
+  緣濃: [
+    '摩擦多半出在細節而不是根本，往後會有一兩次需要重新調整節奏；只要肯講，都過得去。',
+    '接下來會出現一次比較明顯的意見不合，那不是壞事，是你們終於碰到需要對齊的地方；談過之後會更穩。'
+  ],
+  緣淡: '接下來會出現一個需要有人先主動的時機，如果那時沒有人動，關係會就這樣淡下去；不是斷，是慢慢沒有下文。',
+  緣薄: '往後會出現一件把問題攤開的事。那件事發生之後關係會很快明朗——不是變好就是收尾，中間地帶不會維持太久。',
+  緣散: '接下來會有一次你們都覺得「果然還是這樣」的時刻。那不是轉折，是印證；真正的轉折要等其中一個人決定不再照原來的方式來。'
+};
+
+/* ---------- 緣的溫度（日支關係）觸發的事件 ---------- */
+const WENDU_EVENTS = {
+  same:   '往後會有一段你們都不想處理事情的時期，因為兩個人的逃避方式一樣。那時候誰先動誰就救了這段關係。那之後你們會知道，原來這段關係是需要有人主動的，不會自己好起來。',
+  zixing: '往後同樣的爭執會再發生兩三次，形式不同但核心一樣。哪一次有人願意先說「我也是」，那次就會過去。過去之後你會發現，你們卡的從來不是對方，是同一個自己。',
+  xing:   '往後還會有幾次同樣的擦槍走火。你們爭的其實都不是當下那件事，等有人先講出真正在意的，這個循環才會停。循環停下來的那一刻，你們的對話品質會整個換一階。',
+  liuhe:  '接下來會有一個時刻，你發現不用解釋他就懂了。那件事本身可能很小，但它會讓你確定這個人是可以放心的。從那之後你對這段關係的焦慮會少很多。',
+  sanhe:  '往後你們會一起經歷一件有點麻煩的事。處理完之後你會發現，你們合作的方式比想像中順——關係常常是在這種時候定下來的。那件事會變成你們之間的一個共同記憶，往後遇到難關會拿出來用。',
+  ping:   '接下來會有一次你覺得「他怎麼會這樣想」的瞬間。那不是不合，是你們還沒真正聊過那個題目；聊過之後距離會近一階。聊過之後你們的關係會從「還不錯」變成「有內容」。',
+  liuhai: '往後會有一次對話讓你回家反覆想了很久。你會想問又沒問出口——那次如果問了，兩個人之間那層說不出來的累會鬆開。那層累一旦鬆開，你們相處的疲勞感會明顯下降。',
+  liuchong:'接下來會有一件事必須一起決定，那時候你們的差異會被放到最大。談的時候不要比誰對，先各自講出不能讓的那一點。講清楚之後，你們會找到一種各自保留但仍然靠近的方式。'
+};
+
+/* ---------- 緣的重量（日干生剋方向）觸發的事件 ---------- */
+/* {A}／{B} 為稱謂佔位，與 copy.js 相同 */
+const ZHONGLIANG_EVENTS = {
+  bihe:      '往後會出現一次有人真的需要被扶一把的時候。那次誰先開口說「我需要你」，這段關係就會往上一階。在那之前，你們會維持現在這種安全但有點客氣的距離。',
+  a_sheng_b: '接下來會有一次{A}突然覺得很委屈，而他完全不知道發生什麼事。那不是他冷漠，是你從來沒讓他看見你在給。那次之後，你會開始重新衡量自己在這段關係裡的位置。',
+  b_sheng_a: '往後會有一件事讓{A}看見他默默做了什麼。那一刻你會有點愧疚，但更重要的是接下來要怎麼還——他要的不是感謝，是被看見。那之後你們的關係會往前一階，因為他終於被看見了。',
+  a_ke_b:    '接下來他會有一次反常的堅持，為了一件{A}覺得不重要的小事。那不是小事，那是他累積很久的位置問題。處理得好的話，他會重新開始講話；處理不好，他會退得更遠。',
+  b_ke_a:    '往後{A}會遇到一件真的不能讓的事。那次如果還是讓了，這個模式就會定下來；如果講了，關係會震一下，但會重新找到平衡。不管結果如何，那一次都會是這段關係的分水嶺。'
+};
+
+/* ---------- 緣的長度（年支關係）觸發的事件 ---------- */
+const CHANGDU_EVENTS = {
+  zixing:  '這段關係要走長，必須有一次真的把那件事攤開講；沒講之前，它會每隔一段時間就回來一次。講開之後，這段關係的長度會一次拉開很多。',
+  liuhe:   '往後就算你們有一段時間疏於聯絡，也會有一件事把你們重新拉回來。這段緣的底子厚，斷不太掉。所以不用怕暫時的疏遠，你們的問題從來不是距離。',
+  sanhe:   '接下來一兩年，你們會在差不多的時間各自遇到人生的關卡。那種同步會讓你們比別人更懂對方在難什麼。那種同步會讓你們比一般情侶更容易走過中年的變動。',
+  same:    '往後會有一段你們一起低潮的時期，因為節奏太像。那時候誰都沒力氣拉誰，得靠事前講好的方式撐過去。講好的方式不用複雜，重點是低潮來的時候有人記得要啟動它。',
+  ping:    '這段緣沒有既定的走向，所以會有一個明確的分岔點。那個時候的選擇，會決定它往哪一邊去。那個分岔點不會有預告，所以現在的每一次選擇都算數。',
+  liuhai:  '耗損是慢慢來的，所以你們會在某個時候突然覺得「什麼時候變成這樣的」。那個時刻之前處理，比之後容易得多。處理之後，這段緣的長度會比你現在預估的遠。',
+  xing:    '往後會出現一段你們都特別硬的時期。那段時間會很難受，但過了之後關係反而穩——這種緣是磨出來的。磨完之後的關係反而比一開始就順的更穩，因為你們知道彼此的底線在哪。',
+  liuchong:'接下來你們的節奏會明顯錯開一次，一個在衝、一個在休息。那不是感情變了，是真的忙不到一起；要留住就得刻意把時間對回來。對回來之後，你們會發現差異其實不是問題，缺席才是。'
+};
+
+/* ---------- 取出這一組適用的所有事件 ---------- */
+function eventsFor(result, band) {
+  const d = result.dimensions;
+  const out = [];
+  const push = v => { if (Array.isArray(v)) out.push(...v); else if (v) out.push(v); };
+
+  push(BAND_EVENTS[band]);
+  push(WENDU_EVENTS[d.wendu.key]);
+  push(ZHONGLIANG_EVENTS[d.zhongliang.key]);
+  push(CHANGDU_EVENTS[d.changdu.key]);
+  return out;
+}
+
+/* ───────────────────────── */
+
+/* =========================================================================
+   未完籤所 · 緣分指數 —— 付費層：「對方現在怎麼想」第一層
+   -------------------------------------------------------------------------
+   位置層：他在這段關係裡站在哪裡、為什麼會站在那裡。
+   由「緣的重量」決定（日干五行生剋方向），共 5 段，每段約 200 字。
+
+   分層原則（三層必須正交，否則會有拼裝感）：
+     位置 = 為什麼      ← 本檔
+     樣子 = 你看到什麼   ← 溫度 key，另檔
+     態度 = 他打算怎樣   ← 長度 key，另檔
+
+   稱謂：{A} 為填表者，{B} 為對方。預設「你」／「他」。
+   ========================================================================= */
+
+const POSITION = {
+
+  /* 力量對等 —— 誰都沒依賴誰 */
+  bihe:
+    '他在這段關係裡，站的是跟{A}一樣高的位置。這件事聽起來理所當然，但在關係裡其實少見——多數人總有一個在追、一個在被追。他不是這樣。他有自己的節奏、自己的判斷，也不需要靠{A}來確認自己好不好。' +
+    '所以他不會把整顆心壓在你身上，也不太會做那種讓人感動的付出。這常常被誤讀成不夠在乎。事實剛好相反：他是因為夠穩，才不需要用力證明。' +
+    '這個位置的代價是，他也不太懂得示弱。他習慣自己處理事情，遇到難的時候會先退開一點，等整理好再回來。那段退開的時間裡，你可能會覺得他變遠了，但他心裡並沒有離開。',
+
+  /* A 生 B —— 你在給 */
+  a_sheng_b:
+    '他在這段關係裡，是被接住的那個。這不是他刻意安排的，是{A}給得太自然，久了就變成了默契。他的情緒有人照顧、他的節奏有人配合，很多事情不用開口就會被處理好。' +
+    '所以他在這段關係裡是放鬆的。他覺得你們相處很舒服，甚至會跟別人說你很好相處——他說的是真的，他確實這樣覺得。' +
+    '問題是他不知道那份舒服是怎麼來的。他沒有看見你在調整、在忍、在把自己的需要往後排，因為你做得太不著痕跡。他不是不感激，是根本沒發現有東西需要感激。' +
+    '這個位置最危險的地方在於，他會以為現在的狀態是自然發生的，所以也不會想到要維持。',
+
+  /* B 生 A —— 他在給 */
+  b_sheng_a:
+    '他在這段關係裡，是在給的那個。而且他給得很安靜——不會邀功、不會提起，甚至會刻意讓你覺得那些事本來就不費力。' +
+    '他這樣做不是因為卑微，是因為他認為愛就是這樣。他習慣把對方的狀態放在自己前面，看到你過得好，他就覺得這段關係是對的。' +
+    '但安靜的付出有一個問題：它需要被看見才能持續。他嘴上說不用，心裡是需要的。他要的不是回報，是知道自己做的事有落到你眼裡。' +
+    '如果一直沒有，他不會抱怨，會慢慢減量。那個過程很難察覺，因為他減得跟他給的時候一樣安靜——等你發現的時候，通常已經退了一段了。',
+
+  /* A 剋 B —— 你握話語權 */
+  a_ke_b:
+    '他在這段關係裡，是配合的那個。不是他沒有意見，是他很早就發現說了也不太會改變什麼，所以慢慢學會不說。' +
+    '這個過程不是一次形成的。可能是幾次他提了但被繞過去、幾次他堅持了但氣氛變僵、幾次他發現順著走事情比較快。他不是被壓制，是自己選擇了省力的方式。' +
+    '所以他現在的「都可以」大部分是真的——他真的不想為那些事花力氣了。但這也表示，他心裡有一份沒說出口的清單，累積著那些他曾經想講、後來算了的事。' +
+    '他自己不一定意識到那份清單存在。等到某件事碰到清單的底，他的反應會強得讓你意外——那不是為了那件事，是為了前面所有沒講的。',
+
+  /* B 剋 A —— 他握話語權 */
+  b_ke_a:
+    '他在這段關係裡，是定調的那個。方向多半由他決定，節奏也照他的走，而他不覺得這有什麼問題——因為你從來沒有反對過。' +
+    '他不是故意要壓過你。多數時候他甚至覺得你們很合拍，因為在他的感受裡，你們幾乎沒有衝突。他不知道那份「沒有衝突」是{A}吞下去換來的。' +
+    '這裡有一個他真的看不到的盲點：他把你的讓步理解成同意。你不說，他就當作沒事；你說得含蓄，他就當作不重要。他不是遲鈍，是這段關係從一開始就沒有給他學會辨識的機會。' +
+    '所以他對現狀是滿意的，而且會覺得這種滿意是雙方的。',
+
+};
+
+/**
+ * @param key  result.dimensions.zhongliang.key
+ * @param names { A:'你', B:'他' }
+ */
+function position(key, names = { A: '你', B: '他' }) {
+  const t = POSITION[key];
+  if (!t) return '';
+  return t.replace(/\{A\}/g, names.A).replace(/\{B\}/g, names.B);
+}
+
+/* ───────────────────────── */
+
+/* =========================================================================
+   未完籤所 · 緣分指數 —— 付費層：「對方現在怎麼想」第二層
+   -------------------------------------------------------------------------
+   樣子層：{A} 實際看到的他是什麼樣子。只描述現象，不解釋原因。
+   由「緣的溫度」決定（日支關係），共 8 段，每段約 120 字。
+
+   分層原則（三層必須正交）：
+     位置 = 為什麼      ← other-position.js
+     樣子 = 你看到什麼   ← 本檔
+     態度 = 他打算怎樣   ← other-attitude.js
+
+   自檢：這一層不可出現「因為」「所以他才」這類因果句，
+        也不可出現「接下來」「往後」這類未來句。
+   ========================================================================= */
+
+const APPEARANCE = {
+
+  /* 六合 —— 天生合得來 */
+  liuhe:
+    '你看到的他是鬆的。跟你在一起的時候，他講話比平常多，也比較敢說沒頭沒尾的話。' +
+    '他不太需要組織語言就能跟你聊下去，有時候話講到一半就笑了，因為知道你懂。' +
+    '別人可能會說他難相處或很悶，但你看到的完全不是那個人——這個落差本身就是訊息。',
+
+  /* 三合 —— 越處越順 */
+  sanhe:
+    '你看到的他是越來越自在的。剛認識的時候他比較客氣，現在客氣的部分明顯少了。' +
+    '他會開始跟你講一些不重要的小事，抱怨天氣、講今天遇到的蠢事，那些他不會拿去跟一般朋友講的東西。' +
+    '他在你面前的樣子跟第一次見面時已經不太一樣了，而且是往放鬆的方向。',
+
+  /* 同支 —— 同一種人 */
+  same:
+    '你看到的他很像你。連反應的方式都像——同一件事，你們的第一句話常常撞在一起。' +
+    '他也會在同樣的地方卡住、用同樣的方式迴避、對同樣的事情不耐煩。' +
+    '有時候你看著他會有一種很奇怪的感覺，像在看自己不想承認的那一面。',
+
+  /* 無刑衝合 —— 不特別順也不特別卡 */
+  ping:
+    '你看到的他是好的，但不是特別的。你們相處愉快，話也接得上，只是很少有那種「他怎麼知道」的時刻。' +
+    '該有的關心他都有，只是你分不太出來那是不是對誰都一樣。' +
+    '偶爾會有一兩個瞬間你覺得他離你有點遠，但也說不上哪裡不對。',
+
+  /* 自刑 —— 同一個毛病 */
+  zixing:
+    '你看到的他有些地方讓你特別受不了，而且你講不太出來為什麼那麼受不了。' +
+    '通常是一些小事——他拖延的樣子、他敷衍的語氣、他明明在意卻裝作沒事的那種表情。' +
+    '同樣的事別人做你可能就算了，他做你會卡住。你們之間有一個雷區，兩個人都會踩，也都不會提。',
+
+  /* 六害 —— 暗中消耗 */
+  liuhai:
+    '你看到的他表面上沒問題。他不吵、不冷、該回的都會回，日子過得下去。' +
+    '但你跟他相處完常常會有點累，回家還會想起某一句話，反覆判斷他到底是什麼意思。' +
+    '他有一種很難形容的保留——不是不說話，是說了但你抓不到重點；不是不在乎，是在乎的地方跟你不一樣。',
+
+  /* 相刑 —— 容易互相刺到 */
+  xing:
+    '你看到的他有時候會突然變得很硬。前一秒還好好的，一句話說完氣氛就變了。' +
+    '他不見得是在生氣，比較像是被戳到。而他被戳到的點你常常抓不準，因為在你聽起來那只是實話。' +
+    '反過來也一樣，他有些話你聽了會不舒服，他卻完全沒意識到自己說了什麼。',
+
+  /* 六沖 —— 相反的兩種人 */
+  liuchong:
+    '你看到的他跟你完全不同步。他快的時候你還在想，你想好了他已經換題目。' +
+    '他喜歡的場合你會累，你想要的安靜他會無聊。連休假想做什麼都要先協調，很少有自然就一致的時候。' +
+    '這件事在小事上最明顯——吃飯、出門、幾點睡，每一項都要談。',
+
+};
+
+/**
+ * @param key  result.dimensions.wendu.key
+ * @param names { A:'你', B:'他' }
+ */
+function appearance(key, names = { A: '你', B: '他' }) {
+  const t = APPEARANCE[key];
+  if (!t) return '';
+  return t.replace(/\{A\}/g, names.A).replace(/\{B\}/g, names.B);
+}
+
+/* ───────────────────────── */
+
+/* =========================================================================
+   未完籤所 · 緣分指數 —— 付費層：「對方現在怎麼想」第三層
+   -------------------------------------------------------------------------
+   態度層：他對這段關係的未來抱著什麼樣的想法。
+   由「緣的長度」決定（年支關係），共 8 段，每段約 80 字。
+
+   自檢：這一層只講他對未來的想法，不描述行為（樣子層）、不解釋成因（位置層）。
+   ========================================================================= */
+
+const ATTITUDE = {
+
+  liuhe:
+    '他對未來是篤定的。不見得規劃過，但他心裡預設你會在——這種預設比計畫更難動搖。' +
+    '他不太擔心你們會散，所以也不太會做那種抓緊的事。',
+
+  sanhe:
+    '他對未來是願意的。他想過你們往後的樣子，而且想的時候心情是好的。' +
+    '只是他不急著講出來，他覺得那些事會自己發生。',
+
+  same:
+    '他對未來的想法跟你很接近，接近到你們都以為對方一定知道，所以誰都沒開口確認過。' +
+    '他預設你們是同一個方向，但那個方向具體是什麼，他其實也還沒想清楚。',
+
+  ping:
+    '他對未來沒有定見。不是不在意，是還沒到需要決定的階段——他把這件事往後放了。' +
+    '如果沒有人提，他可以就這樣一直過下去。',
+
+  zixing:
+    '他對未來是卡住的。他知道有件事不解決就走不遠，也知道那件事是什麼，' +
+    '但他每次要碰的時候都會退開，因為他也不確定自己講不講得清楚。',
+
+  liuhai:
+    '他對未來是有保留的。他沒有打算離開，但也沒有把心整個放進來。' +
+    '他心裡留了一小塊沒有交出去的地方，連自己都不太願意承認那塊存在。',
+
+  xing:
+    '他對未來是想要的，只是他想要的版本跟你的不完全一樣。' +
+    '他還沒發現這件事，因為你們都還在講「以後」，沒有講到「以後怎麼做」。',
+
+  liuchong:
+    '他對未來是模糊的。他喜歡現在，但把時間拉長之後，他自己也看不太清楚畫面。' +
+    '不是不想跟你走，是他的人生節奏跟你不在同一段上，他也還沒想到怎麼辦。',
+
+};
+
+/**
+ * @param key  result.dimensions.changdu.key
+ */
+function attitude(key, names = { A: '你', B: '他' }) {
+  const t = ATTITUDE[key];
+  if (!t) return '';
+  return t.replace(/\{A\}/g, names.A).replace(/\{B\}/g, names.B);
+}
+
+/* ───────────────────────── */
+
+/* =========================================================================
+   未完籤所 · 緣分指數 —— 付費層：「有哪些事，現在不要做？」
+   -------------------------------------------------------------------------
+   由「緣的重量」決定，共 5 段，每段約 200 字。
+   與 ADVICE（該做什麼）成對：關係裡「不要做什麼」通常比「要做什麼」更救得了人。
+
+   自檢：這一層只講制止，不重述該做什麼；不解釋成因（那是位置層）。
+   ========================================================================= */
+
+const DONT = {
+
+  bihe:
+    '不要繼續比誰比較不需要對方。你們都很能自己來，這件事一旦變成默默較勁，關係就會停在客氣的距離上。' +
+    '也不要在對方難的時候給空間就好——你們都習慣「不打擾」，但有時候他要的其實是有人硬留下來。' +
+    '還有一件事別做：不要因為現在沒有問題就不談以後。你們的穩定是靠各自成熟撐著的，不是靠說好的共識；' +
+    '沒有共識的穩定禁不起一次大的變動。',
+
+  a_sheng_b:
+    '不要一次把累積的委屈全部倒出來。你已經給很久了，真的開口的那天很容易變成清算，而他會停在「你怎麼突然這樣」，' +
+    '完全接不到你真正的重點。' +
+    '也不要用減量來抗議。你少做他不會理解成訊號，只會覺得你變冷淡，然後你們一起退。' +
+    '最後，不要替他解釋。你很容易幫他想好理由——他最近很忙、他不是故意的——那些解釋會讓你更難開口，' +
+    '也會讓他更晚知道發生了什麼事。',
+
+  b_sheng_a:
+    '不要用「謝謝」帶過。太籠統的感謝對他來說幾乎沒有作用，甚至會讓他覺得你根本沒看到細節。' +
+    '也不要在他終於說出想要什麼的時候討價還價。他開口的門檻很高，第一次被打回票，下一次就會更久。' +
+    '還有，不要把他的付出當成他的個性。「他就是這樣的人」是最容易讓人停止感謝的說法，' +
+    '但他其實是選擇這樣對你，不是天生對誰都這樣。',
+
+  a_ke_b:
+    '不要在他終於講話的時候糾正他。就算他的說法有漏洞、就算你三秒就能反駁——那一刻你要的不是講贏，' +
+    '是讓他知道開口不會被打回來。' +
+    '也不要用問的方式確認你已經決定好的事。「你覺得呢」如果只有一個答案是被接受的，他會很快看出來，然後回到「都可以」。' +
+    '最後，不要把他的沉默當成同意。他不反對只表示他不想花力氣，那跟他認同是兩件完全不同的事。',
+
+  b_ke_a:
+    '不要等到忍不住才講。忍到極限說出來的話一定帶著情緒，而他收到的會是情緒不是內容，' +
+    '接著你會得到一個「你怎麼這麼激動」的回應，然後更不想講。' +
+    '也不要用暗示。你覺得已經講得很明顯的話，在他耳裡通常只是隨口一提——他不是故意忽略，是這段關係從來沒訓練他去聽。' +
+    '還有一件事別做：不要在心裡替他打分數。默默記帳的關係最後會爆在一件很小的事情上，' +
+    '而那時候你已經累積到不想解釋了。',
+
+};
+
+function dont(key, names = { A: '你', B: '他' }) {
+  const t = DONT[key];
+  if (!t) return '';
+  return t.replace(/\{A\}/g, names.A).replace(/\{B\}/g, names.B);
+}
+
+/* ───────────────────────── */
+
+/* =========================================================================
+   未完籤所 · 格局判讀
+   -------------------------------------------------------------------------
+   問題：目前「你們現在停在哪裡／卡住的是什麼／值得珍惜的是什麼」三段
+   是由分數推出來的——分數帶決定第一段，最低／最高維度決定後兩段。
+
+   但分數是加權平均，是衍生數字，不是盤面事實。實測有 10.9% 的情況
+   最低與次低只差 0–2 分，這時候斷言「真正卡住你們的是溫度」是硬掰。
+
+   解法：先看盤面「配置」是什麼樣的格局，再決定要怎麼說。
+   分數只用來排名與呈現，不用來決定敘事。
+   ========================================================================= */
+
+const HARSH = ['liuchong', 'liuhai', 'xing', 'zixing'];   // 沖害刑
+const SWEET = ['liuhe', 'sanhe'];                          // 合
+
+/**
+ * @param d  result.dimensions
+ * @returns  { pattern, label, weak, strong, flat }
+ *   pattern  格局代號
+ *   weak     真正的短板（差距不足時為 null）
+ *   strong   真正的強項（差距不足時為 null）
+ *   flat     三項是否相當
+ */
+function shape(d) {
+  const keys = {
+    wendu: d.wendu.key,
+    zhongliang: d.zhongliang.key,
+    changdu: d.changdu.key
+  };
+  const rel = [keys.wendu, keys.changdu];              // 只有溫度與長度是地支關係
+  const sweet = rel.filter(k => SWEET.includes(k)).length;
+  const harsh = rel.filter(k => HARSH.includes(k)).length;
+  const flatRel = rel.filter(k => k === 'ping').length;
+
+  const zl = keys.zhongliang;
+  const balanced = zl === 'bihe';
+  const oneWay = zl === 'a_ke_b' || zl === 'b_ke_a';    // 剋＝壓，最不對等
+  const giving = zl === 'a_sheng_b' || zl === 'b_sheng_a';
+
+  const scores = [
+    ['wendu', d.wendu.score],
+    ['zhongliang', d.zhongliang.score],
+    ['changdu', d.changdu.score]
+  ].sort((a, b) => a[1] - b[1]);
+
+  const GAP = 8;                       // 低於次低 8 分以上才算真的短板
+  const weak   = (scores[1][1] - scores[0][1]) >= GAP ? scores[0][0] : null;
+  let   strong = (scores[2][1] - scores[1][1]) >= GAP ? scores[2][0] : null;
+  // 兩個高分接近、且都明顯高於最低 → 兩項都是強項
+  const twoStrong = !strong && (scores[1][1] - scores[0][1]) >= GAP
+    ? [scores[1][0], scores[2][0]] : null;
+  const flat   = (scores[2][1] - scores[0][1]) <= 10;
+
+  /* ---- 格局判定（順序即優先度） ---- */
+  let pattern;
+  if (sweet === 2 && balanced)              pattern = 'harmony';    // 雙合＋對等
+  else if (harsh === 2)                     pattern = 'doubleClash';// 雙沖害
+  else if (sweet >= 1 && harsh >= 1)        pattern = 'mixed';      // 一合一沖
+  else if (sweet === 2)                     pattern = 'sweetUneven';// 雙合但位置不對等
+  else if (harsh === 1 && oneWay)           pattern = 'pressed';    // 有沖＋有壓
+  else if (flatRel === 2 && balanced)       pattern = 'blank';      // 全平＋對等
+  else if (flatRel === 2)                   pattern = 'quiet';      // 全平
+  else if (sweet === 1)                     pattern = 'onePoint';   // 單一亮點
+  else if (harsh === 1)                     pattern = 'oneSnag';    // 單一卡點
+  else                                      pattern = 'plain';
+
+  return { pattern, keys, weak, strong, twoStrong, flat, sweet, harsh, balanced, oneWay, giving };
+}
+
+/* ---------- 第一段：你們現在，正處於什麼樣的關係狀態？ ---------- */
+/* 由格局決定，不由分數帶決定 */
+const NOW = {
+  harmony:
+    '你們的盤面是少見的整齊。日常相處合得來，長線也對得上，而且兩個人的位置是平的——沒有誰一直在讓。' +
+    '這種配置的關係通常不用什麼技巧就能運作，問題反而出在太順：你們可能從來沒有真正吵過，也因此不知道彼此的底線在哪裡。',
+  doubleClash:
+    '你們的盤面有兩處對沖。這代表不順不是偶發的，是結構性的——日常有摩擦，長線也不容易對齊。' +
+    '這聽起來很硬，但它其實比「說不上哪裡不對」好處理，因為問題是具體的、看得見的。',
+  mixed:
+    '你們的盤面一邊是合、一邊是沖，這是最容易讓人困惑的配置。有些時候你們好到不需要說話，有些時候卻為了小事卡住，' +
+    '而且兩種狀態常常在同一週出現。你會反覆懷疑自己判斷錯了——沒有，是這段關係本來就有兩個面。',
+  sweetUneven:
+    '你們合得來，這件事在盤上很清楚。但兩個人在關係裡的位置不對等，有一方一直在調整。' +
+    '合得來讓這個不對等被掩蓋住了，因為日子過得下去，所以沒有人覺得需要處理。',
+  pressed:
+    '你們的盤面有一處明顯的摩擦，加上位置不對等——這兩件事會互相放大。' +
+    '摩擦發生的時候，退讓的那一方會退得更快，於是問題看起來被解決了，其實只是被吞下去。',
+  blank:
+    '你們的盤面很乾淨，沒有合也沒有沖，位置也是平的。這代表這段關係沒有先天的推力，也沒有先天的阻力。' +
+    '它會長成什麼樣子，幾乎完全取決於你們做了什麼——這種盤最誠實，也最沒有藉口。',
+  quiet:
+    '你們的盤面平穩，沒有明顯的合也沒有明顯的沖。相處起來不會有戲劇性的起伏，' +
+    '但也因此少了那種「非他不可」的推力。這種關係走得下去，只是需要有人記得推一把。',
+  onePoint:
+    '你們的盤面有一個很明確的亮點，其餘平穩。這代表你們之間有一件事是特別對的，' +
+    '而那件事往往就是你們走到現在的原因——只是你可能沒有意識到那是優勢。',
+  oneSnag:
+    '你們的盤面大致平順，但有一處卡點。這種配置的關係通常沒有大問題，' +
+    '只是那一個地方會反覆出現，久了會讓你以為整段關係都有問題——其實只有那一處。',
+  plain:
+    '你們的盤面沒有特別強的訊號，這在合盤裡其實是多數。沒有天生的默契，也沒有天生的對沖，' +
+    '你們的關係目前的樣子，大致上就是你們相處出來的樣子。'
+};
+
+/* ---------- 第二段：真正卡住你們的，是哪一件事？ ---------- */
+/* 有明確短板才指名；沒有就誠實說沒有 */
+const WEAK_LINE = {
+  wendu:      '具體卡住的地方在日常。不是大事，是相處時那些說不上來的不順——那個部分正在慢慢消耗你們之間本來還不錯的東西。',
+  zhongliang: '具體卡住的地方在位置。你們之間有一個人一直在往下讓，另一個人不知道。這件事不解決，其他做得好的部分都會被磨掉。',
+  changdu:    '具體卡住的地方在走向。你們現在相處得還可以，但這段關係沒有先天的長度——它不會自己往前，需要有人刻意去推。'
+};
+const NO_WEAK = {
+  flat:
+    '這一項要誠實講：你們三個維度的分數很接近，盤上沒有一個明顯的短板。' +
+    '這代表現在的狀態不是被某件事拖住的，而是整體就停在這個位置。想往上，得三個地方一起動，不能只修一處。',
+  even:
+    '盤上沒有單一的短板。三個維度各有各的狀況，但沒有哪一個明顯拖累其他兩個。' +
+    '這種情況下不用急著找問題——真正該問的是你們想把這段關係帶去哪裡。'
+};
+
+/* ---------- 第三段：你們之間，最值得珍惜的是什麼？ ---------- */
+const STRONG_LINE = {
+  wendu:      '你們有一個很實在的優勢：日常相處是順的。很多關係就是敗在每天的摩擦上，你們沒有這個問題，這給了你們處理其他事情的餘裕。',
+  zhongliang: '你們有一個很好的底子：位置是對等的。沒有人在偷偷承受，也沒有人在無意識地佔上風。這表示你們的問題都可以放到檯面上談。',
+  changdu:    '你們有一個先天的好處：這段緣本身走得遠。就算中間有一段不順，它也不容易斷——時間站在你們這邊。'
+};
+const DIM_CN = { wendu: '日常相處', zhongliang: '位置對等', changdu: '長線走向' };
+const TWO_STRONG = (a, b) =>
+  '你們有兩個地方是紮實的：' + DIM_CN[a] + '與' + DIM_CN[b] + '。' +
+  '這代表前面說的那個卡點不是全面性的，它只卡在一處——而你們有足夠的本錢去處理它。' +
+  '很多關係是三項都平庸，你們不是。';
+
+const NO_STRONG = {
+  harmony: '要說最值得珍惜的，是這份整齊本身。盤面能同時合得來又位置對等的組合不多，你們現在擁有的東西比你以為的稀有。',
+  plain:   '你們沒有一項特別突出，但也沒有一項特別差——這種均衡本身就是資產。它代表這段關係不會因為某個弱點突然崩掉。',
+  clash:   '就算盤面有沖，你們還是走到了現在，這件事本身就說明了一些什麼。願意為對方調整的意願，是盤上算不出來的。'
+};
+
+function narrate(d) {
+  const sh = shape(d);
+  const now = NOW[sh.pattern];
+
+  const weak = sh.weak
+    ? WEAK_LINE[sh.weak]
+    : (sh.flat ? NO_WEAK.flat : NO_WEAK.even);
+
+  let strong;
+  if (sh.strong) strong = STRONG_LINE[sh.strong];
+  else if (sh.twoStrong) strong = TWO_STRONG(sh.twoStrong[0], sh.twoStrong[1]);
+  else if (sh.pattern === 'harmony') strong = NO_STRONG.harmony;
+  else if (sh.harsh >= 1) strong = NO_STRONG.clash;
+  else strong = NO_STRONG.plain;
+
+  return { shape: sh, now, weak, strong };
+}
+
+/* ───────────────────────── */
+
+/* =========================================================================
+   未完籤所 · 緣分指數 —— 付費層：自己、價值觀、雙方看法
+   -------------------------------------------------------------------------
+   原本報告只講對方與關係，沒有一段講使用者自己。這裡補齊。
+
+     SELF_POSITION  你在這段關係裡是什麼樣子   重量 key   5 段
+     SELF_BLIND     你可能沒發現的自己         重量 key   5 段
+     VALUES         你們看重的東西一樣嗎       年支 key   8 段
+     READING        同一件事，解讀差在哪        日支 key   8 段
+     KEEP           如果只能記住一件事         分數帶     6 段
+
+   SELF_POSITION 講「你在做什麼」，SELF_BLIND 講「你看不到什麼」——
+   兩者同 key 但不同層，寫的時候不可互相重述。
+   ========================================================================= */
+
+/* ---------- 你在這段關係裡，其實是什麼樣子 ---------- */
+
+const SELF_POSITION = {
+  bihe:
+    '你在這段關係裡是獨立的那個，而且你以此為傲。你不黏人、不情緒勒索、不會為了一句話鬧一整天——這些都是真的優點。' +
+    '但你也很少讓對方有機會照顧你。你習慣把自己整理好才出現，難的時候先消失一陣子，好了再回來。' +
+    '對他來說，這代表他很少被你需要過。',
+  a_sheng_b:
+    '你在這段關係裡是撐著的那個。不是委屈求全那種撐，是你比較敏感、比較早看到問題、也比較願意先動手處理。' +
+    '你調整得太自然，自然到你自己都不覺得那是付出——你只是覺得「這樣比較順」。' +
+    '久了你會累，而那個累會來得很突然，因為你一直沒有在記帳。',
+  b_sheng_a:
+    '你在這段關係裡是被接住的那個。這不是說你不付出，是他在你沒看到的地方做了比較多。' +
+    '你可能會覺得自己也很努力，那是真的；只是你們努力的方向不同——你努力在感受上，他努力在承擔上，' +
+    '而承擔比較安靜，所以比較不容易被看見。',
+  a_ke_b:
+    '你在這段關係裡是拿主意的那個。多數事情最後照你的走，不是因為你強勢，是因為你比較快、比較清楚、也比較敢承擔決定。' +
+    '這讓關係運作得很有效率。代價是他的參與感在慢慢降低——不是他不想參與，是他發現參與的邊際效益很低。' +
+    '你可能覺得他越來越沒意見，但那個「越來越」是被養成的。',
+  b_ke_a:
+    '你在這段關係裡是退讓的那個。你退不是因為軟弱，多半是因為你在意氣氛，而且你判斷過——為這件事吵不划算。' +
+    '這個判斷單次都是對的，累積起來就不是了。你會慢慢覺得自己在這段關係裡變小、聲音變輕、連想要什麼都變得不確定。' +
+    '那不是你的個性，是位置造成的。'
+};
+
+/* ---------- 你可能沒發現的自己 ---------- */
+
+const SELF_BLIND = {
+  bihe:
+    '你沒發現的是，你的「不需要」有時候會傷到他。你以為在體貼，其實是在拒絕——拒絕他有機會為你做點什麼。' +
+    '關係裡的親密有一部分是靠互相麻煩換來的，而你太少麻煩他了。',
+  a_sheng_b:
+    '你沒發現的是，你在幫他預先解決問題，所以他從來沒機會學會處理。你以為他不會，其實是你太快。' +
+    '這件事到後來會變成雙重的委屈：你累，而他被當成不會的人。',
+  b_sheng_a:
+    '你沒發現的是，你對他的好已經習慣到不會道謝了。不是你不感激，是那些事發生得太安靜、太固定，' +
+    '固定到你會用「他本來就會」來理解。而他其實每一次都在選擇。',
+  a_ke_b:
+    '你沒發現的是，你問他意見的時候，其實你已經有答案了。你的語氣、你的用詞、你接話的速度都會透露這件事，' +
+    '而他讀得出來。所以他的「都可以」不是沒想法，是他知道現在不是真的在問。',
+  b_ke_a:
+    '你沒發現的是，你把「不講」當成一種善良。但他收到的不是善良，是資訊空白——他真的不知道你在意，' +
+    '因為你從來沒讓他知道過。你保護了氣氛，卻讓他一直在誤判你。'
+};
+
+/* ---------- 你們看重的東西一樣嗎 ---------- */
+
+const VALUES = {
+  liuhe:
+    '你們看重的東西幾乎一樣，而且不用討論就對得上。對「什麼叫過得好」「什麼叫對彼此好」的定義是同一套，' +
+    '所以你們很少為了價值觀吵架——爭執通常只發生在做法上，不在方向上。這是很紮實的基礎，只是你們可能從來沒意識到它有多難得。',
+  sanhe:
+    '你們的價值觀主線一致，細節有差但不衝突。金錢、家庭、工作的優先順序大致排得起來，' +
+    '偶爾會有一方覺得對方太在意某件事，但不至於覺得對方的價值觀有問題。這種差異是可以透過溝通對齊的，不需要誰改變。',
+  same:
+    '你們看重的東西太像了，包括缺點也像。同樣在意面子、同樣逃避同一種話題、同樣把某件事看得比別人重。' +
+    '好處是不用解釋；風險是你們會一起走進同一個死角，而且沒有人在外面提醒。',
+  ping:
+    '你們的價值觀沒有明顯衝突，但也沒有天然的重疊。很多事情你們沒有真正對過——不是刻意迴避，是還沒有需要。' +
+    '真正的差異會在「要一起決定一件大事」的時候才浮現，例如錢怎麼用、要不要搬、家人的界線在哪。',
+  zixing:
+    '你們在同一件事上都有問題，而且是同一種問題。可能是都不擅長處理金錢、都對承諾很緊張、都把工作放在關係前面。' +
+    '因為一樣，所以你們互相不會覺得對方不對，但這件事會同時拖住兩個人。',
+  liuhai:
+    '你們的價值觀表面接近，實際上差在很細微的地方——同樣說重視家庭，但一個是指陪伴，一個是指責任。' +
+    '這種差異不會在日常顯現，會在具體事件上突然爆出來，然後兩個人都覺得「你怎麼會這樣想」。',
+  xing:
+    '你們對「什麼是對的」有真正的分歧，而且都很有主張。你們不是不理解對方，是理解了但不認同。' +
+    '這種分歧沒辦法靠溝通消除，只能靠劃分——哪些事情各自決定、哪些事情必須一起決定，先講清楚。',
+  liuchong:
+    '你們看重的東西幾乎在相反的方向。一個要安穩一個要變化、一個重效率一個重感受。' +
+    '這種對沖不是可以調和的，而是要各自承認：對方那套在對方的人生裡是成立的。承認之後才有辦法談合作。'
+};
+
+/* ---------- 同一件事，你們的解讀差在哪 ---------- */
+
+const READING = {
+  liuhe:   '同一件事，你們的解讀通常一致，連笑點都一樣。偶爾不一致的時候，也很快就能對上，因為你們願意先問「你的意思是」而不是先反應。',
+  sanhe:   '同一件事，你們一開始的解讀可能不同，但講幾句就會靠攏。你們有一個很好的習慣：不會急著替對方的話下定論。',
+  same:    '同一件事，你們的解讀太一致了，一致到少了一個檢查的角度。你們會一起誤判同一件事，然後互相確認說「對啊他就是這樣」。',
+  ping:    '同一件事，你們的解讀有時候會差一點，但通常不影響。真正需要注意的是那些你們都覺得「應該不用講」的事——差異多半藏在那裡。',
+  zixing:  '同一件事，你們的解讀會在某個特定的點上一起卡住。那個點通常跟你們共同的弱項有關，一碰到就兩個人都失去判斷力。',
+  liuhai:  '同一件事，你們的解讀常常差在意圖上。他說的是內容，你聽到的是態度；你說的是感受，他聽到的是指控。這是你們最主要的耗損來源。',
+  xing:    '同一件事，你們的解讀會在語氣上分岔。同樣一句話，你聽起來是直接，他聽起來是不耐煩。你們爭的多半不是事實，是那句話怎麼說的。',
+  liuchong:'同一件事，你們的解讀幾乎從相反的方向出發。他看到機會，你看到風險；你看到體貼，他看到多慮。兩邊都不算錯，但需要刻意翻譯。'
+};
+
+/* ---------- 如果只能記住一件事 ---------- */
+
+const KEEP = {
+  緣滿: '如果這份合盤你只記住一句話：你們現在擁有的東西比你以為的稀有，而稀有的東西通常是在失去之後才被認出來的。',
+  緣濃: '如果這份合盤你只記住一句話：你們的問題都是可以談的，真正的風險是把「可以談」拖成「以後再說」。',
+  緣暖: '如果這份合盤你只記住一句話：你們的關係不會有戲劇性的轉折，它會照著你們每天做的那些小事往前或往後。',
+  緣淡: '如果這份合盤你只記住一句話：這段關係現在的走向掌握在你們手上，而不做決定本身也是一種決定。',
+  緣薄: '如果這份合盤你只記住一句話：你們之間費力的地方是真的存在，那不是你太敏感，也不是你不夠努力。',
+  緣散: '如果這份合盤你只記住一句話：不合適不等於沒有感情，而承認不合適並不會讓你們之間發生過的事失去意義。'
+};
+
+/* 命名避開 copy.js 的 pick —— bundle 會把所有模組併到同一層 */
+const svPick = (obj, key, names = { A: '你', B: '他' }) => {
+  const t = obj[key];
+  if (!t) return '';
+  return t.replace(/\{A\}/g, names.A).replace(/\{B\}/g, names.B);
+};
+
+/* ───────────────────────── */
+
+/* =========================================================================
+   未完籤所 · 緣分指數 —— 每段的「這一段的重點」
+   -------------------------------------------------------------------------
+   每段底部一句收束，約 20 字。不是摘要，是把整段壓成一句能記住的話。
+
+   寫作規則：
+     · 不重述段落內容，要提煉出一句本身就成立的話
+     · 不用「總之」「因此」這類連接詞開頭
+     · 不下判斷式的結論（「你們一定會分手」），要留給讀者決定
+     · 每句都要能單獨截圖分享而不失去意義
+   ========================================================================= */
+
+const T = {
+
+  /* 01 干支表 —— 固定 */
+  table: '算命不是玄學，是把看不見的規律寫成看得懂的表。',
+
+  /* 02 你們現在的狀態 —— 分數帶 */
+  now: {
+    緣滿: '太順的關係最大的風險，是沒有人覺得需要努力。',
+    緣濃: '有份量的關係不怕碰撞，怕的是永遠不碰。',
+    緣暖: '慢，不代表不夠愛；只代表你們用的是另一種速度。',
+    緣淡: '不做決定，久了也會變成一種決定。',
+    緣薄: '費力不是你的錯覺，那個費力是真的。',
+    緣散: '有感情和適不適合，從來就是兩件事。'
+  },
+
+  /* 03 卡住的地方 —— 最低維度 */
+  weak: {
+    wendu:      '關係很少死於大事，多半是被小事一天一天磨掉的。',
+    zhongliang: '長期的不對等，會偽裝成平靜。',
+    changdu:    '沒有天然黏著的關係，只能靠刻意維持。'
+  },
+
+  /* 04 底子好的地方 —— 最高維度 */
+  strong: {
+    wendu:      '日常相處是順的，這件事比你以為的稀有。',
+    zhongliang: '位置對等，代表所有問題都能放到檯面上談。',
+    changdu:    '時間站在你們這邊，所以有犯錯和修正的空間。'
+  },
+
+  /* 05 他的位置 —— 重量 key */
+  position: {
+    bihe:      '他不是不在乎，是他不需要靠你來確認自己。',
+    a_sheng_b: '他的舒服，是有人在你看不到的地方換來的。',
+    b_sheng_a: '安靜的付出需要被看見，才能繼續下去。',
+    a_ke_b:    '他的「都可以」，是學來的，不是天生的。',
+    b_ke_a:    '他把你的沉默當成同意，那不是遲鈍，是沒學過。'
+  },
+
+  /* 06 你看到的他 —— 溫度 key */
+  appearance: {
+    liuhe:    '你面前的他和別人面前的他不同，那個差別就是訊息。',
+    sanhe:    '他在你面前的客氣正在退去，那是關係穩下來的徵兆。',
+    same:     '你在他身上看到的刺眼，多半是你自己的那一面。',
+    ping:     '說不上哪裡不對，通常是因為還沒有真正聊過。',
+    zixing:   '你們都會踩到的那個雷區，兩個人都不提。',
+    liuhai:   '相處完會累，那個累是有原因的，不是你想太多。',
+    xing:     '同一句話，在你嘴裡是實話，在他耳裡是指責。',
+    liuchong: '什麼事都要先協調，那不是不合，那是你們的常態。'
+  },
+
+  /* 07 他對未來的態度 —— 長度 key */
+  attitude: {
+    liuhe:    '他心裡預設你會在，那種預設比計畫更難動搖。',
+    sanhe:    '他想過以後，只是覺得那些事會自己發生。',
+    same:     '你們都以為對方知道，所以誰都沒開口確認過。',
+    ping:     '他把未來往後放了，如果沒有人提，可以一直放下去。',
+    zixing:   '他知道有件事沒解決，也知道自己每次都退開。',
+    liuhai:   '他沒打算離開，但也沒把心整個放進來。',
+    xing:     '你們都還在講「以後」，沒有講到「以後怎麼做」。',
+    liuchong: '他喜歡現在，但把時間拉長就看不清畫面了。'
+  },
+
+  /* 08 你的位置 —— 重量 key */
+  self: {
+    bihe:      '你很少讓他有機會照顧你，那也是一種拒絕。',
+    a_sheng_b: '你一直沒在記帳，所以那個累會來得很突然。',
+    b_sheng_a: '你們努力的方向不同，承擔比感受安靜得多。',
+    a_ke_b:    '他越來越沒意見，那個「越來越」是被養成的。',
+    b_ke_a:    '你在關係裡變小，不是個性造成的，是位置造成的。'
+  },
+
+  /* 09 你的盲點 —— 重量 key */
+  blind: {
+    bihe:      '親密有一部分是靠互相麻煩換來的。',
+    a_sheng_b: '你太快了，快到他從來沒機會學會。',
+    b_sheng_a: '他每一次都在選擇，不是「他本來就會」。',
+    a_ke_b:    '你問的時候已經有答案了，而他讀得出來。',
+    b_ke_a:    '你保護了氣氛，卻讓他一直在誤判你。'
+  },
+
+  /* 10 價值觀 —— 長度 key */
+  values: {
+    liuhe:    '你們從沒為價值觀吵過，那不是理所當然。',
+    sanhe:    '方向一樣的分歧，可以談；方向不同的才難。',
+    same:     '你們會一起走進同一個死角，而沒有人在外面提醒。',
+    ping:     '真正的差異，會在要一起決定一件大事時才浮現。',
+    zixing:   '因為一樣，所以互相不覺得對方不對。',
+    liuhai:   '同樣說重視家庭，一個指陪伴，一個指責任。',
+    xing:     '理解了但不認同的分歧，只能劃分，不能溝通。',
+    liuchong: '承認對方那套在對方的人生裡是成立的，才有得談。'
+  },
+
+  /* 11 解讀差異 —— 溫度 key */
+  reading: {
+    liuhe:    '你們會先問「你的意思是」，而不是先反應。',
+    sanhe:    '不急著替對方的話下定論，是你們最好的習慣。',
+    same:     '一致到少了一個檢查的角度，會一起誤判。',
+    ping:     '差異多半藏在那些你們都覺得「不用講」的事裡。',
+    zixing:   '碰到那個點，你們會一起失去判斷力。',
+    liuhai:   '他說的是內容，你聽到的是態度。',
+    xing:     '你們爭的不是事實，是那句話怎麼說的。',
+    liuchong: '他看到機會，你看到風險，兩邊都不算錯。'
+  },
+
+  /* 12 私下相處 —— 密度 key */
+  midu: {
+    liuhe:    '別人的評價對你們參考價值不高，他們沒看到真正的樣子。',
+    sanhe:    '你們最好的一面需要獨處的時間才用得上。',
+    same:     '太安穩的關係不會壞掉，但會停住。',
+    ping:     '靠近的時刻要刻意製造，它不會自己發生。',
+    zixing:   '這一層需要制度，不需要更多溝通。',
+    liuhai:   '你們可能都以為，只有自己有那種距離感。',
+    xing:     '問題從來不是內容，是時機和語氣。',
+    liuchong: '把差異當成行程來安排，而不是當成問題來解決。'
+  },
+
+  /* 13 近期 —— 分數帶 */
+  near: {
+    緣滿: '順的時候把話說完，比難的時候再開口容易得多。',
+    緣濃: '接下來的每一次談，都會變成之後的基礎。',
+    緣暖: '不會有哪一件事決定一切，但每一件都算數。',
+    緣淡: '接下來的分岔都不明顯，走過才知道偏了哪一邊。',
+    緣薄: '時間比你想的短。',
+    緣散: '真正的變化不會自己來，只會來自其中一個人的決定。'
+  },
+
+  /* 14 再往後 —— 分數帶 */
+  later: {
+    緣滿: '稀有的東西，通常是在失去之後才被認出來的。',
+    緣濃: '談過的每一件事，後來都會證明是值得的。',
+    緣暖: '往後回頭看，你會找不到那個轉捩點——因為沒有。',
+    緣淡: '這段關係的走向，會從行動裡看出來，不會有宣告。',
+    緣薄: '面對之後未必會好，但至少會清楚。',
+    緣散: '沒有轉機不代表沒有選擇。'
+  },
+
+  /* 15 可以觀察的變化 —— 重量 key */
+  watch: {
+    bihe:      '關係往上一階的訊號，是有人終於說出「我需要你」。',
+    a_sheng_b: '他開始察覺，比他開始感謝更重要。',
+    b_sheng_a: '你說得出他做過哪些具體的事，那就是進展。',
+    a_ke_b:    '他把話講完，而不是說到一半算了。',
+    b_ke_a:    '你把不同意說出口，而他停下來問。'
+  },
+
+  /* 16 會讓關係壞掉的事 —— 最低維度 */
+  caution: {
+    wendu:      '等到講得出理由才處理，通常已經累積太多了。',
+    zhongliang: '「他沒說」不等於「他沒事」。',
+    changdu:    '不要用「我們感情很好」當作不用經營的理由。'
+  },
+
+  /* 17 可以怎麼做 —— 重量 key */
+  advice: {
+    bihe:      '關係要往前，需要有人先不把自己整理好。',
+    a_sheng_b: '他需要的是資訊，不是道歉。',
+    b_sheng_a: '「謝謝你」沒有用，講出他做過的那件事才有用。',
+    a_ke_b:    '這段關係現在需要的不是更好的決定。',
+    b_ke_a:    '這段關係比你以為的禁得起。'
+  },
+
+  /* 18 不要做的事 —— 重量 key */
+  dont: {
+    bihe:      '不打擾有時候是體貼，有時候是缺席。',
+    a_sheng_b: '不要用減量抗議，他只會覺得你變冷淡。',
+    b_sheng_a: '第一次被打回票，下一次他會更久才開口。',
+    a_ke_b:    '不要把他的沉默當成同意。',
+    b_ke_a:    '忍到極限才說出口的話，帶的是情緒不是內容。'
+  },
+
+  /* 19 收束 —— 分數帶 */
+  keep: {
+    緣滿: '不需要努力的順，也需要有人記得珍惜。',
+    緣濃: '可以談的問題，就不要拖成不能談的。',
+    緣暖: '這段關係會照著你們每天做的小事走。',
+    緣淡: '主動權在你們手上，這是好消息。',
+    緣散: '承認不合適，不會讓發生過的事失去意義。',
+    緣薄: '看懂卡在哪裡，比用更大的力氣去撐有用。'
+  }
+
+};
+
+/* 段落 title → 取哪一組、用哪個 key */
+function takeaway(section, ctx) {
+  const { band, weak, strong, zl, wendu, changdu, midu } = ctx;
+  const map = {
+    '你們的緣分，究竟有多深？':                 () => T.table,
+    '你們現在，正處於什麼樣的關係狀態？':       () => T.now[band],
+    '明明有感覺，為什麼就是走不近？':           () => T.weak[weak],
+    '你們之間，最值得珍惜的是什麼？':           () => T.strong[strong],
+    '他在這段關係裡，習慣怎麼靠近一個人？':     () => T.position[zl],
+    '你喜歡的他，和真實的他一樣嗎？':           () => T.appearance[wendu],
+    '他對長期關係，真正看重的是什麼？':         () => T.attitude[changdu],
+    '那你呢？你真正需要的是什麼樣的愛？':       () => T.self[zl],
+    '在他面前，你為什麼會變得不像自己？':       () => T.blind[zl],
+    '你們想要的愛情，真的是同一種嗎？':         () => T.values[changdu],
+    '為什麼同一件事，你們總是想得不一樣？':     () => T.reading[wendu],
+    '只有你們兩個人的時候，關係會變成什麼樣子？': () => T.midu[midu],
+    '近期，這段關係可能先出現什麼變化？':       () => T.near[band],
+    '再往後，你們有機會走到哪裡？':             () => T.later[band],
+    '這段關係正在改變什麼？你們又該留意什麼？': () => T.watch[zl],
+    '什麼事，最容易讓你們慢慢走散？':           () => T.caution[weak],
+    '如果你還想繼續，現在可以怎麼做？':         () => T.advice[zl],
+    '現在最不適合做的，是哪件事？':             () => T.dont[zl],
+    '關於這段緣分，你最該記住的一件事。':       () => T.keep[band]
+  };
+  const fn = map[section];
+  return fn ? (fn() || '') : '';
+}
+
+/* ───────────────────────── */
+
+/* =========================================================================
+   未完籤所 · 緣分指數 —— 付費報告組裝
+   -------------------------------------------------------------------------
+   七個段落，全部模組化。實際模組約 60 段，可組出數萬種報告。
+
+     1 這段緣現在停在哪裡   band + 最低維度
+     2 對方現在怎麼想       位置(重量) + 樣子(溫度) + 態度(長度)
+     3 緣的密度            密度 key（僅雙方給時辰）
+     4 接下來會怎麼發展      events.js + 時間層連接語
+     5 可以觀察的變化        重量 key
+     6 需要留意的地方        最低維度
+     7 你現在適合怎麼做      重量 key
+   ========================================================================= */
+
+
+
+
+
+
+
+
+
+
+/* ---------- 1. 這段緣現在停在哪裡 ---------- */
+
+const NOW_BAND = {
+  緣滿: '你們是那種一開始就對得上的關係。不需要磨合期，不需要誰去適應誰，很多事情第一次就順了。' +
+        '這種順不常見，也因為不常見，你可能一直在等它出問題——或者反過來，你已經習慣到不覺得這有什麼特別。' +
+        '這段關係目前停在一個很穩的位置：沒有需要解決的危機，只有需要維持的默契。',
+  緣濃: '你們之間的東西是紮實的。不是激烈，是有份量——那種就算暫時分開一陣子，回來還是找得到彼此位置的關係。' +
+        '你們大概已經過了確認彼此的階段，現在的問題不是「是不是這個人」，而是「要怎麼一起走下去」。' +
+        '這段關係停在一個可以往前的位置，只差把還沒講清楚的部分講清楚。',
+  緣暖: '你們是慢慢長出來的那種關係。沒有哪一刻特別轟烈，但每一段時間回頭看，都比之前更近一點。' +
+        '這種關係的特徵是你講不出一個決定性的時刻，只能說「就這樣越來越好」。' +
+        '目前停在一個還在往前、但速度不快的位置——如果你曾經懷疑過是不是不夠喜歡，那多半是速度的問題，不是感情的問題。',
+  緣淡: '你們現在停在一個不上不下的位置。沒有明顯的問題，也沒有明顯的推力，日子可以這樣過，但誰也說不上會走到哪裡。' +
+        '這種狀態最容易被誤讀成穩定，其實它是懸而未決——你們還沒有真正決定要把這段關係放在生活裡的哪個位置。' +
+        '而不決定本身，久了也會變成一種決定。',
+  緣薄: '你們之間有一些從一開始就對不上的地方。這段時間你大概花了不少力氣在調整，而且多半是你在調整。' +
+        '你可能常常有一種感覺：明明沒有人做錯什麼，但相處起來就是比別人費力。那個感覺是準的。' +
+        '這段關係現在停在一個需要決定的位置——不是決定分開，是決定要不要用不同的方式繼續。',
+  緣散: '你們是兩種不同節奏的人，這件事不是相處久了就會變好的。你心裡其實知道，只是還沒決定要怎麼面對。' +
+        '你們之間不是沒有感情，是感情沒辦法解決節奏的問題——想要的東西不同、承受的方式不同、連對「好」的定義都不太一樣。' +
+        '這段關係現在停在一個誠實的時刻：繼續是可以的，但要清楚代價是什麼。'
+};
+
+const NOW_WEAK = {
+  wendu:      '而具體卡住的地方在日常。不是大事，是相處時那些說不上來的不順——那個部分正在慢慢消耗你們之間本來還不錯的東西。',
+  zhongliang: '而真正的問題不在合不合，在位置。你們之間有一個人一直在往下讓，另一個人不知道。這件事不解決，前面說的好都會被磨掉。',
+  changdu:    '而問題在走向。你們現在相處得還可以，但這段關係沒有先天的長度——它不會自己往前，需要有人刻意去推。'
+};
+
+const NOW_STRONG = {
+  wendu:      '不過你們有一個很實在的優勢：日常相處是順的。這不是小事——很多關係就是敗在每天的摩擦上，你們沒有這個問題，這給了你們處理其他事情的餘裕。',
+  zhongliang: '不過你們有一個底子很好：位置是對等的。沒有人在偷偷承受，也沒有人在無意識地佔上風。這表示你們之間的問題都可以放到檯面上談，不會有人因為位置低而不敢講。',
+  changdu:    '不過你們有一個先天的好處：這段緣本身走得遠。就算中間有一段不順，它也不容易斷——時間站在你們這邊，這給了你們犯錯和修正的空間。'
+};
+
+/* ---------- 4. 時間軸的開場與收束 ---------- */
+
+const TIME_OPEN = {
+  緣滿: '接下來這段時間，你們大方向不會有意外，但仍然有幾個值得先知道的節點。',
+  緣濃: '接下來會有幾件事讓你們的關係更清楚一些，過程不一定舒服，但方向是往前的。',
+  緣暖: '接下來的變化不會很戲劇性，是一件一件慢慢累積的。以下這幾個節點值得留意。',
+  緣淡: '接下來會出現幾個分岔，每一個都不明顯，但走過之後這段關係會往某一邊偏。',
+  緣薄: '接下來會有幾件事把你們現在的狀態逼出來，時間比你想的短。',
+  緣散: '接下來的發展大致會照著現在的方向走，但中間有幾個可以改變路線的時刻。'
+};
+
+const TIME_CLOSE = {
+  緣滿: '整體來看，這一年你們不太需要擔心走向，要花心思的是不要把順利當成理所當然。',
+  緣濃: '整體來看，這段時間是你們把關係定下來的階段。談過的每一件事，之後都會變成基礎。',
+  緣暖: '整體來看，這段時間的關鍵字是累積。不會有哪一件事決定一切，但每一件都算數。',
+  緣淡: '整體來看，這段時間你們會做出一個沒有明說的決定——是要往前，還是就這樣。那個決定不會有宣告，它會從行動裡看出來。',
+  緣薄: '整體來看，這段時間會逼你們面對一直繞開的東西。面對之後未必會好，但至少會清楚。',
+  緣散: '整體來看，這段時間不會出現讓你們突然變合的轉機。真正的變化只會來自其中一個人決定改變做法。'
+};
+
+/* ---------- 5. 可以觀察的變化 ---------- */
+
+const WATCH = {
+  bihe: ['他開始說「我需要你」而不是「我可以」',
+         '遇到難事時他先找你，而不是自己處理完才講',
+         '他會問你的意見，而且真的採納',
+         '你們開始有共同的計畫，不只是各自的行程',
+         '他願意在你面前狀態不好',
+         '他會主動提起你們之間的事，而不是等你開口',
+         '你們吵完之後他不會消失'],
+  a_sheng_b: ['他開始注意到你的情緒，而不是等你說',
+              '他主動安排事情，不再都由你決定',
+              '他問你「你想要什麼」而且等你回答完',
+              '你少做一點的時候，他有察覺',
+              '他會為你調整他的節奏，哪怕只是一次',
+              '他記得你提過但沒重複提的事',
+              '他開始問「這樣你會不會累」'],
+  b_sheng_a: ['你開始說得出他為你做了哪些具體的事',
+              '他不再只是配合，也會提出自己想要的',
+              '他抱怨的時候你聽得進去，而不是覺得他在鬧',
+              '你們之間開始有他先被照顧的時候',
+              '他不用暗示，可以直接說',
+              '他拒絕你的時候不會過度解釋',
+              '他開始有自己的安排，而不是全部配合你'],
+  a_ke_b: ['他開始把話講完，而不是說到一半算了',
+           '他反對的時候你沒有立刻解釋為什麼你是對的',
+           '有些決定最後照他的走，而且你沒有不高興',
+           '他不再用「都可以」回答',
+           '你們爭執之後他還願意再提同一件事',
+           '他會說「我不這樣覺得」而不是沉默',
+           '他開始有情緒，而不是只有配合'],
+  b_ke_a: ['你開始把不同意說出口，而不是嗯一聲',
+           '他發現你有意見時會停下來問',
+           '有些事情最後是照你的意思做的',
+           '你不再為了避免爭執而改口',
+           '你們之間開始有他讓步的時候',
+           '你講完之後沒有立刻補一句「不過都可以」',
+           '你開始覺得講出來沒有想像中可怕']
+};
+
+/* ---------- 6. 需要留意的地方 ---------- */
+
+const CAUTION = {
+  wendu:
+    '最容易讓這段關係悄悄變差的，是把日常的不順當成小事。' +
+    '你們現在的每一次卡住看起來都不嚴重——一句話的語氣、一個沒接上的反應、一次不想解釋的沉默。' +
+    '但這些東西不會消失，它們會變成「跟他相處有點累」這個總體印象，然後有一天你會發現自己不太想見面，卻講不出理由。' +
+    '不要等到講得出理由才處理，那時候通常已經累積太多了。另外，也不要把每一次不順都拿出來談，那會變成另一種消耗；' +
+    '要處理的是重複出現的那幾種，不是每一件。' +
+    '另外一個常見的誤判是把不順歸咎到「最近比較忙」。忙會過去，但那幾種重複出現的卡點不會——它們在你們不忙的時候一樣會出現，只是那時候你們有力氣忽略它。',
+  zhongliang:
+    '最容易出問題的，是把現在的平靜當成沒事。' +
+    '你們之間的不對等目前是穩定的，因為有一方持續在讓——但持續在讓的人自己也不一定清楚在讓什麼，只覺得有點悶。' +
+    '這種狀態最危險的地方是，它可以維持很久，久到雙方都習慣了，然後在某一件很小的事情上突然崩掉。' +
+    '如果你是讓的那個，不要等到受不了才講，那時候講出來的會是控訴不是溝通。' +
+    '如果你是被讓的那個，不要把「他沒說」理解成「他沒事」。' +
+    '還有一件事值得先想：如果有一天讓的那一方真的開口了，另一方的第一反應多半是「你怎麼都沒說」。那句話會讓開口的人更受傷，因為他覺得自己說過很多次，只是說得很小聲。',
+  changdu:
+    '最容易被忽略的，是這段關係需要主動維持。' +
+    '你們現在相處得不錯，所以很容易以為它會自己延續下去。但你們之間沒有那種天然的黏著——' +
+    '沒有共同的人生節點、沒有非見不可的理由，一旦生活忙起來，聯絡會自然變少，而變少之後不會自己回來。' +
+    '不要用「我們感情很好」當作不用經營的理由。也不要在發現變淡之後才用力補，' +
+    '那種補法通常會嚇到對方，因為他不覺得有什麼變了。'
+};
+
+/* ---------- 7. 你現在適合怎麼做 ---------- */
+
+const ADVICE = {
+  bihe:
+    '你們的問題不是誰對誰錯，是太客氣。兩個人都太能自己處理事情，所以沒有人需要對方。' +
+    '接下來你可以做的，是讓他看到你不好的時候——不是抱怨，是讓他知道你也會撐不住。' +
+    '這件事對你可能比較難，因為你習慣把自己整理好再出現。但關係要往前，需要有人先不整理。' +
+    '從小事開始就好，不用等到真的有大事。' +
+    '如果一時做不到，退一步的版本是：下次他問你「還好嗎」的時候，不要說「還好」。' +
+    '另外，這種關係最怕的不是吵架是失聯。你們之間沒有非見不可的理由，所以一旦有人開始忙，聯絡會自然斷掉，而斷掉之後兩邊都不會覺得是誰的錯——那才是真正麻煩的地方。',
+  a_sheng_b:
+    '你要做的不是給少一點，是讓他看見你在給。這兩件事不一樣——減量會讓他覺得你變了，說出來才會讓他理解。' +
+    '你可以從最近一件你調整過的事講起，用平的語氣，不要帶委屈。「這件事我本來想這樣，後來配合你改了」，講完就好，不用要求他做什麼。' +
+    '他需要的是資訊，不是道歉。給他幾次這樣的資訊之後，你會知道他是沒發現，還是不在意——那才是真正要判斷的事。' +
+    '這件事要重複做幾次才有用，一次他會當成你心情不好。',
+  b_sheng_a:
+    '你要做的是把他做的事講出來，而且要具體。「謝謝你」對他沒有用，「你昨天特地繞過來接我，我知道」才有用。' +
+    '他要的不是感謝，是確認自己沒有白做。' +
+    '另外，開始問他想要什麼，並且真的等他答完。他習慣說「都可以」，你要有耐心讓他從「都可以」走到真的講出一件事。' +
+    '那件事不用多大，重點是這段關係開始有他的位置。' +
+    '如果你不確定他做了什麼，那本身就是答案——回去想想最近哪些事情你沒費力就完成了。',
+  a_ke_b:
+    '你要做的是把說話的空間讓出來，而不是問他有沒有意見。' +
+    '他不會在你問的時候說，因為那個時機你已經有答案了。真正有用的是在你還沒決定之前就問，並且在他講完之後不要立刻反駁。' +
+    '你可能會覺得他講的沒道理，那就先不要評論，隔一天再談。' +
+    '這件事會很不習慣，因為你的判斷通常是對的——但這段關係現在需要的不是更好的決定，是他覺得自己講的話有用。' +
+    '如果你發現自己每次都想「可是我是對的」，那正是這段關係現在最該處理的地方。',
+  b_ke_a:
+    '你要做的是開口，而且要在還不生氣的時候開口。' +
+    '你習慣把不同意吞回去，等到吞不下的時候才講，那時候講出來的一定會變成爭吵，然後你會得到「你怎麼突然這樣」的反應，接著更不想講。' +
+    '從一件很小、你其實可以讓但決定不讓的事開始。不用解釋太多，講「這個我不太想」就好。' +
+    '他不會因為這樣就離開，這段關係比你以為的禁得起。'
+};
+
+/* ---------- 3. 緣的密度（僅雙方給時辰） ---------- */
+
+const MIDU = {
+  liuhe:
+    '關起門來，你們是舒服的。私下相處的時候，兩個人都不太需要維持什麼樣子——不用找話講，也不用擔心冷場。' +
+    '這是你們最好的部分，也是外人看不到的部分。有些關係在人前很好，回到私下就沒話講；你們剛好相反，' +
+    '所以別人的評價對你們參考價值不高。這一層的穩定會讓你們在關係遇到外部壓力時比別人撐得久，' +
+    '因為你們有一個誰都進不來的空間。' +
+    '另外，這一層好的人通常低估了它的價值——你們以為每對情侶回家都是這樣，其實不是。' +
+    '講完之後他可能會愣一下，那個愣不是不高興，是他第一次收到真實的資訊。',
+  sanhe:
+    '私下的你們比人前更靠近。獨處的時間對你們是加分的，越單獨相處越自然，話題也越深。' +
+    '這表示這段關係的基礎在兩個人之間，不是靠共同朋友、共同活動或外在條件撐著。' +
+    '值得注意的是，這種關係需要獨處的時間才能長。如果生活變忙、見面都在人多的場合，' +
+    '你們最好的那一面反而會用不上。' +
+    '值得補一句：如果你們曾經因為別人的評價動搖過，可以放掉那些話，因為別人根本沒看到你們真正的樣子。',
+  same:
+    '私下的你們很像室友——舒服、自在、不用應付。你們可以在同一個空間各做各的事，而且都不覺得奇怪。' +
+    '好處是完全沒有壓力，代價是容易失去張力：久了會分不清楚彼此是伴侶還是家人。' +
+    '這種狀態不會讓關係壞掉，但會讓它停住。如果你們之中有人開始覺得少了什麼，' +
+    '那不是感情變了，是這一層太安穩了。' +
+    '要打破的話不需要什麼大動作，換一個沒去過的地方吃飯就夠了——重點是製造一點不熟悉，讓你們重新看見對方。',
+  ping:
+    '私下相處是平順的。沒有特別親密，也沒有特別尷尬，該有的都有，但很少有那種特別靠近的時刻。' +
+    '這種關係好維持，因為它不太會出問題；但它也不會自己變濃。' +
+    '真正靠近的時刻需要刻意製造——一起做一件新的事、一次沒有行程的獨處、一個平常不會問的問題。' +
+    '這一層是你們最容易改善、也最容易被忽略的地方。' +
+    '最實際的做法是每個月安排一次沒有行程的獨處，不做什麼特別的事，只是不看手機。這一層是靠時間堆出來的，不是靠事件。',
+  zixing:
+    '私下的時候，你們同樣的毛病會放大。在外面還能維持，關起門來就直接撞上——同一種拖延、同一種迴避、' +
+    '同一種明明在意卻裝作沒事。這是你們最容易起衝突的場域。' +
+    '重點是這些衝突通常沒有輸贏，因為兩個人都站不住腳。與其吵，不如先講好規則：' +
+    '哪些事情不在私下的時間談、誰先注意到誰要說。這一層需要制度，不需要更多溝通。' +
+    '另外提醒一件事：這一層的衝突通常在疲累的時候爆發，所以規則裡最重要的一條是「累的時候不談事情」。',
+  liuhai:
+    '私下相處會有一種說不出的距離。明明在同一個空間，卻各自帶著一點沒有交出去的東西。' +
+    '這種距離在人前完全看不出來，只有你們自己知道——而且你們可能都以為只有自己有這種感覺。' +
+    '它不會演變成爭吵，會演變成沉默：話越來越少，各自在手機上的時間越來越長。' +
+    '這一層要處理，得有人先把「我覺得我們之間有點怪」講出來，而那句話很難講。' +
+    '如果真的講不出口，可以先從具體的小事開始問——「你上次說那句話是什麼意思」比「我們是不是有問題」容易得多。',
+  xing:
+    '私下的你們容易擦槍走火。外人在場時會收斂，只剩兩個人的時候話就直了，然後傷到對方。' +
+    '這不是感情不好，是你們私下缺少一層緩衝——在外面那層緩衝是別人給的，回到家沒有人接。' +
+    '最實際的做法是把緩衝變成自己的習慣：講重話之前先停一下、累的時候不談事情。' +
+    '你們的問題從來不是內容，是時機和語氣。' +
+    '還有一個小技巧：把重要的話留到出門的時候講。有第三方在場的環境反而會讓你們保持該有的分寸。',
+  liuchong:
+    '私下相處需要協調，而且是每天都要。連休息的方式都不同——一個想說話一個想安靜，' +
+    '一個要出門一個要窩著，連幾點睡都對不上。這件事在同居或長時間相處時會特別明顯。' +
+    '很多人會把這種不同步理解成不合適，但它其實是可管理的：把差異當成行程來安排，而不是當成問題來解決。' +
+    '真正會出事的是有人開始為了配合而長期委屈自己。' +
+    '實際做法是把「各自的時間」明講出來，不要假裝不需要。承認差異的關係比硬要同步的關係耐用得多。'
+};
+
+/* ---------- 時間層連接語 ---------- */
+
+const TIMELINE = ['近期，', '再往後一段時間，', '這之後，', '更長一點來看，'];
+
+/* ---------- 0. 雙方干支表 ---------- */
+
+/**
+ * 回傳可直接渲染成表格的資料。
+ * 只列實際參與運算的柱：年柱、日柱、時柱（有給時辰才有），加上年柱納音。
+ * 不列月柱 —— 這套演算法沒有用到它，列出來會讓人以為有算。
+ */
+function pillarTable(result) {
+  const A = result.debug.A, B = result.debug.B;
+  const rows = [
+    { label: '年柱', a: A.year, b: B.year, use: '緣的長度（年支關係）' },
+    { label: '日柱', a: A.day,  b: B.day,  use: '緣的溫度（日支）、緣的重量（日干）' }
+  ];
+  if (A.hour && B.hour) {
+    rows.push({ label: '時柱', a: A.hour, b: B.hour, use: '緣的密度（時支與時干）' });
+  }
+  rows.push({ label: '年柱納音', a: A.nayin, b: B.nayin, use: '緣的長度（納音生剋）' });
+  return rows;
+}
+
+/* ---------- 組裝 ---------- */
+
+function strongest(dims) {
+  const list = [['wendu', dims.wendu.score], ['zhongliang', dims.zhongliang.score],
+                ['changdu', dims.changdu.score]];
+  list.sort((a, b) => b[1] - a[1]);
+  return list[0][0];
+}
+
+function weakest(dims) {
+  const list = [['wendu', dims.wendu.score], ['zhongliang', dims.zhongliang.score],
+                ['changdu', dims.changdu.score]];
+  list.sort((a, b) => a[1] - b[1]);
+  return list[0][0];
+}
+
+/**
+ * @param result yuanfen() 的輸出
+ * @param names  { A:'你', B:'他' }
+ */
+function report(result, names = { A: '你', B: '他' }) {
+  const d = result.dimensions;
+  const b = band(result.total);
+  const weak = weakest(d);
+  const strong = strongest(d);
+  // 敘事由盤面格局決定，不由分數排名決定
+  const nar = narrate(d);
+  const zl = d.zhongliang.key;
+
+  const ev = eventsFor(result, b.label)
+    .map((t, i) => (TIMELINE[i] || '同時，') + t.replace(/\{A\}/g, names.A));
+  const split = Math.min(2, ev.length);
+  const eventsNear  = TIME_OPEN[b.label] + ev.slice(0, split).join('');
+  const eventsLater = ev.slice(split).join('') + TIME_CLOSE[b.label];
+
+  const P1 = '第一部分｜先看你們的關係';
+  const P2 = '第二部分｜他與你，各自在這段關係裡';
+  const P3 = '第三部分｜你們為什麼會這樣相處';
+  const P4 = '第四部分｜這段關係，接下來可能怎麼走';
+  const P5 = '第五部分｜現在，你可以怎麼做';
+
+  const sections = [
+    { part: P1, title: '你們的緣分，究竟有多深？', table: pillarTable(result),
+      note: '底下每一段都從這張表推出來。沒有列月柱，因為這套算法沒有用到它。' },
+    { part: P1, title: '你們現在，正處於什麼樣的關係狀態？', body: nar.now },
+    { part: P1, title: '明明有感覺，為什麼就是走不近？',     body: nar.weak },
+    { part: P1, title: '你們之間，最值得珍惜的是什麼？',     body: nar.strong },
+
+    { part: P2, title: '他在這段關係裡，習慣怎麼靠近一個人？', body: position(zl, names) },
+    { part: P2, title: '你喜歡的他，和真實的他一樣嗎？',       body: appearance(d.wendu.key, names) },
+    { part: P2, title: '他對長期關係，真正看重的是什麼？',     body: attitude(d.changdu.key, names) },
+    { part: P2, title: '那你呢？你真正需要的是什麼樣的愛？',   body: svPick(SELF_POSITION, zl, names) },
+    { part: P2, title: '在他面前，你為什麼會變得不像自己？',   body: svPick(SELF_BLIND, zl, names) },
+
+    { part: P3, title: '你們想要的愛情，真的是同一種嗎？',     body: svPick(VALUES, d.changdu.key, names) },
+    { part: P3, title: '為什麼同一件事，你們總是想得不一樣？', body: svPick(READING, d.wendu.key, names) }
+  ];
+
+  if (d.midu) {
+    sections.push({ part: P3, needHour: true,
+      title: '只有你們兩個人的時候，關係會變成什麼樣子？', body: MIDU[d.midu.key] });
+  }
+
+  sections.push(
+    { part: P4, title: '近期，這段關係可能先出現什麼變化？', body: eventsNear },
+    { part: P4, title: '再往後，你們有機會走到哪裡？',       body: eventsLater },
+    { part: P4, title: '這段關係正在改變什麼？你們又該留意什麼？', list: WATCH[zl] },
+    { part: P4, title: '什麼事，最容易讓你們慢慢走散？',     body: CAUTION[weak] },
+
+    { part: P5, title: '如果你還想繼續，現在可以怎麼做？',   body: ADVICE[zl] },
+    { part: P5, title: '現在最不適合做的，是哪件事？',       body: dont(zl, names) },
+    { part: P5, title: '關於這段緣分，你最該記住的一件事。', body: svPick(KEEP, b.label, names) }
+  );
+
+  // 每段掛上「這一段的重點」
+  const ctx = { band: b.label, weak, strong, zl,
+                wendu: d.wendu.key, changdu: d.changdu.key,
+                midu: d.midu ? d.midu.key : null };
+  sections.forEach(s => { s.takeaway = takeaway(s.title, ctx); });
+
+  const chars = sections.reduce((n, s) => {
+    if (s.body) return n + [...s.body.replace(/\s/g, '')].length;
+    if (s.list) return n + s.list.reduce((m, x) => m + [...x].length, 0);
+    return n;                       // 表格不計入字數
+  }, 0);
+
+  return { sections, chars };
+}
+
+/* ───────────────────────── */
+
+/* =========================================================================
+   未完籤所 · 緣分指數 分享卡文字總表
+   -------------------------------------------------------------------------
+   卡片上會出現的每一個字都在這裡。頁面文案另在 copy.js，兩套不共用。
+   限制：籤語每行 ≤14 字、共 2 行。其餘為固定字串。
+   ========================================================================= */
+
+/* ---------- 固定字串（永遠出現，不隨結果變動） ---------- */
+const FIXED = {
+  eyebrow:  '緣分指數',            // 分數上方的小標
+  unit:     '',                    // 不加「%」——這是分數不是機率
+  dimNames: ['緣的溫度', '緣的重量', '緣的長度'],
+  footer:   '未完籤所 · 緣分指數',
+  site:     'unfinished.tw'
+};
+
+/* ---------- 等級名（6 選 1，隨分數帶） ---------- */
+const LEVELS = {
+  緣滿: '緣滿 · 春暖花開',
+  緣濃: '緣濃 · 花好月圓',
+  緣暖: '緣暖 · 細水長流',
+  緣淡: '緣淡 · 雲淡風輕',
+  緣薄: '緣薄 · 聚散有時',
+  緣散: '緣散 · 各自天涯'
+};
+
+/* ---------- 卡片籤語（每階 3 句，以生日為種子抽 1 句） ---------- */
+/* 每句兩行，每行獨立控制長度 */
+const CARD_POEMS = {
+  緣滿: [
+    ['不是花等到了春天', '是它們本來就約好了'],
+    ['花開那天不會通知你', '但你會知道，是今天'],
+    ['有些相遇不需要理由', '像沒有人問月亮為何圓']
+  ],
+  緣濃: [
+    ['月圓的那幾天', '看的人總以為還有很多次'],
+    ['花開得正好的時候', '沒有人想到要記住它'],
+    ['好與圓難得同時', '別以為它會一直這樣']
+  ],
+  緣暖: [
+    ['不急的水走得最遠', '因為它不跟石頭爭'],
+    ['水不會一次把路走完', '它只是每天往前一點'],
+    ['溫的東西留得久', '燙的東西留不住手']
+  ],
+  緣淡: [
+    ['淡不是冷', '是還沒到需要用力的時候'],
+    ['雲飄過去不留痕跡', '但天空記得它來過'],
+    ['不濃的那種', '才有空間慢慢變濃']
+  ],
+  緣薄: [
+    ['有些人是來教你捨不得', '不是來留下的'],
+    ['聚的時候沒人算日子', '散的時候才發現有人算'],
+    ['一起走過的路', '不一定走到同一個地方']
+  ],
+  緣散: [
+    ['天涯不是懲罰', '是給了兩個人各自完整'],
+    ['有些路從頭就往兩邊', '走再久也不會交會'],
+    ['不是誰把誰弄丟了', '是風本來就吹往別處']
+  ]
+};
+
+/* ───────────────────────── */
+
+/* =========================================================================
+   未完籤所 · 緣分指數 —— 分享卡繪製（瀏覽器 canvas）
+   -------------------------------------------------------------------------
+   在使用者裝置上畫，中文字型才吃得到。座標沿用花框實測值。
+   花框素材需放在 assets/medallion.png（透明背景 1145×1374）。
+   ========================================================================= */
+
+const CARD_FONT = {
+  serif: '"Cactus Classical Serif","Noto Serif TC",serif',   // 數字・等級名・籤語
+  sans:  '"Noto Sans TC",sans-serif',                        // 小標・維度名
+  latin: 'Lato,sans-serif'                                   // unfinished.tw
+};
+
+const CARD = {
+  W: 1080, H: 1350,
+  BG: '#100b25', GOLD: '#d9bd82', GOLDS: '#f1e5c8',
+  CREAM: '#f4ecd6', MUTED: '#a89ab8', INK: '#5e3e2e',
+  ASSET: 'assets/medallion.webp',
+  MED_W: 790,          // 花框繪製寬度
+  MED_Y: 8,            // 花框上緣
+  SRC_W: 1145, SRC_H: 1374,
+  DISC_X: 575, DISC_Y: 646   // 圓盤中心（原圖座標）
+};
+
+let _medallion = null;
+function loadMedallion() {
+  if (_medallion) return Promise.resolve(_medallion);
+  return new Promise((res, rej) => {
+    const img = new Image();
+    img.onload = () => { _medallion = img; res(img); };
+    img.onerror = () => rej(new Error('花框素材載不到：' + CARD.ASSET));
+    img.src = CARD.ASSET;
+  });
+}
+
+function centred(ctx, text, y, size, colour, tracking, face) {
+  ctx.font = size + 'px ' + (face || CARD_FONT.serif);
+  ctx.fillStyle = colour;
+  ctx.textBaseline = 'top';
+  const cx = CARD.W / 2;
+  if (tracking) {
+    const chars = [...text];
+    const widths = chars.map(c => ctx.measureText(c).width);
+    const span = widths.reduce((a, b) => a + b, 0) + tracking * (chars.length - 1);
+    let x = cx - span / 2;
+    chars.forEach((c, i) => { ctx.fillText(c, x, y); x += widths[i] + tracking; });
+  } else {
+    ctx.textAlign = 'center';
+    ctx.fillText(text, cx, y);
+    ctx.textAlign = 'left';
+  }
+  return size;
+}
+
+function atX(ctx, text, cx, y, size, colour, face) {
+  ctx.font = size + 'px ' + (face || CARD_FONT.serif);
+  ctx.fillStyle = colour;
+  ctx.textBaseline = 'top';
+  ctx.textAlign = 'center';
+  ctx.fillText(text, cx, y);
+  ctx.textAlign = 'left';
+  return size;
+}
+
+/**
+ * @param canvas   目標 canvas
+ * @param data     { total, headline, poem:[l1,l2], dims:[{name,score}×3] }
+ */
+async function drawCard(canvas, data) {
+  if (document.fonts && document.fonts.ready) await document.fonts.ready;   // 舊瀏覽器沒有 FontFaceSet
+  const img = await loadMedallion();
+  const ctx = canvas.getContext('2d');
+  canvas.width = CARD.W; canvas.height = CARD.H;
+
+  ctx.fillStyle = CARD.BG;
+  ctx.fillRect(0, 0, CARD.W, CARD.H);
+
+  const sc = CARD.MED_W / CARD.SRC_W;
+  const mh = CARD.SRC_H * sc;
+  const mx = (CARD.W - CARD.MED_W) / 2;
+  ctx.drawImage(img, mx, CARD.MED_Y, CARD.MED_W, mh);
+
+  // 盤心：數字
+  const dcx = mx + CARD.DISC_X * sc;
+  const dcy = CARD.MED_Y + CARD.DISC_Y * sc;
+  atX(ctx, String(data.total), dcx, dcy - 84, 176, CARD.INK);
+
+  // 盤外
+  let y = CARD.MED_Y + mh - 58;
+  y += centred(ctx, '緣分指數 ' + data.total, y, 28, CARD.MUTED, 6, CARD_FONT.sans) + 26;
+  y += centred(ctx, data.headline, y, 44, CARD.GOLDS, 6) + 34;
+  y += centred(ctx, data.poem[0], y, 36, CARD.CREAM, 0) + 16;
+  y += centred(ctx, data.poem[1], y, 36, CARD.CREAM, 0) + 40;
+
+  // 分隔線 + 三個子分數
+  ctx.strokeStyle = 'rgba(217,189,130,.28)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(CARD.W * 0.16, y - 14); ctx.lineTo(CARD.W * 0.84, y - 14); ctx.stroke();
+  const cols = [CARD.W * 0.24, CARD.W * 0.5, CARD.W * 0.76];
+  data.dims.forEach((d, i) => {
+    atX(ctx, d.name, cols[i], y + 6, 25, CARD.MUTED, CARD_FONT.sans);
+    atX(ctx, String(d.score), cols[i], y + 44, 40, CARD.GOLD);
+  });
+  y += 112;
+  centred(ctx, 'unfinished.tw', y, 22, CARD.MUTED, 6, CARD_FONT.latin);
+
+  return canvas;
+}
+
+/* 由 result 取出卡片需要的資料（籤語以生日為種子，與頁面同源） */
+function cardData(result, birth) {
+  const b = band(result.total);
+  const seed = seedOf(birth.a, birth.b);
+  const poems = CARD_POEMS[b.label];
+  const h = (seed ^ Math.imul(11, 2654435761)) >>> 0;   // 括號不可少：% 的優先序高於 >>>
+  const lines = poems[h % poems.length];
+  return {
+    total: result.total,
+    headline: b.label + ' · ' + b.title,
+    poem: lines,
+    dims: [result.dimensions.wendu, result.dimensions.zhongliang, result.dimensions.changdu]
+            .map(d => ({ name: d.name, score: d.score }))
+  };
+}
+
+/* ───────────────────────── 介面 ───────────────────────── */
+
+const $ = id => document.getElementById(id);
+
+/* ── 時辰選擇 ───────────────────────────── */
+
+const SHICHEN = [
+  ['子', '23–01', 23], ['丑', '01–03', 1], ['寅', '03–05', 3], ['卯', '05–07', 5],
+  ['辰', '07–09', 7], ['巳', '09–11', 9], ['午', '11–13', 11], ['未', '13–15', 13],
+  ['申', '15–17', 15], ['酉', '17–19', 17], ['戌', '19–21', 19], ['亥', '21–23', 21]
+];
+const picked = { a: null, b: null };   // null = 未選；'unsure' = 不確定
+
+function buildShichen(who) {
+  const sel = $(who + '-sc');
+  const opts = [['', '出生時辰', null],
+                ['unsure', '不確定時辰', 'unsure']];
+  SHICHEN.forEach(([name, span, hour]) => opts.push([String(hour), name + '時　' + span, hour]));
+  opts.forEach(([value, text]) => {
+    const o = document.createElement('option');
+    o.value = value; o.textContent = text;
+    sel.appendChild(o);
+  });
+  sel.addEventListener('change', () => {
+    const v = sel.value;
+    picked[who] = v === '' ? null : (v === 'unsure' ? 'unsure' : Number(v));
+  });
+}
+
+buildShichen('a');
+buildShichen('b');
+
+const readDate = p => {
+  const o = {
+    y: parseInt($(p + '-y').value, 10),
+    m: parseInt($(p + '-m').value, 10),
+    d: parseInt($(p + '-d').value, 10)
+  };
+  if (typeof picked[p] === 'number') o.hour = picked[p];
+  return o;
+};
+
+function validate(x, who) {
+  if (!x.y || !x.m || !x.d) return who + '的生日還沒填完。';
+  if (x.y < 1900 || x.y > 2100) return who + '的出生年要在 1900 到 2100 之間。';
+  if (x.m < 1 || x.m > 12) return who + '的月份不對。';
+  const dim = [31, (x.y % 4 === 0 && x.y % 100 !== 0) || x.y % 400 === 0 ? 29 : 28,
+               31, 30, 31, 30, 31, 31, 30, 31, 30, 31][x.m - 1];
+  if (x.d < 1 || x.d > dim) return who + '的' + x.m + '月沒有這一天。';
+  return null;
+}
+
+let last = null;
+
+const REDUCED = window.matchMedia
+  && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* 分數由 0 跑到目標值 */
+function countUp(el, to, ms) {
+  if (REDUCED) { el.textContent = to; return; }
+  const t0 = performance.now();
+  (function step(now) {
+    const p = Math.min(1, (now - t0) / ms);
+    el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));   // ease-out
+    if (p < 1) requestAnimationFrame(step);
+  })(t0);
+}
+
+function draw() {
+  const a = readDate('a'), b = readDate('b');
+  const e = validate(a, '你') || validate(b, '對方');
+  $('err').textContent = e || '';
+  if (e) return;
+
+  /* 起盤：先讓羅盤轉一段時間，占卜需要等待 */
+  const cast = $('casting');
+  cast.classList.add('on');
+  setTimeout(() => { cast.classList.remove('on'); reveal(a, b); },
+             REDUCED ? 400 : 1800);
+}
+
+function reveal(a, b) {
+
+  /* 免費層一律三維：時辰不影響這裡的分數，只留給付費報告用。
+     （yuanfen 在有 hour 時會改用四維權重，所以這裡刻意不傳 hour） */
+  const freeA = { y: a.y, m: a.m, d: a.d };
+  const freeB = { y: b.y, m: b.m, d: b.d };
+  const r = yuanfen(freeA, freeB);
+  const c = render(r, { a: freeA, b: freeB });
+  last = { result: r, a: freeA, b: freeB, full: yuanfen(a, b) };
+  $('r-report').classList.remove('on');
+  document.body.classList.remove('reading');
+  $('u-cta').querySelector('b').textContent = '解讀完整內容';
+  $('u-cta').querySelector('small').textContent = 'NT$199 · 19 段專屬報告';
+  $('u-cta').disabled = false;
+
+  $('r-score').textContent = '0';
+  $('r-name').textContent = c.headline;
+  $('r-num').textContent = '緣分指數　' + c.total;
+  $('r-poem').textContent = c.poem;
+  $('r-summary').textContent = c.summary;
+
+  const g = gapNote(r);
+  $('r-gap').hidden = !g;
+  $('r-gap').textContent = g || '';
+
+  $('r-dims').innerHTML = c.sections.map(s => `
+    <div class="dim">
+      <div class="dim-top">
+        <span class="dim-name">${s.name}</span>
+        <span class="dim-num">${s.score}</span>
+      </div>
+      <div class="scale"><i style="left:${s.score}%"></i></div>
+      <p>${s.text}</p>
+    </div>`).join('');
+
+  const bs = basis(r);
+  $('r-basis').innerHTML = bs.rows.map(row => `
+    <div class="brow">
+      <div class="bh"><span>${row.name}</span><span>${row.score}　×${Math.round(row.weight * 100)}%</span></div>
+      <div class="bl">依據　${row.source}<br>判定　${row.verdict}</div>
+    </div>`).join('')
+    + `<div class="btotal">${bs.rows.map(x => x.score + '×' + Math.round(x.weight * 100) + '%').join('　＋　')}　＝　${bs.total}</div>`;
+
+  /* 時辰決定付費層要不要提到「緣的密度」。
+     不確定時辰 → 完全不提，不讓人看見一扇打不開的門。 */
+  const bothHours = typeof picked.a === 'number' && typeof picked.b === 'number';
+  const u = $('r-upsell');
+  u.hidden = false;
+  $('u-title').textContent = '還沒有答案的部分';
+  $('u-lead').textContent = '上面那些是你們現在的狀態，已經說完了。真正還沒有答案的是接下來——他心裡怎麼想、什麼時候會有變化、那件事會以什麼形式發生。';
+  /* 目錄直接從 report() 產生，確保永遠與內文一致 */
+  const TOC_DESC = {
+    '你們的緣分，究竟有多深？':                 '雙方年柱、日柱與納音攤開來看，每一根柱用在哪個判斷',
+    '你們現在，正處於什麼樣的關係狀態？':       '這段關係目前的整體位置',
+    '明明有感覺，為什麼就是走不近？':           '三個維度裡最低的那一個，以及它正在消耗什麼',
+    '你們之間，最值得珍惜的是什麼？':           '最高的那一個維度，也是你們可以依靠的東西',
+    '他在這段關係裡，習慣怎麼靠近一個人？':     '他為什麼會變成現在這個樣子',
+    '你喜歡的他，和真實的他一樣嗎？':           '你每天實際感受到的他',
+    '他對長期關係，真正看重的是什麼？':         '他心裡對未來的想法，多半沒說出口',
+    '那你呢？你真正需要的是什麼樣的愛？':       '你在做的事，包括你自己覺得理所當然的那些',
+    '在他面前，你為什麼會變得不像自己？':       '你的盲點——通常是善意造成的',
+    '你們想要的愛情，真的是同一種嗎？':         '價值觀的重疊與分歧，以及會在哪種事情上浮現',
+    '為什麼同一件事，你們總是想得不一樣？':     '為什麼同樣一句話，你們聽到的不一樣',
+    '只有你們兩個人的時候，關係會變成什麼樣子？': '私下相處的真實樣貌',
+    '近期，這段關係可能先出現什麼變化？':       '最先會發生的一到兩件事',
+    '再往後，你們有機會走到哪裡？':             '中段與之後的發展，以及那之後的影響',
+    '這段關係正在改變什麼？你們又該留意什麼？': '關係在轉好時會先出現的具體徵兆',
+    '什麼事，最容易讓你們慢慢走散？':           '最容易被當成小事、後來卻變成主因的那件事',
+    '如果你還想繼續，現在可以怎麼做？':         '做得到的動作，不是「多溝通」那種建議',
+    '現在最不適合做的，是哪件事？':             '比「該做什麼」更容易救回一段關係',
+    '關於這段緣分，你最該記住的一件事。':       '整份報告收束成一句'
+  };
+  const preview = report(last.full, { A: '你', B: '他' });
+  let seenPart = '';
+  $('u-list').innerHTML = preview.sections.map(sec => {
+    let out = '';
+    if (sec.part && sec.part !== seenPart) {
+      seenPart = sec.part;
+      out += '<li class="part">' + sec.part + '</li>';
+    }
+    out += '<li>' + sec.title
+         + (sec.needHour ? '<em>需完整出生時間</em>' : '')
+         + '<span>' + (TOC_DESC[sec.title] || '') + '</span></li>';
+    return out;
+  }).join('');
+
+  $('u-price').textContent =
+    '完整合盤 NT$199，共 ' + preview.sections.length + ' 段，約 '
+    + (Math.round(preview.chars / 100) * 100) + ' 字。';
+
+  $('r-disclaim').textContent = bothHours
+    ? '緣分指數以雙方年柱、日柱與時柱推算，為未完籤所的自動判讀，供你參考與自省之用。'
+    : '緣分指數以雙方年柱與日柱推算，為未完籤所的自動判讀，供你參考與自省之用。沒有時辰不影響上面的結果，也不會少給你任何一段。';
+
+  $('r-share').hidden = true;
+  buildCard();
+
+  $('out').classList.add('on');
+  $('out').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  countUp($('r-score'), r.total, REDUCED ? 0 : 700);
+}
+
+/* ── 分享卡 ─────────────────────────── */
+
+async function buildCard() {
+  const box = $('r-share'), msg = $('share-msg');
+  try {
+    await drawCard($('card'), cardData(last.result, { a: last.a, b: last.b }));
+    box.hidden = false;
+    msg.textContent = '';
+  } catch (err) {
+    box.hidden = true;
+    console.warn(err);
+  }
+}
+
+function cardBlob() {
+  return new Promise(res => $('card').toBlob(res, 'image/png'));
+}
+
+$('save-card').addEventListener('click', async () => {
+  const blob = await cardBlob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = '緣分指數-' + last.result.total + '.png';
+  a.click();
+  URL.revokeObjectURL(url);
+  $('share-msg').textContent = '已存到你的裝置';
+});
+
+$('share-card').addEventListener('click', async () => {
+  const blob = await cardBlob();
+  const file = new File([blob], 'yuanfen.png', { type: 'image/png' });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try { await navigator.share({ files: [file] }); } catch (e) { /* 使用者取消 */ }
+  } else {
+    $('share-msg').textContent = '這個瀏覽器不支援直接分享，請用「儲存圖片」。';
+  }
+});
+
+$('u-cta').addEventListener('click', () => {
+  if (!last) return;
+  const r = report(last.full, { A: '你', B: '他' });
+  const box = $('r-report');
+  $('rep-head').textContent = '完整合盤　' + r.chars + ' 字';
+  box.querySelectorAll('section').forEach(x => x.remove());
+  let curPart = '';
+  r.sections.forEach(sec => {
+    const el = document.createElement('section');
+    if (sec.part && sec.part !== curPart) {
+      curPart = sec.part;
+      const ph = document.createElement('p');
+      ph.className = 'part-h';
+      ph.textContent = sec.part;
+      el.appendChild(ph);
+      el.className = 'first-of-part';
+    }
+    const h = document.createElement('h3');
+    h.textContent = sec.title;
+    el.appendChild(h);
+    if (sec.table) {
+      const tb = document.createElement('table');
+      tb.innerHTML =
+        '<thead><tr><th></th><th class="p">你</th><th class="p">對方</th>'
+        + '<th class="use">用在哪裡</th></tr></thead><tbody>'
+        + sec.table.map(r =>
+            '<tr><td class="lab">' + r.label + '</td>'
+            + '<td class="p">' + r.a + '</td><td class="p">' + r.b + '</td>'
+            + '<td class="use">' + r.use + '</td></tr>').join('')
+        + '</tbody>';
+      el.appendChild(tb);
+      if (sec.note) {
+        const n = document.createElement('p');
+        n.className = 'tnote';
+        n.textContent = sec.note;
+        el.appendChild(n);
+      }
+    } else if (sec.list) {
+      const ul = document.createElement('ul');
+      sec.list.forEach(t => { const li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
+      el.appendChild(ul);
+    } else {
+      const p = document.createElement('p');
+      p.textContent = sec.body;
+      el.appendChild(p);
+    }
+    if (sec.takeaway) {
+      const t = document.createElement('p');
+      t.className = 'takeaway';
+      const lbl = document.createElement('b');
+      lbl.textContent = '這一段的重點';
+      t.appendChild(lbl);
+      t.appendChild(document.createTextNode(sec.takeaway));
+      el.appendChild(t);
+    }
+    box.appendChild(el);
+  });
+  box.classList.add('on');
+  document.body.classList.add('reading');
+  $('u-cta').querySelector('b').textContent = '已展開';
+  $('u-cta').querySelector('small').textContent = '往下閱讀';
+  $('u-cta').disabled = true;
+  box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+$('go').addEventListener('click', draw);
+document.querySelectorAll('.dates input').forEach(el => {
+  el.addEventListener('keydown', ev => { if (ev.key === 'Enter') draw(); });
+});
+</script>
+</body>
+</html>

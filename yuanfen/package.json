@@ -1,0 +1,14 @@
+{
+  "name": "yuanfen",
+  "version": "1.0.0",
+  "private": true,
+  "description": "未完籤所 · 緣分指數（雙人合盤）",
+  "scripts": {
+    "build": "node build.js",
+    "lint": "node lint.js",
+    "calibrate": "node calibrate.js"
+  },
+  "dependencies": {
+    "jsdom": "^30.0.1"
+  }
+}
