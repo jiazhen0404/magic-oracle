@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cactus+Classical+Serif&family=Lato:wght@300;400;700&family=Noto+Sans+TC:wght@200..500&display=swap" rel="stylesheet">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-71RMD00WPJ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-71RMD00WPJ');</script>
 <style>
 :root{
   --bg:#100b25; --bg2:#1a1030; --panel:#241943;
@@ -455,6 +457,33 @@ body.reading .corner{opacity:.36}
   color:var(--cream); opacity:.86; font-size:15.5px; margin:16px auto 0;
   max-width:26em; line-height:2;
 }
+/* 準確度回饋：一鍵、不填東西。刻意做得比節奏本身小一階，
+   它是問句不是結果，不該跟分數搶視線。 */
+.accuracy{
+  margin:20px auto 0; display:flex; flex-wrap:wrap;
+  align-items:center; justify-content:center; gap:10px;
+}
+.accuracy .ask{
+  color:var(--muted); font-size:13px; letter-spacing:.08em; margin:0;
+}
+.accuracy button{
+  padding:6px 15px; cursor:pointer; border-radius:999px;
+  border:1px solid var(--line-soft); background:transparent;
+  color:var(--gold-soft); font-family:var(--sans);
+  font-size:13px; letter-spacing:.1em;
+  transition:border-color .25s, background .25s, opacity .25s;
+}
+.accuracy button:hover{border-color:var(--line); background:rgba(217,189,130,.07)}
+.accuracy button:focus-visible{outline:2px solid var(--gold); outline-offset:2px}
+.accuracy.done button{opacity:.32; pointer-events:none}
+.accuracy.done button[aria-pressed="true"]{
+  opacity:1; border-color:var(--gold); background:rgba(217,189,130,.12);
+}
+.accuracy .thanks{color:var(--muted); font-size:13px; letter-spacing:.08em; margin:0}
+/* 手機上要用大拇指點，把可點範圍加高到 44px；桌機維持精簡不搶視線 */
+@media (max-width:420px){
+  .accuracy button{padding:12px 15px}
+}
 .verdict .poem{font-family:var(--serif);
   color:var(--cream); font-size:18px; margin:26px auto 0; max-width:26em;
   line-height:2.1; opacity:.92;
@@ -580,6 +609,12 @@ details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offse
       <p class="poem" id="r-poem"></p>
       <p class="tempo" id="r-tempo"></p>
       <p class="tempo-line" id="r-tempo-line"></p>
+      <div class="accuracy" id="r-accuracy" hidden>
+        <p class="ask">這段描述準嗎？</p>
+        <button type="button" data-rating="accurate" aria-pressed="false">滿準的</button>
+        <button type="button" data-rating="partly"   aria-pressed="false">有點像</button>
+        <button type="button" data-rating="off"      aria-pressed="false">不太對</button>
+      </div>
     </div>
     <p class="summary" id="r-summary"></p>
     <p class="warn-note" id="r-warn" hidden></p>
@@ -3543,6 +3578,56 @@ function buildShichen(who) {
 buildShichen('a');
 buildShichen('b');
 
+/* ── GA4 ──────────────────────────────────────────────
+   band 與 tempo 一起送。tempo 是這一頁最值得看的維度——
+   它會告訴你「轟轟烈烈」跟「平淡如水」哪一種人比較願意付錢，
+   那比分數帶更有行動意義。
+
+   ★ 這裡永遠不要送生日、年份或任何可以還原生日的東西。
+     頁面上寫著「兩組生日不會被儲存，也不會離開你的裝置」，
+     送進 GA4 就等於違背那句話。band / tempo / has_hour / rating
+     都是算完之後的分類結果，回推不出生日。 */
+function track(name, params) {
+  try {
+    if (typeof gtag === 'function') gtag('event', name, params || {});
+  } catch (e) { /* 追蹤壞掉不能影響功能 */ }
+}
+
+/* 兩個人都有時辰才會走四柱、報告才有 20 段，所以分三種值而不是是非題 */
+function hourState(a, b) {
+  const n = (typeof a.hour === 'number' ? 1 : 0) + (typeof b.hour === 'number' ? 1 : 0);
+  return n === 2 ? 'both' : (n === 1 ? 'one' : 'none');
+}
+
+/* 付款完成時呼叫。★ 目前刻意沒有任何地方呼叫它。
+   現在按 u-cta 只是把預覽展開，不是付款——接上去會產生假的購買資料，
+   之後就分不清哪些是真的成交。等金流做完，在「訂單確認為已付款」
+   那一步呼叫，不要在點按鈕或跳轉時呼叫。 */
+function trackUnlock() {
+  if (!last) return;
+  track('yuanfen_unlock', { band: last.view.label, tempo: last.view.tempo });
+}
+
+/* ── 準確度回饋 ────────────────────────────────────────
+   一鍵、不填任何東西。只送 tempo 與選項——三個月後就能回答
+   「哪一型最不準」，那是唯一能真正校準判讀的方式。
+   送出後不收回、也不讓改，重複點會灌壞資料。 */
+$('r-accuracy').addEventListener('click', e => {
+  const btn = e.target.closest('button[data-rating]');
+  const box = $('r-accuracy');
+  if (!btn || box.classList.contains('done') || !last) return;
+
+  btn.setAttribute('aria-pressed', 'true');
+  box.classList.add('done');
+  track('yuanfen_feedback', { tempo: last.view.tempo, rating: btn.dataset.rating });
+
+  const thanks = document.createElement('p');
+  thanks.className = 'thanks';
+  thanks.textContent = '謝謝，這會幫我們把判讀改準一點。';
+  box.appendChild(thanks);
+  box.querySelector('.ask').hidden = true;
+});
+
 const readDate = p => {
   const o = {
     y: parseInt($(p + '-y').value, 10),
@@ -3605,7 +3690,9 @@ function reveal(a, b) {
   const r = yuanfen(freeA, freeB);
   const scene = '曖昧';   // 本產品專做曖昧期；其餘情境的文案保留在 src/copy.js 備用
   const c = render(r, { a: freeA, b: freeB }, { A: '你', B: '他' }, scene);
-  last = { result: r, a: freeA, b: freeB, full: yuanfen(a, b), scene };
+  /* view 是 render() 的輸出，帶著 band 與 tempo。分享與回饋的埋點需要它們，
+     而 result 只有分數與三維度，沒有這兩個分類。 */
+  last = { result: r, view: c, a: freeA, b: freeB, full: yuanfen(a, b), scene };
   $('r-report').classList.remove('on');
   document.body.classList.remove('reading');
   $('u-cta').disabled = false;
@@ -3617,6 +3704,18 @@ function reveal(a, b) {
   $('r-tempo').textContent = c.tempo;
   $('r-tempo-line').textContent = c.tempoLine;
   $('r-summary').textContent = c.summary;
+
+  /* 起盤完成。放在渲染之後，確保使用者真的看到結果才算一次。 */
+  track('yuanfen_draw', { band: c.label, tempo: c.tempo, has_hour: hourState(a, b) });
+
+  /* 重新起盤等於換了一份判讀，回饋要跟著重來 */
+  const acc = $('r-accuracy');
+  acc.hidden = false;
+  acc.classList.remove('done');
+  acc.querySelector('.ask').hidden = false;
+  const oldThanks = acc.querySelector('.thanks');
+  if (oldThanks) oldThanks.remove();
+  acc.querySelectorAll('button[data-rating]').forEach(b => b.setAttribute('aria-pressed', 'false'));
 
   const g = gapNote(r);
   $('r-gap').hidden = !g;
@@ -3737,15 +3836,21 @@ $('save-card').addEventListener('click', async () => {
   a.click();
   URL.revokeObjectURL(url);
   $('share-msg').textContent = '已存到你的裝置';
+  track('yuanfen_share', { band: last.view.label, tempo: last.view.tempo, method: 'save' });
 });
 
 $('share-card').addEventListener('click', async () => {
   const blob = await cardBlob();
   const file = new File([blob], 'yuanfen.png', { type: 'image/png' });
   if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    try { await navigator.share({ files: [file] }); } catch (e) { /* 使用者取消 */ }
+    /* 只有真的送出去才算一次分享。使用者在系統面板按取消會走 catch，不送事件。 */
+    try {
+      await navigator.share({ files: [file] });
+      track('yuanfen_share', { band: last.view.label, tempo: last.view.tempo, method: 'native' });
+    } catch (e) { /* 使用者取消 */ }
   } else {
     $('share-msg').textContent = '這個瀏覽器不支援直接分享，請用「儲存圖片」。';
+    track('yuanfen_share', { band: last.view.label, tempo: last.view.tempo, method: 'unsupported' });
   }
 });
 

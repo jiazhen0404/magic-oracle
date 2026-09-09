@@ -98,6 +98,7 @@ const LIUHE   = [[0,1],[2,11],[3,10],[4,9],[5,8],[6,7]];   // 子丑 寅亥 卯�
 const LIUHAI  = [[0,7],[1,6],[2,5],[3,4],[8,11],[9,10]];   // 子未 丑午 寅巳 卯辰 申亥 酉戌
 const SANXING = [[2,5,8],[1,10,7]];                        // 寅巳申 丑戌未
 const ZIXING  = [4,6,9,11];                                // 辰午酉亥 自刑
+const LIUPO   = [[0,9],[6,3],[8,5],[2,11],[4,1],[10,7]];   // 子酉 午卯 申巳 寅亥 辰丑 戌未 相破
 
 function pairIn(list, a, b) {
   return list.some(p => (p[0] === a && p[1] === b) || (p[1] === a && p[0] === b));
@@ -117,6 +118,7 @@ function zhiRelation(a, b) {
   if (a === b)                                   return { key: 'same',    score: 76 };
   if (Math.abs(a - b) === 6)                     return { key: 'liuchong',score: 38 };
   if (pairIn(LIUHAI, a, b))                      return { key: 'liuhai',  score: 48 };
+  if (pairIn(LIUPO, a, b))                       return { key: 'po',      score: 54 };
   if (bothIn(SANXING, a, b))                     return { key: 'xing',    score: 50 };
   if ((a === 0 && b === 3) || (a === 3 && b === 0)) return { key: 'xing', score: 50 }; // 子卯相刑
   return { key: 'ping', score: 70 };
@@ -138,10 +140,11 @@ function wuxingRelation(wa, wb) {
 
 /* ---------------- 三個子維度 ---------------- */
 
-// 緣的溫度：日支關係 —— 日常相處合不合、舒不舒服
-function scoreWendu(A, B) {
+// 緣的溫度：日支關係，並依交叉柱的合／沖修正
+// 同柱平和但交叉滿是沖害的盤，實際相處不可能沒有摩擦
+function scoreWendu(A, B, adjust) {
   const r = zhiRelation(A.day.zhi, B.day.zhi);
-  return { score: r.score, key: r.key };
+  return { score: clamp(r.score + (adjust || 0)), key: r.key, adjust: adjust || 0 };
 }
 
 // 緣的重量：日干五行生剋方向 —— 誰在承擔、誰在退讓
@@ -182,6 +185,31 @@ function scoreMidu(A, B) {
   };
 }
 
+/* ---------------- 交叉柱比對 ---------------- */
+/* 只比交叉（跳過同位置，那已經計分過），統計合與沖害刑破的數量 */
+const CROSS_SWEET = ['liuhe', 'sanhe'];
+const CROSS_HARSH = ['liuchong', 'liuhai', 'xing', 'po', 'zixing'];
+
+function crossPairs(A, B) {
+  const list = P => {
+    const o = [['年', P.year.zhi], ['月', P.month.zhi], ['日', P.day.zhi]];
+    if (P.hour) o.push(['時', P.hour.zhi]);
+    return o;
+  };
+  const pairs = [];
+  for (const [pa, za] of list(A))
+    for (const [pb, zb] of list(B)) {
+      if (pa === pb) continue;
+      const r = zhiRelation(za, zb);
+      if (r.key !== 'ping') pairs.push({ a: pa + ZHI[za], b: pb + ZHI[zb], key: r.key });
+    }
+  return {
+    pairs,
+    sweet: pairs.filter(p => CROSS_SWEET.includes(p.key)).length,
+    harsh: pairs.filter(p => CROSS_HARSH.includes(p.key)).length
+  };
+}
+
 /* ---------------- 總分 ---------------- */
 
 const WEIGHTS      = { wendu: 0.35, zhongliang: 0.30, changdu: 0.35 };
@@ -210,7 +238,9 @@ function yuanfen(a, b) {
   const hasHour = !!(A.hour && B.hour);
   const W = hasHour ? WEIGHTS_HOUR : WEIGHTS;
 
-  const wendu      = scoreWendu(A, B);
+  // 先算交叉關係，再據以修正溫度
+  const cx = crossPairs(A, B);
+  const wendu      = scoreWendu(A, B, Math.max(-10, Math.min(10, (cx.sweet - cx.harsh) * 3)));
   const zhongliang = scoreZhongliang(A, B);
   const changdu    = scoreChangdu(A, B);
   const midu       = hasHour ? scoreMidu(A, B) : null;
@@ -221,7 +251,7 @@ function yuanfen(a, b) {
   if (hasHour) raw += midu.score * W.midu;
 
   const dimensions = {
-    wendu:      { name: '緣的溫度', score: wendu.score, key: wendu.key },
+    wendu:      { name: '緣的溫度', score: wendu.score, key: wendu.key, adjust: wendu.adjust || 0 },
     zhongliang: { name: '緣的重量', score: zhongliang.score, key: zhongliang.key,
                   yinyang: zhongliang.yinyang, wa: zhongliang.wa, wb: zhongliang.wb },
     changdu:    { name: '緣的長度', score: changdu.score, key: changdu.key,
@@ -254,6 +284,7 @@ function yuanfen(a, b) {
   return {
     total: Math.round(raw),
     hasHour,
+    cross: cx,
     uncertainYear: !!(A.year.uncertain || B.year.uncertain),
     weights: W,
     dimensions,
@@ -262,3 +293,4 @@ function yuanfen(a, b) {
 }
 
 module.exports = { yuanfen, pillars, hourPillar, yearPillar, monthPillar, nayinName, NAYIN_NAME, zhiRelation, wuxingRelation, nayin, GAN, ZHI, WEIGHTS, WEIGHTS_HOUR };
+

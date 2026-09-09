@@ -118,7 +118,7 @@ function cardData(result, birth) {
   return {
     total: result.total,
     headline: b.label + ' · ' + b.title,
-    tempo: tempo(result.dimensions).name,
+    tempo: tempo(result.dimensions, result.cross).name,
     poem: lines,
     dims: [result.dimensions.wendu, result.dimensions.zhongliang, result.dimensions.changdu]
             .map(d => ({ name: d.name, score: d.score }))
