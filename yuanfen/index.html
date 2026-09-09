@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cactus+Classical+Serif&family=Lato:wght@300;400;700&family=Noto+Sans+TC:wght@200..500&display=swap" rel="stylesheet">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-71RMD00WPJ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-71RMD00WPJ');</script>
 <style>
 :root{
   --bg:#100b25; --bg2:#1a1030; --panel:#241943;
@@ -3423,6 +3425,36 @@ function buildShichen(who) {
 buildShichen('a');
 buildShichen('b');
 
+/* ── GA4 ──────────────────────────────────────────────
+   band 與 tempo 一起送。tempo 是這一頁最值得看的維度——
+   它會告訴你「轟轟烈烈」跟「平淡如水」哪一種人比較願意付錢，
+   那比分數帶更有行動意義。
+
+   ★ 這裡永遠不要送生日、年份或任何可以還原生日的東西。
+     頁面上寫著「兩組生日不會被儲存，也不會離開你的裝置」，
+     送進 GA4 就等於違背那句話。band / tempo / has_hour 都是
+     算完之後的分類結果，回推不出生日。 */
+function track(name, params) {
+  try {
+    if (typeof gtag === 'function') gtag('event', name, params || {});
+  } catch (e) { /* 追蹤壞掉不能影響功能 */ }
+}
+
+/* 兩個人都有時辰才會走四柱、報告才有 20 段，所以分三種值而不是是非題 */
+function hourState(a, b) {
+  const n = (typeof a.hour === 'number' ? 1 : 0) + (typeof b.hour === 'number' ? 1 : 0);
+  return n === 2 ? 'both' : (n === 1 ? 'one' : 'none');
+}
+
+/* 付款完成時呼叫。★ 目前刻意沒有任何地方呼叫它。
+   現在按 u-cta 只是把預覽展開，不是付款——接上去會產生假的購買資料，
+   之後就分不清哪些是真的成交。等金流做完，在「訂單確認為已付款」
+   那一步呼叫，不要在點按鈕或跳轉時呼叫。 */
+function trackUnlock() {
+  if (!last) return;
+  track('yuanfen_unlock', { band: last.view.label, tempo: last.view.tempo });
+}
+
 const readDate = p => {
   const o = {
     y: parseInt($(p + '-y').value, 10),
@@ -3485,7 +3517,9 @@ function reveal(a, b) {
   const r = yuanfen(freeA, freeB);
   const scene = '曖昧';   // 本產品專做曖昧期；其餘情境的文案保留在 src/copy.js 備用
   const c = render(r, { a: freeA, b: freeB }, { A: '你', B: '他' }, scene);
-  last = { result: r, a: freeA, b: freeB, full: yuanfen(a, b), scene };
+  /* view 是 render() 的輸出，帶著 band 與 tempo。分享按鈕的埋點需要它們，
+     而 result 只有分數與三維度，沒有這兩個分類。 */
+  last = { result: r, view: c, a: freeA, b: freeB, full: yuanfen(a, b), scene };
   $('r-report').classList.remove('on');
   document.body.classList.remove('reading');
   $('u-cta').disabled = false;
@@ -3497,6 +3531,9 @@ function reveal(a, b) {
   $('r-tempo').textContent = c.tempo;
   $('r-tempo-line').textContent = c.tempoLine;
   $('r-summary').textContent = c.summary;
+
+  /* 起盤完成。放在渲染之後，確保使用者真的看到結果才算一次。 */
+  track('yuanfen_draw', { band: c.label, tempo: c.tempo, has_hour: hourState(a, b) });
 
   const g = gapNote(r);
   $('r-gap').hidden = !g;
@@ -3617,15 +3654,21 @@ $('save-card').addEventListener('click', async () => {
   a.click();
   URL.revokeObjectURL(url);
   $('share-msg').textContent = '已存到你的裝置';
+  track('yuanfen_share', { band: last.view.label, tempo: last.view.tempo, method: 'save' });
 });
 
 $('share-card').addEventListener('click', async () => {
   const blob = await cardBlob();
   const file = new File([blob], 'yuanfen.png', { type: 'image/png' });
   if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    try { await navigator.share({ files: [file] }); } catch (e) { /* 使用者取消 */ }
+    /* 只有真的送出去才算一次分享。使用者在系統面板按取消會走 catch，不送事件。 */
+    try {
+      await navigator.share({ files: [file] });
+      track('yuanfen_share', { band: last.view.label, tempo: last.view.tempo, method: 'native' });
+    } catch (e) { /* 使用者取消 */ }
   } else {
     $('share-msg').textContent = '這個瀏覽器不支援直接分享，請用「儲存圖片」。';
+    track('yuanfen_share', { band: last.view.label, tempo: last.view.tempo, method: 'unsupported' });
   }
 });
 
