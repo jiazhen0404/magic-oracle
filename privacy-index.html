@@ -54,6 +54,7 @@ h2{font-size:1rem;font-weight:600;margin:36px 0 10px;letter-spacing:.06em;color:
 h2::before{content:"";flex:0 0 14px;height:1px;background:var(--gold-dim);transform:translateY(-.4em)}
 h3{font-size:.93rem;font-weight:600;margin:24px 0 8px;letter-spacing:.05em;
   color:var(--gold)}
+footer p.biz{font-family:inherit;font-size:.72rem;line-height:1.9;color:var(--paper-faint);opacity:.75;margin:0 0 14px;letter-spacing:.03em}
 p{margin:0 0 1.1em;font-size:.93rem}
 ul{margin:0 0 1.2em;padding-left:1.3em}
 li{margin-bottom:.5em;font-size:.93rem}
@@ -102,6 +103,7 @@ footer a:hover{color:var(--gold-dim)}
     <p class="updated">最後更新：2026 年 9 月 3 日</p>
 
     <p>歡迎使用未完籤所。當你使用本網站或購買付費內容，即表示你同意以下條款。</p>
+    <p>本網站由<strong>沐金創意工作室</strong>（統一編號 61055754，負責人黃家榛）經營。本條款所稱「我們」即指該營業人。</p>
 
     <h2>我們提供什麼</h2>
     <p>未完籤所提供籤文抽取與解讀內容。你帶著一個問題來，選一個主題，我們為你抽一支籤，並附上解籤與建議。</p>
@@ -176,7 +178,7 @@ footer a:hover{color:var(--gold-dim)}
     <p>若因不可抗力或技術因素導致服務暫停，我們會盡快恢復；若因此讓你無法取得已付費的內容，請聯絡我們處理。</p>
 
     <h2>準據法</h2>
-    <p>本條款以中華民國法律為準據法。因本服務所生爭議，以<strong>臺灣臺南地方法院</strong>為第一審管轄法院。</p>
+    <p>本條款以中華民國法律為準據法。因本服務所生爭議，以<strong>臺灣臺中地方法院</strong>為第一審管轄法院。</p>
   </section>
 
   <!-- ══════════ 隱私權政策 ══════════ -->
@@ -244,7 +246,10 @@ footer a:hover{color:var(--gold-dim)}
     <h2>聯絡我們</h2>
     <dl class="data">
       <dt>服務名稱</dt><dd>未完籤所 MAGIC ORACLE</dd>
+      <dt>營業人名稱</dt><dd>沐金創意工作室</dd>
+      <dt>統一編號</dt><dd>61055754</dd>
       <dt>負責人</dt><dd>黃家榛</dd>
+      <dt>營業地址</dt><dd>407 臺中市西屯區至善里逢甲路 301 巷 22 弄 24 號 1 樓</dd>
       <dt>聯絡信箱</dt><dd><a class="link" href="mailto:hello@unfinished.tw">hello@unfinished.tw</a></dd>
       <dt>網站</dt><dd>unfinished.tw</dd>
     </dl>
@@ -321,6 +326,8 @@ footer a:hover{color:var(--gold-dim)}
 
 
   <footer>
+    <p class="biz">沐金創意工作室　統一編號 61055754　負責人 黃家榛<br>
+      407 臺中市西屯區至善里逢甲路 301 巷 22 弄 24 號 1 樓　hello@unfinished.tw</p>
     <a href="/">回到未完籤所</a>
   </footer>
 </div>
@@ -337,23 +344,5 @@ const io = new IntersectionObserver(entries => {
 }, { rootMargin: '-30% 0px -60% 0px' });
 secs.forEach(s => io.observe(s));
 </script>
-
-<style id="site-footer-v1">
-.site-footer{position:relative;z-index:3;background:linear-gradient(180deg,rgba(9,6,20,0),rgba(9,6,20,.72) 16%,rgba(9,6,20,.86));border-top:1px solid rgba(217,189,130,.32);color:#9d91aa;font-size:13px;padding:44px 20px 40px;text-align:center;width:100%;box-sizing:border-box}
-.site-footer-inner{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:30px 24px;width:min(100%,1000px);margin:0 auto;text-align:left}
-.site-footer-col{display:flex;flex-direction:column;gap:11px;min-width:0}
-.site-footer-h{color:#d9bd82;font-size:13px;letter-spacing:.14em;margin-bottom:3px}
-.site-footer a{color:#9d91aa;text-decoration:none;font-size:13px;line-height:1.4}
-.site-footer a:hover{color:#d9bd82}
-.site-footer p{margin:34px 0 0;font-size:13px}
-@media(max-width:760px){
-.site-footer{padding:36px 22px}
-.site-footer-inner{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 18px}
-.site-footer-col{gap:2px}
-.site-footer-col a{padding:7px 0}
-.site-footer-h{margin-bottom:0}
-}
-</style>
-<footer class="site-footer"><nav class="site-footer-inner" aria-label="網站地圖"><div class="site-footer-col"><span class="site-footer-h">抽籤主題</span><a href="/love/">愛情</a><a href="/work/">工作</a><a href="/life/">人生</a><a href="/pet/">毛孩</a><a href="/choice/">選擇</a></div><div class="site-footer-col"><span class="site-footer-h">更多內容</span><a href="/monthly/">本月主題籤</a><a href="/articles/">未完文章</a><a href="/extended/">延伸解籤</a></div><div class="site-footer-col"><span class="site-footer-h">服務</span><a href="/oracle.html">真人占卜</a><a href="/feedback/">意見回饋</a><a href="/survey/">使用者問卷</a></div><div class="site-footer-col"><span class="site-footer-h">條款</span><a href="/privacy/#terms">服務條款</a><a href="/privacy/#privacy">隱私權</a><a href="/privacy/#refund">退款說明</a></div><div class="site-footer-col"><span class="site-footer-h">聯絡與追蹤</span><a href="https://line.me/R/ti/p/@017vwhwj?utm_source=web&amp;utm_medium=footer&amp;utm_campaign=line_add">LINE 官方帳號</a><a href="https://www.threads.com/@eating_for_justice" target="_blank" rel="noopener">Threads</a><a href="mailto:hello@unfinished.tw">客服信箱</a></div></nav><p>© 2026 未完籤所 MAGIC ORACLE</p></footer>
 </body>
 </html>
