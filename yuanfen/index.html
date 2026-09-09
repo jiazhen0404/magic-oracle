@@ -76,8 +76,36 @@ h1{font-family:var(--serif);
 .sc-row select:focus{outline:2px solid var(--gold); outline-offset:1px; border-color:transparent}
 .sc-row select option{background:var(--panel); color:var(--cream)}
 
+/* 付費區＝一塊金框敕令牌。
+   刻意不換成淺色紙底：那會讓這一區看起來像另一個網站，
+   而且卷軸的紅邊在手機上會吃掉三分之一的寬度，行長從 21 字掉到 14 字。
+   改用「框 ＋ 頂端暈光 ＋ 對角角飾」來凸顯，完全不佔左右空間。
+   紅色只當印記，不鋪底，維持深靛藍與金色的識別。 */
 .upsell{
-  margin-top:48px; border-top:1px solid var(--line); padding-top:42px;
+  position:relative; margin-top:64px; border-top:0;
+  padding:46px 32px 42px;
+  border:1px solid rgba(217,189,130,.5);
+  border-radius:3px;
+  background:
+    radial-gradient(130% 72% at 50% -12%, rgba(217,189,130,.14), transparent 62%),
+    linear-gradient(180deg, rgba(150,40,40,.13), transparent 26%),
+    linear-gradient(180deg, #241943, #1c1236);
+  box-shadow:
+    inset 0 0 0 1px rgba(217,189,130,.15),   /* 內側細線，做出雙框 */
+    inset 0 1px 0 rgba(217,189,130,.32),     /* 上緣一道金 */
+    0 20px 52px rgba(0,0,0,.5);
+}
+/* 對角角飾沿用站上既有素材，跟頁面四角是同一套語言（也同樣只放對角兩處） */
+.upsell::before, .upsell::after{
+  content:''; position:absolute; width:54px; height:52px;
+  background-repeat:no-repeat; background-size:contain;
+  opacity:.45; pointer-events:none;
+}
+.upsell::before{top:5px;    left:5px;  background-image:url('assets/corner-tl.webp'); background-position:left top}
+.upsell::after {bottom:5px; right:5px; background-image:url('assets/corner-br.webp'); background-position:right bottom}
+@media (max-width:420px){
+  .upsell{padding:38px 20px 34px}
+  .upsell::before, .upsell::after{width:40px; height:38px}
 }
 .upsell h2{font-family:var(--serif); text-align:center; font-size:26px; font-weight:400;
   color:var(--gold-soft); letter-spacing:.14em; margin:0 0 20px}
