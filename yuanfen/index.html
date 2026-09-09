@@ -8,8 +8,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cactus+Classical+Serif&family=Lato:wght@300;400;700&family=Noto+Sans+TC:wght@200..500&display=swap" rel="stylesheet">
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-71RMD00WPJ"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-71RMD00WPJ');</script>
 <style>
 :root{
   --bg:#100b25; --bg2:#1a1030; --panel:#241943;
@@ -143,7 +141,7 @@ h1{font-family:var(--serif);
 }
 #r-report section.first-of-part{margin-top:52px}
 .upsell .cta{
-  display:block; width:100%; margin-top:26px; padding:13px; text-align:center;
+  display:block; width:100%; margin-top:26px; padding:15px; text-align:center;
   background:transparent; border:1px solid var(--gold); border-radius:5px;
   color:var(--gold-soft); font-family:var(--latin);
   font-size:15px; letter-spacing:.18em; cursor:pointer;
@@ -164,7 +162,7 @@ h1{font-family:var(--serif);
 .share .hint{color:var(--muted); font-size:13px; margin:0 0 18px; line-height:1.9}
 .share .acts{display:flex; gap:12px; margin-top:4px}
 .share button{
-  flex:1; padding:13px; cursor:pointer; background:rgba(217,189,130,.05);
+  flex:1; padding:16px; cursor:pointer; background:rgba(217,189,130,.05);
   border:1px solid var(--gold); border-radius:3px; color:var(--gold-soft);
   font-family:var(--serif); font-size:17px; letter-spacing:.16em;
   transition:background .25s;
@@ -336,7 +334,7 @@ body.reading .lock-mark{
 .btn-img{
   display:block; border:0; padding:0; background:transparent;
   cursor:pointer; -webkit-tap-highlight-color:transparent;
-  width:min(410px,100%); margin:0 auto;
+  width:min(480px,100%); margin:0 auto;
   background-repeat:no-repeat; background-position:center; background-size:contain;
   filter:drop-shadow(0 10px 30px rgba(0,0,0,.45));
   transition:filter .25s, transform .12s;
@@ -351,7 +349,7 @@ body.reading .lock-mark{
 .btn-img[disabled]{filter:grayscale(.5) brightness(.75); cursor:default}
 
 #go{aspect-ratio:1365/368; background-image:url('assets/btn-start.webp')}
-#u-cta{aspect-ratio:1456/461; background-image:url('assets/btn-unlock.webp'); width:min(440px,100%)}
+#u-cta{aspect-ratio:1456/461; background-image:url('assets/btn-unlock.webp'); width:min(520px,100%)}
 
 /* 展開後：按鈕收起，改用一行文字 */
 .expanded-note{
@@ -588,11 +586,6 @@ details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offse
     <div class="gap" id="r-gap" hidden></div>
     <div class="rule" aria-hidden="true"><i></i></div>
     <div class="dims" id="r-dims"></div>
-    <details class="basis">
-      <summary>這個分數怎麼來的</summary>
-      <p class="basis-why">我們不放一張你看不懂的命盤。要看依據，這裡是完整的算法——每個維度取自哪兩根柱、判定是什麼、佔多少權重。</p>
-      <div id="r-basis"></div>
-    </details>
     <div class="share" id="r-share" hidden>
       <h2>把這張籤存起來</h2>
       <p class="hint">會產生一張帶花框的分享卡，含分數、等級與三個維度。</p>
@@ -604,6 +597,11 @@ details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offse
       <p class="msg" id="share-msg"></p>
     </div>
 
+    <details class="basis">
+      <summary>這個分數怎麼來的</summary>
+      <p class="basis-why">我們不放一張你看不懂的命盤。要看依據，這裡是完整的算法——每個維度取自哪兩根柱、判定是什麼、佔多少權重。</p>
+      <div id="r-basis"></div>
+    </details>
     <div class="upsell" id="r-upsell" hidden>
       <div class="seal" aria-hidden="true"><span class="lock-mark"></span></div>
       <h2 id="u-title"></h2>
@@ -864,6 +862,7 @@ const LIUHE   = [[0,1],[2,11],[3,10],[4,9],[5,8],[6,7]];   // 子丑 寅亥 卯�
 const LIUHAI  = [[0,7],[1,6],[2,5],[3,4],[8,11],[9,10]];   // 子未 丑午 寅巳 卯辰 申亥 酉戌
 const SANXING = [[2,5,8],[1,10,7]];                        // 寅巳申 丑戌未
 const ZIXING  = [4,6,9,11];                                // 辰午酉亥 自刑
+const LIUPO   = [[0,9],[6,3],[8,5],[2,11],[4,1],[10,7]];   // 子酉 午卯 申巳 寅亥 辰丑 戌未 相破
 
 function pairIn(list, a, b) {
   return list.some(p => (p[0] === a && p[1] === b) || (p[1] === a && p[0] === b));
@@ -883,6 +882,7 @@ function zhiRelation(a, b) {
   if (a === b)                                   return { key: 'same',    score: 76 };
   if (Math.abs(a - b) === 6)                     return { key: 'liuchong',score: 38 };
   if (pairIn(LIUHAI, a, b))                      return { key: 'liuhai',  score: 48 };
+  if (pairIn(LIUPO, a, b))                       return { key: 'po',      score: 54 };
   if (bothIn(SANXING, a, b))                     return { key: 'xing',    score: 50 };
   if ((a === 0 && b === 3) || (a === 3 && b === 0)) return { key: 'xing', score: 50 }; // 子卯相刑
   return { key: 'ping', score: 70 };
@@ -904,10 +904,11 @@ function wuxingRelation(wa, wb) {
 
 /* ---------------- 三個子維度 ---------------- */
 
-// 緣的溫度：日支關係 —— 日常相處合不合、舒不舒服
-function scoreWendu(A, B) {
+// 緣的溫度：日支關係，並依交叉柱的合／沖修正
+// 同柱平和但交叉滿是沖害的盤，實際相處不可能沒有摩擦
+function scoreWendu(A, B, adjust) {
   const r = zhiRelation(A.day.zhi, B.day.zhi);
-  return { score: r.score, key: r.key };
+  return { score: clamp(r.score + (adjust || 0)), key: r.key, adjust: adjust || 0 };
 }
 
 // 緣的重量：日干五行生剋方向 —— 誰在承擔、誰在退讓
@@ -948,6 +949,31 @@ function scoreMidu(A, B) {
   };
 }
 
+/* ---------------- 交叉柱比對 ---------------- */
+/* 只比交叉（跳過同位置，那已經計分過），統計合與沖害刑破的數量 */
+const CROSS_SWEET = ['liuhe', 'sanhe'];
+const CROSS_HARSH = ['liuchong', 'liuhai', 'xing', 'po', 'zixing'];
+
+function crossPairs(A, B) {
+  const list = P => {
+    const o = [['年', P.year.zhi], ['月', P.month.zhi], ['日', P.day.zhi]];
+    if (P.hour) o.push(['時', P.hour.zhi]);
+    return o;
+  };
+  const pairs = [];
+  for (const [pa, za] of list(A))
+    for (const [pb, zb] of list(B)) {
+      if (pa === pb) continue;
+      const r = zhiRelation(za, zb);
+      if (r.key !== 'ping') pairs.push({ a: pa + ZHI[za], b: pb + ZHI[zb], key: r.key });
+    }
+  return {
+    pairs,
+    sweet: pairs.filter(p => CROSS_SWEET.includes(p.key)).length,
+    harsh: pairs.filter(p => CROSS_HARSH.includes(p.key)).length
+  };
+}
+
 /* ---------------- 總分 ---------------- */
 
 const WEIGHTS      = { wendu: 0.35, zhongliang: 0.30, changdu: 0.35 };
@@ -976,7 +1002,9 @@ function yuanfen(a, b) {
   const hasHour = !!(A.hour && B.hour);
   const W = hasHour ? WEIGHTS_HOUR : WEIGHTS;
 
-  const wendu      = scoreWendu(A, B);
+  // 先算交叉關係，再據以修正溫度
+  const cx = crossPairs(A, B);
+  const wendu      = scoreWendu(A, B, Math.max(-10, Math.min(10, (cx.sweet - cx.harsh) * 3)));
   const zhongliang = scoreZhongliang(A, B);
   const changdu    = scoreChangdu(A, B);
   const midu       = hasHour ? scoreMidu(A, B) : null;
@@ -987,7 +1015,7 @@ function yuanfen(a, b) {
   if (hasHour) raw += midu.score * W.midu;
 
   const dimensions = {
-    wendu:      { name: '緣的溫度', score: wendu.score, key: wendu.key },
+    wendu:      { name: '緣的溫度', score: wendu.score, key: wendu.key, adjust: wendu.adjust || 0 },
     zhongliang: { name: '緣的重量', score: zhongliang.score, key: zhongliang.key,
                   yinyang: zhongliang.yinyang, wa: zhongliang.wa, wb: zhongliang.wb },
     changdu:    { name: '緣的長度', score: changdu.score, key: changdu.key,
@@ -1020,6 +1048,7 @@ function yuanfen(a, b) {
   return {
     total: Math.round(raw),
     hasHour,
+    cross: cx,
     uncertainYear: !!(A.year.uncertain || B.year.uncertain),
     weights: W,
     dimensions,
@@ -1322,6 +1351,10 @@ const PLACE = {
     '你們多半是在有壓力或有競爭的環境裡認識的——工作上的往來、' +
     '同一件事情的兩端、或是某種需要各自表態的場合。' +
     '這種相遇會讓你們很早就看到對方認真的樣子，那既是吸引，也是後來摩擦的來源。',
+  po:
+    '你們的相遇多半發生在某個銜接不上的時間點——一段剛結束或剛開始的日子，' +
+    '或是某個本來要去卻沒去成的場合。年支相破的緣分常常帶著「差一點就錯過」的成分，' +
+    '而那個差一點，往後也會反覆出現在別的地方。',
   liuchong:
     '你們的相遇多半是偶然的、短暫交錯的——一次臨時的場合、一段本來不會重疊的時間，' +
     '或是某個人生轉折點上剛好碰到。年支相沖的緣分沒有必然性，' +
@@ -1638,6 +1671,21 @@ const WENDU = {
       '你們刺到對方的時候多半沒有惡意，只是說話的方式剛好對不上。這種問題改語氣比改想法有效。',
       '你們的爭執有一個固定的節奏：一句話、一個停頓、然後兩個人都不說話。認出那個節奏是解開它的第一步。',
       '你們不缺理解，缺的是翻譯。同樣一件事換個說法，多半就不會撞上。'] },
+  po: {
+    core: {
+      交往: '你們之間有一種表面看不出來的破損。日子照過、話照講，但有些地方一直沒有真的接上。',
+      曖昧: '你們之間有一種表面看不出來的破損。訊息照回、面照見，但有些地方一直沒有真的接上。',
+      分開: '你們之間一直有一種表面看不出來的破損。不是吵散的，是有些地方從來沒有真的接上過。',
+      未定: '你和他之間有一種表面看不出來的破損。互動看起來正常，但你知道有什麼沒有到位。'
+    },
+    open: ['', '這一項要講得細一點。', '有一種問題不會浮上檯面。'],
+    close: [
+      '相破的關係不吵架，它只是慢慢鬆掉。你會在某個時候突然發現，有些事已經不會跟他說了。',
+      '這種破損最麻煩的是找不到源頭，因為它不是某一件事造成的。要修的話得從最近的一件小事開始，不要回頭翻舊帳。',
+      '你們之間該接上卻沒接上的地方，多半跟一開始就沒講清楚的期待有關。'
+    ]
+  },
+
   liuchong: {
     core: {
       交往: '你們是相反的兩種人。他快你慢、他要熱鬧你要安靜，什麼事都得先協調才能一起做。',
@@ -1834,6 +1882,21 @@ const CHANGDU = {
       '磨的過程會讓人懷疑是不是不適合。過了那段之後回頭看，那正是關係變穩的地方。',
       '會磨的關係通常比一開始就順的關係更清楚彼此的底線，前提是磨完了還在。',
       '那段拉扯期不會突然結束，會是慢慢鬆開的。你不會記得是哪一天好起來的。'] },
+  po: {
+    core: {
+      交往: '這段緣有一處破損。不是斷，是有一段接不上——你們之間有些話題永遠繞過去。',
+      曖昧: '這段緣有一處破損。不是斷，是有一段接不上——你們之間有些話題永遠繞過去。',
+      分開: '這段緣有一處破損。當初就有一段接不上，那個接不上的地方後來變成了距離。',
+      未定: '這段緣有一處破損。不是斷，是有一段接不上——你們之間有些話題永遠繞過去。'
+    },
+    open: ['', '長度上有一個具體的缺口。', '這一項的問題很明確。'],
+    close: [
+      '要走長的話，那個繞過去的話題遲早要面對。繞得越久，它佔的比重越大。',
+      '相破的緣不會突然斷掉，會是慢慢失去共同的部分。發現的時候通常已經過了一段時間。',
+      '這種缺口是可以補的，前提是有人願意先承認它存在。'
+    ]
+  },
+
   liuchong: {
     core: {
       交往: '這段緣的變動大。你們的人生節奏常常錯開，一個在衝的時候另一個在休息，容易走著走著就分岔。',
@@ -1891,7 +1954,7 @@ function render(result, birth, names = { A: '你', B: '對方' }, scene = '交�
            + pick(CHANGDU_NAYIN[d.changdu.nayinKey], seed, SALT.changdu * 13)
            + fl.changdu;
 
-  const tp = tempo(d);
+  const tp = tempo(d, result.cross);
 
   return {
     total: result.total,
@@ -1930,6 +1993,7 @@ const ZHI_LABEL = {
   zixing:   { name: '自刑', gloss: '同一個毛病' },
   liuhai:   { name: '六害', gloss: '暗中消耗' },
   xing:     { name: '相刑', gloss: '容易互相刺到' },
+  po:       { name: '相破', gloss: '有一處始終接不上' },
   liuchong: { name: '六沖', gloss: '相反的兩種人' }
 };
 
@@ -2051,6 +2115,7 @@ const WENDU_EVENTS = {
   sanhe:  '往後你們會一起經歷一件有點麻煩的事。處理完之後你會發現，你們合作的方式比想像中順——關係常常是在這種時候定下來的。那件事會變成你們之間的一個共同記憶，往後遇到難關會拿出來用。',
   ping:   '接下來會有一次你覺得「他怎麼會這樣想」的瞬間。那不是不合，是你們還沒真正聊過那個題目；聊過之後距離會近一階。聊過之後你們的關係會從「還不錯」變成「有內容」。',
   liuhai: '往後會有一次對話讓你回家反覆想了很久。你會想問又沒問出口——那次如果問了，兩個人之間那層說不出來的累會鬆開。那層累一旦鬆開，你們相處的疲勞感會明顯下降。',
+  po:'往後會有一件小事讓你發現，有些話你已經不會跟他說了。那件事本身不重要，重要的是你什麼時候開始不說的。之後你會開始留意還有哪些事也停了。',
   liuchong:'接下來會有一件事必須一起決定，那時候你們的差異會被放到最大。談的時候不要比誰對，先各自講出不能讓的那一點。講清楚之後，你們會找到一種各自保留但仍然靠近的方式。'
 };
 
@@ -2073,6 +2138,7 @@ const CHANGDU_EVENTS = {
   ping:    '這段緣沒有既定的走向，所以會有一個明確的分岔點。那個時候的選擇，會決定它往哪一邊去。那個分岔點不會有預告，所以現在的每一次選擇都算數。',
   liuhai:  '耗損是慢慢來的，所以你們會在某個時候突然覺得「什麼時候變成這樣的」。那個時刻之前處理，比之後容易得多。處理之後，這段緣的長度會比你現在預估的遠。',
   xing:    '往後會出現一段你們都特別硬的時期。那段時間會很難受，但過了之後關係反而穩——這種緣是磨出來的。磨完之後的關係反而比一開始就順的更穩，因為你們知道彼此的底線在哪。',
+  po:'接下來那個你們一直繞開的話題會被某件事帶出來。躲不掉的那一次，其實是這段緣能不能補起來的關鍵。',
   liuchong:'接下來你們的節奏會明顯錯開一次，一個在衝、一個在休息。那不是感情變了，是真的忙不到一起；要留住就得刻意把時間對回來。對回來之後，你們會發現差異其實不是問題，缺席才是。'
 };
 
@@ -2215,6 +2281,9 @@ const APPEARANCE = {
     '反過來也一樣，他有些話你聽了會不舒服，他卻完全沒意識到自己說了什麼。',
 
   /* 六沖 —— 相反的兩種人 */
+  po:
+    '你看到的他大致上是好的，但你們之間有一小塊是空的。他沒有做錯什麼，' +
+    '只是有些事你不會問、他也不會提。這種空白不會讓人難過，只會讓人覺得少了什麼。',
   liuchong:
     '你看到的他跟你完全不同步。他快的時候你還在想，你想好了他已經換題目。' +
     '他喜歡的場合你會累，你想要的安靜他會無聊。連休假想做什麼都要先協調，很少有自然就一致的時候。' +
@@ -2273,6 +2342,9 @@ const ATTITUDE = {
     '他對未來是想要的，只是他想要的版本跟你的不完全一樣。' +
     '他還沒發現這件事，因為你們都還在講「以後」，沒有講到「以後怎麼做」。',
 
+  po:
+    '他對未來是願意的，但有一塊他沒有算進去。' +
+    '不是刻意隱瞞，是他自己也還沒想到那裡——直到有人問起。',
   liuchong:
     '他對未來是模糊的。他喜歡現在，但把時間拉長之後，他自己也看不太清楚畫面。' +
     '不是不想跟你走，是他的人生節奏跟你不在同一段上，他也還沒想到怎麼辦。',
@@ -2356,7 +2428,7 @@ function dont(key, names = { A: '你', B: '他' }) {
    分數只用來排名與呈現，不用來決定敘事。
    ========================================================================= */
 
-const HARSH = ['liuchong', 'liuhai', 'xing', 'zixing'];   // 沖害刑
+const HARSH = ['liuchong', 'liuhai', 'xing', 'zixing', 'po'];   // 沖害刑破
 const SWEET = ['liuhe', 'sanhe'];                          // 合
 
 /**
@@ -2592,6 +2664,9 @@ const VALUES = {
   xing:
     '你們對「什麼是對的」有真正的分歧，而且都很有主張。你們不是不理解對方，是理解了但不認同。' +
     '這種分歧沒辦法靠溝通消除，只能靠劃分——哪些事情各自決定、哪些事情必須一起決定，先講清楚。',
+  po:
+    '你們看重的東西大方向一致，但有一項是對不上的，而且那一項恰好是你們都不太願意讓步的。' +
+    '表面上不衝突，實際上一碰就卡——所以你們會下意識地繞開它。',
   liuchong:
     '你們看重的東西幾乎在相反的方向。一個要安穩一個要變化、一個重效率一個重感受。' +
     '這種對沖不是可以調和的，而是要各自承認：對方那套在對方的人生裡是成立的。承認之後才有辦法談合作。'
@@ -2607,6 +2682,7 @@ const READING = {
   zixing:  '同一件事，你們的解讀會在某個特定的點上一起卡住。那個點通常跟你們共同的弱項有關，一碰到就兩個人都失去判斷力。',
   liuhai:  '同一件事，你們的解讀常常差在意圖上。他說的是內容，你聽到的是態度；你說的是感受，他聽到的是指控。這是你們最主要的耗損來源。',
   xing:    '同一件事，你們的解讀會在語氣上分岔。同樣一句話，你聽起來是直接，他聽起來是不耐煩。你們爭的多半不是事實，是那句話怎麼說的。',
+  po:      '同一件事，你們的解讀多半接近，但總有一小塊對不上。那一小塊你們通常會跳過去，久了就變成一個誰都不碰的空白。',
   liuchong:'同一件事，你們的解讀幾乎從相反的方向出發。他看到機會，你看到風險；你看到體貼，他看到多慮。兩邊都不算錯，但需要刻意翻譯。'
 };
 
@@ -3111,6 +3187,10 @@ const MIDU = {
     '最實際的做法是把緩衝變成自己的習慣：講重話之前先停一下、累的時候不談事情。' +
     '你們的問題從來不是內容，是時機和語氣。' +
     '還有一個小技巧：把重要的話留到出門的時候講。有第三方在場的環境反而會讓你們保持該有的分寸。',
+  po:
+    '私下相處看起來沒事，但有一塊是空的。你們不吵、也不冷，只是有些話題永遠不會在獨處的時候出現。' +
+    '這種空白在人前完全看不出來，因為有別人在的時候本來就不會聊那些。' +
+    '要補的話得刻意製造一次沒有行程的獨處，讓那個話題有機會自己浮上來。',
   liuchong:
     '私下相處需要協調，而且是每天都要。連休息的方式都不同——一個想說話一個想安靜，' +
     '一個要出門一個要窩著，連幾點睡都對不上。這件事在同居或長時間相處時會特別明顯。' +
@@ -3171,7 +3251,7 @@ function report(result, names = { A: '你', B: '他' }) {
   const strong = strongest(d);
   // 敘事由盤面格局決定，不由分數排名決定
   const nar = narrate(d);
-  const tp = tempo(d);
+  const tp = tempo(d, result.cross);
   const en = encounter(d.changdu.key, tp.key);
   const zl = d.zhongliang.key;
 
@@ -3424,7 +3504,7 @@ function cardData(result, birth) {
   return {
     total: result.total,
     headline: b.label + ' · ' + b.title,
-    tempo: tempo(result.dimensions).name,
+    tempo: tempo(result.dimensions, result.cross).name,
     poem: lines,
     dims: [result.dimensions.wendu, result.dimensions.zhongliang, result.dimensions.changdu]
             .map(d => ({ name: d.name, score: d.score }))
@@ -3462,36 +3542,6 @@ function buildShichen(who) {
 
 buildShichen('a');
 buildShichen('b');
-
-/* ── GA4 ──────────────────────────────────────────────
-   band 與 tempo 一起送。tempo 是這一頁最值得看的維度——
-   它會告訴你「轟轟烈烈」跟「平淡如水」哪一種人比較願意付錢，
-   那比分數帶更有行動意義。
-
-   ★ 這裡永遠不要送生日、年份或任何可以還原生日的東西。
-     頁面上寫著「兩組生日不會被儲存，也不會離開你的裝置」，
-     送進 GA4 就等於違背那句話。band / tempo / has_hour 都是
-     算完之後的分類結果，回推不出生日。 */
-function track(name, params) {
-  try {
-    if (typeof gtag === 'function') gtag('event', name, params || {});
-  } catch (e) { /* 追蹤壞掉不能影響功能 */ }
-}
-
-/* 兩個人都有時辰才會走四柱、報告才有 20 段，所以分三種值而不是是非題 */
-function hourState(a, b) {
-  const n = (typeof a.hour === 'number' ? 1 : 0) + (typeof b.hour === 'number' ? 1 : 0);
-  return n === 2 ? 'both' : (n === 1 ? 'one' : 'none');
-}
-
-/* 付款完成時呼叫。★ 目前刻意沒有任何地方呼叫它。
-   現在按 u-cta 只是把預覽展開，不是付款——接上去會產生假的購買資料，
-   之後就分不清哪些是真的成交。等金流做完，在「訂單確認為已付款」
-   那一步呼叫，不要在點按鈕或跳轉時呼叫。 */
-function trackUnlock() {
-  if (!last) return;
-  track('yuanfen_unlock', { band: last.view.label, tempo: last.view.tempo });
-}
 
 const readDate = p => {
   const o = {
@@ -3555,9 +3605,7 @@ function reveal(a, b) {
   const r = yuanfen(freeA, freeB);
   const scene = '曖昧';   // 本產品專做曖昧期；其餘情境的文案保留在 src/copy.js 備用
   const c = render(r, { a: freeA, b: freeB }, { A: '你', B: '他' }, scene);
-  /* view 是 render() 的輸出，帶著 band 與 tempo。分享按鈕的埋點需要它們，
-     而 result 只有分數與三維度，沒有這兩個分類。 */
-  last = { result: r, view: c, a: freeA, b: freeB, full: yuanfen(a, b), scene };
+  last = { result: r, a: freeA, b: freeB, full: yuanfen(a, b), scene };
   $('r-report').classList.remove('on');
   document.body.classList.remove('reading');
   $('u-cta').disabled = false;
@@ -3569,9 +3617,6 @@ function reveal(a, b) {
   $('r-tempo').textContent = c.tempo;
   $('r-tempo-line').textContent = c.tempoLine;
   $('r-summary').textContent = c.summary;
-
-  /* 起盤完成。放在渲染之後，確保使用者真的看到結果才算一次。 */
-  track('yuanfen_draw', { band: c.label, tempo: c.tempo, has_hour: hourState(a, b) });
 
   const g = gapNote(r);
   $('r-gap').hidden = !g;
@@ -3692,21 +3737,15 @@ $('save-card').addEventListener('click', async () => {
   a.click();
   URL.revokeObjectURL(url);
   $('share-msg').textContent = '已存到你的裝置';
-  track('yuanfen_share', { band: last.view.label, tempo: last.view.tempo, method: 'save' });
 });
 
 $('share-card').addEventListener('click', async () => {
   const blob = await cardBlob();
   const file = new File([blob], 'yuanfen.png', { type: 'image/png' });
   if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    /* 只有真的送出去才算一次分享。使用者在系統面板按取消會走 catch，不送事件。 */
-    try {
-      await navigator.share({ files: [file] });
-      track('yuanfen_share', { band: last.view.label, tempo: last.view.tempo, method: 'native' });
-    } catch (e) { /* 使用者取消 */ }
+    try { await navigator.share({ files: [file] }); } catch (e) { /* 使用者取消 */ }
   } else {
     $('share-msg').textContent = '這個瀏覽器不支援直接分享，請用「儲存圖片」。';
-    track('yuanfen_share', { band: last.view.label, tempo: last.view.tempo, method: 'unsupported' });
   }
 });
 
