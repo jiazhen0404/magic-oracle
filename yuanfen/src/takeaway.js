@@ -27,6 +27,15 @@ const T = {
     平淡如水: '淡不是沒有可能，是還沒有人決定要讓它變濃。'
   },
 
+  /* 新增 誰先動心 —— 重量 key 的標籤 */
+  ini: {
+    你先動心: '你比他早進入這段關係，所以你的期待也一直比他多一點。',
+    你先出手: '節奏一直由你在推，所以你很難分辨他是想靠近還是在配合。',
+    他先動心: '他的在意表現在行動上，不在話上——所以你不一定察覺得到。',
+    他先出手: '被選中的感覺很好，但主導權也在那個時候交出去了。',
+    幾乎同時: '沒有誰欠誰，也沒有人覺得自己該先開口。'
+  },
+
   /* 新增 相遇的場合 —— 年支 key */
   place: {
     po:       '差一點就錯過的相遇，那個「差一點」往後會反覆出現。',
@@ -224,10 +233,11 @@ const T = {
 
 /* 段落 title → 取哪一組、用哪個 key */
 function takeaway(section, ctx) {
-  const { band, weak, strong, zl, wendu, changdu, midu, tempo, place } = ctx;
+  const { band, weak, strong, zl, wendu, changdu, midu, tempo, place, ini } = ctx;
   const map = {
     '你們的緣分，究竟有多深？':                 () => T.table,
     '你們是怎麼開始的？':                       () => T.tempo[ctx.tempo],
+    '是誰先開始喜歡上誰的？':                   () => T.ini[ctx.ini],
     '你們是在什麼樣的場合遇上的？':             () => T.place[ctx.place],
     '你們現在，到底算是什麼？':       () => T.now[band],
     '明明有感覺，為什麼就是差那一步？':           () => T.weak[weak],

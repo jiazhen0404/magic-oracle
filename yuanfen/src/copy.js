@@ -12,6 +12,7 @@
 
 const { flavour } = require('./flavour');
 const { tempo } = require('./tempo');
+const { initiator } = require('./initiator');
 
 /* ---------- 種子與抽樣 ---------- */
 
@@ -548,6 +549,7 @@ function render(result, birth, names = { A: '你', B: '對方' }, scene = '交�
            + fl.changdu;
 
   const tp = tempo(d, result.cross);
+  const ini = initiator(d);
 
   return {
     total: result.total,
@@ -555,6 +557,7 @@ function render(result, birth, names = { A: '你', B: '對方' }, scene = '交�
     title: b.title,
     tempo: tp.name,
     tempoLine: tp.intro,
+    initiator: ini.label,
     headline: b.label + '·' + b.title,
     poem: pick(b.poems, seed, SALT.poem),
     summary: compose(b, seed, SALT.summary, true, scene),
@@ -572,4 +575,3 @@ module.exports = {
   render, band, seedOf, pick, compose, coreOf, SCENES,
   TOTAL_BANDS, WENDU, ZHONGLIANG, CHANGDU, CHANGDU_NAYIN
 };
-

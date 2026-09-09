@@ -22,6 +22,7 @@ const { SELF_POSITION, SELF_BLIND, VALUES, READING, KEEP, svPick } = require('./
 const { takeaway } = require('./takeaway');
 const { narrate } = require('./shape');
 const { tempo } = require('./tempo');
+const { initiator } = require('./initiator');
 const { encounter } = require('./encounter');
 
 /* ---------- 1. 這段緣現在停在哪裡 ---------- */
@@ -290,6 +291,7 @@ function report(result, names = { A: '你', B: '他' }) {
   const nar = narrate(d);
   const tp = tempo(d, result.cross);
   const en = encounter(d.changdu.key, tp.key);
+  const ini = initiator(d);
   const zl = d.zhongliang.key;
 
   const ev = eventsFor(result, b.label)
@@ -309,6 +311,8 @@ function report(result, names = { A: '你', B: '他' }) {
       note: '立春時刻由太陽黃經實算，不是固定 2/4；月柱由節氣定界。本版計分只用年、日、時三柱，月柱列出供對照。' },
     { part: P1, title: '你們是怎麼開始的？',
       body: tp.intro + tp.arc + tp.note },
+    { part: P1, title: '是誰先開始喜歡上誰的？',
+      body: ini.body },
     { part: P1, title: '你們是在什麼樣的場合遇上的？',
       body: en.place + en.timing },
     { part: P1, title: '你們現在，到底算是什麼？', body: nar.now },
@@ -342,7 +346,7 @@ function report(result, names = { A: '你', B: '他' }) {
   );
 
   // 每段掛上「這一段的重點」
-  const ctx = { band: b.label, weak, strong, zl, tempo: tp.name, place: d.changdu.key,
+  const ctx = { band: b.label, weak, strong, zl, tempo: tp.name, place: d.changdu.key, ini: ini.label,
                 wendu: d.wendu.key, changdu: d.changdu.key,
                 midu: d.midu ? d.midu.key : null };
   sections.forEach(s => { s.takeaway = takeaway(s.title, ctx); });
@@ -357,4 +361,3 @@ function report(result, names = { A: '你', B: '他' }) {
 }
 
 module.exports = { report, pillarTable, NOW_BAND, NOW_WEAK, NOW_STRONG, WATCH, CAUTION, ADVICE, MIDU };
-
