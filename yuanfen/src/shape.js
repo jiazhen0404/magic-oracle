@@ -11,7 +11,7 @@
    分數只用來排名與呈現，不用來決定敘事。
    ========================================================================= */
 
-const HARSH = ['liuchong', 'liuhai', 'xing', 'zixing'];   // 沖害刑
+const HARSH = ['liuchong', 'liuhai', 'xing', 'zixing', 'po'];   // 沖害刑破
 const SWEET = ['liuhe', 'sanhe'];                          // 合
 
 /**
@@ -162,3 +162,4 @@ function narrate(d) {
 }
 
 module.exports = { shape, narrate, NOW, WEAK_LINE, STRONG_LINE, NO_WEAK, NO_STRONG, TWO_STRONG };
+

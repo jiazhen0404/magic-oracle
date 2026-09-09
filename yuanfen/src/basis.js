@@ -15,6 +15,7 @@ const ZHI_LABEL = {
   zixing:   { name: '自刑', gloss: '同一個毛病' },
   liuhai:   { name: '六害', gloss: '暗中消耗' },
   xing:     { name: '相刑', gloss: '容易互相刺到' },
+  po:       { name: '相破', gloss: '有一處始終接不上' },
   liuchong: { name: '六沖', gloss: '相反的兩種人' }
 };
 
@@ -103,3 +104,4 @@ function renderBasis(result, names) {
 }
 
 module.exports = { basis, gapNote, renderBasis, ZHI_LABEL, GAP_THRESHOLD };
+

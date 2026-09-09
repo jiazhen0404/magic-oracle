@@ -224,6 +224,10 @@ const MIDU = {
     '最實際的做法是把緩衝變成自己的習慣：講重話之前先停一下、累的時候不談事情。' +
     '你們的問題從來不是內容，是時機和語氣。' +
     '還有一個小技巧：把重要的話留到出門的時候講。有第三方在場的環境反而會讓你們保持該有的分寸。',
+  po:
+    '私下相處看起來沒事，但有一塊是空的。你們不吵、也不冷，只是有些話題永遠不會在獨處的時候出現。' +
+    '這種空白在人前完全看不出來，因為有別人在的時候本來就不會聊那些。' +
+    '要補的話得刻意製造一次沒有行程的獨處，讓那個話題有機會自己浮上來。',
   liuchong:
     '私下相處需要協調，而且是每天都要。連休息的方式都不同——一個想說話一個想安靜，' +
     '一個要出門一個要窩著，連幾點睡都對不上。這件事在同居或長時間相處時會特別明顯。' +
@@ -284,7 +288,7 @@ function report(result, names = { A: '你', B: '他' }) {
   const strong = strongest(d);
   // 敘事由盤面格局決定，不由分數排名決定
   const nar = narrate(d);
-  const tp = tempo(d);
+  const tp = tempo(d, result.cross);
   const en = encounter(d.changdu.key, tp.key);
   const zl = d.zhongliang.key;
 
@@ -353,3 +357,4 @@ function report(result, names = { A: '你', B: '他' }) {
 }
 
 module.exports = { report, pillarTable, NOW_BAND, NOW_WEAK, NOW_STRONG, WATCH, CAUTION, ADVICE, MIDU };
+
