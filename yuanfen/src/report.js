@@ -22,6 +22,9 @@ const { SELF_POSITION, SELF_BLIND, VALUES, READING, KEEP, svPick } = require('./
 const { takeaway } = require('./takeaway');
 const { narrate } = require('./shape');
 const { tempo } = require('./tempo');
+const { initiator } = require('./initiator');
+const { chance } = require('./chance');
+const { moveFirst } = require('./movefirst');
 const { encounter } = require('./encounter');
 
 /* ---------- 1. 這段緣現在停在哪裡 ---------- */
@@ -290,7 +293,10 @@ function report(result, names = { A: '你', B: '他' }) {
   const nar = narrate(d);
   const tp = tempo(d, result.cross);
   const en = encounter(d.changdu.key, tp.key);
+  const ini = initiator(d);
+  const ch = chance(d, result.cross, tp.key);
   const zl = d.zhongliang.key;
+  const mf = moveFirst(zl, ch.blockKey);
 
   const ev = eventsFor(result, b.label)
     .map((t, i) => (TIMELINE[i] || '同時，') + t.replace(/\{A\}/g, names.A));
@@ -298,51 +304,58 @@ function report(result, names = { A: '你', B: '他' }) {
   const eventsNear  = TIME_OPEN[b.label] + ev.slice(0, split).join('');
   const eventsLater = ev.slice(split).join('') + TIME_CLOSE[b.label];
 
-  const P1 = '第一部分｜先看你們的關係';
-  const P2 = '第二部分｜他與你，各自在這段關係裡';
-  const P3 = '第三部分｜你們為什麼會這樣相處';
-  const P4 = '第四部分｜這段關係，接下來可能怎麼走';
-  const P5 = '第五部分｜現在，你可以怎麼做';
+  const P1 = '第一部分｜你們是怎麼開始的';
+  const P2 = '第二部分｜你們現在的狀態';
+  const P3 = '第三部分｜他與你，各自在這段關係裡';
+  const P4 = '第四部分｜你們為什麼會這樣相處';
+  const P5 = '第五部分｜接下來可能怎麼走';
+  const P6 = '第六部分｜現在，你可以怎麼做';
 
   const sections = [
     { part: P1, title: '你們的緣分，究竟有多深？', table: pillarTable(result),
       note: '立春時刻由太陽黃經實算，不是固定 2/4；月柱由節氣定界。本版計分只用年、日、時三柱，月柱列出供對照。' },
     { part: P1, title: '你們是怎麼開始的？',
       body: tp.intro + tp.arc + tp.note },
+    { part: P1, title: '是誰先開始喜歡上誰的？',
+      body: ini.body },
     { part: P1, title: '你們是在什麼樣的場合遇上的？',
       body: en.place + en.timing },
-    { part: P1, title: '你們現在，到底算是什麼？', body: nar.now },
-    { part: P1, title: '明明有感覺，為什麼就是差那一步？',     body: nar.weak },
-    { part: P1, title: '你們之間，最值得珍惜的是什麼？',     body: nar.strong },
+    { part: P2, title: '你們現在，到底算是什麼？', body: nar.now },
+    { part: P2, title: '明明有感覺，為什麼就是差那一步？',     body: nar.weak },
+    { part: P2, title: '你們之間，最值得珍惜的是什麼？',     body: nar.strong },
+    { part: P2, title: '這段曖昧，走到一起的機會有多大？',
+      body: ch.line + ch.block + ch.key },
 
-    { part: P2, title: '他習慣用什麼方式靠近一個人？', body: position(zl, names) },
-    { part: P2, title: '你喜歡的他，和真實的他一樣嗎？',       body: appearance(d.wendu.key, names) },
-    { part: P2, title: '如果真的在一起，他看重的會是什麼？',     body: attitude(d.changdu.key, names) },
-    { part: P2, title: '那你呢？你真正需要的是什麼樣的愛？',   body: svPick(SELF_POSITION, zl, names) },
-    { part: P2, title: '在他面前，你為什麼會變得不像自己？',   body: svPick(SELF_BLIND, zl, names) },
+    { part: P3, title: '他習慣用什麼方式靠近一個人？', body: position(zl, names) },
+    { part: P3, title: '你喜歡的他，和真實的他一樣嗎？',       body: appearance(d.wendu.key, names) },
+    { part: P3, title: '如果真的在一起，他看重的會是什麼？',     body: attitude(d.changdu.key, names) },
+    { part: P3, title: '那你呢？你真正需要的是什麼樣的愛？',   body: svPick(SELF_POSITION, zl, names) },
+    { part: P3, title: '在他面前，你為什麼會變得不像自己？',   body: svPick(SELF_BLIND, zl, names) },
 
-    { part: P3, title: '你們想要的愛情，真的是同一種嗎？',     body: svPick(VALUES, d.changdu.key, names) },
-    { part: P3, title: '為什麼同一件事，你們總是想得不一樣？', body: svPick(READING, d.wendu.key, names) }
+    { part: P4, title: '你們想要的愛情，真的是同一種嗎？',     body: svPick(VALUES, d.changdu.key, names) },
+    { part: P4, title: '為什麼同一件事，你們總是想得不一樣？', body: svPick(READING, d.wendu.key, names) }
   ];
 
   if (d.midu) {
-    sections.push({ part: P3, needHour: true,
+    sections.push({ part: P4, needHour: true,
       title: '只有你們兩個人的時候，是什麼樣子？', body: MIDU[d.midu.key] });
   }
 
   sections.push(
-    { part: P4, title: '近期，你們之間可能先出現什麼變化？', body: eventsNear },
-    { part: P4, title: '再往後，你們有機會走到哪裡？',       body: eventsLater },
-    { part: P4, title: '他有在往前嗎？從哪裡看得出來？', list: WATCH[zl] },
-    { part: P4, title: '什麼事，最容易讓你們就這樣停住？',     body: CAUTION[weak] },
+    { part: P5, title: '近期，你們之間可能先出現什麼變化？', body: eventsNear },
+    { part: P5, title: '再往後，你們有機會走到哪裡？',       body: eventsLater },
+    { part: P5, title: '他有在往前嗎？從哪裡看得出來？', list: WATCH[zl] },
+    { part: P5, title: '什麼事，最容易讓你們就這樣停住？',     body: CAUTION[weak] },
 
-    { part: P5, title: '如果你想往前一步，現在可以怎麼做？',   body: ADVICE[zl] },
-    { part: P5, title: '現在最不適合做的，是哪件事？',       body: dont(zl, names) },
-    { part: P5, title: '關於這段緣分，你最該記住的一件事。', body: svPick(KEEP, b.label, names) }
+    { part: P6, title: '接下來，該由誰先開口？',
+      body: mf.who + mf.how },
+    { part: P6, title: '如果你想往前一步，現在可以怎麼做？',   body: ADVICE[zl] },
+    { part: P6, title: '現在最不適合做的，是哪件事？',       body: dont(zl, names) },
+    { part: P6, title: '關於這段緣分，你最該記住的一件事。', body: svPick(KEEP, b.label, names) }
   );
 
   // 每段掛上「這一段的重點」
-  const ctx = { band: b.label, weak, strong, zl, tempo: tp.name, place: d.changdu.key,
+  const ctx = { band: b.label, weak, strong, zl, tempo: tp.name, place: d.changdu.key, ini: ini.label, chance: ch.blockKey, move: zl,
                 wendu: d.wendu.key, changdu: d.changdu.key,
                 midu: d.midu ? d.midu.key : null };
   sections.forEach(s => { s.takeaway = takeaway(s.title, ctx); });
@@ -357,4 +370,3 @@ function report(result, names = { A: '你', B: '他' }) {
 }
 
 module.exports = { report, pillarTable, NOW_BAND, NOW_WEAK, NOW_STRONG, WATCH, CAUTION, ADVICE, MIDU };
-

@@ -12,6 +12,14 @@
 
 const { flavour } = require('./flavour');
 const { tempo } = require('./tempo');
+const { initiator } = require('./initiator');
+const { chance } = require('./chance');
+
+
+
+
+
+
 
 /* ---------- 種子與抽樣 ---------- */
 
@@ -548,6 +556,8 @@ function render(result, birth, names = { A: '你', B: '對方' }, scene = '交�
            + fl.changdu;
 
   const tp = tempo(d, result.cross);
+  const ini = initiator(d);
+  const ch = chance(d, result.cross, tp.key);
 
   return {
     total: result.total,
@@ -555,6 +565,9 @@ function render(result, birth, names = { A: '你', B: '對方' }, scene = '交�
     title: b.title,
     tempo: tp.name,
     tempoLine: tp.intro,
+    initiator: ini.label,
+    chance: ch.label,
+    chanceLine: ch.line,
     headline: b.label + '·' + b.title,
     poem: pick(b.poems, seed, SALT.poem),
     summary: compose(b, seed, SALT.summary, true, scene),

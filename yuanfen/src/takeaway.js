@@ -27,6 +27,35 @@ const T = {
     平淡如水: '淡不是沒有可能，是還沒有人決定要讓它變濃。'
   },
 
+  /* 新增 誰該先開口 —— 重量 key */
+  move: {
+    a_sheng_b: '一直是同一方在推的關係，最後多半推不動。',
+    a_ke_b:    '他會配合，但配合不等於他想要。',
+    b_sheng_a: '你先講對他是解脫；你不講，他會一直在原地給下去。',
+    b_ke_a:    '有一次不是等他約，而是你先提，他就會接住。',
+    bihe:      '如果你等他，他很可能也在等你，然後一起等到這件事過去。'
+  },
+
+  /* 新增 走到一起的機會 —— 卡點 key */
+  chance: {
+    approach: '你們缺的不是感情，是自然靠近的機會。',
+    push:     '兩個人都在等的關係，最後多半誰也沒等到。',
+    friction: '曖昧期沒有承諾可以撐，卡住幾次就容易冷掉。',
+    timing:   '差的不是喜歡的程度，是有沒有餘力。',
+    thin:     '平順的關係需要外力，它不會自己往前。',
+    base:     '底子薄的緣要靠次數補，頻率一低就會淡掉。',
+    none:     '條件已經齊了，剩下的是誰願意先承認。'
+  },
+
+  /* 新增 誰先動心 —— 重量 key 的標籤 */
+  ini: {
+    你先動心: '你比他早進入這段關係，所以你的期待也一直比他多一點。',
+    你先出手: '節奏一直由你在推，所以你很難分辨他是想靠近還是在配合。',
+    他先動心: '他的在意表現在行動上，不在話上——所以你不一定察覺得到。',
+    他先出手: '被選中的感覺很好，但主導權也在那個時候交出去了。',
+    幾乎同時: '沒有誰欠誰，也沒有人覺得自己該先開口。'
+  },
+
   /* 新增 相遇的場合 —— 年支 key */
   place: {
     po:       '差一點就錯過的相遇，那個「差一點」往後會反覆出現。',
@@ -224,10 +253,13 @@ const T = {
 
 /* 段落 title → 取哪一組、用哪個 key */
 function takeaway(section, ctx) {
-  const { band, weak, strong, zl, wendu, changdu, midu, tempo, place } = ctx;
+  const { band, weak, strong, zl, wendu, changdu, midu, tempo, place, ini, chance, move } = ctx;
   const map = {
     '你們的緣分，究竟有多深？':                 () => T.table,
     '你們是怎麼開始的？':                       () => T.tempo[ctx.tempo],
+    '這段曖昧，走到一起的機會有多大？':         () => T.chance[ctx.chance],
+    '接下來，該由誰先開口？':                   () => T.move[ctx.move],
+    '是誰先開始喜歡上誰的？':                   () => T.ini[ctx.ini],
     '你們是在什麼樣的場合遇上的？':             () => T.place[ctx.place],
     '你們現在，到底算是什麼？':       () => T.now[band],
     '明明有感覺，為什麼就是差那一步？':           () => T.weak[weak],
@@ -253,3 +285,4 @@ function takeaway(section, ctx) {
 }
 
 module.exports = { T, takeaway };
+
