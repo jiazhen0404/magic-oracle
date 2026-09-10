@@ -4756,6 +4756,13 @@ $('rep-toc').addEventListener('click', e => {
   $('rep-body').scrollIntoView({ block: 'start' });
 });
 
+/* 問卷連結的點擊。沒有這一筆，就分不出「沒人想填」與「點進去卻放棄」——
+   前者要改連結文案，後者要改問卷本身，處方完全不同。 */
+$('r-survey-link').addEventListener('click', () => {
+  if (!last) return;
+  track('yuanfen_survey_open', { band: last.view.label, tempo: last.view.tempo, chance: last.view.chance });
+});
+
 $('rep-prev').addEventListener('click', () => { showSection(repAt - 1); $('rep-body').scrollIntoView({ block: 'start' }); });
 $('rep-next').addEventListener('click', () => { showSection(repAt + 1); $('rep-body').scrollIntoView({ block: 'start' }); });
 $('rep-toc-toggle').addEventListener('click', () => {
