@@ -216,7 +216,10 @@ h1{font-family:var(--serif);
   white-space:nowrap;
 }
 
+/* 部別標題在螢幕上不顯示——那裡一次只看一段，部別在上方的 bar。
+   它是為了列印而存在的，見檔案最後的 @media print。 */
 #r-report .part-h{
+  display:none;
   color:var(--gold); font-size:12.5px; letter-spacing:.12em;
   margin:0 0 26px; padding-bottom:10px; border-bottom:1px solid var(--line);
 }
@@ -343,7 +346,15 @@ h1{font-family:var(--serif);
   padding-bottom:12px; margin-bottom:26px; border-bottom:1px solid var(--line-soft);
 }
 .reader-bar .rb-part{color:var(--gold); font-size:12.5px; letter-spacing:.12em}
+.reader-bar .rb-right{display:flex; align-items:baseline; gap:14px; flex:none}
 .reader-bar .rb-prog{color:var(--muted); font-family:var(--latin); font-size:12.5px; letter-spacing:.1em; flex:none}
+.reader-bar .rb-print{
+  border:0; background:none; padding:0; cursor:pointer;
+  color:var(--muted); font-family:var(--sans); font-size:12.5px; letter-spacing:.06em;
+  border-bottom:1px solid var(--line-soft); transition:color .2s, border-color .2s;
+}
+.reader-bar .rb-print:hover{color:var(--gold); border-color:var(--gold)}
+.reader-bar .rb-print:focus-visible{outline:2px solid var(--gold); outline-offset:3px}
 
 #rep-body section{display:none; margin:0}
 #rep-body section.on{display:block}
@@ -704,6 +715,68 @@ details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offse
   #out.on{animation:none}
   *{transition:none !important}
 }
+
+/* ══════════════════ 列印／存成 PDF ══════════════════
+   先用瀏覽器原生列印，不自己產 PDF——那要處理中文字型嵌入，成本高很多。
+   要處理的重點只有三個：黑字白底、把分頁閱讀器攤開成 24 段、
+   以及把所有互動元件拿掉（按鈕在紙上沒有意義，只會佔位置）。 */
+@media print{
+  @page{margin:16mm 14mm}
+
+  /* 深底金字印出來會是一大片墨，而且多數印表機會直接把背景丟掉，
+     變成金色細字印在白紙上，幾乎看不見。整個翻成黑字白底。 */
+  html, body{background:#fff !important; color:#1a1a1a !important}
+  body{font-size:11.5pt; line-height:1.85}
+  .starfield, .corner, #casting, .btn-img, .cta-wrap, .ornate{display:none !important}
+
+  /* 輸入區、免費結果的互動件、分享卡、付費區：紙上都不需要 */
+  .ask.panel, .promise, .err, .privacy, .share, .upsell,
+  .survey-link, details.basis, .reader-toc, .reader-nav,
+  .rb-print, .expanded-note{display:none !important}
+
+  /* 免費結果保留分數與判讀，那是報告的前提 */
+  #out{display:block !important}
+  .verdict .name, .verdict .num, .verdict .chance, .verdict .tempo{color:#1a1a1a !important}
+  .verdict .chance, .verdict .tempo{border-color:#999 !important; background:none !important}
+  .medallion{filter:grayscale(1)}
+  .verdict .poem, .verdict .chance-line, .verdict .tempo-line, .summary, .dim p{color:#1a1a1a !important; opacity:1 !important}
+  .dims{border-color:#bbb !important; background:none !important}
+  .dim-name, .dim-num{color:#1a1a1a !important}
+  .gap{border-color:#999 !important; background:none !important; color:#1a1a1a !important}
+  .rule::before, .rule::after{background:#ccc !important}
+
+  /* ── 報告：把一次一段攤開成全部 ── */
+  #r-report{
+    display:block !important; width:auto !important; margin:0 !important;
+    border-top:0 !important; padding-top:0 !important;
+  }
+  .reader{display:block !important}
+  #rep-body section{display:block !important; margin-bottom:0}
+  /* 每一段從新的一頁開始：24 段各自完整，比較好讀也好翻 */
+  #rep-body section{break-before:page; page-break-before:always}
+  #rep-body section:first-child{break-before:auto; page-break-before:auto}
+  /* 標題不要單獨留在頁尾，重點框不要被切成兩半 */
+  #r-report h3, #r-report .part-h{break-after:avoid; page-break-after:avoid}
+  #r-report .takeaway, #r-report table, #r-report .box{break-inside:avoid; page-break-inside:avoid}
+
+  #r-report .part-h{display:block !important; color:#1a1a1a !important; border-bottom-color:#bbb !important}
+  #r-report h3{color:#1a1a1a !important; border-bottom-color:#ddd !important}
+  #r-report p, #r-report li, #r-report td{color:#1a1a1a !important; opacity:1 !important}
+  #r-report .takeaway{
+    color:#1a1a1a !important; background:none !important;
+    border-color:#999 !important; padding-left:20px !important;
+  }
+  #r-report .takeaway::before{display:none !important}   /* 星形飾圖是白底上的白圖 */
+  #r-report .takeaway b{color:#555 !important}
+  #r-report thead th{background:none !important; color:#555 !important; border-bottom-color:#999 !important}
+  #r-report td.p{color:#1a1a1a !important}
+  #r-report td.use{display:table-cell !important}         /* 手機版藏起來的欄位，紙上放得下 */
+  #r-report .cover{display:none !important}
+
+  /* 頁首與頁尾的導覽在紙上沒有用 */
+  .ww-header, .ww-nav, .ww-mobile, .site-footer, footer{display:none !important}
+  a{color:#1a1a1a !important; text-decoration:none}
+}
 </style>
 </head>
 <body>
@@ -828,7 +901,10 @@ details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offse
         <div class="reader-main">
           <div class="reader-bar">
             <span class="rb-part" id="rep-part"></span>
-            <span class="rb-prog" id="rep-prog"></span>
+            <span class="rb-right">
+              <button type="button" class="rb-print" id="rep-print">存成 PDF</button>
+              <span class="rb-prog" id="rep-prog"></span>
+            </span>
           </div>
           <div id="rep-body"></div>
           <nav class="reader-nav" aria-label="段落切換">
@@ -4700,8 +4776,19 @@ $('u-cta').addEventListener('click', () => {
   const bodyBox = $('rep-body');
   $('rep-head').textContent = '完整合盤　' + r.chars + ' 字';
   bodyBox.querySelectorAll('section').forEach(x => x.remove());
+  let printPart = '';
   r.sections.forEach(sec => {
     const el = document.createElement('section');
+    /* 部別標題只給列印用。螢幕上一次只看一段，部別顯示在上方那條 bar；
+       列印時 24 段會一起攤開，沒有這個就失去分段結構。 */
+    if (sec.part && sec.part !== printPart) {
+      printPart = sec.part;
+      const ph = document.createElement('p');
+      ph.className = 'part-h';
+      ph.textContent = sec.part;
+      el.appendChild(ph);
+      el.classList.add('first-of-part');
+    }
     const h = document.createElement('h3');
     h.textContent = sec.title;
     el.appendChild(h);
@@ -4823,6 +4910,13 @@ $('r-survey-link').addEventListener('click', () => {
 
 $('rep-prev').addEventListener('click', () => { showSection(repAt - 1); $('rep-body').scrollIntoView({ block: 'start' }); });
 $('rep-next').addEventListener('click', () => { showSection(repAt + 1); $('rep-body').scrollIntoView({ block: 'start' }); });
+/* 存成 PDF：走瀏覽器原生列印。@media print 會把 24 段一次攤開，
+   使用者在列印對話框選「另存為 PDF」即可。 */
+$('rep-print').addEventListener('click', () => {
+  track('yuanfen_print', { band: last && last.view.label, tempo: last && last.view.tempo });
+  window.print();
+});
+
 $('rep-toc-toggle').addEventListener('click', () => {
   const aside = $('rep-toc').parentElement;
   const open = aside.classList.toggle('open');
