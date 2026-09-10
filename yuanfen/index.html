@@ -297,6 +297,87 @@ h1{font-family:var(--serif);
 }
 
 #r-report .tnote{color:var(--muted); font-size:12.5px; margin:16px 0 0; line-height:1.8; opacity:.85}
+
+/* ── 報告分頁閱讀器 ──────────────────────────────────
+   24 段一次全展開會變成一長條，捲不完。改成一次一段，
+   左側目錄固定，「03 / 24」本身也在提醒使用者買到多少東西。
+   依 UI-PLAN「不做報告頁的進場動畫」，切換段落不加轉場。 */
+/* 桌機讓報告突破 .wrap 的 660px。不加寬的話，插進 206px 的目錄之後
+   內文只剩 372px，比原本的 616px 還窄——那就本末倒置了。
+   用 margin 而不是 transform 置中：transform 會讓目錄的 sticky 失效。
+   位移量與視窗寬無關，推導：(660 - 報告寬)/2 - wrap 的左內距。 */
+@media (min-width:861px){
+  #r-report{
+    /* 880 = 目錄 206 ＋ 間距 38 ＋ 內文 636。內文寬度刻意對齊免費區的 616px，
+       每行約 38 字。放到 1040 時內文會變成 796px、每行 63 字，中文讀起來太長。 */
+    --rw:min(880px, calc(100vw - 48px));
+    width:var(--rw);
+    margin-left:calc((660px - var(--rw)) / 2 - 22px);
+  }
+}
+.reader{display:grid; grid-template-columns:206px 1fr; gap:38px; align-items:start}
+.reader-toc{position:sticky; top:20px; max-height:calc(100vh - 40px); overflow:auto}
+.reader-toc .toc-toggle{display:none}
+.reader-toc .tp{
+  color:var(--gold); font-size:11.5px; letter-spacing:.14em;
+  margin:18px 0 8px; padding-bottom:7px; border-bottom:1px solid var(--line-soft);
+}
+.reader-toc .tp:first-child{margin-top:0}
+.reader-toc a{
+  display:flex; gap:9px; align-items:baseline;
+  padding:7px 0; color:var(--muted); font-size:13px; line-height:1.6;
+  text-decoration:none; transition:color .2s;
+}
+.reader-toc a i{
+  font-style:normal; font-family:var(--latin); font-size:11px;
+  color:var(--muted); opacity:.6; flex:none; transition:color .2s, opacity .2s;
+}
+.reader-toc a:hover{color:var(--cream)}
+.reader-toc a:hover i{color:var(--gold); opacity:1}       /* UI-PLAN：hover 時左側編號變亮金色 */
+.reader-toc a.read i{color:var(--gold); opacity:.55}       /* 讀過的編號變暗金色 */
+.reader-toc a[aria-current="true"]{color:var(--gold-soft)}
+.reader-toc a[aria-current="true"] i{color:var(--gold); opacity:1}
+
+.reader-bar{
+  display:flex; justify-content:space-between; align-items:baseline; gap:14px;
+  padding-bottom:12px; margin-bottom:26px; border-bottom:1px solid var(--line-soft);
+}
+.reader-bar .rb-part{color:var(--gold); font-size:12.5px; letter-spacing:.12em}
+.reader-bar .rb-prog{color:var(--muted); font-family:var(--latin); font-size:12.5px; letter-spacing:.1em; flex:none}
+
+#rep-body section{display:none; margin:0}
+#rep-body section.on{display:block}
+
+.reader-nav{display:flex; justify-content:space-between; gap:12px; margin-top:38px}
+.reader-nav button{
+  padding:11px 20px; cursor:pointer; border-radius:3px;
+  border:1px solid var(--line); background:transparent;
+  color:var(--gold-soft); font-family:var(--serif); font-size:14.5px; letter-spacing:.1em;
+  transition:border-color .2s, background .2s, opacity .2s;
+}
+.reader-nav button:hover:not([disabled]){border-color:var(--gold); background:rgba(217,189,130,.07)}
+.reader-nav button:focus-visible{outline:2px solid var(--gold); outline-offset:2px}
+.reader-nav button[disabled]{opacity:.28; cursor:default}
+
+@media (max-width:860px){
+  .reader{grid-template-columns:1fr; gap:0}
+  .reader-toc{position:static; max-height:none; overflow:visible; margin-bottom:22px}
+  /* 手機把目錄收起來，不要一進報告就先看到 24 條清單 */
+  .reader-toc .toc-toggle{
+    display:block; width:100%; padding:12px 16px; cursor:pointer;
+    border:1px solid var(--line); border-radius:3px; background:transparent;
+    color:var(--gold); font-family:var(--sans); font-size:13.5px; letter-spacing:.16em;
+  }
+  .reader-toc .toc-body{display:none; padding:4px 2px 0}
+  .reader-toc.open .toc-body{display:block}
+  /* 上下段固定在底部，長文捲到一半也按得到 */
+  .reader-nav{
+    position:sticky; bottom:0; margin-top:30px;
+    padding:12px 0 calc(12px + env(safe-area-inset-bottom));
+    background:linear-gradient(180deg,rgba(16,11,37,0),rgba(16,11,37,.94) 26%);
+  }
+  .reader-nav button{flex:1; padding:14px 10px}
+}
 @media (max-width:420px){
   #r-report td.use{display:none}
   #r-report td.lab{width:26%}
@@ -774,6 +855,23 @@ details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offse
     <div id="r-report">
       <span class="cover" aria-hidden="true"></span>
       <p class="rep-head" id="rep-head"></p>
+      <div class="reader">
+        <aside class="reader-toc">
+          <button type="button" class="toc-toggle" id="rep-toc-toggle" aria-expanded="false">目錄</button>
+          <div class="toc-body" id="rep-toc"></div>
+        </aside>
+        <div class="reader-main">
+          <div class="reader-bar">
+            <span class="rb-part" id="rep-part"></span>
+            <span class="rb-prog" id="rep-prog"></span>
+          </div>
+          <div id="rep-body"></div>
+          <nav class="reader-nav" aria-label="段落切換">
+            <button type="button" id="rep-prev">‹ 上一段</button>
+            <button type="button" id="rep-next">下一段 ›</button>
+          </nav>
+        </div>
+      </div>
     </div>
     <p class="disclaim" id="r-disclaim"></p>
   </div>
@@ -4637,19 +4735,11 @@ $('u-cta').addEventListener('click', () => {
   if (!last) return;
   const r = report(last.full, { A: '你', B: '他' });
   const box = $('r-report');
+  const bodyBox = $('rep-body');
   $('rep-head').textContent = '完整合盤　' + r.chars + ' 字';
-  box.querySelectorAll('section').forEach(x => x.remove());
-  let curPart = '';
+  bodyBox.querySelectorAll('section').forEach(x => x.remove());
   r.sections.forEach(sec => {
     const el = document.createElement('section');
-    if (sec.part && sec.part !== curPart) {
-      curPart = sec.part;
-      const ph = document.createElement('p');
-      ph.className = 'part-h';
-      ph.textContent = sec.part;
-      el.appendChild(ph);
-      el.className = 'first-of-part';
-    }
     const h = document.createElement('h3');
     h.textContent = sec.title;
     el.appendChild(h);
@@ -4688,12 +4778,86 @@ $('u-cta').addEventListener('click', () => {
       t.appendChild(document.createTextNode(sec.takeaway));
       el.appendChild(t);
     }
-    box.appendChild(el);
+    bodyBox.appendChild(el);
   });
+
+  buildReader(r.sections);
   box.classList.add('on');
   document.body.classList.add('reading');
   $('u-cta').disabled = true;
   box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+/* ── 報告分頁閱讀器 ──────────────────────────────────
+   段落已經全部渲染進 DOM，這裡只負責一次顯示一段、
+   維護目錄的當前與已讀狀態，以及上下段按鈕。 */
+let repAt = 0, repTotal = 0, repParts = [];
+
+function buildReader(sections) {
+  repTotal = sections.length;
+  repAt = 0;
+  repParts = sections.map(s => s.part || '');
+
+  /* 目錄依部別分組，編號連續 */
+  const toc = $('rep-toc');
+  toc.innerHTML = '';
+  let part = '';
+  sections.forEach((sec, i) => {
+    if (sec.part && sec.part !== part) {
+      part = sec.part;
+      const p = document.createElement('p');
+      p.className = 'tp';
+      p.textContent = part;
+      toc.appendChild(p);
+    }
+    const a = document.createElement('a');
+    a.href = '#';
+    a.dataset.i = i;
+    a.innerHTML = '<i>' + String(i + 1).padStart(2, '0') + '</i>';
+    a.appendChild(document.createTextNode(sec.title));
+    toc.appendChild(a);
+  });
+
+  showSection(0);
+}
+
+function showSection(i) {
+  const secs = [...$('rep-body').querySelectorAll('section')];
+  if (!secs.length) return;
+  repAt = Math.max(0, Math.min(i, secs.length - 1));
+
+  secs.forEach((el, k) => el.classList.toggle('on', k === repAt));
+
+  $('rep-part').textContent = repParts[repAt] || '';
+  $('rep-prog').textContent = String(repAt + 1).padStart(2, '0') + ' / ' + String(repTotal).padStart(2, '0');
+
+  $('rep-toc').querySelectorAll('a[data-i]').forEach(a => {
+    const k = +a.dataset.i;
+    a.setAttribute('aria-current', k === repAt ? 'true' : 'false');
+    a.classList.toggle('read', k < repAt);
+  });
+
+  $('rep-prev').disabled = repAt === 0;
+  $('rep-next').disabled = repAt === repTotal - 1;
+}
+
+/* 目錄用事件代理，綁在容器上一次就好——buildReader 每次重建內容，
+   若在裡面綁會越疊越多層。 */
+$('rep-toc').addEventListener('click', e => {
+  const a = e.target.closest('a[data-i]');
+  if (!a) return;
+  e.preventDefault();
+  showSection(+a.dataset.i);
+  $('rep-toc').parentElement.classList.remove('open');   // 手機：選完把目錄收回去
+  $('rep-body').scrollIntoView({ block: 'start' });
+});
+
+$('rep-prev').addEventListener('click', () => { showSection(repAt - 1); $('rep-body').scrollIntoView({ block: 'start' }); });
+$('rep-next').addEventListener('click', () => { showSection(repAt + 1); $('rep-body').scrollIntoView({ block: 'start' }); });
+$('rep-toc-toggle').addEventListener('click', () => {
+  const aside = $('rep-toc').parentElement;
+  const open = aside.classList.toggle('open');
+  $('rep-toc-toggle').setAttribute('aria-expanded', open ? 'true' : 'false');
 });
 
 $('go').addEventListener('click', draw);
