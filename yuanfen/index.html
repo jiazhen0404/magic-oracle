@@ -76,8 +76,36 @@ h1{font-family:var(--serif);
 .sc-row select:focus{outline:2px solid var(--gold); outline-offset:1px; border-color:transparent}
 .sc-row select option{background:var(--panel); color:var(--cream)}
 
+/* 付費區＝一塊金框敕令牌。
+   刻意不換成淺色紙底：那會讓這一區看起來像另一個網站，
+   而且卷軸的紅邊在手機上會吃掉三分之一的寬度，行長從 21 字掉到 14 字。
+   改用「框 ＋ 頂端暈光 ＋ 對角角飾」來凸顯，完全不佔左右空間。
+   紅色只當印記，不鋪底，維持深靛藍與金色的識別。 */
 .upsell{
-  margin-top:48px; border-top:1px solid var(--line); padding-top:42px;
+  position:relative; margin-top:64px; border-top:0;
+  padding:46px 32px 42px;
+  border:1px solid rgba(217,189,130,.5);
+  border-radius:3px;
+  background:
+    radial-gradient(130% 72% at 50% -12%, rgba(217,189,130,.14), transparent 62%),
+    linear-gradient(180deg, rgba(150,40,40,.13), transparent 26%),
+    linear-gradient(180deg, #241943, #1c1236);
+  box-shadow:
+    inset 0 0 0 1px rgba(217,189,130,.15),   /* 內側細線，做出雙框 */
+    inset 0 1px 0 rgba(217,189,130,.32),     /* 上緣一道金 */
+    0 20px 52px rgba(0,0,0,.5);
+}
+/* 對角角飾沿用站上既有素材，跟頁面四角是同一套語言（也同樣只放對角兩處） */
+.upsell::before, .upsell::after{
+  content:''; position:absolute; width:54px; height:52px;
+  background-repeat:no-repeat; background-size:contain;
+  opacity:.45; pointer-events:none;
+}
+.upsell::before{top:5px;    left:5px;  background-image:url('assets/corner-tl.webp'); background-position:left top}
+.upsell::after {bottom:5px; right:5px; background-image:url('assets/corner-br.webp'); background-position:right bottom}
+@media (max-width:420px){
+  .upsell{padding:38px 20px 34px}
+  .upsell::before, .upsell::after{width:40px; height:38px}
 }
 .upsell h2{font-family:var(--serif); text-align:center; font-size:26px; font-weight:400;
   color:var(--gold-soft); letter-spacing:.14em; margin:0 0 20px}
@@ -121,6 +149,57 @@ h1{font-family:var(--serif);
 .upsell ol li em{
   font-style:normal; color:var(--gold); font-size:11.5px; letter-spacing:.08em;
   border:1px solid var(--line); border-radius:3px; padding:2px 7px; margin-left:9px;
+  white-space:nowrap; vertical-align:2px;
+}
+/* ── 目錄：依部別收合。24 段攤平太長，分成六組、第一組預設展開 ── */
+.toc-group{
+  border:1px solid var(--line); border-radius:3px; margin-top:12px;
+  background:linear-gradient(180deg,rgba(36,25,67,.5),rgba(26,16,48,.25));
+  overflow:hidden;
+}
+.toc-group summary{
+  list-style:none; cursor:pointer; position:relative;
+  padding:17px 46px 17px 20px;
+  color:var(--gold); font-family:var(--sans); font-size:14px; letter-spacing:.16em;
+  transition:background .2s;
+}
+.toc-group summary::-webkit-details-marker{display:none}
+.toc-group summary:hover{background:rgba(217,189,130,.05)}
+.toc-group summary:focus-visible{outline:2px solid var(--gold); outline-offset:-2px}
+.toc-group summary i{
+  font-style:normal; color:var(--muted); font-family:var(--latin);
+  font-size:12px; letter-spacing:.06em; margin-left:10px;
+}
+.toc-group summary::after{                 /* 收合箭頭 */
+  content:''; position:absolute; right:20px; top:50%;
+  width:8px; height:8px; margin-top:-6px;
+  border-right:1.5px solid var(--gold); border-bottom:1.5px solid var(--gold);
+  transform:rotate(45deg); transition:transform .25s; opacity:.75;
+}
+.toc-group[open] summary::after{transform:rotate(-135deg); margin-top:-2px}
+.toc-group ul{margin:0; padding:0 20px 16px; list-style:none}
+.toc-group li{
+  display:flex; gap:14px; align-items:flex-start;
+  padding:14px 0; border-top:1px solid var(--line-soft);
+}
+.toc-group li b{
+  flex:none; width:32px; height:32px; line-height:30px; text-align:center;
+  color:var(--gold); font-family:var(--latin); font-size:12.5px; font-weight:400;
+  border:1px solid var(--line); border-radius:50%;
+  background:rgba(217,189,130,.05);
+}
+.toc-group li:hover b{border-color:var(--gold); color:var(--gold-soft)}
+.toc-group li > div{
+  color:var(--cream); font-family:var(--serif); font-size:17px;
+  letter-spacing:.04em; line-height:1.55;
+}
+.toc-group li span{
+  display:block; color:var(--muted); font-family:var(--sans);
+  font-size:13px; margin-top:5px; line-height:1.85;
+}
+.toc-group li em{
+  font-style:normal; color:var(--gold); font-size:11.5px; letter-spacing:.08em;
+  border:1px solid var(--line); border-radius:3px; padding:2px 7px; margin-left:8px;
   white-space:nowrap; vertical-align:2px;
 }
 .upsell .toc-h{color:var(--gold-soft); font-family:var(--serif); font-size:17px;
@@ -218,6 +297,87 @@ h1{font-family:var(--serif);
 }
 
 #r-report .tnote{color:var(--muted); font-size:12.5px; margin:16px 0 0; line-height:1.8; opacity:.85}
+
+/* ── 報告分頁閱讀器 ──────────────────────────────────
+   24 段一次全展開會變成一長條，捲不完。改成一次一段，
+   左側目錄固定，「03 / 24」本身也在提醒使用者買到多少東西。
+   依 UI-PLAN「不做報告頁的進場動畫」，切換段落不加轉場。 */
+/* 桌機讓報告突破 .wrap 的 660px。不加寬的話，插進 206px 的目錄之後
+   內文只剩 372px，比原本的 616px 還窄——那就本末倒置了。
+   用 margin 而不是 transform 置中：transform 會讓目錄的 sticky 失效。
+   位移量與視窗寬無關，推導：(660 - 報告寬)/2 - wrap 的左內距。 */
+@media (min-width:861px){
+  #r-report{
+    /* 880 = 目錄 206 ＋ 間距 38 ＋ 內文 636。內文寬度刻意對齊免費區的 616px，
+       每行約 38 字。放到 1040 時內文會變成 796px、每行 63 字，中文讀起來太長。 */
+    --rw:min(880px, calc(100vw - 48px));
+    width:var(--rw);
+    margin-left:calc((660px - var(--rw)) / 2 - 22px);
+  }
+}
+.reader{display:grid; grid-template-columns:206px 1fr; gap:38px; align-items:start}
+.reader-toc{position:sticky; top:20px; max-height:calc(100vh - 40px); overflow:auto}
+.reader-toc .toc-toggle{display:none}
+.reader-toc .tp{
+  color:var(--gold); font-size:11.5px; letter-spacing:.14em;
+  margin:18px 0 8px; padding-bottom:7px; border-bottom:1px solid var(--line-soft);
+}
+.reader-toc .tp:first-child{margin-top:0}
+.reader-toc a{
+  display:flex; gap:9px; align-items:baseline;
+  padding:7px 0; color:var(--muted); font-size:13px; line-height:1.6;
+  text-decoration:none; transition:color .2s;
+}
+.reader-toc a i{
+  font-style:normal; font-family:var(--latin); font-size:11px;
+  color:var(--muted); opacity:.6; flex:none; transition:color .2s, opacity .2s;
+}
+.reader-toc a:hover{color:var(--cream)}
+.reader-toc a:hover i{color:var(--gold); opacity:1}       /* UI-PLAN：hover 時左側編號變亮金色 */
+.reader-toc a.read i{color:var(--gold); opacity:.55}       /* 讀過的編號變暗金色 */
+.reader-toc a[aria-current="true"]{color:var(--gold-soft)}
+.reader-toc a[aria-current="true"] i{color:var(--gold); opacity:1}
+
+.reader-bar{
+  display:flex; justify-content:space-between; align-items:baseline; gap:14px;
+  padding-bottom:12px; margin-bottom:26px; border-bottom:1px solid var(--line-soft);
+}
+.reader-bar .rb-part{color:var(--gold); font-size:12.5px; letter-spacing:.12em}
+.reader-bar .rb-prog{color:var(--muted); font-family:var(--latin); font-size:12.5px; letter-spacing:.1em; flex:none}
+
+#rep-body section{display:none; margin:0}
+#rep-body section.on{display:block}
+
+.reader-nav{display:flex; justify-content:space-between; gap:12px; margin-top:38px}
+.reader-nav button{
+  padding:11px 20px; cursor:pointer; border-radius:3px;
+  border:1px solid var(--line); background:transparent;
+  color:var(--gold-soft); font-family:var(--serif); font-size:14.5px; letter-spacing:.1em;
+  transition:border-color .2s, background .2s, opacity .2s;
+}
+.reader-nav button:hover:not([disabled]){border-color:var(--gold); background:rgba(217,189,130,.07)}
+.reader-nav button:focus-visible{outline:2px solid var(--gold); outline-offset:2px}
+.reader-nav button[disabled]{opacity:.28; cursor:default}
+
+@media (max-width:860px){
+  .reader{grid-template-columns:1fr; gap:0}
+  .reader-toc{position:static; max-height:none; overflow:visible; margin-bottom:22px}
+  /* 手機把目錄收起來，不要一進報告就先看到 24 條清單 */
+  .reader-toc .toc-toggle{
+    display:block; width:100%; padding:12px 16px; cursor:pointer;
+    border:1px solid var(--line); border-radius:3px; background:transparent;
+    color:var(--gold); font-family:var(--sans); font-size:13.5px; letter-spacing:.16em;
+  }
+  .reader-toc .toc-body{display:none; padding:4px 2px 0}
+  .reader-toc.open .toc-body{display:block}
+  /* 上下段固定在底部，長文捲到一半也按得到 */
+  .reader-nav{
+    position:sticky; bottom:0; margin-top:30px;
+    padding:12px 0 calc(12px + env(safe-area-inset-bottom));
+    background:linear-gradient(180deg,rgba(16,11,37,0),rgba(16,11,37,.94) 26%);
+  }
+  .reader-nav button{flex:1; padding:14px 10px}
+}
 @media (max-width:420px){
   #r-report td.use{display:none}
   #r-report td.lab{width:26%}
@@ -475,10 +635,12 @@ body.reading .corner{opacity:.36}
 }
 /* 準確度回饋：一鍵、不填東西。刻意做得比節奏本身小一階，
    它是問句不是結果，不該跟分數搶視線。 */
-.accuracy{
-  margin:20px auto 0; display:flex; flex-wrap:wrap;
+.accuracy{margin:20px auto 0}
+.acc-row{
+  display:flex; flex-wrap:wrap;
   align-items:center; justify-content:center; gap:10px;
 }
+.acc-why{margin-top:12px}
 .accuracy .ask{
   color:var(--muted); font-size:13px; letter-spacing:.08em; margin:0;
 }
@@ -491,14 +653,21 @@ body.reading .corner{opacity:.36}
 }
 .accuracy button:hover{border-color:var(--line); background:rgba(217,189,130,.07)}
 .accuracy button:focus-visible{outline:2px solid var(--gold); outline-offset:2px}
-.accuracy.done button{opacity:.32; pointer-events:none}
-.accuracy.done button[aria-pressed="true"]{
+/* 第一層答完先鎖第一排，第二排要留著可以按；兩層都答完才整個鎖起來 */
+.accuracy.r1done .acc-row:first-child button{opacity:.32; pointer-events:none}
+.accuracy.done .acc-why button{opacity:.32; pointer-events:none}
+.accuracy.r1done .acc-row:first-child button[aria-pressed="true"],
+.accuracy.done .acc-why button[aria-pressed="true"]{
   opacity:1; border-color:var(--gold); background:rgba(217,189,130,.12);
 }
-.accuracy .thanks{color:var(--muted); font-size:13px; letter-spacing:.08em; margin:0}
+.accuracy .thanks{color:var(--muted); font-size:13px; letter-spacing:.08em; margin:12px 0 0; text-align:center}
 /* 手機上要用大拇指點，把可點範圍加高到 44px；桌機維持精簡不搶視線 */
 @media (max-width:420px){
   .accuracy button{padding:12px 15px}
+  /* 第二層那四個是句子不是短標籤，手機上排成一欄比擠成三行好讀 */
+  .acc-why{flex-direction:column; align-items:stretch}
+  .acc-why .ask{text-align:center}
+  .acc-why button{width:100%}
 }
 .verdict .poem{font-family:var(--serif);
   color:var(--cream); font-size:18px; margin:26px auto 0; max-width:26em;
@@ -607,7 +776,7 @@ details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offse
 
     <button class="btn-img" id="go"><span>開始測算</span></button>
     <p class="err" id="err" role="status"></p>
-    <p class="privacy">不用註冊，不用留 email。兩組生日不會被儲存，也不會離開你的裝置——計算全部在這個頁面完成，關掉就不存在了。</p>
+    <p class="privacy">不用註冊，不用留 email。計算在你的裝置上完成。除非你主動送出準確度回饋，否則兩組生日不會離開這一頁。</p>
     <div class="promise">
       <b>免費的部分不會遮任何一句話</b>
       分數怎麼算的、你們卡在哪裡、接下來往哪個方向走，全部給你，沒有馬賽克也沒有「付費後解鎖」。付費的是更深的一層，不是被藏起來的那一層。
@@ -628,10 +797,22 @@ details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offse
       <p class="tags"><span class="tempo" id="r-tempo"></span><span class="tempo" id="r-ini"></span></p>
       <p class="tempo-line" id="r-tempo-line"></p>
       <div class="accuracy" id="r-accuracy" hidden>
-        <p class="ask">這段描述準嗎？</p>
-        <button type="button" data-rating="accurate" aria-pressed="false">滿準的</button>
-        <button type="button" data-rating="partly"   aria-pressed="false">有點像</button>
-        <button type="button" data-rating="off"      aria-pressed="false">不太對</button>
+        <div class="acc-row">
+          <p class="ask">這段描述準嗎？</p>
+          <button type="button" data-rating="滿準的" aria-pressed="false">滿準的</button>
+          <button type="button" data-rating="有點像" aria-pressed="false">有點像</button>
+          <button type="button" data-rating="不太對" aria-pressed="false">不太對</button>
+        </div>
+        <!-- 第二層只在選「不太對」時展開。四個選項各自對應一個模組，
+             二十個人選同一項就知道要改哪個檔案。 -->
+        <div class="acc-row acc-why" id="r-acc-why" hidden>
+          <p class="ask">哪裡不對？</p>
+          <button type="button" data-part="tempo">我們不是這樣開始的</button>
+          <button type="button" data-part="initiator">誰先主動說反了</button>
+          <button type="button" data-part="shape">相處狀況不是這樣</button>
+          <button type="button" data-part="chance">機會判斷差很多</button>
+        </div>
+        <p class="thanks" id="r-acc-thanks" hidden>謝謝，這會幫我們把判讀改準一點。</p>
       </div>
     </div>
     <p class="summary" id="r-summary"></p>
@@ -665,7 +846,7 @@ details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offse
         <div class="f3"><span></span><b>NT$199</b><em>一次付清</em></div>
       </div>
       <p class="toc-h">目錄</p>
-      <ol id="u-list"></ol>
+      <div id="u-list"></div>
       <p class="price-note" id="u-price"></p>
       <button class="btn-img" id="u-cta"><span>解讀完整內容 NT$199</span></button>
       <p class="expanded-note">已展開　往下閱讀</p>
@@ -674,6 +855,23 @@ details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offse
     <div id="r-report">
       <span class="cover" aria-hidden="true"></span>
       <p class="rep-head" id="rep-head"></p>
+      <div class="reader">
+        <aside class="reader-toc">
+          <button type="button" class="toc-toggle" id="rep-toc-toggle" aria-expanded="false">目錄</button>
+          <div class="toc-body" id="rep-toc"></div>
+        </aside>
+        <div class="reader-main">
+          <div class="reader-bar">
+            <span class="rb-part" id="rep-part"></span>
+            <span class="rb-prog" id="rep-prog"></span>
+          </div>
+          <div id="rep-body"></div>
+          <nav class="reader-nav" aria-label="段落切換">
+            <button type="button" id="rep-prev">‹ 上一段</button>
+            <button type="button" id="rep-next">下一段 ›</button>
+          </nav>
+        </div>
+      </div>
     </div>
     <p class="disclaim" id="r-disclaim"></p>
   </div>
@@ -848,8 +1046,8 @@ function jdn(y, m, d) {
 
 // 日柱：以 2000-01-07 為甲子日校準
 const DAY_ANCHOR = jdn(2000, 1, 7);
-function dayPillar(y, m, d) {
-  const n = ((jdn(y, m, d) - DAY_ANCHOR) % 60 + 60) % 60;
+function dayPillar(y, m, d, offset = 0) {
+  const n = ((jdn(y, m, d) + offset - DAY_ANCHOR) % 60 + 60) % 60;
   return { gan: n % 10, zhi: n % 12 };
 }
 
@@ -1035,8 +1233,17 @@ const WEIGHTS_HOUR = { wendu: 0.28, zhongliang: 0.24, changdu: 0.28, midu: 0.20 
 
 function clamp(n, lo = 0, hi = 100) { return Math.max(lo, Math.min(hi, n)); }
 
+/* 早子／晚子採「子初換日」：23:00 一到就進入次日的子時，日柱跟著換日。
+   兩派都有人用，這裡選子初換日的理由是使用者會拿結果去別的排盤網站對——
+   市面上常見的排盤預設是 23 點換日，我們如果算成當日，那群人會以為我們算錯。
+   日柱是這個產品最吃重的一根柱（夫妻宮＝日支、溫度＝日支關係、重量＝日干），
+   對不上等於整份判讀都對不上。
+
+   只有日柱跟著換，年柱與月柱仍以實際出生時刻對節氣——節氣是天文時刻，
+   不因命理上的換日約定而改變。 */
 function pillars(y, m, d, hour) {
-  const day = dayPillar(y, m, d);
+  const h = (hour === undefined || hour === null || hour === '') ? undefined : Number(hour);
+  const day = dayPillar(y, m, d, h === 23 ? 1 : 0);
   const year = yearPillar(y, m, d, hour);
   const p = { year, day, month: monthPillar(y, m, d, hour, year.gan) };
   if (hour !== undefined && hour !== null && hour !== '') {
@@ -1478,21 +1685,22 @@ const CHANCE_TEMPO_ADJ = {
 /* 命名前綴避開 card-text.js 的 LEVELS */
 const CHANCE_LEVELS = [
   { min: 74, label: '很有機會',
-    line: '這段曖昧走到一起的機會偏高。盤上該有的條件大致都在——靠近不費力、有人願意先動、底子也撐得住。' +
-          '會不會成，現在主要不是命的問題，是有沒有人願意把話說出口。' },
+    line: '這段曖昧走到一起的機會偏高。盤上的阻力少，該順的地方大致都順，' +
+          '所以結果比較不受命的限制——現在的關鍵在人不在盤。' },
   { min: 62, label: '有機會，但要推',
-    line: '這段曖昧有成的條件，但它不會自己發生。盤上有幾個地方是順的，也有幾個地方需要人去處理，' +
-          '所以結果取決於接下來有沒有人做出明確的動作——維持現狀的話，多半會停在這裡。' },
+    line: '這段曖昧有成的條件，但它不會自己發生。順的地方跟卡的地方都有，' +
+          '所以結果取決於接下來有沒有人做出明確的動作。' },
   { min: 50, label: '一半一半',
-    line: '這段曖昧成與不成的條件差不多。往哪一邊走，盤上看不出定局——' +
+    line: '這段曖昧成與不成的條件差不多，往哪一邊走盤上看不出定局。' +
           '這種情況通常不是被什麼擋住，是缺一個把關係推過去的契機。' },
   { min: 38, label: '偏低，但不是不可能',
-    line: '這段曖昧走到一起的機會偏低。不是沒有感情，是條件不太站在你們這邊：' +
-          '該順的地方有卡點，或是缺一個推動的人。要成的話需要比一般關係多做一些。' },
+    line: '這段曖昧走到一起的機會偏低。不是沒有感情，是條件不太站在你們這邊，' +
+          '要成的話需要比一般關係多做一些。' },
   { min: 0,  label: '很低',
     line: '這段曖昧走到一起的機會很低。盤上的阻力集中而且具體，' +
           '不是靠更喜歡就能解決的那一種。這不代表要放棄，但要清楚自己在為什麼留著。' }
 ];
+
 
 /* ---------- 卡在哪裡 ---------- */
 const CHANCE_BLOCK = {
@@ -1532,7 +1740,7 @@ const CHANCE_KEY = {
  * @param cross  result.cross
  * @param tempoKey  tempo(d, cross).key
  */
-function chance(d, cross, tempoKey) {
+function chance(d, cross, tempoKey, sh) {
   const zl = d.zhongliang.key;
   const balanced = zl === 'bihe';
 
@@ -1542,7 +1750,11 @@ function chance(d, cross, tempoKey) {
   v += balanced ? -7 : 7;                      // 有沒有人推
   v += (cross ? cross.sweet * 4 - cross.harsh * 4 : 0);
   v += CHANCE_TEMPO_ADJ[tempoKey] || 0;
-  v = Math.max(8, Math.min(96, Math.round(v)));
+  /* 一致性約束：格局判定沒有推力時，機會不得落在「很有機會」——
+     否則會出現「你們沒有特別強的推力」配「條件都在」的自相矛盾 */
+  const noPush = balanced
+    || (sh && ['quiet', 'blank', 'plain'].includes(sh.pattern));
+  v = Math.max(8, Math.min(noPush ? 71 : 96, Math.round(v)));
 
   const lv = CHANCE_LEVELS.find(l => v >= l.min);
 
@@ -1556,7 +1768,19 @@ function chance(d, cross, tempoKey) {
   else if (v < 62)                                  key = 'thin';   // 分數不高就一定有卡點
   else                                              key = 'none';
 
-  return { value: v, label: lv.label, line: lv.line,
+  /* 緣分指數與機會不同向時要交代，否則讀起來像前後矛盾 */
+  let note = '';
+  const total = Math.round(
+    d.wendu.score * 0.35 + d.zhongliang.score * 0.30 + d.changdu.score * 0.35);
+  if (v >= 62 && total < 70)
+    note = '（緣分指數不高但機會不低，這兩件事看的不是同一回事——' +
+           '指數看這段緣本身的質地，機會看能不能走到一起。底子普通但阻力少的組合，' +
+           '常常比底子好卻卡住的更容易成。）';
+  else if (v < 50 && total >= 74)
+    note = '（緣分指數不低但機會偏低，這兩件事看的不是同一回事——' +
+           '你們之間的東西是有份量的，只是要從曖昧走到確定，中間卡著具體的東西。）';
+
+  return { value: v, label: lv.label, line: lv.line, note,
            block: CHANCE_BLOCK[key], key: CHANCE_KEY[key], blockKey: key };
 }
 
@@ -1643,6 +1867,189 @@ function moveFirst(zlKey, blockKey) {
   return {
     who: MOVE_WHO[zlKey] || MOVE_WHO.bihe,
     how: MOVE_HOW[blockKey] || MOVE_HOW.none
+  };
+}
+
+/* ───────────────────────── */
+
+/* =========================================================================
+   未完籤所 · 夫妻宮的錯位
+   -------------------------------------------------------------------------
+   日支即夫妻宮，它決定的不是「你們合不合」，而是**你天生預期的相處模式**。
+
+   現有的「緣的重量」比對雙方日干，講的是這段關係實際的力道；
+   這裡看的是各自日支坐什麼十神，講的是各自期待什麼。
+   兩個人的期待錯開時，衝突的樣子是可以具體描述的——
+   「一方想靜一靜，一方想馬上溝通」就是這種錯位。
+
+   十神歸五類（依日支本氣對日干）：
+     食傷  我習慣主動給
+     印星  我期待被照顧
+     比劫  我要平起平坐
+     財星  我習慣掌握節奏
+     官殺  我容易在意對方的反應
+
+   不取吉凶，只取方向——吉凶要判喜忌，那需要旺衰判定。
+   ========================================================================= */
+
+/* 地支本氣（十天干序：甲0 乙1 丙2 丁3 戊4 己5 庚6 辛7 壬8 癸9） */
+const PAL_ZHI_BENQI = [9, 5, 0, 1, 4, 2, 3, 5, 6, 7, 4, 8];
+//                子 丑 寅 卯 辰 巳 午 未 申 酉 戌 亥
+
+const PAL_GAN_WUXING = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4];   // 木木火火土土金金水水
+const PAL_GAN_YANG   = [1, 0, 1, 0, 1, 0, 1, 0, 1, 0];   // 陽干為 1
+
+/* 五行生剋：0木 1火 2土 3金 4水。前綴避開 yuanfen.js 的同名常數 */
+const PAL_SHENG = [1, 2, 3, 4, 0];     // 木生火、火生土、土生金、金生水、水生木
+const PAL_KE    = [2, 3, 4, 0, 1];     // 木剋土、火剋金、土剋水、金剋木、水剋火
+
+/**
+ * 日支對日干的十神大類
+ * @returns 'shishang' | 'yinxing' | 'bijie' | 'caixing' | 'guansha'
+ */
+function palaceType(dayGan, dayZhi) {
+  const me = PAL_GAN_WUXING[dayGan];
+  const it = PAL_GAN_WUXING[PAL_ZHI_BENQI[dayZhi]];
+  if (it === me)          return 'bijie';      // 同我
+  if (PAL_SHENG[me] === it)   return 'shishang';   // 我生
+  if (PAL_SHENG[it] === me)   return 'yinxing';    // 生我
+  if (PAL_KE[me] === it)      return 'caixing';    // 我剋
+  if (PAL_KE[it] === me)      return 'guansha';    // 剋我
+  return 'bijie';
+}
+
+/* ---------- 你的期待 ---------- */
+const PAL_SELF = {
+  shishang: '你在關係裡是主動給的那一種。你習慣先付出、先安排、先把對方照顧好，' +
+            '因為那讓你覺得自己在這段關係裡是有位置的。',
+  yinxing:  '你在關係裡期待被接住。不一定是物質上的照顧，' +
+            '而是希望有人比你更穩，讓你可以不用一直撐著。',
+  bijie:    '你在關係裡要的是平起平坐。你不想被照顧，也不想照顧誰，' +
+            '你要的是一個能跟你並肩、而不是圍著你轉的人。',
+  caixing:  '你在關係裡習慣掌握節奏。什麼時候見面、關係走到哪一步，' +
+            '你心裡多半有個譜，而且會不自覺地照那個譜走。',
+  guansha:  '你在關係裡容易在意對方的反應。他的一句話、一個停頓，你都會收進去，' +
+            '所以你在感情裡總是比別人多一層緊張。'
+};
+
+/* ---------- 他的期待（同一套，換視角） ---------- */
+const PAL_OTHER = {
+  shishang: '他要的是一個願意接受他的人——他習慣主動安排、主動給，' +
+            '也需要對方接受他的給。',
+  yinxing:  '他要的是一個能讓他放鬆的人。他不想在關係裡繼續繃著，' +
+            '所以他會被那種讓他不用解釋的人吸引。',
+  bijie:    '他要的是一個對等的人。他不喜歡被照顧，也不打算把誰扛在身上，' +
+            '他期待的是各自站得住、然後一起走。',
+  caixing:  '他習慣掌握節奏。什麼時候聯絡、進到哪一步，多半是他在定，' +
+            '而且他不太會意識到那是一種主導。',
+  guansha:  '他在關係裡有壓力感。他會在意做得對不對、會不會被評價，' +
+            '所以他的謹慎不是冷淡，是他怕做錯。'
+};
+
+/* ---------- 錯位或相配的具體樣子（5×5） ---------- */
+const PAL_CLASH = {
+  shishang: {
+    shishang: '你們都習慣主動給，所以一開始會覺得對方很好相處。問題出在誰都不接——' +
+              '兩個人都在給，卻沒有人好好收下對方給的東西，久了會覺得自己的心意落空。',
+    yinxing:  '這是最順的一組：你想給，他想被接住。要留意的是分寸——' +
+              '你給得太快太多，他會從「被照顧」變成「被安排」，那時候他會退。',
+    bijie:    '你想給，他要對等。你的照顧在他讀起來可能是「你把我當成需要被照顧的人」，' +
+              '那會傷到他的自尊。他不是不領情，是那種給法讓他不舒服。',
+    caixing:  '你想給，他要掌握。表面上很配合——你給、他收，節奏由他定。' +
+              '但這種組合最容易失衡，因為你的付出會變成他的預設，而他不會發現。',
+    guansha:  '你想給，他有壓力。你越主動，他越覺得自己欠了什麼、該有所回應，' +
+              '於是他會先退開整理。你以為他不領情，其實他是被你的好嚇到了。'
+  },
+  yinxing: {
+    shishang: '這是很順的一組：他想給，你想被接住。' +
+              '要留意的是你會不會習慣到失去表達的能力——被接住久了，人會忘記怎麼開口要。',
+    yinxing:  '你們都在等對方先穩住。兩個人都想被照顧，於是誰都不肯先扛，' +
+              '關係會停在一種都很客氣、也都有點失望的狀態。',
+    bijie:    '你想被接住，他要對等。他不會主動照顧你，因為在他的邏輯裡那是不尊重；' +
+              '你會覺得他冷，其實他是在等你跟他並肩。',
+    caixing:  '你想被接住，他要掌握。這個組合初期很舒服——他安排，你跟著。' +
+              '風險是你會慢慢失去自己的判斷，然後有一天發現這段關係裡沒有你的聲音。',
+    guansha:  '你想被接住，他自己也在緊張。你們會互相等對方先穩下來，' +
+              '結果是誰都沒有安全感，而且都以為問題出在對方身上。'
+  },
+  bijie: {
+    shishang: '你要對等，他想給。他的照顧會讓你覺得被矮化，即使他完全沒有那個意思。' +
+              '這一組要早點講清楚：你要的不是被照顧，是被當成同一個層級的人。',
+    yinxing:  '你要對等，他想被接住。他會期待你多做一點，而你會覺得那不是你該做的。' +
+              '兩邊都沒錯，只是預設不同。',
+    bijie:    '你們都要對等，也都不肯先低頭。相處時很少有誰吃虧，' +
+              '但一旦僵住就很難解——因為兩個人都覺得先軟下來的那個是輸家。',
+    caixing:  '你要對等，他要掌握。這是最容易起衝突的一組：他每一次的安排，' +
+              '在你讀起來都是「他又替我決定了」。',
+    guansha:  '你要對等，他有壓力。你的直接會讓他更緊張，' +
+              '而他的小心翼翼在你看來像是不夠坦白。'
+  },
+  caixing: {
+    shishang: '你要掌握，他想給。這一組表面很順，因為他願意配合你的節奏。' +
+              '但他給的是心意，你回的是安排，久了他會覺得自己的心意沒有被看見。',
+    yinxing:  '你要掌握，他想被接住。他樂於讓你決定，這讓關係推進得很快。' +
+              '要留意的是你會越扛越多，而他會越來越不參與。',
+    bijie:    '你要掌握，他要對等。你的每一次定調，他都會想爭一下——' +
+              '不是因為他反對那件事，是因為他不想被決定。',
+    caixing:  '你們都想掌握節奏。這一組的相處像談判：小事也要爭出個誰說了算。' +
+              '好處是你們都很清楚自己要什麼，壞處是很少有人願意讓。',
+    guansha:  '你要掌握，他有壓力。你定調的時候他會照做，但心裡有壓力，' +
+              '而且不會說。他的順從不代表同意，那只是他不知道怎麼反對。'
+  },
+  guansha: {
+    shishang: '你容易緊張，他主動給。他的好會讓你更緊張，' +
+              '因為你會開始想「我要回報什麼」。他其實沒有要你回報。',
+    yinxing:  '你容易緊張，他也想被接住。你們會互相觀望，' +
+              '兩個人都在等對方給一個明確的訊號，於是誰都沒有先給。',
+    bijie:    '你容易緊張，他要對等。他的直接會讓你不安，' +
+              '你會反覆猜他那句話有沒有別的意思——多數時候沒有。',
+    caixing:  '你容易緊張，他要掌握。他定節奏你就跟，看起來很和諧，' +
+              '但你心裡一直在評估自己做得對不對。這種累他完全看不到。',
+    guansha:  '你們都在小心翼翼。兩個人都怕做錯、都在觀察對方的反應，' +
+              '所以關係會停在一種很客氣的狀態——誰都不敢先往前一步。'
+  }
+};
+
+/* 日干方向 → 對應的夫妻宮期待。相符代表「你天生要的，這段關係剛好給了」 */
+const PAL_MATCH = {
+  a_sheng_b: 'shishang', b_sheng_a: 'yinxing',
+  a_ke_b: 'caixing',     b_ke_a: 'guansha', bihe: 'bijie'
+};
+
+/* 期待與實際錯開時的橋接句。實測 83.6% 的組合會錯開——
+   不講出來的話，「你主導」跟「你容易在意他反應」讀起來會像前後矛盾 */
+const PAL_BRIDGE = {
+  shishang: '有一件事要一起看：你天生是主動給的那一種，' +
+            '但前面「緣的重量」算出來的實際力道，跟這個期待不是同一回事。' +
+            '你在這段關係裡的位置，跟你習慣的位置對不上——那份說不出來的彆扭，來源就在這裡。',
+  yinxing:  '有一件事要一起看：你天生期待有人比你更穩、讓你可以不用一直撐著，' +
+            '但前面「緣的重量」算出來的實際位置，跟這個期待對不上。' +
+            '你在這段關係裡的角色不是你熟悉的那個，所以會比平常更耗力。',
+  bijie:    '有一件事要一起看：你天生要的是平起平坐，' +
+            '但前面「緣的重量」算出來的力道並不是平的。' +
+            '不管高的那一邊是誰，你都會不太舒服——因為那不是你想要的相處方式。',
+  caixing:  '有一件事要一起看：你天生習慣掌握節奏，' +
+            '但前面「緣的重量」算出來的分配，跟這個習慣不一致。' +
+            '你在這段關係裡使力的方式跟平常不同，那種不順手是真的，不是你想太多。',
+  guansha:  '有一件事要一起看：你天生容易在意對方的反應，' +
+            '但前面「緣的重量」算出來的位置，跟這個習慣不一樣。' +
+            '你在這段關係裡做的事跟你的本性有點距離，所以你可能會覺得自己不太像自己。'
+};
+
+
+/**
+ * @param dbgA  result.debug.A
+ * @param dbgB  result.debug.B
+ * @param zlKey result.dimensions.zhongliang.key（實際的力道方向）
+ */
+function palace(dbgA, dbgB, zlKey) {
+  const a = palaceType(dbgA.dayGan, dbgA.dayZhi);
+  const b = palaceType(dbgB.dayGan, dbgB.dayZhi);
+  const aligned = PAL_MATCH[zlKey] === a;
+  return {
+    aKey: a, bKey: b, aligned,
+    body: PAL_SELF[a] + PAL_OTHER[b] + PAL_CLASH[a][b]
+        + (aligned ? '' : PAL_BRIDGE[a])
   };
 }
 
@@ -1759,6 +2166,7 @@ function encounter(changduKey, tempoKey) {
    變體以「兩人生日」為種子抽選：同一組永遠得到同一句，A×B 與 B×A 相同。
    往 open / close 陣列裡加句子就會自動生效，不需要改邏輯。
    ========================================================================= */
+
 
 
 
@@ -2017,10 +2425,10 @@ const WENDU = {
       '你們不缺理解，缺的是翻譯。同樣一件事換個說法，多半就不會撞上。'] },
   po: {
     core: {
-      交往: '你們之間有一種表面看不出來的破損。日子照過、話照講，但有些地方一直沒有真的接上。',
-      曖昧: '你們之間有一種表面看不出來的破損。訊息照回、面照見，但有些地方一直沒有真的接上。',
-      分開: '你們之間一直有一種表面看不出來的破損。不是吵散的，是有些地方從來沒有真的接上過。',
-      未定: '你和他之間有一種表面看不出來的破損。互動看起來正常，但你知道有什麼沒有到位。'
+      交往: '你們之間有一種容易內傷的結構。日子照過、話照講，但小事容易互相挑剔，心裡有疙瘩卻不直接說。',
+      曖昧: '你們之間有一種容易內傷的結構。訊息照回、面照見，但小事容易在心裡放大，而且你多半不會說出來。',
+      分開: '你們之間一直有一種容易內傷的結構。不是吵散的，是疙瘩累積太多，而且誰都沒有把它們攤開講過。',
+      未定: '你和他之間有一種容易內傷的結構。互動看起來正常，但你會為了小事暗自委屈，而那些他不會知道。'
     },
     open: ['', '這一項要講得細一點。', '有一種問題不會浮上檯面。'],
     close: [
@@ -2053,10 +2461,10 @@ const WENDU = {
 const ZHONGLIANG = {
   bihe: {
     core: {
-      交往: '你們的力氣是平的。誰都沒有特別依賴誰，也沒有誰在偷偷撐著——這在關係裡很難得。',
-      曖昧: '你們的力氣是平的。誰都沒有特別在追誰，這種對等在曖昧的階段不常見。',
-      分開: '你們的力氣是平的。分開的時候誰都沒有特別狼狽，各自都站得住——這是這段關係留下來最好的部分。',
-      未定: '你們的力氣是平的。沒有誰在仰望誰，這讓關係穩，但也讓它不容易往前推。'
+      交往: '你們的力氣是平的，誰都沒有特別依賴誰。但平不只有一種——比和的另一面是互不相讓，兩個人一樣硬，誰都不肯先低頭。',
+      曖昧: '你們的力氣是平的，誰都沒有特別在追誰。這在曖昧期是雙面的：沒有人卑微，但也沒有人覺得自己該先開口。',
+      分開: '你們的力氣是平的，分開的時候誰都沒有特別狼狽。但那份對等在當時也是阻力——兩個人一樣硬，誰都沒有先軟下來。',
+      未定: '你們的力氣是平的，沒有誰在仰望誰。這讓關係穩，但也讓它停得住——對等的兩個人最容易一起等下去。'
     },
     open: ['', '先講好消息。', '這在關係裡不是理所當然的。'],
     close: [
@@ -2300,7 +2708,7 @@ function render(result, birth, names = { A: '你', B: '對方' }, scene = '交�
 
   const tp = tempo(d, result.cross);
   const ini = initiator(d);
-  const ch = chance(d, result.cross, tp.key);
+  const ch = chance(d, result.cross, tp.key, shape(d));
 
   return {
     total: result.total,
@@ -2311,6 +2719,7 @@ function render(result, birth, names = { A: '你', B: '對方' }, scene = '交�
     initiator: ini.label,
     chance: ch.label,
     chanceLine: ch.line,
+    chanceNote: ch.note,
     headline: b.label + '·' + b.title,
     poem: pick(b.poems, seed, SALT.poem),
     summary: compose(b, seed, SALT.summary, true, scene),
@@ -3084,6 +3493,15 @@ const T = {
     平淡如水: '淡不是沒有可能，是還沒有人決定要讓它變濃。'
   },
 
+  /* 新增 夫妻宮錯位 —— 自己的日支十神 */
+  palace: {
+    shishang: '你給的是心意，但對方收到的不一定是同一件事。',
+    yinxing:  '被接住久了，人會忘記怎麼開口要。',
+    bijie:    '對等的兩個人，最容易一起停在原地。',
+    caixing:  '他配合你的節奏，不代表那也是他想要的節奏。',
+    guansha:  '你反覆評估自己做得對不對，那種累他完全看不到。'
+  },
+
   /* 新增 誰該先開口 —— 重量 key */
   move: {
     a_sheng_b: '一直是同一方在推的關係，最後多半推不動。',
@@ -3310,11 +3728,12 @@ const T = {
 
 /* 段落 title → 取哪一組、用哪個 key */
 function takeaway(section, ctx) {
-  const { band, weak, strong, zl, wendu, changdu, midu, tempo, place, ini, chance, move } = ctx;
+  const { band, weak, strong, zl, wendu, changdu, midu, tempo, place, ini, chance, move, palace } = ctx;
   const map = {
     '你們的緣分，究竟有多深？':                 () => T.table,
     '你們是怎麼開始的？':                       () => T.tempo[ctx.tempo],
     '這段曖昧，走到一起的機會有多大？':         () => T.chance[ctx.chance],
+    '你要的，和他要的，是同一種嗎？':           () => T.palace[ctx.palace],
     '接下來，該由誰先開口？':                   () => T.move[ctx.move],
     '是誰先開始喜歡上誰的？':                   () => T.ini[ctx.ini],
     '你們是在什麼樣的場合遇上的？':             () => T.place[ctx.place],
@@ -3356,6 +3775,7 @@ function takeaway(section, ctx) {
      6 需要留意的地方        最低維度
      7 你現在適合怎麼做      重量 key
    ========================================================================= */
+
 
 
 
@@ -3638,9 +4058,10 @@ function report(result, names = { A: '你', B: '他' }) {
   const tp = tempo(d, result.cross);
   const en = encounter(d.changdu.key, tp.key);
   const ini = initiator(d);
-  const ch = chance(d, result.cross, tp.key);
+  const ch = chance(d, result.cross, tp.key, nar.shape);
   const zl = d.zhongliang.key;
   const mf = moveFirst(zl, ch.blockKey);
+  const pl = palace(result.debug.A, result.debug.B, zl);
 
   const ev = eventsFor(result, b.label)
     .map((t, i) => (TIMELINE[i] || '同時，') + t.replace(/\{A\}/g, names.A));
@@ -3668,12 +4089,14 @@ function report(result, names = { A: '你', B: '他' }) {
     { part: P2, title: '明明有感覺，為什麼就是差那一步？',     body: nar.weak },
     { part: P2, title: '你們之間，最值得珍惜的是什麼？',     body: nar.strong },
     { part: P2, title: '這段曖昧，走到一起的機會有多大？',
-      body: ch.line + ch.block + ch.key },
+      body: ch.line + ch.note + ch.block + ch.key },
 
     { part: P3, title: '他習慣用什麼方式靠近一個人？', body: position(zl, names) },
     { part: P3, title: '你喜歡的他，和真實的他一樣嗎？',       body: appearance(d.wendu.key, names) },
     { part: P3, title: '如果真的在一起，他看重的會是什麼？',     body: attitude(d.changdu.key, names) },
     { part: P3, title: '那你呢？你真正需要的是什麼樣的愛？',   body: svPick(SELF_POSITION, zl, names) },
+    { part: P3, title: '你要的，和他要的，是同一種嗎？',
+      body: pl.body },
     { part: P3, title: '在他面前，你為什麼會變得不像自己？',   body: svPick(SELF_BLIND, zl, names) },
 
     { part: P4, title: '你們想要的愛情，真的是同一種嗎？',     body: svPick(VALUES, d.changdu.key, names) },
@@ -3699,10 +4122,30 @@ function report(result, names = { A: '你', B: '他' }) {
   );
 
   // 每段掛上「這一段的重點」
-  const ctx = { band: b.label, weak, strong, zl, tempo: tp.name, place: d.changdu.key, ini: ini.label, chance: ch.blockKey, move: zl,
+  const ctx = { band: b.label, weak, strong, zl, tempo: tp.name, place: d.changdu.key, ini: ini.label, chance: ch.blockKey, move: zl, palace: pl.aKey,
                 wendu: d.wendu.key, changdu: d.changdu.key,
                 midu: d.midu ? d.midu.key : null };
   sections.forEach(s => { s.takeaway = takeaway(s.title, ctx); });
+
+  /* 重點句多半就是段落的收尾。同一句話在內文與重點框各出現一次，
+     讀起來像填充而不是強調——把內文「結尾那一句」拿掉，讓它只出現在框裡。
+     只動最後一句：中間的句子常帶著別的資訊，整句砍掉會留下孤句。 */
+  const norm = t => t.replace(/[，。；：—「」（）]/g, '');
+  sections.forEach(s => {
+    if (!s.takeaway || !s.body) return;
+    const parts = s.body.split('。').filter(Boolean);
+    if (parts.length < 4) return;                     // 太短的段落不動，砍掉會留孤句
+    const tk = norm(s.takeaway);
+    const hit = i => {
+      const n = norm(parts[i]);
+      for (let k = 0; k + 8 <= tk.length; k++) if (n.includes(tk.slice(k, k + 8))) return true;
+      return false;
+    };
+    // 首句是判斷的落點，不能動；其餘重複的句子移除
+    const kept = parts.filter((_, i) => i === 0 || !hit(i));
+    if (kept.length >= parts.length - 1 && kept.length >= 3)
+      s.body = kept.join('。') + '。';
+  });
 
   const chars = sections.reduce((n, s) => {
     if (s.body) return n + [...s.body.replace(/\s/g, '')].length;
@@ -3911,10 +4354,14 @@ const $ = id => document.getElementById(id);
 
 /* ── 時辰選擇 ───────────────────────────── */
 
+/* 子時橫跨午夜，所以拆成早子與晚子——本來「子　23–01」會讓 00:30 出生的人
+   跟 23:30 出生的人選到同一個選項，但這兩者的日柱差一天。
+   採子初換日：晚子（23:00 後）的日柱算次日，引擎在 pillars() 處理。 */
 const SHICHEN = [
-  ['子', '23–01', 23], ['丑', '01–03', 1], ['寅', '03–05', 3], ['卯', '05–07', 5],
+  ['早子', '00–01', 0], ['丑', '01–03', 1], ['寅', '03–05', 3], ['卯', '05–07', 5],
   ['辰', '07–09', 7], ['巳', '09–11', 9], ['午', '11–13', 11], ['未', '13–15', 13],
-  ['申', '15–17', 15], ['酉', '17–19', 17], ['戌', '19–21', 19], ['亥', '21–23', 21]
+  ['申', '15–17', 15], ['酉', '17–19', 17], ['戌', '19–21', 19], ['亥', '21–23', 21],
+  ['晚子', '23–24', 23]
 ];
 const picked = { a: null, b: null };   // null = 未選；'unsure' = 不確定
 
@@ -3964,27 +4411,102 @@ function hourState(a, b) {
    那一步呼叫，不要在點按鈕或跳轉時呼叫。 */
 function trackUnlock() {
   if (!last) return;
-  track('yuanfen_unlock', { band: last.view.label, tempo: last.view.tempo });
+  track('yuanfen_unlock', { band: last.view.label, tempo: last.view.tempo, chance: last.view.chance });
 }
 
 /* ── 準確度回饋 ────────────────────────────────────────
    一鍵、不填任何東西。只送 tempo 與選項——三個月後就能回答
    「哪一型最不準」，那是唯一能真正校準判讀的方式。
    送出後不收回、也不讓改，重複點會灌壞資料。 */
+/* 事件要帶盤面 key，光知道「20 人說節奏不對」是改不了東西的。
+   帶了 key 才做得到「說節奏不對的人裡面七成是 cross_harsh >= 3」——
+   那就直接指出判定條件錯在哪。 */
+function boardKeys() {
+  const d = last.result.dimensions, x = last.result.cross || {};
+  return {
+    tempo:           last.view.tempo,
+    wendu_key:       d.wendu.key,
+    zhongliang_key:  d.zhongliang.key,
+    changdu_key:     d.changdu.key,
+    cross_sweet:     x.sweet || 0,
+    cross_harsh:     x.harsh || 0
+  };
+}
+
+/* 選了「不太對」但還沒說哪裡不對時，先擱著不送。
+   等她選了原因才送；中途離開就在 pagehide 補送一筆沒有 wrong_part 的。
+   這樣 rating 不會被重複計算，也不會整筆漏掉。 */
+/* 存的是「當下那一盤的完整參數」，不是只存 rating——
+   補送的時機可能已經重新起盤過，那時 last 已經是另一盤了。 */
+let pendingFeedback = null;
+
+function sendFeedback(params, wrongPart) {
+  const p = Object.assign({}, params);
+  if (wrongPart) p.wrong_part = wrongPart;
+  track('yuanfen_feedback', p);
+  saveFeedback(p);
+}
+
+/* 同一個動作也送一份到自己的後端，多帶兩組生日。
+   GA4 那份是匿名的、看漏斗用；這份的用途只有一個——引擎改版之後
+   拿真實案例整批重跑，看新版是不是真的比較準。盤面 key 是舊引擎算的，
+   重跑不能用，所以才需要生日。
+
+   ★ 只在這裡呼叫。頁面上說的是「除非你主動送出準確度回饋，
+     否則兩組生日不會離開這一頁」，抽籤本身不能送。 */
+function saveFeedback(p) {
+  if (!last || !last.birth) return;
+  const payload = Object.assign({ a: last.birth.a, b: last.birth.b, total: last.view.total }, p);
+  try {
+    fetch('/api/yuanfen-feedback', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(payload),
+      keepalive: true,          // 使用者按完就關頁面也要送得出去
+      cache: 'no-store'
+    }).catch(() => {});
+  } catch (e) { /* 回饋送不出去不能影響閱讀 */ }
+}
+
+function finishFeedback() {
+  $('r-accuracy').classList.add('done');
+  $('r-acc-thanks').hidden = false;
+}
+
 $('r-accuracy').addEventListener('click', e => {
-  const btn = e.target.closest('button[data-rating]');
   const box = $('r-accuracy');
-  if (!btn || box.classList.contains('done') || !last) return;
+  if (!last) return;
+  const btn = e.target.closest('button');
+  if (!btn) return;
 
-  btn.setAttribute('aria-pressed', 'true');
-  box.classList.add('done');
-  track('yuanfen_feedback', { tempo: last.view.tempo, rating: btn.dataset.rating });
+  /* 第一層 */
+  if (btn.dataset.rating && !box.classList.contains('r1done')) {
+    btn.setAttribute('aria-pressed', 'true');
+    box.classList.add('r1done');
 
-  const thanks = document.createElement('p');
-  thanks.className = 'thanks';
-  thanks.textContent = '謝謝，這會幫我們把判讀改準一點。';
-  box.appendChild(thanks);
-  box.querySelector('.ask').hidden = true;
+    const params = Object.assign({ rating: btn.dataset.rating }, boardKeys());
+    if (btn.dataset.rating === '不太對') {
+      pendingFeedback = params;            // 先不送，等第二層
+      $('r-acc-why').hidden = false;
+    } else {
+      sendFeedback(params);
+      finishFeedback();
+    }
+    return;
+  }
+
+  /* 第二層 */
+  if (btn.dataset.part && pendingFeedback && !box.classList.contains('done')) {
+    btn.setAttribute('aria-pressed', 'true');
+    sendFeedback(pendingFeedback, btn.dataset.part);
+    pendingFeedback = null;
+    finishFeedback();
+  }
+});
+
+/* 按了「不太對」卻沒選原因就離開——補送一筆，至少留住 rating */
+addEventListener('pagehide', () => {
+  if (pendingFeedback) { sendFeedback(pendingFeedback); pendingFeedback = null; }
 });
 
 const readDate = p => {
@@ -4051,7 +4573,9 @@ function reveal(a, b) {
   const c = render(r, { a: freeA, b: freeB }, { A: '你', B: '他' }, scene);
   /* view 是 render() 的輸出，帶著 band 與 tempo。分享與回饋的埋點需要它們，
      而 result 只有分數與三維度，沒有這兩個分類。 */
-  last = { result: r, view: c, a: freeA, b: freeB, full: yuanfen(a, b), scene };
+  /* birth 保留原始輸入（含時辰），只有送出準確度回饋時才會用到。
+     a / b 是免費層用的無時辰版本，兩者不能混用。 */
+  last = { result: r, view: c, a: freeA, b: freeB, birth: { a, b }, full: yuanfen(a, b), scene };
   $('r-report').classList.remove('on');
   document.body.classList.remove('reading');
   $('u-cta').disabled = false;
@@ -4061,23 +4585,25 @@ function reveal(a, b) {
   $('r-num').textContent = '緣分指數　' + c.total;
   $('r-poem').textContent = c.poem;
   $('r-chance').textContent = '走到一起的機會　' + c.chance;
-  $('r-chance-line').textContent = c.chanceLine;
+  $('r-chance-line').textContent = c.chanceLine + (c.chanceNote || '');
   $('r-tempo').textContent = c.tempo;
   $('r-ini').textContent = c.initiator;
   $('r-tempo-line').textContent = c.tempoLine;
   $('r-summary').textContent = c.summary;
 
   /* 起盤完成。放在渲染之後，確保使用者真的看到結果才算一次。 */
-  track('yuanfen_draw', { band: c.label, tempo: c.tempo, has_hour: hourState(a, b) });
+  /* chance 與 tempo 比 band 更值得看——它們會告訴你哪一種處境的人比較願意付錢 */
+  track('yuanfen_draw', { band: c.label, tempo: c.tempo, chance: c.chance, has_hour: hourState(a, b) });
 
-  /* 重新起盤等於換了一份判讀，回饋要跟著重來 */
+  /* 重新起盤等於換了一份判讀，回饋要跟著重來。
+     上一輪若停在「不太對」還沒選原因，先把那筆送出去再重置。 */
+  if (pendingFeedback) { sendFeedback(pendingFeedback); pendingFeedback = null; }
   const acc = $('r-accuracy');
   acc.hidden = false;
-  acc.classList.remove('done');
-  acc.querySelector('.ask').hidden = false;
-  const oldThanks = acc.querySelector('.thanks');
-  if (oldThanks) oldThanks.remove();
-  acc.querySelectorAll('button[data-rating]').forEach(b => b.setAttribute('aria-pressed', 'false'));
+  acc.classList.remove('done', 'r1done');
+  $('r-acc-why').hidden = true;
+  $('r-acc-thanks').hidden = true;
+  acc.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false'));
 
   const g = gapNote(r);
   $('r-gap').hidden = !g;
@@ -4122,6 +4648,7 @@ function reveal(a, b) {
     '你喜歡的他，和真實的他一樣嗎？':           '你每天實際感受到的他',
     '如果真的在一起，他看重的會是什麼？':         '他心裡對未來的想法，多半沒說出口',
     '那你呢？你真正需要的是什麼樣的愛？':       '你在做的事，包括你自己覺得理所當然的那些',
+    '你要的，和他要的，是同一種嗎？':           '各自日支所坐的十神——你期待的相處模式，跟他期待的差在哪',
     '在他面前，你為什麼會變得不像自己？':       '你的盲點——通常是善意造成的',
     '你們想要的愛情，真的是同一種嗎？':         '價值觀的重疊與分歧，以及會在哪種事情上浮現',
     '為什麼同一件事，你們總是想得不一樣？':     '為什麼同樣一句話，你們聽到的不一樣',
@@ -4136,17 +4663,26 @@ function reveal(a, b) {
     '關於這段緣分，你最該記住的一件事。':       '整份報告收束成一句'
   };
   const preview = report(last.full, { A: '你', B: '他' });
-  let seenPart = '';
-  $('u-list').innerHTML = preview.sections.map(sec => {
-    let out = '';
-    if (sec.part && sec.part !== seenPart) {
-      seenPart = sec.part;
-      out += '<li class="part">' + sec.part + '</li>';
-    }
-    out += '<li>' + sec.title
-         + (sec.needHour ? '<em>需完整出生時間</em>' : '')
-         + '<span>' + (TOC_DESC[sec.title] || '') + '</span></li>';
-    return out;
+  // 依部別分組，做成可收合的 <details>；第一組預設展開
+  const groups = [];
+  preview.sections.forEach(sec => {
+    const last = groups[groups.length - 1];
+    if (!last || last.part !== sec.part) groups.push({ part: sec.part, items: [sec] });
+    else last.items.push(sec);
+  });
+
+  let no = 0;
+  $('u-list').innerHTML = groups.map((g, gi) => {
+    const rows = g.items.map(sec => {
+      no++;
+      return '<li><b>' + String(no).padStart(2, '0') + '</b><div>' + sec.title
+           + (sec.needHour ? '<em>需完整出生時間</em>' : '')
+           + '<span>' + (TOC_DESC[sec.title] || '') + '</span></div></li>';
+    }).join('');
+    return '<details class="toc-group"' + (gi === 0 ? ' open' : '') + '>'
+         + '<summary>' + g.part
+         + '<i>' + g.items.length + ' 段</i></summary>'
+         + '<ul>' + rows + '</ul></details>';
   }).join('');
 
   $('u-price').textContent =
@@ -4223,19 +4759,11 @@ $('u-cta').addEventListener('click', () => {
   if (!last) return;
   const r = report(last.full, { A: '你', B: '他' });
   const box = $('r-report');
+  const bodyBox = $('rep-body');
   $('rep-head').textContent = '完整合盤　' + r.chars + ' 字';
-  box.querySelectorAll('section').forEach(x => x.remove());
-  let curPart = '';
+  bodyBox.querySelectorAll('section').forEach(x => x.remove());
   r.sections.forEach(sec => {
     const el = document.createElement('section');
-    if (sec.part && sec.part !== curPart) {
-      curPart = sec.part;
-      const ph = document.createElement('p');
-      ph.className = 'part-h';
-      ph.textContent = sec.part;
-      el.appendChild(ph);
-      el.className = 'first-of-part';
-    }
     const h = document.createElement('h3');
     h.textContent = sec.title;
     el.appendChild(h);
@@ -4274,12 +4802,86 @@ $('u-cta').addEventListener('click', () => {
       t.appendChild(document.createTextNode(sec.takeaway));
       el.appendChild(t);
     }
-    box.appendChild(el);
+    bodyBox.appendChild(el);
   });
+
+  buildReader(r.sections);
   box.classList.add('on');
   document.body.classList.add('reading');
   $('u-cta').disabled = true;
   box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+/* ── 報告分頁閱讀器 ──────────────────────────────────
+   段落已經全部渲染進 DOM，這裡只負責一次顯示一段、
+   維護目錄的當前與已讀狀態，以及上下段按鈕。 */
+let repAt = 0, repTotal = 0, repParts = [];
+
+function buildReader(sections) {
+  repTotal = sections.length;
+  repAt = 0;
+  repParts = sections.map(s => s.part || '');
+
+  /* 目錄依部別分組，編號連續 */
+  const toc = $('rep-toc');
+  toc.innerHTML = '';
+  let part = '';
+  sections.forEach((sec, i) => {
+    if (sec.part && sec.part !== part) {
+      part = sec.part;
+      const p = document.createElement('p');
+      p.className = 'tp';
+      p.textContent = part;
+      toc.appendChild(p);
+    }
+    const a = document.createElement('a');
+    a.href = '#';
+    a.dataset.i = i;
+    a.innerHTML = '<i>' + String(i + 1).padStart(2, '0') + '</i>';
+    a.appendChild(document.createTextNode(sec.title));
+    toc.appendChild(a);
+  });
+
+  showSection(0);
+}
+
+function showSection(i) {
+  const secs = [...$('rep-body').querySelectorAll('section')];
+  if (!secs.length) return;
+  repAt = Math.max(0, Math.min(i, secs.length - 1));
+
+  secs.forEach((el, k) => el.classList.toggle('on', k === repAt));
+
+  $('rep-part').textContent = repParts[repAt] || '';
+  $('rep-prog').textContent = String(repAt + 1).padStart(2, '0') + ' / ' + String(repTotal).padStart(2, '0');
+
+  $('rep-toc').querySelectorAll('a[data-i]').forEach(a => {
+    const k = +a.dataset.i;
+    a.setAttribute('aria-current', k === repAt ? 'true' : 'false');
+    a.classList.toggle('read', k < repAt);
+  });
+
+  $('rep-prev').disabled = repAt === 0;
+  $('rep-next').disabled = repAt === repTotal - 1;
+}
+
+/* 目錄用事件代理，綁在容器上一次就好——buildReader 每次重建內容，
+   若在裡面綁會越疊越多層。 */
+$('rep-toc').addEventListener('click', e => {
+  const a = e.target.closest('a[data-i]');
+  if (!a) return;
+  e.preventDefault();
+  showSection(+a.dataset.i);
+  $('rep-toc').parentElement.classList.remove('open');   // 手機：選完把目錄收回去
+  $('rep-body').scrollIntoView({ block: 'start' });
+});
+
+$('rep-prev').addEventListener('click', () => { showSection(repAt - 1); $('rep-body').scrollIntoView({ block: 'start' }); });
+$('rep-next').addEventListener('click', () => { showSection(repAt + 1); $('rep-body').scrollIntoView({ block: 'start' }); });
+$('rep-toc-toggle').addEventListener('click', () => {
+  const aside = $('rep-toc').parentElement;
+  const open = aside.classList.toggle('open');
+  $('rep-toc-toggle').setAttribute('aria-expanded', open ? 'true' : 'false');
 });
 
 $('go').addEventListener('click', draw);

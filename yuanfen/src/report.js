@@ -25,6 +25,7 @@ const { tempo } = require('./tempo');
 const { initiator } = require('./initiator');
 const { chance } = require('./chance');
 const { moveFirst } = require('./movefirst');
+const { palace } = require('./palace');
 const { encounter } = require('./encounter');
 
 /* ---------- 1. 這段緣現在停在哪裡 ---------- */
@@ -294,9 +295,10 @@ function report(result, names = { A: '你', B: '他' }) {
   const tp = tempo(d, result.cross);
   const en = encounter(d.changdu.key, tp.key);
   const ini = initiator(d);
-  const ch = chance(d, result.cross, tp.key);
+  const ch = chance(d, result.cross, tp.key, nar.shape);
   const zl = d.zhongliang.key;
   const mf = moveFirst(zl, ch.blockKey);
+  const pl = palace(result.debug.A, result.debug.B, zl);
 
   const ev = eventsFor(result, b.label)
     .map((t, i) => (TIMELINE[i] || '同時，') + t.replace(/\{A\}/g, names.A));
@@ -324,12 +326,14 @@ function report(result, names = { A: '你', B: '他' }) {
     { part: P2, title: '明明有感覺，為什麼就是差那一步？',     body: nar.weak },
     { part: P2, title: '你們之間，最值得珍惜的是什麼？',     body: nar.strong },
     { part: P2, title: '這段曖昧，走到一起的機會有多大？',
-      body: ch.line + ch.block + ch.key },
+      body: ch.line + ch.note + ch.block + ch.key },
 
     { part: P3, title: '他習慣用什麼方式靠近一個人？', body: position(zl, names) },
     { part: P3, title: '你喜歡的他，和真實的他一樣嗎？',       body: appearance(d.wendu.key, names) },
     { part: P3, title: '如果真的在一起，他看重的會是什麼？',     body: attitude(d.changdu.key, names) },
     { part: P3, title: '那你呢？你真正需要的是什麼樣的愛？',   body: svPick(SELF_POSITION, zl, names) },
+    { part: P3, title: '你要的，和他要的，是同一種嗎？',
+      body: pl.body },
     { part: P3, title: '在他面前，你為什麼會變得不像自己？',   body: svPick(SELF_BLIND, zl, names) },
 
     { part: P4, title: '你們想要的愛情，真的是同一種嗎？',     body: svPick(VALUES, d.changdu.key, names) },
@@ -355,10 +359,30 @@ function report(result, names = { A: '你', B: '他' }) {
   );
 
   // 每段掛上「這一段的重點」
-  const ctx = { band: b.label, weak, strong, zl, tempo: tp.name, place: d.changdu.key, ini: ini.label, chance: ch.blockKey, move: zl,
+  const ctx = { band: b.label, weak, strong, zl, tempo: tp.name, place: d.changdu.key, ini: ini.label, chance: ch.blockKey, move: zl, palace: pl.aKey,
                 wendu: d.wendu.key, changdu: d.changdu.key,
                 midu: d.midu ? d.midu.key : null };
   sections.forEach(s => { s.takeaway = takeaway(s.title, ctx); });
+
+  /* 重點句多半就是段落的收尾。同一句話在內文與重點框各出現一次，
+     讀起來像填充而不是強調——把內文「結尾那一句」拿掉，讓它只出現在框裡。
+     只動最後一句：中間的句子常帶著別的資訊，整句砍掉會留下孤句。 */
+  const norm = t => t.replace(/[，。；：—「」（）]/g, '');
+  sections.forEach(s => {
+    if (!s.takeaway || !s.body) return;
+    const parts = s.body.split('。').filter(Boolean);
+    if (parts.length < 4) return;                     // 太短的段落不動，砍掉會留孤句
+    const tk = norm(s.takeaway);
+    const hit = i => {
+      const n = norm(parts[i]);
+      for (let k = 0; k + 8 <= tk.length; k++) if (n.includes(tk.slice(k, k + 8))) return true;
+      return false;
+    };
+    // 首句是判斷的落點，不能動；其餘重複的句子移除
+    const kept = parts.filter((_, i) => i === 0 || !hit(i));
+    if (kept.length >= parts.length - 1 && kept.length >= 3)
+      s.body = kept.join('。') + '。';
+  });
 
   const chars = sections.reduce((n, s) => {
     if (s.body) return n + [...s.body.replace(/\s/g, '')].length;
