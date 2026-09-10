@@ -151,6 +151,57 @@ h1{font-family:var(--serif);
   border:1px solid var(--line); border-radius:3px; padding:2px 7px; margin-left:9px;
   white-space:nowrap; vertical-align:2px;
 }
+/* ── 目錄：依部別收合。24 段攤平太長，分成六組、第一組預設展開 ── */
+.toc-group{
+  border:1px solid var(--line); border-radius:3px; margin-top:12px;
+  background:linear-gradient(180deg,rgba(36,25,67,.5),rgba(26,16,48,.25));
+  overflow:hidden;
+}
+.toc-group summary{
+  list-style:none; cursor:pointer; position:relative;
+  padding:17px 46px 17px 20px;
+  color:var(--gold); font-family:var(--sans); font-size:14px; letter-spacing:.16em;
+  transition:background .2s;
+}
+.toc-group summary::-webkit-details-marker{display:none}
+.toc-group summary:hover{background:rgba(217,189,130,.05)}
+.toc-group summary:focus-visible{outline:2px solid var(--gold); outline-offset:-2px}
+.toc-group summary i{
+  font-style:normal; color:var(--muted); font-family:var(--latin);
+  font-size:12px; letter-spacing:.06em; margin-left:10px;
+}
+.toc-group summary::after{                 /* 收合箭頭 */
+  content:''; position:absolute; right:20px; top:50%;
+  width:8px; height:8px; margin-top:-6px;
+  border-right:1.5px solid var(--gold); border-bottom:1.5px solid var(--gold);
+  transform:rotate(45deg); transition:transform .25s; opacity:.75;
+}
+.toc-group[open] summary::after{transform:rotate(-135deg); margin-top:-2px}
+.toc-group ul{margin:0; padding:0 20px 16px; list-style:none}
+.toc-group li{
+  display:flex; gap:14px; align-items:flex-start;
+  padding:14px 0; border-top:1px solid var(--line-soft);
+}
+.toc-group li b{
+  flex:none; width:32px; height:32px; line-height:30px; text-align:center;
+  color:var(--gold); font-family:var(--latin); font-size:12.5px; font-weight:400;
+  border:1px solid var(--line); border-radius:50%;
+  background:rgba(217,189,130,.05);
+}
+.toc-group li:hover b{border-color:var(--gold); color:var(--gold-soft)}
+.toc-group li > div{
+  color:var(--cream); font-family:var(--serif); font-size:17px;
+  letter-spacing:.04em; line-height:1.55;
+}
+.toc-group li span{
+  display:block; color:var(--muted); font-family:var(--sans);
+  font-size:13px; margin-top:5px; line-height:1.85;
+}
+.toc-group li em{
+  font-style:normal; color:var(--gold); font-size:11.5px; letter-spacing:.08em;
+  border:1px solid var(--line); border-radius:3px; padding:2px 7px; margin-left:8px;
+  white-space:nowrap; vertical-align:2px;
+}
 .upsell .toc-h{color:var(--gold-soft); font-family:var(--serif); font-size:17px;
   letter-spacing:.24em; margin:38px 0 0; text-align:center}
 .upsell ol li.part{
@@ -693,7 +744,7 @@ details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offse
         <div class="f3"><span></span><b>NT$199</b><em>一次付清</em></div>
       </div>
       <p class="toc-h">目錄</p>
-      <ol id="u-list"></ol>
+      <div id="u-list"></div>
       <p class="price-note" id="u-price"></p>
       <button class="btn-img" id="u-cta"><span>解讀完整內容 NT$199</span></button>
       <p class="expanded-note">已展開　往下閱讀</p>
@@ -1506,21 +1557,22 @@ const CHANCE_TEMPO_ADJ = {
 /* 命名前綴避開 card-text.js 的 LEVELS */
 const CHANCE_LEVELS = [
   { min: 74, label: '很有機會',
-    line: '這段曖昧走到一起的機會偏高。盤上該有的條件大致都在——靠近不費力、有人願意先動、底子也撐得住。' +
-          '會不會成，現在主要不是命的問題，是有沒有人願意把話說出口。' },
+    line: '這段曖昧走到一起的機會偏高。盤上的阻力少，該順的地方大致都順，' +
+          '所以結果比較不受命的限制——現在的關鍵在人不在盤。' },
   { min: 62, label: '有機會，但要推',
-    line: '這段曖昧有成的條件，但它不會自己發生。盤上有幾個地方是順的，也有幾個地方需要人去處理，' +
-          '所以結果取決於接下來有沒有人做出明確的動作——維持現狀的話，多半會停在這裡。' },
+    line: '這段曖昧有成的條件，但它不會自己發生。順的地方跟卡的地方都有，' +
+          '所以結果取決於接下來有沒有人做出明確的動作。' },
   { min: 50, label: '一半一半',
-    line: '這段曖昧成與不成的條件差不多。往哪一邊走，盤上看不出定局——' +
+    line: '這段曖昧成與不成的條件差不多，往哪一邊走盤上看不出定局。' +
           '這種情況通常不是被什麼擋住，是缺一個把關係推過去的契機。' },
   { min: 38, label: '偏低，但不是不可能',
-    line: '這段曖昧走到一起的機會偏低。不是沒有感情，是條件不太站在你們這邊：' +
-          '該順的地方有卡點，或是缺一個推動的人。要成的話需要比一般關係多做一些。' },
+    line: '這段曖昧走到一起的機會偏低。不是沒有感情，是條件不太站在你們這邊，' +
+          '要成的話需要比一般關係多做一些。' },
   { min: 0,  label: '很低',
     line: '這段曖昧走到一起的機會很低。盤上的阻力集中而且具體，' +
           '不是靠更喜歡就能解決的那一種。這不代表要放棄，但要清楚自己在為什麼留著。' }
 ];
+
 
 /* ---------- 卡在哪裡 ---------- */
 const CHANCE_BLOCK = {
@@ -1560,7 +1612,7 @@ const CHANCE_KEY = {
  * @param cross  result.cross
  * @param tempoKey  tempo(d, cross).key
  */
-function chance(d, cross, tempoKey) {
+function chance(d, cross, tempoKey, sh) {
   const zl = d.zhongliang.key;
   const balanced = zl === 'bihe';
 
@@ -1570,7 +1622,11 @@ function chance(d, cross, tempoKey) {
   v += balanced ? -7 : 7;                      // 有沒有人推
   v += (cross ? cross.sweet * 4 - cross.harsh * 4 : 0);
   v += CHANCE_TEMPO_ADJ[tempoKey] || 0;
-  v = Math.max(8, Math.min(96, Math.round(v)));
+  /* 一致性約束：格局判定沒有推力時，機會不得落在「很有機會」——
+     否則會出現「你們沒有特別強的推力」配「條件都在」的自相矛盾 */
+  const noPush = balanced
+    || (sh && ['quiet', 'blank', 'plain'].includes(sh.pattern));
+  v = Math.max(8, Math.min(noPush ? 71 : 96, Math.round(v)));
 
   const lv = CHANCE_LEVELS.find(l => v >= l.min);
 
@@ -1584,7 +1640,19 @@ function chance(d, cross, tempoKey) {
   else if (v < 62)                                  key = 'thin';   // 分數不高就一定有卡點
   else                                              key = 'none';
 
-  return { value: v, label: lv.label, line: lv.line,
+  /* 緣分指數與機會不同向時要交代，否則讀起來像前後矛盾 */
+  let note = '';
+  const total = Math.round(
+    d.wendu.score * 0.35 + d.zhongliang.score * 0.30 + d.changdu.score * 0.35);
+  if (v >= 62 && total < 70)
+    note = '（緣分指數不高但機會不低，這兩件事看的不是同一回事——' +
+           '指數看這段緣本身的質地，機會看能不能走到一起。底子普通但阻力少的組合，' +
+           '常常比底子好卻卡住的更容易成。）';
+  else if (v < 50 && total >= 74)
+    note = '（緣分指數不低但機會偏低，這兩件事看的不是同一回事——' +
+           '你們之間的東西是有份量的，只是要從曖昧走到確定，中間卡著具體的東西。）';
+
+  return { value: v, label: lv.label, line: lv.line, note,
            block: CHANCE_BLOCK[key], key: CHANCE_KEY[key], blockKey: key };
 }
 
@@ -1671,6 +1739,189 @@ function moveFirst(zlKey, blockKey) {
   return {
     who: MOVE_WHO[zlKey] || MOVE_WHO.bihe,
     how: MOVE_HOW[blockKey] || MOVE_HOW.none
+  };
+}
+
+/* ───────────────────────── */
+
+/* =========================================================================
+   未完籤所 · 夫妻宮的錯位
+   -------------------------------------------------------------------------
+   日支即夫妻宮，它決定的不是「你們合不合」，而是**你天生預期的相處模式**。
+
+   現有的「緣的重量」比對雙方日干，講的是這段關係實際的力道；
+   這裡看的是各自日支坐什麼十神，講的是各自期待什麼。
+   兩個人的期待錯開時，衝突的樣子是可以具體描述的——
+   「一方想靜一靜，一方想馬上溝通」就是這種錯位。
+
+   十神歸五類（依日支本氣對日干）：
+     食傷  我習慣主動給
+     印星  我期待被照顧
+     比劫  我要平起平坐
+     財星  我習慣掌握節奏
+     官殺  我容易在意對方的反應
+
+   不取吉凶，只取方向——吉凶要判喜忌，那需要旺衰判定。
+   ========================================================================= */
+
+/* 地支本氣（十天干序：甲0 乙1 丙2 丁3 戊4 己5 庚6 辛7 壬8 癸9） */
+const PAL_ZHI_BENQI = [9, 5, 0, 1, 4, 2, 3, 5, 6, 7, 4, 8];
+//                子 丑 寅 卯 辰 巳 午 未 申 酉 戌 亥
+
+const PAL_GAN_WUXING = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4];   // 木木火火土土金金水水
+const PAL_GAN_YANG   = [1, 0, 1, 0, 1, 0, 1, 0, 1, 0];   // 陽干為 1
+
+/* 五行生剋：0木 1火 2土 3金 4水。前綴避開 yuanfen.js 的同名常數 */
+const PAL_SHENG = [1, 2, 3, 4, 0];     // 木生火、火生土、土生金、金生水、水生木
+const PAL_KE    = [2, 3, 4, 0, 1];     // 木剋土、火剋金、土剋水、金剋木、水剋火
+
+/**
+ * 日支對日干的十神大類
+ * @returns 'shishang' | 'yinxing' | 'bijie' | 'caixing' | 'guansha'
+ */
+function palaceType(dayGan, dayZhi) {
+  const me = PAL_GAN_WUXING[dayGan];
+  const it = PAL_GAN_WUXING[PAL_ZHI_BENQI[dayZhi]];
+  if (it === me)          return 'bijie';      // 同我
+  if (PAL_SHENG[me] === it)   return 'shishang';   // 我生
+  if (PAL_SHENG[it] === me)   return 'yinxing';    // 生我
+  if (PAL_KE[me] === it)      return 'caixing';    // 我剋
+  if (PAL_KE[it] === me)      return 'guansha';    // 剋我
+  return 'bijie';
+}
+
+/* ---------- 你的期待 ---------- */
+const PAL_SELF = {
+  shishang: '你在關係裡是主動給的那一種。你習慣先付出、先安排、先把對方照顧好，' +
+            '因為那讓你覺得自己在這段關係裡是有位置的。',
+  yinxing:  '你在關係裡期待被接住。不一定是物質上的照顧，' +
+            '而是希望有人比你更穩，讓你可以不用一直撐著。',
+  bijie:    '你在關係裡要的是平起平坐。你不想被照顧，也不想照顧誰，' +
+            '你要的是一個能跟你並肩、而不是圍著你轉的人。',
+  caixing:  '你在關係裡習慣掌握節奏。什麼時候見面、關係走到哪一步，' +
+            '你心裡多半有個譜，而且會不自覺地照那個譜走。',
+  guansha:  '你在關係裡容易在意對方的反應。他的一句話、一個停頓，你都會收進去，' +
+            '所以你在感情裡總是比別人多一層緊張。'
+};
+
+/* ---------- 他的期待（同一套，換視角） ---------- */
+const PAL_OTHER = {
+  shishang: '他要的是一個願意接受他的人——他習慣主動安排、主動給，' +
+            '也需要對方接受他的給。',
+  yinxing:  '他要的是一個能讓他放鬆的人。他不想在關係裡繼續繃著，' +
+            '所以他會被那種讓他不用解釋的人吸引。',
+  bijie:    '他要的是一個對等的人。他不喜歡被照顧，也不打算把誰扛在身上，' +
+            '他期待的是各自站得住、然後一起走。',
+  caixing:  '他習慣掌握節奏。什麼時候聯絡、進到哪一步，多半是他在定，' +
+            '而且他不太會意識到那是一種主導。',
+  guansha:  '他在關係裡有壓力感。他會在意做得對不對、會不會被評價，' +
+            '所以他的謹慎不是冷淡，是他怕做錯。'
+};
+
+/* ---------- 錯位或相配的具體樣子（5×5） ---------- */
+const PAL_CLASH = {
+  shishang: {
+    shishang: '你們都習慣主動給，所以一開始會覺得對方很好相處。問題出在誰都不接——' +
+              '兩個人都在給，卻沒有人好好收下對方給的東西，久了會覺得自己的心意落空。',
+    yinxing:  '這是最順的一組：你想給，他想被接住。要留意的是分寸——' +
+              '你給得太快太多，他會從「被照顧」變成「被安排」，那時候他會退。',
+    bijie:    '你想給，他要對等。你的照顧在他讀起來可能是「你把我當成需要被照顧的人」，' +
+              '那會傷到他的自尊。他不是不領情，是那種給法讓他不舒服。',
+    caixing:  '你想給，他要掌握。表面上很配合——你給、他收，節奏由他定。' +
+              '但這種組合最容易失衡，因為你的付出會變成他的預設，而他不會發現。',
+    guansha:  '你想給，他有壓力。你越主動，他越覺得自己欠了什麼、該有所回應，' +
+              '於是他會先退開整理。你以為他不領情，其實他是被你的好嚇到了。'
+  },
+  yinxing: {
+    shishang: '這是很順的一組：他想給，你想被接住。' +
+              '要留意的是你會不會習慣到失去表達的能力——被接住久了，人會忘記怎麼開口要。',
+    yinxing:  '你們都在等對方先穩住。兩個人都想被照顧，於是誰都不肯先扛，' +
+              '關係會停在一種都很客氣、也都有點失望的狀態。',
+    bijie:    '你想被接住，他要對等。他不會主動照顧你，因為在他的邏輯裡那是不尊重；' +
+              '你會覺得他冷，其實他是在等你跟他並肩。',
+    caixing:  '你想被接住，他要掌握。這個組合初期很舒服——他安排，你跟著。' +
+              '風險是你會慢慢失去自己的判斷，然後有一天發現這段關係裡沒有你的聲音。',
+    guansha:  '你想被接住，他自己也在緊張。你們會互相等對方先穩下來，' +
+              '結果是誰都沒有安全感，而且都以為問題出在對方身上。'
+  },
+  bijie: {
+    shishang: '你要對等，他想給。他的照顧會讓你覺得被矮化，即使他完全沒有那個意思。' +
+              '這一組要早點講清楚：你要的不是被照顧，是被當成同一個層級的人。',
+    yinxing:  '你要對等，他想被接住。他會期待你多做一點，而你會覺得那不是你該做的。' +
+              '兩邊都沒錯，只是預設不同。',
+    bijie:    '你們都要對等，也都不肯先低頭。相處時很少有誰吃虧，' +
+              '但一旦僵住就很難解——因為兩個人都覺得先軟下來的那個是輸家。',
+    caixing:  '你要對等，他要掌握。這是最容易起衝突的一組：他每一次的安排，' +
+              '在你讀起來都是「他又替我決定了」。',
+    guansha:  '你要對等，他有壓力。你的直接會讓他更緊張，' +
+              '而他的小心翼翼在你看來像是不夠坦白。'
+  },
+  caixing: {
+    shishang: '你要掌握，他想給。這一組表面很順，因為他願意配合你的節奏。' +
+              '但他給的是心意，你回的是安排，久了他會覺得自己的心意沒有被看見。',
+    yinxing:  '你要掌握，他想被接住。他樂於讓你決定，這讓關係推進得很快。' +
+              '要留意的是你會越扛越多，而他會越來越不參與。',
+    bijie:    '你要掌握，他要對等。你的每一次定調，他都會想爭一下——' +
+              '不是因為他反對那件事，是因為他不想被決定。',
+    caixing:  '你們都想掌握節奏。這一組的相處像談判：小事也要爭出個誰說了算。' +
+              '好處是你們都很清楚自己要什麼，壞處是很少有人願意讓。',
+    guansha:  '你要掌握，他有壓力。你定調的時候他會照做，但心裡有壓力，' +
+              '而且不會說。他的順從不代表同意，那只是他不知道怎麼反對。'
+  },
+  guansha: {
+    shishang: '你容易緊張，他主動給。他的好會讓你更緊張，' +
+              '因為你會開始想「我要回報什麼」。他其實沒有要你回報。',
+    yinxing:  '你容易緊張，他也想被接住。你們會互相觀望，' +
+              '兩個人都在等對方給一個明確的訊號，於是誰都沒有先給。',
+    bijie:    '你容易緊張，他要對等。他的直接會讓你不安，' +
+              '你會反覆猜他那句話有沒有別的意思——多數時候沒有。',
+    caixing:  '你容易緊張，他要掌握。他定節奏你就跟，看起來很和諧，' +
+              '但你心裡一直在評估自己做得對不對。這種累他完全看不到。',
+    guansha:  '你們都在小心翼翼。兩個人都怕做錯、都在觀察對方的反應，' +
+              '所以關係會停在一種很客氣的狀態——誰都不敢先往前一步。'
+  }
+};
+
+/* 日干方向 → 對應的夫妻宮期待。相符代表「你天生要的，這段關係剛好給了」 */
+const PAL_MATCH = {
+  a_sheng_b: 'shishang', b_sheng_a: 'yinxing',
+  a_ke_b: 'caixing',     b_ke_a: 'guansha', bihe: 'bijie'
+};
+
+/* 期待與實際錯開時的橋接句。實測 83.6% 的組合會錯開——
+   不講出來的話，「你主導」跟「你容易在意他反應」讀起來會像前後矛盾 */
+const PAL_BRIDGE = {
+  shishang: '有一件事要一起看：你天生是主動給的那一種，' +
+            '但前面「緣的重量」算出來的實際力道，跟這個期待不是同一回事。' +
+            '你在這段關係裡的位置，跟你習慣的位置對不上——那份說不出來的彆扭，來源就在這裡。',
+  yinxing:  '有一件事要一起看：你天生期待有人比你更穩、讓你可以不用一直撐著，' +
+            '但前面「緣的重量」算出來的實際位置，跟這個期待對不上。' +
+            '你在這段關係裡的角色不是你熟悉的那個，所以會比平常更耗力。',
+  bijie:    '有一件事要一起看：你天生要的是平起平坐，' +
+            '但前面「緣的重量」算出來的力道並不是平的。' +
+            '不管高的那一邊是誰，你都會不太舒服——因為那不是你想要的相處方式。',
+  caixing:  '有一件事要一起看：你天生習慣掌握節奏，' +
+            '但前面「緣的重量」算出來的分配，跟這個習慣不一致。' +
+            '你在這段關係裡使力的方式跟平常不同，那種不順手是真的，不是你想太多。',
+  guansha:  '有一件事要一起看：你天生容易在意對方的反應，' +
+            '但前面「緣的重量」算出來的位置，跟這個習慣不一樣。' +
+            '你在這段關係裡做的事跟你的本性有點距離，所以你可能會覺得自己不太像自己。'
+};
+
+
+/**
+ * @param dbgA  result.debug.A
+ * @param dbgB  result.debug.B
+ * @param zlKey result.dimensions.zhongliang.key（實際的力道方向）
+ */
+function palace(dbgA, dbgB, zlKey) {
+  const a = palaceType(dbgA.dayGan, dbgA.dayZhi);
+  const b = palaceType(dbgB.dayGan, dbgB.dayZhi);
+  const aligned = PAL_MATCH[zlKey] === a;
+  return {
+    aKey: a, bKey: b, aligned,
+    body: PAL_SELF[a] + PAL_OTHER[b] + PAL_CLASH[a][b]
+        + (aligned ? '' : PAL_BRIDGE[a])
   };
 }
 
@@ -1787,6 +2038,7 @@ function encounter(changduKey, tempoKey) {
    變體以「兩人生日」為種子抽選：同一組永遠得到同一句，A×B 與 B×A 相同。
    往 open / close 陣列裡加句子就會自動生效，不需要改邏輯。
    ========================================================================= */
+
 
 
 
@@ -2045,10 +2297,10 @@ const WENDU = {
       '你們不缺理解，缺的是翻譯。同樣一件事換個說法，多半就不會撞上。'] },
   po: {
     core: {
-      交往: '你們之間有一種表面看不出來的破損。日子照過、話照講，但有些地方一直沒有真的接上。',
-      曖昧: '你們之間有一種表面看不出來的破損。訊息照回、面照見，但有些地方一直沒有真的接上。',
-      分開: '你們之間一直有一種表面看不出來的破損。不是吵散的，是有些地方從來沒有真的接上過。',
-      未定: '你和他之間有一種表面看不出來的破損。互動看起來正常，但你知道有什麼沒有到位。'
+      交往: '你們之間有一種容易內傷的結構。日子照過、話照講，但小事容易互相挑剔，心裡有疙瘩卻不直接說。',
+      曖昧: '你們之間有一種容易內傷的結構。訊息照回、面照見，但小事容易在心裡放大，而且你多半不會說出來。',
+      分開: '你們之間一直有一種容易內傷的結構。不是吵散的，是疙瘩累積太多，而且誰都沒有把它們攤開講過。',
+      未定: '你和他之間有一種容易內傷的結構。互動看起來正常，但你會為了小事暗自委屈，而那些他不會知道。'
     },
     open: ['', '這一項要講得細一點。', '有一種問題不會浮上檯面。'],
     close: [
@@ -2081,10 +2333,10 @@ const WENDU = {
 const ZHONGLIANG = {
   bihe: {
     core: {
-      交往: '你們的力氣是平的。誰都沒有特別依賴誰，也沒有誰在偷偷撐著——這在關係裡很難得。',
-      曖昧: '你們的力氣是平的。誰都沒有特別在追誰，這種對等在曖昧的階段不常見。',
-      分開: '你們的力氣是平的。分開的時候誰都沒有特別狼狽，各自都站得住——這是這段關係留下來最好的部分。',
-      未定: '你們的力氣是平的。沒有誰在仰望誰，這讓關係穩，但也讓它不容易往前推。'
+      交往: '你們的力氣是平的，誰都沒有特別依賴誰。但平不只有一種——比和的另一面是互不相讓，兩個人一樣硬，誰都不肯先低頭。',
+      曖昧: '你們的力氣是平的，誰都沒有特別在追誰。這在曖昧期是雙面的：沒有人卑微，但也沒有人覺得自己該先開口。',
+      分開: '你們的力氣是平的，分開的時候誰都沒有特別狼狽。但那份對等在當時也是阻力——兩個人一樣硬，誰都沒有先軟下來。',
+      未定: '你們的力氣是平的，沒有誰在仰望誰。這讓關係穩，但也讓它停得住——對等的兩個人最容易一起等下去。'
     },
     open: ['', '先講好消息。', '這在關係裡不是理所當然的。'],
     close: [
@@ -2328,7 +2580,7 @@ function render(result, birth, names = { A: '你', B: '對方' }, scene = '交�
 
   const tp = tempo(d, result.cross);
   const ini = initiator(d);
-  const ch = chance(d, result.cross, tp.key);
+  const ch = chance(d, result.cross, tp.key, shape(d));
 
   return {
     total: result.total,
@@ -2339,6 +2591,7 @@ function render(result, birth, names = { A: '你', B: '對方' }, scene = '交�
     initiator: ini.label,
     chance: ch.label,
     chanceLine: ch.line,
+    chanceNote: ch.note,
     headline: b.label + '·' + b.title,
     poem: pick(b.poems, seed, SALT.poem),
     summary: compose(b, seed, SALT.summary, true, scene),
@@ -3112,6 +3365,15 @@ const T = {
     平淡如水: '淡不是沒有可能，是還沒有人決定要讓它變濃。'
   },
 
+  /* 新增 夫妻宮錯位 —— 自己的日支十神 */
+  palace: {
+    shishang: '你給的是心意，但對方收到的不一定是同一件事。',
+    yinxing:  '被接住久了，人會忘記怎麼開口要。',
+    bijie:    '對等的兩個人，最容易一起停在原地。',
+    caixing:  '他配合你的節奏，不代表那也是他想要的節奏。',
+    guansha:  '你反覆評估自己做得對不對，那種累他完全看不到。'
+  },
+
   /* 新增 誰該先開口 —— 重量 key */
   move: {
     a_sheng_b: '一直是同一方在推的關係，最後多半推不動。',
@@ -3338,11 +3600,12 @@ const T = {
 
 /* 段落 title → 取哪一組、用哪個 key */
 function takeaway(section, ctx) {
-  const { band, weak, strong, zl, wendu, changdu, midu, tempo, place, ini, chance, move } = ctx;
+  const { band, weak, strong, zl, wendu, changdu, midu, tempo, place, ini, chance, move, palace } = ctx;
   const map = {
     '你們的緣分，究竟有多深？':                 () => T.table,
     '你們是怎麼開始的？':                       () => T.tempo[ctx.tempo],
     '這段曖昧，走到一起的機會有多大？':         () => T.chance[ctx.chance],
+    '你要的，和他要的，是同一種嗎？':           () => T.palace[ctx.palace],
     '接下來，該由誰先開口？':                   () => T.move[ctx.move],
     '是誰先開始喜歡上誰的？':                   () => T.ini[ctx.ini],
     '你們是在什麼樣的場合遇上的？':             () => T.place[ctx.place],
@@ -3384,6 +3647,7 @@ function takeaway(section, ctx) {
      6 需要留意的地方        最低維度
      7 你現在適合怎麼做      重量 key
    ========================================================================= */
+
 
 
 
@@ -3666,9 +3930,10 @@ function report(result, names = { A: '你', B: '他' }) {
   const tp = tempo(d, result.cross);
   const en = encounter(d.changdu.key, tp.key);
   const ini = initiator(d);
-  const ch = chance(d, result.cross, tp.key);
+  const ch = chance(d, result.cross, tp.key, nar.shape);
   const zl = d.zhongliang.key;
   const mf = moveFirst(zl, ch.blockKey);
+  const pl = palace(result.debug.A, result.debug.B, zl);
 
   const ev = eventsFor(result, b.label)
     .map((t, i) => (TIMELINE[i] || '同時，') + t.replace(/\{A\}/g, names.A));
@@ -3696,12 +3961,14 @@ function report(result, names = { A: '你', B: '他' }) {
     { part: P2, title: '明明有感覺，為什麼就是差那一步？',     body: nar.weak },
     { part: P2, title: '你們之間，最值得珍惜的是什麼？',     body: nar.strong },
     { part: P2, title: '這段曖昧，走到一起的機會有多大？',
-      body: ch.line + ch.block + ch.key },
+      body: ch.line + ch.note + ch.block + ch.key },
 
     { part: P3, title: '他習慣用什麼方式靠近一個人？', body: position(zl, names) },
     { part: P3, title: '你喜歡的他，和真實的他一樣嗎？',       body: appearance(d.wendu.key, names) },
     { part: P3, title: '如果真的在一起，他看重的會是什麼？',     body: attitude(d.changdu.key, names) },
     { part: P3, title: '那你呢？你真正需要的是什麼樣的愛？',   body: svPick(SELF_POSITION, zl, names) },
+    { part: P3, title: '你要的，和他要的，是同一種嗎？',
+      body: pl.body },
     { part: P3, title: '在他面前，你為什麼會變得不像自己？',   body: svPick(SELF_BLIND, zl, names) },
 
     { part: P4, title: '你們想要的愛情，真的是同一種嗎？',     body: svPick(VALUES, d.changdu.key, names) },
@@ -3727,10 +3994,30 @@ function report(result, names = { A: '你', B: '他' }) {
   );
 
   // 每段掛上「這一段的重點」
-  const ctx = { band: b.label, weak, strong, zl, tempo: tp.name, place: d.changdu.key, ini: ini.label, chance: ch.blockKey, move: zl,
+  const ctx = { band: b.label, weak, strong, zl, tempo: tp.name, place: d.changdu.key, ini: ini.label, chance: ch.blockKey, move: zl, palace: pl.aKey,
                 wendu: d.wendu.key, changdu: d.changdu.key,
                 midu: d.midu ? d.midu.key : null };
   sections.forEach(s => { s.takeaway = takeaway(s.title, ctx); });
+
+  /* 重點句多半就是段落的收尾。同一句話在內文與重點框各出現一次，
+     讀起來像填充而不是強調——把內文「結尾那一句」拿掉，讓它只出現在框裡。
+     只動最後一句：中間的句子常帶著別的資訊，整句砍掉會留下孤句。 */
+  const norm = t => t.replace(/[，。；：—「」（）]/g, '');
+  sections.forEach(s => {
+    if (!s.takeaway || !s.body) return;
+    const parts = s.body.split('。').filter(Boolean);
+    if (parts.length < 4) return;                     // 太短的段落不動，砍掉會留孤句
+    const tk = norm(s.takeaway);
+    const hit = i => {
+      const n = norm(parts[i]);
+      for (let k = 0; k + 8 <= tk.length; k++) if (n.includes(tk.slice(k, k + 8))) return true;
+      return false;
+    };
+    // 首句是判斷的落點，不能動；其餘重複的句子移除
+    const kept = parts.filter((_, i) => i === 0 || !hit(i));
+    if (kept.length >= parts.length - 1 && kept.length >= 3)
+      s.body = kept.join('。') + '。';
+  });
 
   const chars = sections.reduce((n, s) => {
     if (s.body) return n + [...s.body.replace(/\s/g, '')].length;
@@ -4089,7 +4376,7 @@ function reveal(a, b) {
   $('r-num').textContent = '緣分指數　' + c.total;
   $('r-poem').textContent = c.poem;
   $('r-chance').textContent = '走到一起的機會　' + c.chance;
-  $('r-chance-line').textContent = c.chanceLine;
+  $('r-chance-line').textContent = c.chanceLine + (c.chanceNote || '');
   $('r-tempo').textContent = c.tempo;
   $('r-ini').textContent = c.initiator;
   $('r-tempo-line').textContent = c.tempoLine;
@@ -4150,6 +4437,7 @@ function reveal(a, b) {
     '你喜歡的他，和真實的他一樣嗎？':           '你每天實際感受到的他',
     '如果真的在一起，他看重的會是什麼？':         '他心裡對未來的想法，多半沒說出口',
     '那你呢？你真正需要的是什麼樣的愛？':       '你在做的事，包括你自己覺得理所當然的那些',
+    '你要的，和他要的，是同一種嗎？':           '各自日支所坐的十神——你期待的相處模式，跟他期待的差在哪',
     '在他面前，你為什麼會變得不像自己？':       '你的盲點——通常是善意造成的',
     '你們想要的愛情，真的是同一種嗎？':         '價值觀的重疊與分歧，以及會在哪種事情上浮現',
     '為什麼同一件事，你們總是想得不一樣？':     '為什麼同樣一句話，你們聽到的不一樣',
@@ -4164,17 +4452,26 @@ function reveal(a, b) {
     '關於這段緣分，你最該記住的一件事。':       '整份報告收束成一句'
   };
   const preview = report(last.full, { A: '你', B: '他' });
-  let seenPart = '';
-  $('u-list').innerHTML = preview.sections.map(sec => {
-    let out = '';
-    if (sec.part && sec.part !== seenPart) {
-      seenPart = sec.part;
-      out += '<li class="part">' + sec.part + '</li>';
-    }
-    out += '<li>' + sec.title
-         + (sec.needHour ? '<em>需完整出生時間</em>' : '')
-         + '<span>' + (TOC_DESC[sec.title] || '') + '</span></li>';
-    return out;
+  // 依部別分組，做成可收合的 <details>；第一組預設展開
+  const groups = [];
+  preview.sections.forEach(sec => {
+    const last = groups[groups.length - 1];
+    if (!last || last.part !== sec.part) groups.push({ part: sec.part, items: [sec] });
+    else last.items.push(sec);
+  });
+
+  let no = 0;
+  $('u-list').innerHTML = groups.map((g, gi) => {
+    const rows = g.items.map(sec => {
+      no++;
+      return '<li><b>' + String(no).padStart(2, '0') + '</b><div>' + sec.title
+           + (sec.needHour ? '<em>需完整出生時間</em>' : '')
+           + '<span>' + (TOC_DESC[sec.title] || '') + '</span></div></li>';
+    }).join('');
+    return '<details class="toc-group"' + (gi === 0 ? ' open' : '') + '>'
+         + '<summary>' + g.part
+         + '<i>' + g.items.length + ' 段</i></summary>'
+         + '<ul>' + rows + '</ul></details>';
   }).join('');
 
   $('u-price').textContent =

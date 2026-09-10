@@ -16,6 +16,7 @@ const { tempo } = require('./tempo');
 
 
 
+
 /* 節奏對「成不成」的修正。曖昧期最怕的是沒有事件推動。 */
 const CHANCE_TEMPO_ADJ = {
   instant:  9,    // 一開始就對上，只差有人開口
@@ -31,21 +32,22 @@ const CHANCE_TEMPO_ADJ = {
 /* 命名前綴避開 card-text.js 的 LEVELS */
 const CHANCE_LEVELS = [
   { min: 74, label: '很有機會',
-    line: '這段曖昧走到一起的機會偏高。盤上該有的條件大致都在——靠近不費力、有人願意先動、底子也撐得住。' +
-          '會不會成，現在主要不是命的問題，是有沒有人願意把話說出口。' },
+    line: '這段曖昧走到一起的機會偏高。盤上的阻力少，該順的地方大致都順，' +
+          '所以結果比較不受命的限制——現在的關鍵在人不在盤。' },
   { min: 62, label: '有機會，但要推',
-    line: '這段曖昧有成的條件，但它不會自己發生。盤上有幾個地方是順的，也有幾個地方需要人去處理，' +
-          '所以結果取決於接下來有沒有人做出明確的動作——維持現狀的話，多半會停在這裡。' },
+    line: '這段曖昧有成的條件，但它不會自己發生。順的地方跟卡的地方都有，' +
+          '所以結果取決於接下來有沒有人做出明確的動作。' },
   { min: 50, label: '一半一半',
-    line: '這段曖昧成與不成的條件差不多。往哪一邊走，盤上看不出定局——' +
+    line: '這段曖昧成與不成的條件差不多，往哪一邊走盤上看不出定局。' +
           '這種情況通常不是被什麼擋住，是缺一個把關係推過去的契機。' },
   { min: 38, label: '偏低，但不是不可能',
-    line: '這段曖昧走到一起的機會偏低。不是沒有感情，是條件不太站在你們這邊：' +
-          '該順的地方有卡點，或是缺一個推動的人。要成的話需要比一般關係多做一些。' },
+    line: '這段曖昧走到一起的機會偏低。不是沒有感情，是條件不太站在你們這邊，' +
+          '要成的話需要比一般關係多做一些。' },
   { min: 0,  label: '很低',
     line: '這段曖昧走到一起的機會很低。盤上的阻力集中而且具體，' +
           '不是靠更喜歡就能解決的那一種。這不代表要放棄，但要清楚自己在為什麼留著。' }
 ];
+
 
 /* ---------- 卡在哪裡 ---------- */
 const CHANCE_BLOCK = {
@@ -85,7 +87,7 @@ const CHANCE_KEY = {
  * @param cross  result.cross
  * @param tempoKey  tempo(d, cross).key
  */
-function chance(d, cross, tempoKey) {
+function chance(d, cross, tempoKey, sh) {
   const zl = d.zhongliang.key;
   const balanced = zl === 'bihe';
 
@@ -95,7 +97,11 @@ function chance(d, cross, tempoKey) {
   v += balanced ? -7 : 7;                      // 有沒有人推
   v += (cross ? cross.sweet * 4 - cross.harsh * 4 : 0);
   v += CHANCE_TEMPO_ADJ[tempoKey] || 0;
-  v = Math.max(8, Math.min(96, Math.round(v)));
+  /* 一致性約束：格局判定沒有推力時，機會不得落在「很有機會」——
+     否則會出現「你們沒有特別強的推力」配「條件都在」的自相矛盾 */
+  const noPush = balanced
+    || (sh && ['quiet', 'blank', 'plain'].includes(sh.pattern));
+  v = Math.max(8, Math.min(noPush ? 71 : 96, Math.round(v)));
 
   const lv = CHANCE_LEVELS.find(l => v >= l.min);
 
@@ -109,9 +115,22 @@ function chance(d, cross, tempoKey) {
   else if (v < 62)                                  key = 'thin';   // 分數不高就一定有卡點
   else                                              key = 'none';
 
-  return { value: v, label: lv.label, line: lv.line,
+  /* 緣分指數與機會不同向時要交代，否則讀起來像前後矛盾 */
+  let note = '';
+  const total = Math.round(
+    d.wendu.score * 0.35 + d.zhongliang.score * 0.30 + d.changdu.score * 0.35);
+  if (v >= 62 && total < 70)
+    note = '（緣分指數不高但機會不低，這兩件事看的不是同一回事——' +
+           '指數看這段緣本身的質地，機會看能不能走到一起。底子普通但阻力少的組合，' +
+           '常常比底子好卻卡住的更容易成。）';
+  else if (v < 50 && total >= 74)
+    note = '（緣分指數不低但機會偏低，這兩件事看的不是同一回事——' +
+           '你們之間的東西是有份量的，只是要從曖昧走到確定，中間卡著具體的東西。）';
+
+  return { value: v, label: lv.label, line: lv.line, note,
            block: CHANCE_BLOCK[key], key: CHANCE_KEY[key], blockKey: key };
 }
 
 module.exports = { chance, CHANCE_LEVELS };
+
 

@@ -1,3 +1,9 @@
+const { flavour } = require('./flavour');
+const { tempo } = require('./tempo');
+const { initiator } = require('./initiator');
+const { chance } = require('./chance');
+const { shape } = require('./shape');
+
 /* =========================================================================
    未完籤所 · 緣分指數 文案模板 v2
    -------------------------------------------------------------------------
@@ -9,12 +15,6 @@
    變體以「兩人生日」為種子抽選：同一組永遠得到同一句，A×B 與 B×A 相同。
    往 open / close 陣列裡加句子就會自動生效，不需要改邏輯。
    ========================================================================= */
-
-const { flavour } = require('./flavour');
-const { tempo } = require('./tempo');
-const { initiator } = require('./initiator');
-const { chance } = require('./chance');
-
 
 
 
@@ -274,10 +274,10 @@ const WENDU = {
       '你們不缺理解，缺的是翻譯。同樣一件事換個說法，多半就不會撞上。'] },
   po: {
     core: {
-      交往: '你們之間有一種表面看不出來的破損。日子照過、話照講，但有些地方一直沒有真的接上。',
-      曖昧: '你們之間有一種表面看不出來的破損。訊息照回、面照見，但有些地方一直沒有真的接上。',
-      分開: '你們之間一直有一種表面看不出來的破損。不是吵散的，是有些地方從來沒有真的接上過。',
-      未定: '你和他之間有一種表面看不出來的破損。互動看起來正常，但你知道有什麼沒有到位。'
+      交往: '你們之間有一種容易內傷的結構。日子照過、話照講，但小事容易互相挑剔，心裡有疙瘩卻不直接說。',
+      曖昧: '你們之間有一種容易內傷的結構。訊息照回、面照見，但小事容易在心裡放大，而且你多半不會說出來。',
+      分開: '你們之間一直有一種容易內傷的結構。不是吵散的，是疙瘩累積太多，而且誰都沒有把它們攤開講過。',
+      未定: '你和他之間有一種容易內傷的結構。互動看起來正常，但你會為了小事暗自委屈，而那些他不會知道。'
     },
     open: ['', '這一項要講得細一點。', '有一種問題不會浮上檯面。'],
     close: [
@@ -310,10 +310,10 @@ const WENDU = {
 const ZHONGLIANG = {
   bihe: {
     core: {
-      交往: '你們的力氣是平的。誰都沒有特別依賴誰，也沒有誰在偷偷撐著——這在關係裡很難得。',
-      曖昧: '你們的力氣是平的。誰都沒有特別在追誰，這種對等在曖昧的階段不常見。',
-      分開: '你們的力氣是平的。分開的時候誰都沒有特別狼狽，各自都站得住——這是這段關係留下來最好的部分。',
-      未定: '你們的力氣是平的。沒有誰在仰望誰，這讓關係穩，但也讓它不容易往前推。'
+      交往: '你們的力氣是平的，誰都沒有特別依賴誰。但平不只有一種——比和的另一面是互不相讓，兩個人一樣硬，誰都不肯先低頭。',
+      曖昧: '你們的力氣是平的，誰都沒有特別在追誰。這在曖昧期是雙面的：沒有人卑微，但也沒有人覺得自己該先開口。',
+      分開: '你們的力氣是平的，分開的時候誰都沒有特別狼狽。但那份對等在當時也是阻力——兩個人一樣硬，誰都沒有先軟下來。',
+      未定: '你們的力氣是平的，沒有誰在仰望誰。這讓關係穩，但也讓它停得住——對等的兩個人最容易一起等下去。'
     },
     open: ['', '先講好消息。', '這在關係裡不是理所當然的。'],
     close: [
@@ -557,7 +557,7 @@ function render(result, birth, names = { A: '你', B: '對方' }, scene = '交�
 
   const tp = tempo(d, result.cross);
   const ini = initiator(d);
-  const ch = chance(d, result.cross, tp.key);
+  const ch = chance(d, result.cross, tp.key, shape(d));
 
   return {
     total: result.total,
@@ -568,6 +568,7 @@ function render(result, birth, names = { A: '你', B: '對方' }, scene = '交�
     initiator: ini.label,
     chance: ch.label,
     chanceLine: ch.line,
+    chanceNote: ch.note,
     headline: b.label + '·' + b.title,
     poem: pick(b.poems, seed, SALT.poem),
     summary: compose(b, seed, SALT.summary, true, scene),
@@ -585,4 +586,5 @@ module.exports = {
   render, band, seedOf, pick, compose, coreOf, SCENES,
   TOTAL_BANDS, WENDU, ZHONGLIANG, CHANGDU, CHANGDU_NAYIN
 };
+
 

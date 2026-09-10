@@ -27,6 +27,15 @@ const T = {
     平淡如水: '淡不是沒有可能，是還沒有人決定要讓它變濃。'
   },
 
+  /* 新增 夫妻宮錯位 —— 自己的日支十神 */
+  palace: {
+    shishang: '你給的是心意，但對方收到的不一定是同一件事。',
+    yinxing:  '被接住久了，人會忘記怎麼開口要。',
+    bijie:    '對等的兩個人，最容易一起停在原地。',
+    caixing:  '他配合你的節奏，不代表那也是他想要的節奏。',
+    guansha:  '你反覆評估自己做得對不對，那種累他完全看不到。'
+  },
+
   /* 新增 誰該先開口 —— 重量 key */
   move: {
     a_sheng_b: '一直是同一方在推的關係，最後多半推不動。',
@@ -253,11 +262,12 @@ const T = {
 
 /* 段落 title → 取哪一組、用哪個 key */
 function takeaway(section, ctx) {
-  const { band, weak, strong, zl, wendu, changdu, midu, tempo, place, ini, chance, move } = ctx;
+  const { band, weak, strong, zl, wendu, changdu, midu, tempo, place, ini, chance, move, palace } = ctx;
   const map = {
     '你們的緣分，究竟有多深？':                 () => T.table,
     '你們是怎麼開始的？':                       () => T.tempo[ctx.tempo],
     '這段曖昧，走到一起的機會有多大？':         () => T.chance[ctx.chance],
+    '你要的，和他要的，是同一種嗎？':           () => T.palace[ctx.palace],
     '接下來，該由誰先開口？':                   () => T.move[ctx.move],
     '是誰先開始喜歡上誰的？':                   () => T.ini[ctx.ini],
     '你們是在什麼樣的場合遇上的？':             () => T.place[ctx.place],
@@ -285,4 +295,5 @@ function takeaway(section, ctx) {
 }
 
 module.exports = { T, takeaway };
+
 
