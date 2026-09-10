@@ -1,10 +1,3 @@
-const { flavour } = require('./flavour');
-const { tempo } = require('./tempo');
-const { initiator } = require('./initiator');
-const { chance } = require('./chance');
-const { shape } = require('./shape');
-const { fillNames } = require('./fill');
-
 /* =========================================================================
    未完籤所 · 緣分指數 文案模板 v2
    -------------------------------------------------------------------------
@@ -17,10 +10,12 @@ const { fillNames } = require('./fill');
    往 open / close 陣列裡加句子就會自動生效，不需要改邏輯。
    ========================================================================= */
 
-
-
-
-
+const { flavour } = require('./flavour');
+const { fillNames } = require('./fill');
+const { tempo } = require('./tempo');
+const { initiator } = require('./initiator');
+const { chance } = require('./chance');
+const { shape } = require('./shape');
 
 /* ---------- 種子與抽樣 ---------- */
 
@@ -98,19 +93,19 @@ const TOTAL_BANDS = [
 
   { min: 70, label: '緣暖', title: '細水長流',
     poems: [
-      '不急的水走得最遠，因為它從不跟石頭爭。',
+      '炭火不搶眼，卻是最後熄的那一種。',
       '水不會一次把路走完；它只是每天都往前一點。',
-      '溫的東西留得久，燙的東西留不住手。'
+      '暖的東西不會灼人，所以握得住。'
     ,
-      '慢慢來的關係沒有故事可以講，但走得久。',
-      '一天暖一點，一年之後就不是同一種溫度了。'],
-    core: '你們不是一見面就燒起來的那種，但也不會突然就沒了。',
+      '故事會講完，日子不會。',
+      '火光會滅，餘溫不會。'],
+    core: '你們之間的東西是紮實的。不是最濃的那一級，但它有厚度——不容易被小事動搖，也不容易憑空消失。',
     open: ['', ''],
     close: [
-      '這段關係會慢慢累積，越往後越穩；前期可能會有人嫌不夠熱烈，等時間拉長就會知道這種溫度才留得住。',
+      '你們的底子比表面看起來厚。真正的差別不在當下的強度，在它撐得住多少次消耗。',
       '往後一年你們會經歷幾件小事，每一件都不起眼，但加起來會讓你確定這個人是可以的。不用急著要一個答案。'
     ,
-      '不用羨慕那些一見鍾情的人，他們要處理的問題你們早就處理完了。',
+      '你們不需要靠強度來維持關係，這讓你們少了很多別人得處理的問題。',
       '你們的關係不會突然變好，也不會突然變壞，這種穩定本身就是一種保護。'] },
 
   { min: 60, label: '緣淡', title: '雲淡風輕',
@@ -560,7 +555,6 @@ function render(result, birth, names = { A: '你', B: '對方' }, scene = '交�
   const ini = initiator(d);
   const ch = chance(d, result.cross, tp.key, shape(d));
 
-  /* 跟 report() 一樣，代名詞在出口統一替換——這裡是免費頁所有文字的唯一出口 */
   return fillNames({
     total: result.total,
     label: b.label,
@@ -588,5 +582,3 @@ module.exports = {
   render, band, seedOf, pick, compose, coreOf, SCENES,
   TOTAL_BANDS, WENDU, ZHONGLIANG, CHANGDU, CHANGDU_NAYIN
 };
-
-

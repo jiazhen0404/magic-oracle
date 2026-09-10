@@ -46,7 +46,10 @@ const DONT = {
 function dont(key, names = { A: '你', B: '{B}' }) {
   const t = DONT[key];
   if (!t) return '';
-  return t.replace(/\{A\}/g, names.A).replace(/\{B\}/g, names.B);
+  /* 這裡刻意不替換佔位符。代名詞統一由 report()／render() 在出口用 fill.js 處理。
+     模組各自替換的話，report.js 的去重會拿「已經替換的內文」去比對「還沒替換的
+     重點句」，永遠對不上，重複的句子就砍不掉——那正是上游花力氣移除的東西。 */
+  return t;
 }
 
 module.exports = { DONT, dont };

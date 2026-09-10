@@ -26,6 +26,7 @@ const { initiator } = require('./initiator');
 const { chance } = require('./chance');
 const { moveFirst } = require('./movefirst');
 const { palace } = require('./palace');
+const { wrap } = require('./wrap');
 const { encounter } = require('./encounter');
 const { fillNames } = require('./fill');
 
@@ -292,6 +293,16 @@ function report(result, names = { A: '你', B: '{B}' }) {
   const weak = weakest(d);
   const strong = strongest(d);
   // 敘事由盤面格局決定，不由分數排名決定
+  /* 由四柱字串推種子：同一組生日永遠得到同一批框架句 */
+  const dA = result.debug.A, dB = result.debug.B;
+  const seedSrc = [dA.year, dA.month, dA.day, dA.hour, dB.year, dB.month, dB.day, dB.hour]
+    .filter(Boolean).join('');
+  let seed = 2166136261;
+  for (let i = 0; i < seedSrc.length; i++) {
+    seed ^= seedSrc.charCodeAt(i);
+    seed = Math.imul(seed, 16777619) >>> 0;
+  }
+
   const nar = narrate(d);
   const tp = tempo(d, result.cross);
   const en = encounter(d.changdu.key, tp.key);
@@ -302,7 +313,7 @@ function report(result, names = { A: '你', B: '{B}' }) {
   const pl = palace(result.debug.A, result.debug.B, zl);
 
   const ev = eventsFor(result, b.label)
-    .map((t, i) => (TIMELINE[i] || '同時，') + t.replace(/\{A\}/g, names.A));
+    .map((t, i) => (TIMELINE[i] || '同時，') + t);   // 佔位符留給出口統一替換
   const split = Math.min(2, ev.length);
   const eventsNear  = TIME_OPEN[b.label] + ev.slice(0, split).join('');
   const eventsLater = ev.slice(split).join('') + TIME_CLOSE[b.label];
@@ -318,45 +329,45 @@ function report(result, names = { A: '你', B: '{B}' }) {
     { part: P1, title: '你們的緣分，究竟有多深？', table: pillarTable(result),
       note: '立春時刻由太陽黃經實算，不是固定 2/4；月柱由節氣定界。本版計分只用年、日、時三柱，月柱列出供對照。' },
     { part: P1, title: '你們是怎麼開始的？',
-      body: tp.intro + tp.arc + tp.note },
+      body: wrap('tempo', tp.intro + tp.arc + tp.note, seed, 41) },
     { part: P1, title: '是誰先開始喜歡上誰的？',
       body: ini.body },
     { part: P1, title: '你們是在什麼樣的場合遇上的？',
       body: en.place + en.timing },
-    { part: P2, title: '你們現在，到底算是什麼？', body: nar.now },
-    { part: P2, title: '明明有感覺，為什麼就是差那一步？',     body: nar.weak },
-    { part: P2, title: '你們之間，最值得珍惜的是什麼？',     body: nar.strong },
+    { part: P2, title: '你們現在，到底算是什麼？', body: wrap('now', nar.now, seed, 29) },
+    { part: P2, title: '明明有感覺，為什麼就是差那一步？',     body: wrap('weak', nar.weak, seed, 31) },
+    { part: P2, title: '你們之間，最值得珍惜的是什麼？',     body: wrap('strong', nar.strong, seed, 37) },
     { part: P2, title: '這段曖昧，走到一起的機會有多大？',
       body: ch.line + ch.note + ch.block + ch.key },
 
-    { part: P3, title: '{B}習慣用什麼方式靠近一個人？', body: position(zl, names) },
-    { part: P3, title: '你喜歡的{B}，和真實的{B}一樣嗎？',       body: appearance(d.wendu.key, names) },
-    { part: P3, title: '如果真的在一起，{B}看重的會是什麼？',     body: attitude(d.changdu.key, names) },
-    { part: P3, title: '那你呢？你真正需要的是什麼樣的愛？',   body: svPick(SELF_POSITION, zl, names) },
+    { part: P3, title: '{B}習慣用什麼方式靠近一個人？', body: wrap('position', position(zl, names), seed, 3) },
+    { part: P3, title: '你喜歡的{B}，和真實的{B}一樣嗎？',       body: wrap('appearance', appearance(d.wendu.key, names), seed, 53) },
+    { part: P3, title: '如果真的在一起，{B}看重的會是什麼？',     body: wrap('attitude', attitude(d.changdu.key, names), seed, 43) },
+    { part: P3, title: '那你呢？你真正需要的是什麼樣的愛？',   body: wrap('self', svPick(SELF_POSITION, zl, names), seed, 5) },
     { part: P3, title: '你要的，和{B}要的，是同一種嗎？',
       body: pl.body },
-    { part: P3, title: '在{B}面前，你為什麼會變得不像自己？',   body: svPick(SELF_BLIND, zl, names) },
+    { part: P3, title: '在{B}面前，你為什麼會變得不像自己？',   body: wrap('blind', svPick(SELF_BLIND, zl, names), seed, 7) },
 
-    { part: P4, title: '你們想要的愛情，真的是同一種嗎？',     body: svPick(VALUES, d.changdu.key, names) },
-    { part: P4, title: '為什麼同一件事，你們總是想得不一樣？', body: svPick(READING, d.wendu.key, names) }
+    { part: P4, title: '你們想要的愛情，真的是同一種嗎？',     body: wrap('values', svPick(VALUES, d.changdu.key, names), seed, 47) },
+    { part: P4, title: '為什麼同一件事，你們總是想得不一樣？', body: wrap('reading', svPick(READING, d.wendu.key, names), seed, 59) }
   ];
 
   if (d.midu) {
     sections.push({ part: P4, needHour: true,
-      title: '只有你們兩個人的時候，是什麼樣子？', body: MIDU[d.midu.key] });
+      title: '只有你們兩個人的時候，是什麼樣子？', body: wrap('midu', MIDU[d.midu.key], seed, 11) });
   }
 
   sections.push(
     { part: P5, title: '近期，你們之間可能先出現什麼變化？', body: eventsNear },
     { part: P5, title: '再往後，你們有機會走到哪裡？',       body: eventsLater },
     { part: P5, title: '{B}有在往前嗎？從哪裡看得出來？', list: WATCH[zl] },
-    { part: P5, title: '什麼事，最容易讓你們就這樣停住？',     body: CAUTION[weak] },
+    { part: P5, title: '什麼事，最容易讓你們就這樣停住？',     body: wrap('caution', CAUTION[weak], seed, 13) },
 
     { part: P6, title: '接下來，該由誰先開口？',
       body: mf.who + mf.how },
-    { part: P6, title: '如果你想往前一步，現在可以怎麼做？',   body: ADVICE[zl] },
-    { part: P6, title: '現在最不適合做的，是哪件事？',       body: dont(zl, names) },
-    { part: P6, title: '關於這段緣分，你最該記住的一件事。', body: svPick(KEEP, b.label, names) }
+    { part: P6, title: '如果你想往前一步，現在可以怎麼做？',   body: wrap('advice', ADVICE[zl], seed, 17) },
+    { part: P6, title: '現在最不適合做的，是哪件事？',       body: wrap('dont', dont(zl, names), seed, 19) },
+    { part: P6, title: '關於這段緣分，你最該記住的一件事。', body: wrap('keep', svPick(KEEP, b.label, names), seed, 23) }
   );
 
   // 每段掛上「這一段的重點」
@@ -365,11 +376,18 @@ function report(result, names = { A: '你', B: '{B}' }) {
                 midu: d.midu ? d.midu.key : null };
   sections.forEach(s => { s.takeaway = takeaway(s.title, ctx); });
 
+  /* ★ 替換要在去重之前。
+     去重用的是 8 字滑動視窗，而 {B} 佔三個字元、「他」只佔一個——
+     不先還原的話，同一句話的比對字串會從 11 字變成 13 字，
+     視窗數從 4 個變成 6 個，變得比原本更容易命中，砍掉不該砍的句子。
+     門檻是照人眼訂的，就要餵給它人眼看到的東西。 */
+  const sec = fillNames(sections, names);
+
   /* 重點句多半就是段落的收尾。同一句話在內文與重點框各出現一次，
      讀起來像填充而不是強調——把內文「結尾那一句」拿掉，讓它只出現在框裡。
      只動最後一句：中間的句子常帶著別的資訊，整句砍掉會留下孤句。 */
   const norm = t => t.replace(/[，。；：—「」（）]/g, '');
-  sections.forEach(s => {
+  sec.forEach(s => {
     if (!s.takeaway || !s.body) return;
     const parts = s.body.split('。').filter(Boolean);
     if (parts.length < 4) return;                     // 太短的段落不動，砍掉會留孤句
@@ -385,21 +403,14 @@ function report(result, names = { A: '你', B: '{B}' }) {
       s.body = kept.join('。') + '。';
   });
 
-  /* 代名詞佔位符統一在這裡替換。
-     讓每個模組自己收 names 再各自 replace，只要新增一個模組忘了接就會漏——
-     而漏掉的那一句要等使用者選了「她」才看得到。這裡是所有文字的唯一出口，
-     從結構上就不可能漏。 */
-  const filled = fillNames(sections, names);
-
-  /* 字數要在替換之後算：{B} 是三個字元，換成「她」只有一個，
-     先算會把字數灌水，而那個數字是印在付費頁上的。 */
-  const chars = filled.reduce((n, s) => {
+  /* 字數在替換之後算 */
+  const chars = sec.reduce((n, s) => {
     if (s.body) return n + [...s.body.replace(/\s/g, '')].length;
     if (s.list) return n + s.list.reduce((m, x) => m + [...x].length, 0);
     return n;                       // 表格不計入字數
   }, 0);
 
-  return { sections: filled, chars };
+  return { sections: sec, chars };
 }
 
 module.exports = { report, pillarTable, NOW_BAND, NOW_WEAK, NOW_STRONG, WATCH, CAUTION, ADVICE, MIDU };

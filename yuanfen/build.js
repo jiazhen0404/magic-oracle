@@ -5,7 +5,7 @@ const path = require('path');
 
 const SRC = 'src';
 const ORDER = [
-  'fill.js', 'solar.js', 'yuanfen.js', 'flavour.js', 'tempo.js', 'initiator.js', 'chance.js', 'movefirst.js', 'palace.js', 'encounter.js', 'copy.js', 'basis.js', 'events.js',
+  'fill.js', 'solar.js', 'yuanfen.js', 'flavour.js', 'tempo.js', 'initiator.js', 'chance.js', 'movefirst.js', 'palace.js', 'wrap.js', 'encounter.js', 'copy.js', 'basis.js', 'events.js',
   'other-position.js', 'other-appearance.js', 'other-attitude.js',
   'dont.js', 'shape.js', 'self-values.js', 'takeaway.js', 'report.js',
   'card-text.js', 'card-render.js'
