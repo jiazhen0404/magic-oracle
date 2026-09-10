@@ -236,6 +236,9 @@ async function yuanfenFeedback(request, env) {
     a, b,
     rating,
     wrongPart,
+    /* 使用者體驗那兩題，跟準不準是兩件事，分開存 */
+    usability: str(body.usability, 60),
+    note: str(body.note, 1000),
     /* 當下這個版本算出來的結果，用來跟重跑的新版本對照 */
     view: {
       total: num(body.total),
