@@ -4526,6 +4526,7 @@ function stashForSurvey() {
     localStorage.setItem(YF_CTX_KEY, JSON.stringify({
       at: Date.now(),
       a: last.birth.a, b: last.birth.b,
+      pron: $('b-pron').value,          // 還原時要跟著回來，不然稱謂會跳回預設
       total: last.view.total, band: last.view.label,
       tempo: last.view.tempo, chance: last.view.chance, initiator: last.view.initiator,
       wendu_key: d.wendu.key, zhongliang_key: d.zhongliang.key, changdu_key: d.changdu.key,
@@ -4926,6 +4927,34 @@ $('rep-toc-toggle').addEventListener('click', () => {
   const open = aside.classList.toggle('open');
   $('rep-toc-toggle').setAttribute('aria-expanded', open ? 'true' : 'false');
 });
+
+/* ── 從問卷頁回來時，把上一次的結果還原 ──────────────────
+   問卷填完按上一頁，如果整頁空白、要重打一次生日，那是很惱人的。
+   盤面本來就存在 localStorage（問卷頁要讀），這裡順便拿來還原。
+
+   只還原 30 分鐘內的：再久就不是「剛才那一次」，而是幾天後回訪的人
+   看到一份自己已經忘記的舊結果，那會更奇怪。 */
+const RESTORE_WINDOW = 30 * 60 * 1000;
+
+function restoreLastDraw() {
+  let s;
+  try { s = JSON.parse(localStorage.getItem(YF_CTX_KEY) || 'null'); } catch (e) { return; }
+  if (!s || !s.a || !s.b || !s.at || Date.now() - s.at > RESTORE_WINDOW) return;
+
+  /* 把輸入欄位填回去，讓畫面與結果一致——只還原結果卻留著空白表單，
+     使用者會以為這份結果是憑空出現的。 */
+  const put = (p, v) => {
+    $(p + '-y').value = v.y; $(p + '-m').value = v.m; $(p + '-d').value = v.d;
+    if (typeof v.hour === 'number') { $(p + '-sc').value = String(v.hour); picked[p] = v.hour; }
+  };
+  put('a', s.a); put('b', s.b);
+  if (s.pron) { $('b-pron').value = s.pron; $('b-label').textContent = s.pron + '的生日'; }
+  reveal(s.a, s.b);
+}
+
+restoreLastDraw();
+/* 從 bfcache 回來（按上一頁）時 DOM 通常還在，但被還原成重新載入的話就靠上面那支 */
+addEventListener('pageshow', e => { if (e.persisted && !last) restoreLastDraw(); });
 
 $('go').addEventListener('click', draw);
 document.querySelectorAll('.dates input').forEach(el => {

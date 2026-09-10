@@ -113,14 +113,20 @@ body.sent .done{display:block}
       </div>
     </fieldset>
 
+    <!-- 七個選項各自對應一個判讀環節，選了就知道要改哪個模組。
+         三個維度刻意分開問——全部塞進一個「相處狀況」的話，
+         收到回報也不知道是溫度、重量還是長度在錯。 -->
     <fieldset id="why-box" hidden>
       <legend>哪裡不對？</legend>
-      <p class="hint">每個選項對應到我們判讀的其中一個環節，選了就知道要改哪裡。</p>
+      <p class="hint">可以複選。不準通常不只一項，全部勾出來對我們最有用。</p>
       <div class="opts">
-        <label class="opt"><input type="radio" name="wrong_part" value="tempo"><span>我們不是這樣開始的</span></label>
-        <label class="opt"><input type="radio" name="wrong_part" value="initiator"><span>誰先主動說反了</span></label>
-        <label class="opt"><input type="radio" name="wrong_part" value="shape"><span>相處狀況不是這樣</span></label>
-        <label class="opt"><input type="radio" name="wrong_part" value="chance"><span>機會判斷差很多</span></label>
+        <label class="opt"><input type="checkbox" name="wrong_part" value="band"><span>分數整體不對，太高或太低</span></label>
+        <label class="opt"><input type="checkbox" name="wrong_part" value="chance"><span>走到一起的機會，判斷差很多</span></label>
+        <label class="opt"><input type="checkbox" name="wrong_part" value="tempo"><span>我們不是這樣開始的</span></label>
+        <label class="opt"><input type="checkbox" name="wrong_part" value="initiator"><span>誰先動心說反了</span></label>
+        <label class="opt"><input type="checkbox" name="wrong_part" value="wendu"><span>日常相處不是這樣（緣的溫度）</span></label>
+        <label class="opt"><input type="checkbox" name="wrong_part" value="zhongliang"><span>誰在付出說反了（緣的重量）</span></label>
+        <label class="opt"><input type="checkbox" name="wrong_part" value="changdu"><span>能走多久，判斷不對（緣的長度）</span></label>
       </div>
     </fieldset>
 
@@ -175,7 +181,7 @@ document.querySelectorAll('input[name="rating"]').forEach(r => {
   r.addEventListener('change', () => {
     const off = document.querySelector('input[name="rating"]:checked').value === '不太對';
     $('why-box').hidden = !off;
-    if (!off) document.querySelectorAll('input[name="wrong_part"]').forEach(x => { x.checked = false; });
+    if (!off) document.querySelectorAll('input[name="wrong_part"]:checked').forEach(x => { x.checked = false; });
   });
 });
 
@@ -195,7 +201,7 @@ $('f').addEventListener('submit', async e => {
     wendu_key: ctx.wendu_key, zhongliang_key: ctx.zhongliang_key, changdu_key: ctx.changdu_key,
     cross_sweet: ctx.cross_sweet, cross_harsh: ctx.cross_harsh,
     rating,
-    wrong_part: (document.querySelector('input[name="wrong_part"]:checked') || {}).value || null,
+    wrong_part: [...document.querySelectorAll('input[name="wrong_part"]:checked')].map(x => x.value),
     usability: (document.querySelector('input[name="usability"]:checked') || {}).value || '',
     note: $('note').value.slice(0, 1000)
   };
@@ -210,7 +216,16 @@ $('f').addEventListener('submit', async e => {
     });
     const d = await r.json().catch(() => ({}));
     if (!r.ok || !d.ok) throw new Error(d.error || '送出失敗');
-    try { gtag('event', 'yuanfen_feedback', { rating, wrong_part: payload.wrong_part || undefined, tempo: ctx.tempo }); } catch (e) {}
+    /* GA4 的參數不能是陣列，串成一條字串；真正要分析的統計看後台，
+       那邊存的是陣列，數起來才準。 */
+    try {
+      gtag('event', 'yuanfen_feedback', {
+        rating,
+        wrong_part: payload.wrong_part.length ? payload.wrong_part.join(',') : undefined,
+        wrong_count: payload.wrong_part.length || undefined,
+        tempo: ctx.tempo
+      });
+    } catch (e) {}
     document.body.classList.add('sent');
     window.scrollTo(0, 0);
   } catch (err) {
