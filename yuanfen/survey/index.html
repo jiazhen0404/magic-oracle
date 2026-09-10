@@ -1,0 +1,223 @@
+<!doctype html><html lang="zh-Hant"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>這份判讀準嗎？｜曖昧緣分合盤</title>
+<meta name="description" content="曖昧緣分合盤的準確度回饋。花 30 秒告訴我們哪裡準、哪裡不準，我們用它把判讀改得更貼近真實。">
+<meta name="robots" content="noindex,follow">
+<link rel="canonical" href="https://unfinished.tw/yuanfen/survey/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cactus+Classical+Serif&family=Lato:wght@300;400;700&family=Noto+Sans+TC:wght@200..500&display=swap" rel="stylesheet">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-71RMD00WPJ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-71RMD00WPJ');</script>
+<style>
+:root{
+  --bg:#100b25; --panel:#241943;
+  --line:rgba(217,189,130,.22); --line-soft:rgba(217,189,130,.11);
+  --gold:#d9bd82; --gold-soft:#f1e5c8; --cream:#f4ecd6; --muted:#a89ab8;
+  --serif:"Cactus Classical Serif","Noto Serif TC",serif;
+  --sans:"Noto Sans TC",sans-serif;
+  --latin:Lato,sans-serif;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:radial-gradient(circle at 50% 0%,#2a183c 0,#140d20 42%,#0d0915 100%);
+  min-height:100vh; color:var(--cream); font-family:var(--sans); line-height:1.9;
+}
+.wrap{max-width:660px; margin:0 auto; padding:48px 22px 90px}
+.crumb{color:var(--muted); font-size:12.5px; letter-spacing:.06em; margin-bottom:26px}
+.crumb a{color:var(--muted); text-decoration:none}
+.crumb a:hover{color:var(--gold)}
+h1{
+  font-family:var(--serif); font-size:clamp(24px,6vw,30px); font-weight:400;
+  color:var(--gold-soft); letter-spacing:.1em; line-height:1.6; margin:0 0 16px;
+}
+.lead{color:var(--cream); opacity:.9; font-size:15.5px; margin:0 0 10px}
+.note{color:var(--muted); font-size:13px; line-height:1.85; margin:0 0 34px}
+
+.ctx{
+  border:1px solid var(--line); border-radius:3px; padding:16px 18px; margin:0 0 34px;
+  background:linear-gradient(180deg,rgba(36,25,67,.5),rgba(26,16,48,.25));
+}
+.ctx b{display:block; color:var(--gold); font-size:11.5px; letter-spacing:.14em; font-weight:400; margin-bottom:8px}
+.ctx p{margin:0; color:var(--gold-soft); font-family:var(--serif); font-size:16px; letter-spacing:.06em}
+.ctx.missing p{color:var(--muted); font-family:var(--sans); font-size:13.5px}
+
+fieldset{border:0; margin:0 0 34px; padding:0}
+legend{
+  color:var(--gold-soft); font-family:var(--serif); font-size:17px;
+  letter-spacing:.08em; margin-bottom:6px; padding:0;
+}
+.hint{color:var(--muted); font-size:12.5px; margin:0 0 14px; line-height:1.8}
+.opts{display:flex; flex-direction:column; gap:10px}
+.opts.row{flex-direction:row; flex-wrap:wrap}
+.opt{
+  display:flex; align-items:center; gap:11px; cursor:pointer;
+  border:1px solid var(--line-soft); border-radius:3px; padding:13px 16px;
+  color:var(--cream); font-size:15px; transition:border-color .2s, background .2s;
+}
+/* 三等分而不是 flex:1 1 auto——auto 會讓每個選項用內容當基準，
+   375px 時三個加起來只超出 1px 就掉成 2＋1 行，很不平衡。
+   1 1 0 ＋ min-width:0 保證永遠平分一行。 */
+.opts.row .opt{flex:1 1 0; min-width:0; justify-content:center; gap:7px; padding:13px 8px}
+.opt:hover{border-color:var(--line); background:rgba(217,189,130,.05)}
+.opt input{accent-color:var(--gold); width:16px; height:16px; flex:none; margin:0}
+.opt:has(input:checked){border-color:var(--gold); background:rgba(217,189,130,.1); color:var(--gold-soft)}
+.opt input:focus-visible{outline:2px solid var(--gold); outline-offset:3px}
+
+textarea{
+  width:100%; min-height:96px; padding:13px 15px; resize:vertical;
+  border:1px solid var(--line-soft); border-radius:3px; background:rgba(0,0,0,.18);
+  color:var(--cream); font-family:var(--sans); font-size:15px; line-height:1.85;
+}
+textarea:focus{outline:2px solid var(--gold); outline-offset:1px; border-color:transparent}
+
+button.send{
+  display:block; width:100%; padding:15px; cursor:pointer;
+  background:transparent; border:1px solid var(--gold); border-radius:5px;
+  color:var(--gold-soft); font-family:var(--latin);
+  font-size:15px; letter-spacing:.18em; transition:background .25s, opacity .25s;
+}
+button.send:hover:not([disabled]){background:rgba(217,189,130,.1)}
+button.send:focus-visible{outline:2px solid var(--gold); outline-offset:3px}
+button.send[disabled]{opacity:.4; cursor:default}
+.msg{min-height:1.6em; margin:14px 0 0; text-align:center; font-size:13.5px; color:var(--muted)}
+.msg.bad{color:#e8b4b4}
+
+.done{display:none; text-align:center; padding:40px 0}
+.done h2{font-family:var(--serif); font-size:22px; font-weight:400; color:var(--gold-soft); letter-spacing:.12em; margin:0 0 14px}
+.done p{color:var(--muted); font-size:14.5px; margin:0 0 26px}
+.done a{color:var(--gold); text-decoration:none; border-bottom:1px solid var(--line); padding-bottom:2px}
+body.sent form{display:none}
+body.sent .done{display:block}
+.privacy{color:var(--muted); font-size:12px; opacity:.8; line-height:1.75; margin:22px 0 0}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <p class="crumb"><a href="/yuanfen/">← 回到曖昧緣分合盤</a></p>
+
+  <h1>這份判讀，準嗎？</h1>
+  <p class="lead">這一頁只問你剛才看到的那份結果。沒有必填，想跳過的題目直接跳過。</p>
+  <p class="note">你的回答會用來校準判讀——哪一型判得不準、錯在哪個環節，都要靠這些回覆才看得出來。不會收集信箱或姓名。</p>
+
+  <div class="ctx" id="ctx"><b>你剛才那一盤</b><p id="ctx-text">讀取中…</p></div>
+
+  <form id="f">
+    <fieldset>
+      <legend>整體來說，準嗎？</legend>
+      <div class="opts row">
+        <label class="opt"><input type="radio" name="rating" value="滿準的"><span>滿準的</span></label>
+        <label class="opt"><input type="radio" name="rating" value="有點像"><span>有點像</span></label>
+        <label class="opt"><input type="radio" name="rating" value="不太對"><span>不太對</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset id="why-box" hidden>
+      <legend>哪裡不對？</legend>
+      <p class="hint">每個選項對應到我們判讀的其中一個環節，選了就知道要改哪裡。</p>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="wrong_part" value="tempo"><span>我們不是這樣開始的</span></label>
+        <label class="opt"><input type="radio" name="wrong_part" value="initiator"><span>誰先主動說反了</span></label>
+        <label class="opt"><input type="radio" name="wrong_part" value="shape"><span>相處狀況不是這樣</span></label>
+        <label class="opt"><input type="radio" name="wrong_part" value="chance"><span>機會判斷差很多</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>這一頁好用嗎？</legend>
+      <p class="hint">操作上的感受，跟準不準是兩件事。</p>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="usability" value="很順，知道要做什麼"><span>很順，知道要做什麼</span></label>
+        <label class="opt"><input type="radio" name="usability" value="還可以，有一兩個地方卡住"><span>還可以，有一兩個地方卡住</span></label>
+        <label class="opt"><input type="radio" name="usability" value="有點難懂"><span>有點難懂</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>還有什麼想說的？</legend>
+      <p class="hint">哪一段最有感、哪一句看不懂、想看到什麼還沒有的——都可以寫。</p>
+      <textarea id="note" maxlength="1000" placeholder="選填"></textarea>
+    </fieldset>
+
+    <button class="send" id="send" type="submit">送出</button>
+    <p class="msg" id="msg"></p>
+    <p class="privacy">送出時會一併附上你剛才那一盤的兩組生日與判讀結果，用來校準準確度，保存 12 個月後自動刪除。詳見<a href="/privacy/#privacy" style="color:var(--gold)">隱私權政策</a>。</p>
+  </form>
+
+  <div class="done">
+    <h2>謝謝，收到了</h2>
+    <p>這會幫我們把判讀改準一點。</p>
+    <p><a href="/yuanfen/">再測一次</a></p>
+  </div>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const YF_CTX_KEY = 'yf-last-draw';
+
+/* 盤面資料由結果頁寫進 localStorage，不走網址——
+   生日放在 query string 會被 GA4 的 page_location 收走，也會留在瀏覽紀錄裡。 */
+let ctx = null;
+try { ctx = JSON.parse(localStorage.getItem(YF_CTX_KEY) || 'null'); } catch (e) { ctx = null; }
+
+if (ctx && ctx.total) {
+  $('ctx-text').textContent =
+    ctx.total + ' 分 · ' + [ctx.band, ctx.tempo, ctx.initiator, ctx.chance].filter(Boolean).join(' · ');
+} else {
+  $('ctx').classList.add('missing');
+  $('ctx-text').innerHTML =
+    '找不到剛才的測算結果。<a href="/yuanfen/" style="color:var(--gold)">先去測一次</a>再回來填，回饋才對得上是哪一份判讀。';
+}
+
+/* 第二層只在「不太對」時出現，跟結果頁原本的行為一致 */
+document.querySelectorAll('input[name="rating"]').forEach(r => {
+  r.addEventListener('change', () => {
+    const off = document.querySelector('input[name="rating"]:checked').value === '不太對';
+    $('why-box').hidden = !off;
+    if (!off) document.querySelectorAll('input[name="wrong_part"]').forEach(x => { x.checked = false; });
+  });
+});
+
+$('f').addEventListener('submit', async e => {
+  e.preventDefault();
+  const rating = (document.querySelector('input[name="rating"]:checked') || {}).value;
+  if (!rating) { $('msg').textContent = '至少先回答「準嗎」那一題。'; $('msg').className = 'msg bad'; return; }
+  if (!ctx || !ctx.a || !ctx.b) {
+    $('msg').textContent = '找不到剛才的測算結果，請先回去測一次。';
+    $('msg').className = 'msg bad'; return;
+  }
+
+  const payload = {
+    a: ctx.a, b: ctx.b,
+    total: ctx.total, band: ctx.band, tempo: ctx.tempo,
+    chance: ctx.chance, initiator: ctx.initiator,
+    wendu_key: ctx.wendu_key, zhongliang_key: ctx.zhongliang_key, changdu_key: ctx.changdu_key,
+    cross_sweet: ctx.cross_sweet, cross_harsh: ctx.cross_harsh,
+    rating,
+    wrong_part: (document.querySelector('input[name="wrong_part"]:checked') || {}).value || null,
+    usability: (document.querySelector('input[name="usability"]:checked') || {}).value || '',
+    note: $('note').value.slice(0, 1000)
+  };
+
+  $('send').disabled = true;
+  $('msg').className = 'msg';
+  $('msg').textContent = '送出中…';
+  try {
+    const r = await fetch('/api/yuanfen-feedback', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(payload), cache: 'no-store'
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok || !d.ok) throw new Error(d.error || '送出失敗');
+    try { gtag('event', 'yuanfen_feedback', { rating, wrong_part: payload.wrong_part || undefined, tempo: ctx.tempo }); } catch (e) {}
+    document.body.classList.add('sent');
+    window.scrollTo(0, 0);
+  } catch (err) {
+    $('send').disabled = false;
+    $('msg').className = 'msg bad';
+    $('msg').textContent = '送出失敗，請稍後再試一次。';
+  }
+});
+</script>
+</body></html>

@@ -1,11 +1,60 @@
 <!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>問卷報表｜未完籤所</title>
-<style>body{font:14px system-ui;margin:0;background:#f4f0f5;color:#302437}.wrap{max-width:1200px;margin:auto;padding:28px}.bar,.cards{display:flex;gap:12px;flex-wrap:wrap}.bar input,.bar button{padding:10px 14px;border:1px solid #ccc;border-radius:9px}.bar button{background:#633c76;color:#fff}.card{background:#fff;padding:18px;border-radius:14px;min-width:170px}.card strong{font-size:30px;display:block}table{width:100%;border-collapse:collapse;background:#fff;margin-top:20px}th,td{padding:10px;border-bottom:1px solid #eee;text-align:left;vertical-align:top;max-width:260px}th{position:sticky;top:0;background:#5b376d;color:white}.table{overflow:auto;max-height:65vh;border-radius:14px}#msg{color:#a33}</style></head>
-<body><main class="wrap"><h1>使用體驗問卷報表</h1><div class="bar"><input id="key" type="password" placeholder="管理員密碼"><button id="load">載入報表</button><button id="csv" style="display:none">下載 CSV</button></div><p id="msg"></p>
+<style>body{font:14px system-ui;margin:0;background:#f4f0f5;color:#302437}.wrap{max-width:1200px;margin:auto;padding:28px}.bar,.cards{display:flex;gap:12px;flex-wrap:wrap}.bar input,.bar button{padding:10px 14px;border:1px solid #ccc;border-radius:9px}.bar button{background:#633c76;color:#fff}.card{background:#fff;padding:18px;border-radius:14px;min-width:170px}.card strong{font-size:30px;display:block}table{width:100%;border-collapse:collapse;background:#fff;margin-top:20px}th,td{padding:10px;border-bottom:1px solid #eee;text-align:left;vertical-align:top;max-width:260px}th{position:sticky;top:0;background:#5b376d;color:white}.table{overflow:auto;max-height:65vh;border-radius:14px}#msg{color:#a33}
+.tabs{display:flex;gap:8px;margin:20px 0 16px;border-bottom:1px solid #ddd}
+.tab{padding:10px 18px;border:0;background:none;cursor:pointer;font:inherit;color:#6b5c75;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab:hover{color:#302437}
+.tab.on{color:#5b376d;border-bottom-color:#5b376d;font-weight:600}
+.hint{color:#6b5c75;font-size:12.5px;margin:0 0 10px}</style></head>
+<body><main class="wrap"><h1>問卷報表</h1><div class="bar"><input id="key" type="password" placeholder="管理員密碼"><button id="load">載入報表</button><button id="csv" style="display:none">下載 CSV</button></div><p id="msg"></p>
+<div class="tabs"><button class="tab on" data-pane="survey">使用體驗問卷</button><button class="tab" data-pane="yuanfen">曖昧緣分合盤</button></div>
+
+<section id="pane-survey">
 <div class="cards"><div class="card">有效回答<strong id="total">—</strong></div><div class="card">平均符合度<strong id="avg">—</strong></div><div class="card">已購買延伸籤<strong id="bought">—</strong></div><div class="card">付費價值清楚<strong id="clarity">—</strong></div><div class="card">願意回訪<strong id="revisit">—</strong></div><div class="card">已抽限定籤<strong id="claimed">—</strong></div></div>
-<div class="table"><table><thead><tr><th>時間</th><th>暱稱</th><th>Email</th><th>主題</th><th>來源</th><th>流程</th><th>符合度</th><th>延伸籤狀態</th><th>價值清楚度</th><th>未購買主因</th><th>回訪意願</th><th>最想改善</th></tr></thead><tbody id="rows"></tbody></table></div></main>
+<div class="table"><table><thead><tr><th>時間</th><th>暱稱</th><th>Email</th><th>主題</th><th>來源</th><th>流程</th><th>符合度</th><th>延伸籤狀態</th><th>價值清楚度</th><th>未購買主因</th><th>回訪意願</th><th>最想改善</th></tr></thead><tbody id="rows"></tbody></table></div>
+</section>
+
+<section id="pane-yuanfen" hidden>
+<div class="cards"><div class="card">回饋筆數<strong id="yf-total">—</strong></div><div class="card">滿準的<strong id="yf-good">—</strong></div><div class="card">有點像<strong id="yf-mid">—</strong></div><div class="card">不太對<strong id="yf-bad">—</strong></div><div class="card">最常說錯的環節<strong id="yf-part">—</strong></div></div>
+<p class="hint">「哪裡不對」對應到判讀的四個環節：tempo 節奏／initiator 主動方／shape 相處狀況／chance 機會。某一項特別多，就是那個模組要改。</p>
+<div class="table"><table><thead><tr><th>時間</th><th>準嗎</th><th>哪裡不對</th><th>好用嗎</th><th>你的生日</th><th>對方生日</th><th>分數</th><th>節奏</th><th>主動方</th><th>機會</th><th>溫度 key</th><th>重量 key</th><th>長度 key</th><th>合／沖</th><th>留言</th></tr></thead><tbody id="yf-rows"></tbody></table></div>
+</section>
+</main>
 <script>
 let DATA=[];const $=id=>document.getElementById(id),esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-$('load').onclick=async()=>{const key=$('key').value;sessionStorage.setItem('uw_admin',key);try{const r=await fetch('/api/survey/admin',{headers:{'X-Admin-Key':key}}),d=await r.json();if(!r.ok)throw Error('密碼錯誤或無法載入');DATA=d.rows||[];$('total').textContent=DATA.length;const scores=DATA.map(x=>+x.matchScore).filter(Boolean);$('avg').textContent=scores.length?(scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1):'—';/* 新舊兩種欄位都算。問卷 2.0 之前用 extendedAwareness，之後用
+
+/* ── 分頁籤：兩份問卷共用同一把管理員密碼與同一顆載入鈕 ──
+   按載入時只抓當前分頁的資料，不要兩支 API 都打。 */
+let PANE='survey', YF=[];
+document.querySelectorAll('.tab').forEach(t=>{t.onclick=()=>{
+  PANE=t.dataset.pane;
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
+  $('pane-survey').hidden=PANE!=='survey';
+  $('pane-yuanfen').hidden=PANE!=='yuanfen';
+  $('msg').textContent='';
+  $('csv').style.display=(PANE==='survey'?DATA.length:YF.length)?'inline-block':'none';
+};});
+
+async function loadYuanfen(key){
+  const r=await fetch('/api/yuanfen-feedback/admin',{headers:{'X-Admin-Key':key}});
+  const d=await r.json();
+  if(!r.ok)throw Error('密碼錯誤或無法載入');
+  YF=d.rows||[];
+  const br=d.byRating||{};
+  $('yf-total').textContent=d.total||0;
+  $('yf-good').textContent=br['滿準的']||0;
+  $('yf-mid').textContent=br['有點像']||0;
+  $('yf-bad').textContent=br['不太對']||0;
+  const bp=Object.entries(d.byPart||{}).sort((a,b)=>b[1]-a[1]);
+  $('yf-part').textContent=bp.length?bp[0][0]+'（'+bp[0][1]+'）':'—';
+  const bd=b=>b?b.y+'/'+b.m+'/'+b.d+(b.hour!=null?' '+String(b.hour).padStart(2,'0')+'時':''):'';
+  $('yf-rows').innerHTML=YF.map(x=>`<tr><td>${esc(new Date(x.createdAt).toLocaleString('zh-TW'))}</td><td>${esc(x.rating)}</td><td>${esc(x.wrongPart)}</td><td>${esc(x.usability)}</td><td>${esc(bd(x.a))}</td><td>${esc(bd(x.b))}</td><td>${esc(x.view&&x.view.total)}</td><td>${esc(x.view&&x.view.tempo)}</td><td>${esc(x.view&&x.view.initiator)}</td><td>${esc(x.view&&x.view.chance)}</td><td>${esc(x.keys&&x.keys.wendu)}</td><td>${esc(x.keys&&x.keys.zhongliang)}</td><td>${esc(x.keys&&x.keys.changdu)}</td><td>${esc((x.keys&&x.keys.crossSweet)+' / '+(x.keys&&x.keys.crossHarsh))}</td><td>${esc(x.note)}</td></tr>`).join('');
+  $('csv').style.display='inline-block';
+  $('msg').textContent='';
+}
+
+$('load').onclick=async()=>{const key=$('key').value;sessionStorage.setItem('uw_admin',key);
+if(PANE==='yuanfen'){try{await loadYuanfen(key)}catch(e){$('msg').textContent=e.message}return}
+try{const r=await fetch('/api/survey/admin',{headers:{'X-Admin-Key':key}}),d=await r.json();if(!r.ok)throw Error('密碼錯誤或無法載入');DATA=d.rows||[];$('total').textContent=DATA.length;const scores=DATA.map(x=>+x.matchScore).filter(Boolean);$('avg').textContent=scores.length?(scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1):'—';/* 新舊兩種欄位都算。問卷 2.0 之前用 extendedAwareness，之後用
    extended_fortune_status，兩邊的回覆都是真的買過，不能只認一種。 */
 $('bought').textContent=DATA.filter(x=>x.extended_fortune_status==='曾經購買過延伸籤'
   ||x.extendedAwareness==='有，而且已經購買').length;
@@ -20,7 +69,20 @@ $('clarity').textContent=vc.length
 const ri=DATA.filter(x=>x.returnIntent);
 $('revisit').textContent=ri.length?Math.round(ri.filter(x=>x.returnIntent.startsWith('會')).length/ri.length*100)+'%（'+ri.length+' 人回答）':'—';$('claimed').textContent=d.rewardCount||0;$('rows').innerHTML=DATA.map(x=>`<tr><td>${esc(new Date(x.createdAt).toLocaleString('zh-TW'))}</td><td>${esc(x.nickname)}</td><td>${esc(x.email)}</td><td>${esc(x.topic)}</td><td>${esc(x.source)}</td><td>${esc(x.flowClarity)}</td><td>${esc(x.matchScore)}</td><td>${esc(x.extended_fortune_status||x.extendedAwareness)}</td><td>${esc(x.extended_value_clarity)}</td><td>${esc(x.extended_no_purchase_primary_reason)}</td><td>${esc(x.returnIntent)}</td><td>${esc(x.oneChange)}</td></tr>`).join('');$('csv').style.display='inline-block';$('msg').textContent=''}catch(e){$('msg').textContent=e.message}};
 $('key').value=sessionStorage.getItem('uw_admin')||'';
-$('csv').onclick=()=>{const cols=['createdAt','nickname','email','topic','distress','source','categoryEase','flowClarity','issues','device','matchScore','readability','benefits','missing','extendedAwareness','noBuyReasons','buyMotivators','free_fortune_remaining_questions','extended_fortune_status','extended_value_clarity','extended_no_purchase_primary_reason','extended_buyer_improvement','extended_top_value','wantedFeatures','returnIntent','age','relationship','oneChange','rewardClaimedAt','rewardFortuneId'],q=v=>'"'+String(Array.isArray(v)?v.join('、'):v||'').replaceAll('"','""')+'"',text='\ufeff'+[cols.join(','),...DATA.map(r=>cols.map(c=>q(r[c])).join(','))].join('\n'),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'text/csv'}));a.download='unfinished-survey-'+new Date().toISOString().slice(0,10)+'.csv';a.click()};
+$('csv').onclick=()=>{
+if(PANE==='yuanfen'){
+  const q=v=>'"'+String(v==null?'':v).replaceAll('"','""')+'"';
+  const bd=b=>b?b.y+'/'+b.m+'/'+b.d+(b.hour!=null?' '+b.hour+'時':''):'';
+  const head=['時間','準嗎','哪裡不對','好用嗎','你的生日','對方生日','分數','等級','節奏','主動方','機會','溫度key','重量key','長度key','合','沖','留言'];
+  const text='﻿'+[head.join(','),...YF.map(x=>[x.createdAt,x.rating,x.wrongPart,x.usability,bd(x.a),bd(x.b),
+    x.view&&x.view.total,x.view&&x.view.band,x.view&&x.view.tempo,x.view&&x.view.initiator,x.view&&x.view.chance,
+    x.keys&&x.keys.wendu,x.keys&&x.keys.zhongliang,x.keys&&x.keys.changdu,
+    x.keys&&x.keys.crossSweet,x.keys&&x.keys.crossHarsh,x.note].map(q).join(','))].join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([text],{type:'text/csv'}));
+  a.download='yuanfen-feedback-'+new Date().toISOString().slice(0,10)+'.csv';a.click();return;
+}
+const cols=['createdAt','nickname','email','topic','distress','source','categoryEase','flowClarity','issues','device','matchScore','readability','benefits','missing','extendedAwareness','noBuyReasons','buyMotivators','free_fortune_remaining_questions','extended_fortune_status','extended_value_clarity','extended_no_purchase_primary_reason','extended_buyer_improvement','extended_top_value','wantedFeatures','returnIntent','age','relationship','oneChange','rewardClaimedAt','rewardFortuneId'],q=v=>'"'+String(Array.isArray(v)?v.join('、'):v||'').replaceAll('"','""')+'"',text='\ufeff'+[cols.join(','),...DATA.map(r=>cols.map(c=>q(r[c])).join(','))].join('\n'),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'text/csv'}));a.download='unfinished-survey-'+new Date().toISOString().slice(0,10)+'.csv';a.click()};
 </script>
 <style id="site-footer-v1">
 .site-footer{position:relative;z-index:3;background:linear-gradient(180deg,rgba(9,6,20,0),rgba(9,6,20,.72) 16%,rgba(9,6,20,.86));border-top:1px solid rgba(217,189,130,.32);color:#9d91aa;font-size:13px;padding:44px 20px 40px;text-align:center;width:100%;box-sizing:border-box}
