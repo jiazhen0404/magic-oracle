@@ -776,7 +776,7 @@ details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offse
 
     <button class="btn-img" id="go"><span>開始測算</span></button>
     <p class="err" id="err" role="status"></p>
-    <p class="privacy">不用註冊，不用留 email。兩組生日不會被儲存，也不會離開你的裝置——計算全部在這個頁面完成，關掉就不存在了。</p>
+    <p class="privacy">不用註冊，不用留 email。計算在你的裝置上完成。除非你主動送出準確度回饋，否則兩組生日不會離開這一頁。</p>
     <div class="promise">
       <b>免費的部分不會遮任何一句話</b>
       分數怎麼算的、你們卡在哪裡、接下來往哪個方向走，全部給你，沒有馬賽克也沒有「付費後解鎖」。付費的是更深的一層，不是被藏起來的那一層。
@@ -4444,6 +4444,28 @@ function sendFeedback(params, wrongPart) {
   const p = Object.assign({}, params);
   if (wrongPart) p.wrong_part = wrongPart;
   track('yuanfen_feedback', p);
+  saveFeedback(p);
+}
+
+/* 同一個動作也送一份到自己的後端，多帶兩組生日。
+   GA4 那份是匿名的、看漏斗用；這份的用途只有一個——引擎改版之後
+   拿真實案例整批重跑，看新版是不是真的比較準。盤面 key 是舊引擎算的，
+   重跑不能用，所以才需要生日。
+
+   ★ 只在這裡呼叫。頁面上說的是「除非你主動送出準確度回饋，
+     否則兩組生日不會離開這一頁」，抽籤本身不能送。 */
+function saveFeedback(p) {
+  if (!last || !last.birth) return;
+  const payload = Object.assign({ a: last.birth.a, b: last.birth.b, total: last.view.total }, p);
+  try {
+    fetch('/api/yuanfen-feedback', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(payload),
+      keepalive: true,          // 使用者按完就關頁面也要送得出去
+      cache: 'no-store'
+    }).catch(() => {});
+  } catch (e) { /* 回饋送不出去不能影響閱讀 */ }
 }
 
 function finishFeedback() {
@@ -4551,7 +4573,9 @@ function reveal(a, b) {
   const c = render(r, { a: freeA, b: freeB }, { A: '你', B: '他' }, scene);
   /* view 是 render() 的輸出，帶著 band 與 tempo。分享與回饋的埋點需要它們，
      而 result 只有分數與三維度，沒有這兩個分類。 */
-  last = { result: r, view: c, a: freeA, b: freeB, full: yuanfen(a, b), scene };
+  /* birth 保留原始輸入（含時辰），只有送出準確度回饋時才會用到。
+     a / b 是免費層用的無時辰版本，兩者不能混用。 */
+  last = { result: r, view: c, a: freeA, b: freeB, birth: { a, b }, full: yuanfen(a, b), scene };
   $('r-report').classList.remove('on');
   document.body.classList.remove('reading');
   $('u-cta').disabled = false;

@@ -101,6 +101,12 @@ export default {
       if (path === '/api/survey/reward' && request.method === 'POST') {
         return await surveyReward(request, env);
       }
+      if (path === '/api/yuanfen-feedback' && request.method === 'POST') {
+        return await yuanfenFeedback(request, env);
+      }
+      if (path === '/api/yuanfen-feedback/admin' && request.method === 'GET') {
+        return await yuanfenFeedbackAdmin(request, env);
+      }
       if (path === '/api/health') {
         return json({
           ok: true,
@@ -173,6 +179,104 @@ async function submitSurvey(request, env) {
     env.ORDERS.put('survey-reward:' + rewardToken, JSON.stringify({ id, used: false, createdAt: record.createdAt }), { expirationTtl: 60 * 60 * 24 * 30 })
   ]);
   return json({ ok: true, id, rewardToken });
+}
+
+/* ── 曖昧合盤 · 準確度回饋 ─────────────────────────────────
+   使用者在免費結果頁按下「滿準的／有點像／不太對」時送來。
+   同一個動作也會送一筆匿名的 GA4 事件，那份用來看漏斗；
+   這一份多帶兩組生日，用途只有一個：引擎改版後拿真實案例整批重跑。
+   盤面 key 是舊引擎算出來的，重跑不能用，所以才需要留生日。
+
+   ★ 只收生日、盤面與評分。不收信箱、姓名、IP。
+     頁面上的說明是「除非你主動送出準確度回饋，否則兩組生日不會離開這一頁」，
+     所以這支 API 只能由那個動作觸發，不要拿去記錄一般抽籤。 */
+
+const YF_TTL = 60 * 60 * 24 * 365;                       // 保存 12 個月
+const YF_RATING = ['滿準的', '有點像', '不太對'];
+const YF_PART = ['tempo', 'initiator', 'shape', 'chance'];
+
+/* 生日只留年月日與時辰，而且要是合理的值——不合理就整筆退掉，
+   不要把髒資料存進去，之後重跑會被它污染。 */
+function yfBirth(v) {
+  if (!v || typeof v !== 'object') return null;
+  const y = Number(v.y), m = Number(v.m), d = Number(v.d);
+  if (!Number.isInteger(y) || y < 1900 || y > 2100) return null;
+  if (!Number.isInteger(m) || m < 1 || m > 12) return null;
+  if (!Number.isInteger(d) || d < 1 || d > 31) return null;
+  const out = { y, m, d };
+  if (v.hour !== undefined && v.hour !== null) {
+    const h = Number(v.hour);
+    if (!Number.isInteger(h) || h < 0 || h > 23) return null;
+    out.hour = h;
+  }
+  return out;
+}
+
+async function yuanfenFeedback(request, env) {
+  if (!env.ORDERS) return json({ ok: false, error: 'not_configured' }, 503);
+  let body;
+  try { body = await request.json(); } catch { return json({ ok: false, error: 'bad_json' }, 400); }
+
+  const a = yfBirth(body.a), b = yfBirth(body.b);
+  if (!a || !b) return json({ ok: false, error: 'bad_birth' }, 400);
+
+  const rating = String(body.rating || '');
+  if (!YF_RATING.includes(rating)) return json({ ok: false, error: 'bad_rating' }, 400);
+
+  const wrongPart = body.wrong_part == null ? null : String(body.wrong_part);
+  if (wrongPart !== null && !YF_PART.includes(wrongPart)) return json({ ok: false, error: 'bad_part' }, 400);
+
+  const str = (v, max = 40) => String(v == null ? '' : v).slice(0, max);
+  const num = v => (Number.isFinite(Number(v)) ? Number(v) : null);
+
+  const id = 'YF' + Date.now().toString(36).toUpperCase() + randomHex(4);
+  const record = {
+    id,
+    createdAt: new Date().toISOString(),
+    a, b,
+    rating,
+    wrongPart,
+    /* 當下這個版本算出來的結果，用來跟重跑的新版本對照 */
+    view: {
+      total: num(body.total),
+      band: str(body.band),
+      tempo: str(body.tempo),
+      chance: str(body.chance),
+      initiator: str(body.initiator)
+    },
+    keys: {
+      wendu: str(body.wendu_key, 20),
+      zhongliang: str(body.zhongliang_key, 20),
+      changdu: str(body.changdu_key, 20),
+      crossSweet: num(body.cross_sweet),
+      crossHarsh: num(body.cross_harsh)
+    }
+  };
+  await env.ORDERS.put('yfsurvey:' + id, JSON.stringify(record), { expirationTtl: YF_TTL });
+  return json({ ok: true });
+}
+
+async function yuanfenFeedbackAdmin(request, env) {
+  if (!env.ADMIN_KEY || request.headers.get('X-Admin-Key') !== env.ADMIN_KEY) {
+    return json({ error: 'unauthorized' }, 401);
+  }
+  if (!env.ORDERS) return json({ error: 'not_configured' }, 503);
+  const rows = [];
+  let cursor;
+  do {
+    const listed = await env.ORDERS.list({ prefix: 'yfsurvey:', cursor, limit: 1000 });
+    const values = await Promise.all(listed.keys.map(k => env.ORDERS.get(k.name, 'json')));
+    values.forEach(v => { if (v) rows.push(v); });
+    cursor = listed.list_complete ? undefined : listed.cursor;
+  } while (cursor && rows.length < 20000);
+  rows.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+  const byRating = {};
+  const byPart = {};
+  for (const r of rows) {
+    byRating[r.rating] = (byRating[r.rating] || 0) + 1;
+    if (r.wrongPart) byPart[r.wrongPart] = (byPart[r.wrongPart] || 0) + 1;
+  }
+  return json({ ok: true, total: rows.length, byRating, byPart, rows });
 }
 
 async function surveyAdmin(request, env, url) {
