@@ -11,6 +11,8 @@
    ========================================================================= */
 
 const copy = require('./src/copy');
+const { fillNames } = require('./src/fill');
+const NAMES = { A: '你', B: '他' };   // 用預設稱謂還原，字數與使用者看到的一致
 const SCENES = copy.SCENES || ['交往'];
 
 /* ---------- 概念群：語意重複的偵測基礎 ---------- */
@@ -133,7 +135,11 @@ function lint() {
       for (const open of v.open)
         for (const close of v.close) {
           combos++;
-          const ctx = { open, core: copy.coreOf(v, scene), close };
+          /* 檢查使用者實際讀到的字，不是含佔位符的樣板。
+             {B} 是三個字元，不還原的話「{B}的退讓」會被 6-gram 判成重複，
+             但使用者看到的是「他的退讓」，只有四個字，根本不會觸發。
+             規則的門檻是照人眼訂的，就要餵給它人眼看到的東西。 */
+          const ctx = fillNames({ open, core: copy.coreOf(v, scene), close }, NAMES);
           for (const r of RULES) {
             const msg = r.check(ctx);
             if (msg) found.push({ rule: r.id, dim, key, open, msg });
@@ -144,7 +150,7 @@ function lint() {
   for (const b of copy.TOTAL_BANDS)
     for (const close of b.close) {
       combos++;
-      const ctx = { open: '', core: b.core, close };
+      const ctx = fillNames({ open: '', core: b.core, close }, NAMES);
       for (const r of RULES) {
         if (r.id === 'R1' || r.id === 'R2') continue;
         const msg = r.check(ctx);
