@@ -554,10 +554,12 @@ body.reading .corner{opacity:.36}
 }
 /* 準確度回饋：一鍵、不填東西。刻意做得比節奏本身小一階，
    它是問句不是結果，不該跟分數搶視線。 */
-.accuracy{
-  margin:20px auto 0; display:flex; flex-wrap:wrap;
+.accuracy{margin:20px auto 0}
+.acc-row{
+  display:flex; flex-wrap:wrap;
   align-items:center; justify-content:center; gap:10px;
 }
+.acc-why{margin-top:12px}
 .accuracy .ask{
   color:var(--muted); font-size:13px; letter-spacing:.08em; margin:0;
 }
@@ -570,14 +572,21 @@ body.reading .corner{opacity:.36}
 }
 .accuracy button:hover{border-color:var(--line); background:rgba(217,189,130,.07)}
 .accuracy button:focus-visible{outline:2px solid var(--gold); outline-offset:2px}
-.accuracy.done button{opacity:.32; pointer-events:none}
-.accuracy.done button[aria-pressed="true"]{
+/* 第一層答完先鎖第一排，第二排要留著可以按；兩層都答完才整個鎖起來 */
+.accuracy.r1done .acc-row:first-child button{opacity:.32; pointer-events:none}
+.accuracy.done .acc-why button{opacity:.32; pointer-events:none}
+.accuracy.r1done .acc-row:first-child button[aria-pressed="true"],
+.accuracy.done .acc-why button[aria-pressed="true"]{
   opacity:1; border-color:var(--gold); background:rgba(217,189,130,.12);
 }
-.accuracy .thanks{color:var(--muted); font-size:13px; letter-spacing:.08em; margin:0}
+.accuracy .thanks{color:var(--muted); font-size:13px; letter-spacing:.08em; margin:12px 0 0; text-align:center}
 /* 手機上要用大拇指點，把可點範圍加高到 44px；桌機維持精簡不搶視線 */
 @media (max-width:420px){
   .accuracy button{padding:12px 15px}
+  /* 第二層那四個是句子不是短標籤，手機上排成一欄比擠成三行好讀 */
+  .acc-why{flex-direction:column; align-items:stretch}
+  .acc-why .ask{text-align:center}
+  .acc-why button{width:100%}
 }
 .verdict .poem{font-family:var(--serif);
   color:var(--cream); font-size:18px; margin:26px auto 0; max-width:26em;
@@ -707,10 +716,22 @@ details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offse
       <p class="tags"><span class="tempo" id="r-tempo"></span><span class="tempo" id="r-ini"></span></p>
       <p class="tempo-line" id="r-tempo-line"></p>
       <div class="accuracy" id="r-accuracy" hidden>
-        <p class="ask">這段描述準嗎？</p>
-        <button type="button" data-rating="accurate" aria-pressed="false">滿準的</button>
-        <button type="button" data-rating="partly"   aria-pressed="false">有點像</button>
-        <button type="button" data-rating="off"      aria-pressed="false">不太對</button>
+        <div class="acc-row">
+          <p class="ask">這段描述準嗎？</p>
+          <button type="button" data-rating="滿準的" aria-pressed="false">滿準的</button>
+          <button type="button" data-rating="有點像" aria-pressed="false">有點像</button>
+          <button type="button" data-rating="不太對" aria-pressed="false">不太對</button>
+        </div>
+        <!-- 第二層只在選「不太對」時展開。四個選項各自對應一個模組，
+             二十個人選同一項就知道要改哪個檔案。 -->
+        <div class="acc-row acc-why" id="r-acc-why" hidden>
+          <p class="ask">哪裡不對？</p>
+          <button type="button" data-part="tempo">我們不是這樣開始的</button>
+          <button type="button" data-part="initiator">誰先主動說反了</button>
+          <button type="button" data-part="shape">相處狀況不是這樣</button>
+          <button type="button" data-part="chance">機會判斷差很多</button>
+        </div>
+        <p class="thanks" id="r-acc-thanks" hidden>謝謝，這會幫我們把判讀改準一點。</p>
       </div>
     </div>
     <p class="summary" id="r-summary"></p>
@@ -4279,27 +4300,80 @@ function hourState(a, b) {
    那一步呼叫，不要在點按鈕或跳轉時呼叫。 */
 function trackUnlock() {
   if (!last) return;
-  track('yuanfen_unlock', { band: last.view.label, tempo: last.view.tempo });
+  track('yuanfen_unlock', { band: last.view.label, tempo: last.view.tempo, chance: last.view.chance });
 }
 
 /* ── 準確度回饋 ────────────────────────────────────────
    一鍵、不填任何東西。只送 tempo 與選項——三個月後就能回答
    「哪一型最不準」，那是唯一能真正校準判讀的方式。
    送出後不收回、也不讓改，重複點會灌壞資料。 */
+/* 事件要帶盤面 key，光知道「20 人說節奏不對」是改不了東西的。
+   帶了 key 才做得到「說節奏不對的人裡面七成是 cross_harsh >= 3」——
+   那就直接指出判定條件錯在哪。 */
+function boardKeys() {
+  const d = last.result.dimensions, x = last.result.cross || {};
+  return {
+    tempo:           last.view.tempo,
+    wendu_key:       d.wendu.key,
+    zhongliang_key:  d.zhongliang.key,
+    changdu_key:     d.changdu.key,
+    cross_sweet:     x.sweet || 0,
+    cross_harsh:     x.harsh || 0
+  };
+}
+
+/* 選了「不太對」但還沒說哪裡不對時，先擱著不送。
+   等她選了原因才送；中途離開就在 pagehide 補送一筆沒有 wrong_part 的。
+   這樣 rating 不會被重複計算，也不會整筆漏掉。 */
+/* 存的是「當下那一盤的完整參數」，不是只存 rating——
+   補送的時機可能已經重新起盤過，那時 last 已經是另一盤了。 */
+let pendingFeedback = null;
+
+function sendFeedback(params, wrongPart) {
+  const p = Object.assign({}, params);
+  if (wrongPart) p.wrong_part = wrongPart;
+  track('yuanfen_feedback', p);
+}
+
+function finishFeedback() {
+  $('r-accuracy').classList.add('done');
+  $('r-acc-thanks').hidden = false;
+}
+
 $('r-accuracy').addEventListener('click', e => {
-  const btn = e.target.closest('button[data-rating]');
   const box = $('r-accuracy');
-  if (!btn || box.classList.contains('done') || !last) return;
+  if (!last) return;
+  const btn = e.target.closest('button');
+  if (!btn) return;
 
-  btn.setAttribute('aria-pressed', 'true');
-  box.classList.add('done');
-  track('yuanfen_feedback', { tempo: last.view.tempo, rating: btn.dataset.rating });
+  /* 第一層 */
+  if (btn.dataset.rating && !box.classList.contains('r1done')) {
+    btn.setAttribute('aria-pressed', 'true');
+    box.classList.add('r1done');
 
-  const thanks = document.createElement('p');
-  thanks.className = 'thanks';
-  thanks.textContent = '謝謝，這會幫我們把判讀改準一點。';
-  box.appendChild(thanks);
-  box.querySelector('.ask').hidden = true;
+    const params = Object.assign({ rating: btn.dataset.rating }, boardKeys());
+    if (btn.dataset.rating === '不太對') {
+      pendingFeedback = params;            // 先不送，等第二層
+      $('r-acc-why').hidden = false;
+    } else {
+      sendFeedback(params);
+      finishFeedback();
+    }
+    return;
+  }
+
+  /* 第二層 */
+  if (btn.dataset.part && pendingFeedback && !box.classList.contains('done')) {
+    btn.setAttribute('aria-pressed', 'true');
+    sendFeedback(pendingFeedback, btn.dataset.part);
+    pendingFeedback = null;
+    finishFeedback();
+  }
+});
+
+/* 按了「不太對」卻沒選原因就離開——補送一筆，至少留住 rating */
+addEventListener('pagehide', () => {
+  if (pendingFeedback) { sendFeedback(pendingFeedback); pendingFeedback = null; }
 });
 
 const readDate = p => {
@@ -4383,16 +4457,18 @@ function reveal(a, b) {
   $('r-summary').textContent = c.summary;
 
   /* 起盤完成。放在渲染之後，確保使用者真的看到結果才算一次。 */
-  track('yuanfen_draw', { band: c.label, tempo: c.tempo, has_hour: hourState(a, b) });
+  /* chance 與 tempo 比 band 更值得看——它們會告訴你哪一種處境的人比較願意付錢 */
+  track('yuanfen_draw', { band: c.label, tempo: c.tempo, chance: c.chance, has_hour: hourState(a, b) });
 
-  /* 重新起盤等於換了一份判讀，回饋要跟著重來 */
+  /* 重新起盤等於換了一份判讀，回饋要跟著重來。
+     上一輪若停在「不太對」還沒選原因，先把那筆送出去再重置。 */
+  if (pendingFeedback) { sendFeedback(pendingFeedback); pendingFeedback = null; }
   const acc = $('r-accuracy');
   acc.hidden = false;
-  acc.classList.remove('done');
-  acc.querySelector('.ask').hidden = false;
-  const oldThanks = acc.querySelector('.thanks');
-  if (oldThanks) oldThanks.remove();
-  acc.querySelectorAll('button[data-rating]').forEach(b => b.setAttribute('aria-pressed', 'false'));
+  acc.classList.remove('done', 'r1done');
+  $('r-acc-why').hidden = true;
+  $('r-acc-thanks').hidden = true;
+  acc.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false'));
 
   const g = gapNote(r);
   $('r-gap').hidden = !g;
