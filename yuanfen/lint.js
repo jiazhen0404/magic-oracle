@@ -30,6 +30,18 @@ const CONCEPTS = {
   選擇:   ['選擇', '決定', '主動權', '取決於'],
 };
 
+/* ---------- 各軸專屬詞彙（R7 用）----------
+   只列該軸專屬、其他軸不該碰的字。字表刻意收得緊：
+   「越接觸越」是溫度在講合不合、「先開口」是重量在講力氣對等，
+   兩者都被誤判過，所以不列入。寧可漏抓，不要製造假陽性——
+   規則一旦開始亂叫，下一步就是被忽略。 */
+const AXIS_WORDS = {
+  節奏:   ['一見', '燒起來', '見面就', '一拍即合', '轟轟烈烈', '忽冷忽熱',
+           '似曾相識', '日久', '慢慢熟', '怎麼開始', '一開始就強烈'],
+  主動方: ['先動心', '先出手', '誰先主動'],
+  機會:   ['走到一起的機會', '成的機會', '機會偏低', '機會很高', '翻盤'],
+};
+
 /* ---------- 句式偵測 ---------- */
 const PAT = {
   judge:   /(你們是|你們的|他是|他在這段|這段關係裡|這段緣的?[^，。]{0,4}是|主要在給)/,  // 下判斷
@@ -98,6 +110,27 @@ const RULES = [
     }
   },
   {
+    id: 'R7', name: 'core 不得對其他軸下斷言',
+    /* 暫時降為警告：規則抓到的是真問題（緣暖那一句），但修法是改文案，
+       規格已交出（docs/COPY-FIX-BAND-WARM.md）。文案回填後把這行刪掉，
+       讓它恢復成會擋下建置的失敗。
+       之所以不留成紅字：平常就在紅的檢查，久了會被習慣性忽略，
+       等到真的有新問題時反而看不見。 */
+    warn: true,
+    why: '每個軸只負責自己那件事。分數帶講份量、節奏講怎麼開始的——'
+       + '兩邊各寫一句就會撞：實測 8.8% 的盤會讀到「一見傾心」配上'
+       + '「你們不是一見面就燒起來的那種」，相鄰兩段直接打架。',
+    /* 只管 core。core 是「分數的文字化」，是固定的判斷句，本來就該只講自己那一軸；
+       open／close 是包裝與建議，提到別的軸通常是對比或延伸，硬擋會誤傷——
+       實例：緣暖的 close「不用羨慕那些一見鍾情的人」講的是別人，不是這一對。 */
+    check: ({ core }) => {
+      for (const [axis, words] of Object.entries(AXIS_WORDS))
+        for (const w of words)
+          if (core.includes(w)) return 'core 講到【' + axis + '】的「' + w + '」';
+      return null;
+    }
+  },
+  {
     id: 'R6', name: '字面重複（6 字以上）',
     why: '最基本的一條，但只能抓字面，抓不到換句話說。',
     check: ({ open, core, close }) => {
@@ -159,6 +192,9 @@ function lint() {
     }
 
   console.log('檢查組合數：' + combos);
+  const WARN = new Set(RULES.filter(r => r.warn).map(r => r.id));
+  const fails = found.filter(f => !WARN.has(f.rule));
+  const warns = found.filter(f => WARN.has(f.rule));
   if (!found.length) { console.log('全部通過 ✓'); return 0; }
 
   const byRule = {};
@@ -177,9 +213,18 @@ function lint() {
                   + (f.open ? '　開場「' + f.open + '」' : ''));
     }
   }
-  console.log('\n共 ' + found.length + ' 處（去重後 '
-              + new Set(found.map(f => f.rule + f.dim + f.key + f.msg)).size + ' 類）');
-  return found.length;
+  /* 失敗與警告分開講，而且只有失敗會讓離開碼變成 1。
+     警告是「已知、已交出規格、正在處理」的問題；混在一起會讓整支檢查
+     長期是紅的，久了就沒有人看——那比沒有檢查更糟。 */
+  const uniq = a => new Set(a.map(f => f.rule + f.dim + f.key + f.msg)).size;
+  console.log('');
+  if (fails.length) console.log('✗ 失敗 ' + fails.length + ' 處（去重後 ' + uniq(fails) + ' 類）');
+  else console.log('失敗 0 處 ✓');
+  if (warns.length) {
+    console.log('△ 警告 ' + warns.length + ' 處（去重後 ' + uniq(warns) + ' 類）'
+                + '——已知問題，改寫規格見 docs/COPY-FIX-BAND-WARM.md');
+  }
+  return fails.length;
 }
 
 if (require.main === module) process.exitCode = lint() ? 1 : 0;
