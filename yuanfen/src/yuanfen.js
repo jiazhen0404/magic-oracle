@@ -31,8 +31,8 @@ function jdn(y, m, d) {
 
 // 日柱：以 2000-01-07 為甲子日校準
 const DAY_ANCHOR = jdn(2000, 1, 7);
-function dayPillar(y, m, d) {
-  const n = ((jdn(y, m, d) - DAY_ANCHOR) % 60 + 60) % 60;
+function dayPillar(y, m, d, offset = 0) {
+  const n = ((jdn(y, m, d) + offset - DAY_ANCHOR) % 60 + 60) % 60;
   return { gan: n % 10, zhi: n % 12 };
 }
 
@@ -218,8 +218,17 @@ const WEIGHTS_HOUR = { wendu: 0.28, zhongliang: 0.24, changdu: 0.28, midu: 0.20 
 
 function clamp(n, lo = 0, hi = 100) { return Math.max(lo, Math.min(hi, n)); }
 
+/* 早子／晚子採「子初換日」：23:00 一到就進入次日的子時，日柱跟著換日。
+   兩派都有人用，這裡選子初換日的理由是使用者會拿結果去別的排盤網站對——
+   市面上常見的排盤預設是 23 點換日，我們如果算成當日，那群人會以為我們算錯。
+   日柱是這個產品最吃重的一根柱（夫妻宮＝日支、溫度＝日支關係、重量＝日干），
+   對不上等於整份判讀都對不上。
+
+   只有日柱跟著換，年柱與月柱仍以實際出生時刻對節氣——節氣是天文時刻，
+   不因命理上的換日約定而改變。 */
 function pillars(y, m, d, hour) {
-  const day = dayPillar(y, m, d);
+  const h = (hour === undefined || hour === null || hour === '') ? undefined : Number(hour);
+  const day = dayPillar(y, m, d, h === 23 ? 1 : 0);
   const year = yearPillar(y, m, d, hour);
   const p = { year, day, month: monthPillar(y, m, d, hour, year.gan) };
   if (hour !== undefined && hour !== null && hour !== '') {
