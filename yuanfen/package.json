@@ -5,7 +5,7 @@
   "description": "未完籤所 · 緣分指數（雙人合盤）",
   "scripts": {
     "build": "node build.js",
-    "lint": "node lint.js && node checkglobals.js && node checkwrap.js",
+    "lint": "node lint.js && node checkglobals.js && node checkwrap.js && node checkspouse.js",
     "accept": "node accept.js",
     "calibrate": "node calibrate.js"
   },
