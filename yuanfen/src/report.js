@@ -29,6 +29,7 @@ const { palace } = require('./palace');
 const { wrap } = require('./wrap');
 const { encounter } = require('./encounter');
 const { fillNames } = require('./fill');
+const { spouseStar, fromDebug } = require('./spouse');
 
 /* ---------- 1. 這段緣現在停在哪裡 ---------- */
 
@@ -286,8 +287,12 @@ function weakest(dims) {
 /**
  * @param result yuanfen() 的輸出
  * @param names  { A:'你', B:'{B}' }
+ * @param gender 'male' | 'female' | ''　使用者自己的性別。
+ *               只用在配偶星那一段（男看財星、女看官殺），其餘判讀完全不看。
+ *               空字串＝不指定，那一段整段不出現——寧可少一段，
+ *               也不要隨便挑一邊算給人看。
  */
-function report(result, names = { A: '你', B: '{B}' }) {
+function report(result, names = { A: '你', B: '{B}' }, gender = '') {
   const d = result.dimensions;
   const b = band(result.total);
   const weak = weakest(d);
@@ -311,6 +316,16 @@ function report(result, names = { A: '你', B: '{B}' }) {
   const zl = d.zhongliang.key;
   const mf = moveFirst(zl, ch.blockKey);
   const pl = palace(result.debug.A, result.debug.B, zl);
+
+  /* 配偶星只看使用者自己的盤（男看財星、女看官殺），跟{B}是誰無關。
+     沒填性別就整段不出現——寧可少一段，也不要挑一邊亂算給人看。
+     籤詩的挑法跟 copy.js 一致：同一組生日永遠抽到同一句。 */
+  const sp = (gender === 'male' || gender === 'female')
+    ? spouseStar(fromDebug(result.debug.A), gender === 'male')
+    : null;
+  const spPoem = sp
+    ? sp.poems[((seed ^ Math.imul(67, 2654435761)) >>> 0) % sp.poems.length]
+    : null;
 
   const ev = eventsFor(result, b.label)
     .map((t, i) => (TIMELINE[i] || '同時，') + t);   // 佔位符留給出口統一替換
@@ -347,6 +362,11 @@ function report(result, names = { A: '你', B: '{B}' }) {
     { part: P3, title: '你要的，和{B}要的，是同一種嗎？',
       body: pl.body },
     { part: P3, title: '在{B}面前，你為什麼會變得不像自己？',   body: wrap('blind', svPick(SELF_BLIND, zl, names), seed, 7) },
+    /* 配偶星。只有填了性別才算得出來——男看財星、女看官殺。
+       放在第三部的最後：前一段講你在{B}面前的變形，
+       接著問「這樣的吸引讓你輕鬆還是費力」，是同一個問題的下一層。 */
+    ...(sp ? [{ part: P3, title: '你被吸引的那一型，會讓你輕鬆還是費力？',
+                body: sp.core, poem: spPoem }] : []),
 
     { part: P4, title: '你們想要的愛情，真的是同一種嗎？',     body: wrap('values', svPick(VALUES, d.changdu.key, names), seed, 47) },
     { part: P4, title: '為什麼同一件事，你們總是想得不一樣？', body: wrap('reading', svPick(READING, d.wendu.key, names), seed, 59) }

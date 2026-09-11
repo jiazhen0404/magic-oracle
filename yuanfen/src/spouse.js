@@ -55,6 +55,18 @@ function spouseHits(P, isMale) {
   return hits;
 }
 
+/* result.debug.A／B 的形狀跟 pillars() 不一樣（那邊是扁的索引），
+   轉成同一個形狀，讓 report.js 不必知道兩種格式。 */
+function fromDebug(d) {
+  const P = {
+    year:  { gan: d.yearGan,  zhi: d.yearZhi },
+    month: { gan: d.monthGan, zhi: d.monthZhi },
+    day:   { gan: d.dayGan,   zhi: d.dayZhi },
+  };
+  if (d.hourGan !== undefined) P.hour = { gan: d.hourGan, zhi: d.hourZhi };
+  return P;
+}
+
 /**
  * @param P       pillars() 的回傳值
  * @param isMale  true 男、false 女。不指定時請不要呼叫這支，整段不顯示
@@ -79,4 +91,4 @@ function spouseStar(P, isMale) {
   };
 }
 
-module.exports = { spouseStar, spouseElement, spouseHits };
+module.exports = { spouseStar, spouseElement, spouseHits, fromDebug };
