@@ -193,7 +193,10 @@ async function submitSurvey(request, env) {
 
 const YF_TTL = 60 * 60 * 24 * 365;                       // 保存 12 個月
 const YF_RATING = ['滿準的', '有點像', '不太對'];
-const YF_PART = ['tempo', 'initiator', 'shape', 'chance'];
+/* 每一項都對應到免費頁上使用者真的看得到、判斷得了的一個判讀，
+   而且對應到一個具體的模組或分數——某一項特別多就知道要改哪裡。
+   三個維度刻意拆開：全部塞進一個「相處狀況」，收到回報也不知道是哪一項在錯。 */
+const YF_PART = ['band', 'chance', 'tempo', 'initiator', 'wendu', 'zhongliang', 'changdu'];
 
 /* 生日只留年月日與時辰，而且要是合理的值——不合理就整筆退掉，
    不要把髒資料存進去，之後重跑會被它污染。 */
@@ -223,8 +226,12 @@ async function yuanfenFeedback(request, env) {
   const rating = String(body.rating || '');
   if (!YF_RATING.includes(rating)) return json({ ok: false, error: 'bad_rating' }, 400);
 
-  const wrongPart = body.wrong_part == null ? null : String(body.wrong_part);
-  if (wrongPart !== null && !YF_PART.includes(wrongPart)) return json({ ok: false, error: 'bad_part' }, 400);
+  /* 可複選。舊版送單一字串，這裡兩種都收，一律存成陣列，
+     之後統計不用再判斷型別。 */
+  const raw = body.wrong_part == null ? [] : (Array.isArray(body.wrong_part) ? body.wrong_part : [body.wrong_part]);
+  const wrongPart = [...new Set(raw.map(String))].filter(Boolean);
+  if (wrongPart.length > YF_PART.length) return json({ ok: false, error: 'bad_part' }, 400);
+  for (const p of wrongPart) if (!YF_PART.includes(p)) return json({ ok: false, error: 'bad_part' }, 400);
 
   const str = (v, max = 40) => String(v == null ? '' : v).slice(0, max);
   const num = v => (Number.isFinite(Number(v)) ? Number(v) : null);
@@ -277,7 +284,9 @@ async function yuanfenFeedbackAdmin(request, env) {
   const byPart = {};
   for (const r of rows) {
     byRating[r.rating] = (byRating[r.rating] || 0) + 1;
-    if (r.wrongPart) byPart[r.wrongPart] = (byPart[r.wrongPart] || 0) + 1;
+    /* wrongPart 現在是陣列；舊紀錄是字串，兩種都要算得到 */
+    const parts = Array.isArray(r.wrongPart) ? r.wrongPart : (r.wrongPart ? [r.wrongPart] : []);
+    for (const p of parts) byPart[p] = (byPart[p] || 0) + 1;
   }
   return json({ ok: true, total: rows.length, byRating, byPart, rows });
 }

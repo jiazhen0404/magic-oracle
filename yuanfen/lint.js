@@ -11,6 +11,8 @@
    ========================================================================= */
 
 const copy = require('./src/copy');
+const { fillNames } = require('./src/fill');
+const NAMES = { A: '你', B: '他' };   // 用預設稱謂還原，字數與使用者看到的一致
 const SCENES = copy.SCENES || ['交往'];
 
 /* ---------- 概念群：語意重複的偵測基礎 ---------- */
@@ -26,6 +28,18 @@ const CONCEPTS = {
   距離:   ['距離', '疏遠', '變淡', '沒有下文', '失聯', '斷'],
   重複:   ['反覆', '又回來', '再發生', '循環', '每隔一段時間'],
   選擇:   ['選擇', '決定', '主動權', '取決於'],
+};
+
+/* ---------- 各軸專屬詞彙（R7 用）----------
+   只列該軸專屬、其他軸不該碰的字。字表刻意收得緊：
+   「越接觸越」是溫度在講合不合、「先開口」是重量在講力氣對等，
+   兩者都被誤判過，所以不列入。寧可漏抓，不要製造假陽性——
+   規則一旦開始亂叫，下一步就是被忽略。 */
+const AXIS_WORDS = {
+  節奏:   ['一見', '燒起來', '見面就', '一拍即合', '轟轟烈烈', '忽冷忽熱',
+           '似曾相識', '日久', '慢慢熟', '怎麼開始', '一開始就強烈'],
+  主動方: ['先動心', '先出手', '誰先主動'],
+  機會:   ['走到一起的機會', '成的機會', '機會偏低', '機會很高', '翻盤'],
 };
 
 /* ---------- 句式偵測 ---------- */
@@ -96,6 +110,22 @@ const RULES = [
     }
   },
   {
+    id: 'R7', name: 'core 不得對其他軸下斷言',
+    why: '每個軸只負責自己那件事。分數帶講份量、節奏講怎麼開始的——'
+       + '兩邊各寫一句就會撞：這條規則剛寫出來時，8.8% 的盤會讀到'
+       + '「一見傾心」配上「你們不是一見面就燒起來的那種」，相鄰兩段直接打架。'
+       + '緣暖改成只講份量之後降到 0，這條就轉成會擋下建置的規則，守住它。',
+    /* 只管 core。core 是「分數的文字化」，是固定的判斷句，本來就該只講自己那一軸；
+       open／close 是包裝與建議，提到別的軸通常是對比或延伸，硬擋會誤傷——
+       實例：緣暖的 close「不用羨慕那些一見鍾情的人」講的是別人，不是這一對。 */
+    check: ({ core }) => {
+      for (const [axis, words] of Object.entries(AXIS_WORDS))
+        for (const w of words)
+          if (core.includes(w)) return 'core 講到【' + axis + '】的「' + w + '」';
+      return null;
+    }
+  },
+  {
     id: 'R6', name: '字面重複（6 字以上）',
     why: '最基本的一條，但只能抓字面，抓不到換句話說。',
     check: ({ open, core, close }) => {
@@ -133,7 +163,11 @@ function lint() {
       for (const open of v.open)
         for (const close of v.close) {
           combos++;
-          const ctx = { open, core: copy.coreOf(v, scene), close };
+          /* 檢查使用者實際讀到的字，不是含佔位符的樣板。
+             {B} 是三個字元，不還原的話「{B}的退讓」會被 6-gram 判成重複，
+             但使用者看到的是「他的退讓」，只有四個字，根本不會觸發。
+             規則的門檻是照人眼訂的，就要餵給它人眼看到的東西。 */
+          const ctx = fillNames({ open, core: copy.coreOf(v, scene), close }, NAMES);
           for (const r of RULES) {
             const msg = r.check(ctx);
             if (msg) found.push({ rule: r.id, dim, key, open, msg });
@@ -144,7 +178,7 @@ function lint() {
   for (const b of copy.TOTAL_BANDS)
     for (const close of b.close) {
       combos++;
-      const ctx = { open: '', core: b.core, close };
+      const ctx = fillNames({ open: '', core: b.core, close }, NAMES);
       for (const r of RULES) {
         if (r.id === 'R1' || r.id === 'R2') continue;
         const msg = r.check(ctx);
@@ -153,6 +187,9 @@ function lint() {
     }
 
   console.log('檢查組合數：' + combos);
+  const WARN = new Set(RULES.filter(r => r.warn).map(r => r.id));
+  const fails = found.filter(f => !WARN.has(f.rule));
+  const warns = found.filter(f => WARN.has(f.rule));
   if (!found.length) { console.log('全部通過 ✓'); return 0; }
 
   const byRule = {};
@@ -171,9 +208,18 @@ function lint() {
                   + (f.open ? '　開場「' + f.open + '」' : ''));
     }
   }
-  console.log('\n共 ' + found.length + ' 處（去重後 '
-              + new Set(found.map(f => f.rule + f.dim + f.key + f.msg)).size + ' 類）');
-  return found.length;
+  /* 失敗與警告分開講，而且只有失敗會讓離開碼變成 1。
+     警告是「已知、已交出規格、正在處理」的問題；混在一起會讓整支檢查
+     長期是紅的，久了就沒有人看——那比沒有檢查更糟。 */
+  const uniq = a => new Set(a.map(f => f.rule + f.dim + f.key + f.msg)).size;
+  console.log('');
+  if (fails.length) console.log('✗ 失敗 ' + fails.length + ' 處（去重後 ' + uniq(fails) + ' 類）');
+  else console.log('失敗 0 處 ✓');
+  if (warns.length) {
+    console.log('△ 警告 ' + warns.length + ' 處（去重後 ' + uniq(warns) + ' 類）'
+                + '——已知問題，改寫規格見 docs/COPY-FIX-BAND-WARM.md');
+  }
+  return fails.length;
 }
 
 if (require.main === module) process.exitCode = lint() ? 1 : 0;

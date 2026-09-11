@@ -26,7 +26,9 @@ const { initiator } = require('./initiator');
 const { chance } = require('./chance');
 const { moveFirst } = require('./movefirst');
 const { palace } = require('./palace');
+const { wrap } = require('./wrap');
 const { encounter } = require('./encounter');
+const { fillNames } = require('./fill');
 
 /* ---------- 1. 這段緣現在停在哪裡 ---------- */
 
@@ -86,39 +88,39 @@ const TIME_CLOSE = {
 /* ---------- 5. 可以觀察的變化 ---------- */
 
 const WATCH = {
-  bihe: ['他開始說「我需要你」而不是「我可以」',
-         '遇到難事時他先找你，而不是自己處理完才講',
-         '他會問你的意見，而且真的採納',
+  bihe: ['{B}開始說「我需要你」而不是「我可以」',
+         '遇到難事時{B}先找你，而不是自己處理完才講',
+         '{B}會問你的意見，而且真的採納',
          '你們開始有共同的計畫，不只是各自的行程',
-         '他願意在你面前狀態不好',
-         '他會主動提起你們之間的事，而不是等你開口',
-         '你們吵完之後他不會消失'],
-  a_sheng_b: ['他開始注意到你的情緒，而不是等你說',
-              '他主動安排事情，不再都由你決定',
-              '他問你「你想要什麼」而且等你回答完',
-              '你少做一點的時候，他有察覺',
-              '他會為你調整他的節奏，哪怕只是一次',
-              '他記得你提過但沒重複提的事',
-              '他開始問「這樣你會不會累」'],
-  b_sheng_a: ['你開始說得出他為你做了哪些具體的事',
-              '他不再只是配合，也會提出自己想要的',
-              '他抱怨的時候你聽得進去，而不是覺得他在鬧',
-              '你們之間開始有他先被照顧的時候',
-              '他不用暗示，可以直接說',
-              '他拒絕你的時候不會過度解釋',
-              '他開始有自己的安排，而不是全部配合你'],
-  a_ke_b: ['他開始把話講完，而不是說到一半算了',
-           '他反對的時候你沒有立刻解釋為什麼你是對的',
-           '有些決定最後照他的走，而且你沒有不高興',
-           '他不再用「都可以」回答',
-           '你們爭執之後他還願意再提同一件事',
-           '他會說「我不這樣覺得」而不是沉默',
-           '他開始有情緒，而不是只有配合'],
+         '{B}願意在你面前狀態不好',
+         '{B}會主動提起你們之間的事，而不是等你開口',
+         '你們吵完之後{B}不會消失'],
+  a_sheng_b: ['{B}開始注意到你的情緒，而不是等你說',
+              '{B}主動安排事情，不再都由你決定',
+              '{B}問你「你想要什麼」而且等你回答完',
+              '你少做一點的時候，{B}有察覺',
+              '{B}會為你調整{B}的節奏，哪怕只是一次',
+              '{B}記得你提過但沒重複提的事',
+              '{B}開始問「這樣你會不會累」'],
+  b_sheng_a: ['你開始說得出{B}為你做了哪些具體的事',
+              '{B}不再只是配合，也會提出自己想要的',
+              '{B}抱怨的時候你聽得進去，而不是覺得{B}在鬧',
+              '你們之間開始有{B}先被照顧的時候',
+              '{B}不用暗示，可以直接說',
+              '{B}拒絕你的時候不會過度解釋',
+              '{B}開始有自己的安排，而不是全部配合你'],
+  a_ke_b: ['{B}開始把話講完，而不是說到一半算了',
+           '{B}反對的時候你沒有立刻解釋為什麼你是對的',
+           '有些決定最後照{B}的走，而且你沒有不高興',
+           '{B}不再用「都可以」回答',
+           '你們爭執之後{B}還願意再提同一件事',
+           '{B}會說「我不這樣覺得」而不是沉默',
+           '{B}開始有情緒，而不是只有配合'],
   b_ke_a: ['你開始把不同意說出口，而不是嗯一聲',
-           '他發現你有意見時會停下來問',
+           '{B}發現你有意見時會停下來問',
            '有些事情最後是照你的意思做的',
            '你不再為了避免爭執而改口',
-           '你們之間開始有他讓步的時候',
+           '你們之間開始有{B}讓步的時候',
            '你講完之後沒有立刻補一句「不過都可以」',
            '你開始覺得講出來沒有想像中可怕']
 };
@@ -129,7 +131,7 @@ const CAUTION = {
   wendu:
     '最容易讓這段關係悄悄變差的，是把日常的不順當成小事。' +
     '你們現在的每一次卡住看起來都不嚴重——一句話的語氣、一個沒接上的反應、一次不想解釋的沉默。' +
-    '但這些東西不會消失，它們會變成「跟他相處有點累」這個總體印象，然後有一天你會發現自己不太想見面，卻講不出理由。' +
+    '但這些東西不會消失，它們會變成「跟{B}相處有點累」這個總體印象，然後有一天你會發現自己不太想見面，卻講不出理由。' +
     '不要等到講得出理由才處理，那時候通常已經累積太多了。另外，也不要把每一次不順都拿出來談，那會變成另一種消耗；' +
     '要處理的是重複出現的那幾種，不是每一件。' +
     '另外一個常見的誤判是把不順歸咎到「最近比較忙」。忙會過去，但那幾種重複出現的卡點不會——它們在你們不忙的時候一樣會出現，只是那時候你們有力氣忽略它。',
@@ -138,14 +140,14 @@ const CAUTION = {
     '你們之間的不對等目前是穩定的，因為有一方持續在讓——但持續在讓的人自己也不一定清楚在讓什麼，只覺得有點悶。' +
     '這種狀態最危險的地方是，它可以維持很久，久到雙方都習慣了，然後在某一件很小的事情上突然崩掉。' +
     '如果你是讓的那個，不要等到受不了才講，那時候講出來的會是控訴不是溝通。' +
-    '如果你是被讓的那個，不要把「他沒說」理解成「他沒事」。' +
-    '還有一件事值得先想：如果有一天讓的那一方真的開口了，另一方的第一反應多半是「你怎麼都沒說」。那句話會讓開口的人更受傷，因為他覺得自己說過很多次，只是說得很小聲。',
+    '如果你是被讓的那個，不要把「{B}沒說」理解成「{B}沒事」。' +
+    '還有一件事值得先想：如果有一天讓的那一方真的開口了，另一方的第一反應多半是「你怎麼都沒說」。那句話會讓開口的人更受傷，因為{B}覺得自己說過很多次，只是說得很小聲。',
   changdu:
     '最容易被忽略的，是這段關係需要主動維持。' +
     '你們現在相處得不錯，所以很容易以為它會自己延續下去。但你們之間沒有那種天然的黏著——' +
     '沒有共同的人生節點、沒有非見不可的理由，一旦生活忙起來，聯絡會自然變少，而變少之後不會自己回來。' +
     '不要用「我們感情很好」當作不用經營的理由。也不要在發現變淡之後才用力補，' +
-    '那種補法通常會嚇到對方，因為他不覺得有什麼變了。'
+    '那種補法通常會嚇到對方，因為{B}不覺得有什麼變了。'
 };
 
 /* ---------- 7. 你現在適合怎麼做 ---------- */
@@ -153,33 +155,33 @@ const CAUTION = {
 const ADVICE = {
   bihe:
     '你們的問題不是誰對誰錯，是太客氣。兩個人都太能自己處理事情，所以沒有人需要對方。' +
-    '接下來你可以做的，是讓他看到你不好的時候——不是抱怨，是讓他知道你也會撐不住。' +
+    '接下來你可以做的，是讓{B}看到你不好的時候——不是抱怨，是讓{B}知道你也會撐不住。' +
     '這件事對你可能比較難，因為你習慣把自己整理好再出現。但關係要往前，需要有人先不整理。' +
     '從小事開始就好，不用等到真的有大事。' +
-    '如果一時做不到，退一步的版本是：下次他問你「還好嗎」的時候，不要說「還好」。' +
+    '如果一時做不到，退一步的版本是：下次{B}問你「還好嗎」的時候，不要說「還好」。' +
     '另外，這種關係最怕的不是吵架是失聯。你們之間沒有非見不可的理由，所以一旦有人開始忙，聯絡會自然斷掉，而斷掉之後兩邊都不會覺得是誰的錯——那才是真正麻煩的地方。',
   a_sheng_b:
-    '你要做的不是給少一點，是讓他看見你在給。這兩件事不一樣——減量會讓他覺得你變了，說出來才會讓他理解。' +
-    '你可以從最近一件你調整過的事講起，用平的語氣，不要帶委屈。「這件事我本來想這樣，後來配合你改了」，講完就好，不用要求他做什麼。' +
-    '他需要的是資訊，不是道歉。給他幾次這樣的資訊之後，你會知道他是沒發現，還是不在意——那才是真正要判斷的事。' +
-    '這件事要重複做幾次才有用，一次他會當成你心情不好。',
+    '你要做的不是給少一點，是讓{B}看見你在給。這兩件事不一樣——減量會讓{B}覺得你變了，說出來才會讓{B}理解。' +
+    '你可以從最近一件你調整過的事講起，用平的語氣，不要帶委屈。「這件事我本來想這樣，後來配合你改了」，講完就好，不用要求{B}做什麼。' +
+    '{B}需要的是資訊，不是道歉。給{B}幾次這樣的資訊之後，你會知道{B}是沒發現，還是不在意——那才是真正要判斷的事。' +
+    '這件事要重複做幾次才有用，一次{B}會當成你心情不好。',
   b_sheng_a:
-    '你要做的是把他做的事講出來，而且要具體。「謝謝你」對他沒有用，「你昨天特地繞過來接我，我知道」才有用。' +
-    '他要的不是感謝，是確認自己沒有白做。' +
-    '另外，開始問他想要什麼，並且真的等他答完。他習慣說「都可以」，你要有耐心讓他從「都可以」走到真的講出一件事。' +
-    '那件事不用多大，重點是這段關係開始有他的位置。' +
-    '如果你不確定他做了什麼，那本身就是答案——回去想想最近哪些事情你沒費力就完成了。',
+    '你要做的是把{B}做的事講出來，而且要具體。「謝謝你」對{B}沒有用，「你昨天特地繞過來接我，我知道」才有用。' +
+    '{B}要的不是感謝，是確認自己沒有白做。' +
+    '另外，開始問{B}想要什麼，並且真的等{B}答完。{B}習慣說「都可以」，你要有耐心讓{B}從「都可以」走到真的講出一件事。' +
+    '那件事不用多大，重點是這段關係開始有{B}的位置。' +
+    '如果你不確定{B}做了什麼，那本身就是答案——回去想想最近哪些事情你沒費力就完成了。',
   a_ke_b:
-    '你要做的是把說話的空間讓出來，而不是問他有沒有意見。' +
-    '他不會在你問的時候說，因為那個時機你已經有答案了。真正有用的是在你還沒決定之前就問，並且在他講完之後不要立刻反駁。' +
-    '你可能會覺得他講的沒道理，那就先不要評論，隔一天再談。' +
-    '這件事會很不習慣，因為你的判斷通常是對的——但這段關係現在需要的不是更好的決定，是他覺得自己講的話有用。' +
+    '你要做的是把說話的空間讓出來，而不是問{B}有沒有意見。' +
+    '{B}不會在你問的時候說，因為那個時機你已經有答案了。真正有用的是在你還沒決定之前就問，並且在{B}講完之後不要立刻反駁。' +
+    '你可能會覺得{B}講的沒道理，那就先不要評論，隔一天再談。' +
+    '這件事會很不習慣，因為你的判斷通常是對的——但這段關係現在需要的不是更好的決定，是{B}覺得自己講的話有用。' +
     '如果你發現自己每次都想「可是我是對的」，那正是這段關係現在最該處理的地方。',
   b_ke_a:
     '你要做的是開口，而且要在還不生氣的時候開口。' +
     '你習慣把不同意吞回去，等到吞不下的時候才講，那時候講出來的一定會變成爭吵，然後你會得到「你怎麼突然這樣」的反應，接著更不想講。' +
     '從一件很小、你其實可以讓但決定不讓的事開始。不用解釋太多，講「這個我不太想」就好。' +
-    '他不會因為這樣就離開，這段關係比你以為的禁得起。'
+    '{B}不會因為這樣就離開，這段關係比你以為的禁得起。'
 };
 
 /* ---------- 3. 緣的密度（僅雙方給時辰） ---------- */
@@ -191,7 +193,7 @@ const MIDU = {
     '所以別人的評價對你們參考價值不高。這一層的穩定會讓你們在關係遇到外部壓力時比別人撐得久，' +
     '因為你們有一個誰都進不來的空間。' +
     '另外，這一層好的人通常低估了它的價值——你們以為每對情侶回家都是這樣，其實不是。' +
-    '講完之後他可能會愣一下，那個愣不是不高興，是他第一次收到真實的資訊。',
+    '講完之後{B}可能會愣一下，那個愣不是不高興，是{B}第一次收到真實的資訊。',
   sanhe:
     '私下的你們比人前更靠近。獨處的時間對你們是加分的，越單獨相處越自然，話題也越深。' +
     '這表示這段關係的基礎在兩個人之間，不是靠共同朋友、共同活動或外在條件撐著。' +
@@ -283,14 +285,24 @@ function weakest(dims) {
 
 /**
  * @param result yuanfen() 的輸出
- * @param names  { A:'你', B:'他' }
+ * @param names  { A:'你', B:'{B}' }
  */
-function report(result, names = { A: '你', B: '他' }) {
+function report(result, names = { A: '你', B: '{B}' }) {
   const d = result.dimensions;
   const b = band(result.total);
   const weak = weakest(d);
   const strong = strongest(d);
   // 敘事由盤面格局決定，不由分數排名決定
+  /* 由四柱字串推種子：同一組生日永遠得到同一批框架句 */
+  const dA = result.debug.A, dB = result.debug.B;
+  const seedSrc = [dA.year, dA.month, dA.day, dA.hour, dB.year, dB.month, dB.day, dB.hour]
+    .filter(Boolean).join('');
+  let seed = 2166136261;
+  for (let i = 0; i < seedSrc.length; i++) {
+    seed ^= seedSrc.charCodeAt(i);
+    seed = Math.imul(seed, 16777619) >>> 0;
+  }
+
   const nar = narrate(d);
   const tp = tempo(d, result.cross);
   const en = encounter(d.changdu.key, tp.key);
@@ -301,14 +313,14 @@ function report(result, names = { A: '你', B: '他' }) {
   const pl = palace(result.debug.A, result.debug.B, zl);
 
   const ev = eventsFor(result, b.label)
-    .map((t, i) => (TIMELINE[i] || '同時，') + t.replace(/\{A\}/g, names.A));
+    .map((t, i) => (TIMELINE[i] || '同時，') + t);   // 佔位符留給出口統一替換
   const split = Math.min(2, ev.length);
   const eventsNear  = TIME_OPEN[b.label] + ev.slice(0, split).join('');
   const eventsLater = ev.slice(split).join('') + TIME_CLOSE[b.label];
 
   const P1 = '第一部分｜你們是怎麼開始的';
   const P2 = '第二部分｜你們現在的狀態';
-  const P3 = '第三部分｜他與你，各自在這段關係裡';
+  const P3 = '第三部分｜{B}與你，各自在這段關係裡';
   const P4 = '第四部分｜你們為什麼會這樣相處';
   const P5 = '第五部分｜接下來可能怎麼走';
   const P6 = '第六部分｜現在，你可以怎麼做';
@@ -317,45 +329,45 @@ function report(result, names = { A: '你', B: '他' }) {
     { part: P1, title: '你們的緣分，究竟有多深？', table: pillarTable(result),
       note: '立春時刻由太陽黃經實算，不是固定 2/4；月柱由節氣定界。本版計分只用年、日、時三柱，月柱列出供對照。' },
     { part: P1, title: '你們是怎麼開始的？',
-      body: tp.intro + tp.arc + tp.note },
+      body: wrap('tempo', tp.intro + tp.arc + tp.note, seed, 41) },
     { part: P1, title: '是誰先開始喜歡上誰的？',
       body: ini.body },
     { part: P1, title: '你們是在什麼樣的場合遇上的？',
       body: en.place + en.timing },
-    { part: P2, title: '你們現在，到底算是什麼？', body: nar.now },
-    { part: P2, title: '明明有感覺，為什麼就是差那一步？',     body: nar.weak },
-    { part: P2, title: '你們之間，最值得珍惜的是什麼？',     body: nar.strong },
+    { part: P2, title: '你們現在，到底算是什麼？', body: wrap('now', nar.now, seed, 29) },
+    { part: P2, title: '明明有感覺，為什麼就是差那一步？',     body: wrap('weak', nar.weak, seed, 31) },
+    { part: P2, title: '你們之間，最值得珍惜的是什麼？',     body: wrap('strong', nar.strong, seed, 37) },
     { part: P2, title: '這段曖昧，走到一起的機會有多大？',
       body: ch.line + ch.note + ch.block + ch.key },
 
-    { part: P3, title: '他習慣用什麼方式靠近一個人？', body: position(zl, names) },
-    { part: P3, title: '你喜歡的他，和真實的他一樣嗎？',       body: appearance(d.wendu.key, names) },
-    { part: P3, title: '如果真的在一起，他看重的會是什麼？',     body: attitude(d.changdu.key, names) },
-    { part: P3, title: '那你呢？你真正需要的是什麼樣的愛？',   body: svPick(SELF_POSITION, zl, names) },
-    { part: P3, title: '你要的，和他要的，是同一種嗎？',
+    { part: P3, title: '{B}習慣用什麼方式靠近一個人？', body: wrap('position', position(zl, names), seed, 3) },
+    { part: P3, title: '你喜歡的{B}，和真實的{B}一樣嗎？',       body: wrap('appearance', appearance(d.wendu.key, names), seed, 53) },
+    { part: P3, title: '如果真的在一起，{B}看重的會是什麼？',     body: wrap('attitude', attitude(d.changdu.key, names), seed, 43) },
+    { part: P3, title: '那你呢？你真正需要的是什麼樣的愛？',   body: wrap('self', svPick(SELF_POSITION, zl, names), seed, 5) },
+    { part: P3, title: '你要的，和{B}要的，是同一種嗎？',
       body: pl.body },
-    { part: P3, title: '在他面前，你為什麼會變得不像自己？',   body: svPick(SELF_BLIND, zl, names) },
+    { part: P3, title: '在{B}面前，你為什麼會變得不像自己？',   body: wrap('blind', svPick(SELF_BLIND, zl, names), seed, 7) },
 
-    { part: P4, title: '你們想要的愛情，真的是同一種嗎？',     body: svPick(VALUES, d.changdu.key, names) },
-    { part: P4, title: '為什麼同一件事，你們總是想得不一樣？', body: svPick(READING, d.wendu.key, names) }
+    { part: P4, title: '你們想要的愛情，真的是同一種嗎？',     body: wrap('values', svPick(VALUES, d.changdu.key, names), seed, 47) },
+    { part: P4, title: '為什麼同一件事，你們總是想得不一樣？', body: wrap('reading', svPick(READING, d.wendu.key, names), seed, 59) }
   ];
 
   if (d.midu) {
     sections.push({ part: P4, needHour: true,
-      title: '只有你們兩個人的時候，是什麼樣子？', body: MIDU[d.midu.key] });
+      title: '只有你們兩個人的時候，是什麼樣子？', body: wrap('midu', MIDU[d.midu.key], seed, 11) });
   }
 
   sections.push(
     { part: P5, title: '近期，你們之間可能先出現什麼變化？', body: eventsNear },
     { part: P5, title: '再往後，你們有機會走到哪裡？',       body: eventsLater },
-    { part: P5, title: '他有在往前嗎？從哪裡看得出來？', list: WATCH[zl] },
-    { part: P5, title: '什麼事，最容易讓你們就這樣停住？',     body: CAUTION[weak] },
+    { part: P5, title: '{B}有在往前嗎？從哪裡看得出來？', list: WATCH[zl] },
+    { part: P5, title: '什麼事，最容易讓你們就這樣停住？',     body: wrap('caution', CAUTION[weak], seed, 13) },
 
     { part: P6, title: '接下來，該由誰先開口？',
       body: mf.who + mf.how },
-    { part: P6, title: '如果你想往前一步，現在可以怎麼做？',   body: ADVICE[zl] },
-    { part: P6, title: '現在最不適合做的，是哪件事？',       body: dont(zl, names) },
-    { part: P6, title: '關於這段緣分，你最該記住的一件事。', body: svPick(KEEP, b.label, names) }
+    { part: P6, title: '如果你想往前一步，現在可以怎麼做？',   body: wrap('advice', ADVICE[zl], seed, 17) },
+    { part: P6, title: '現在最不適合做的，是哪件事？',       body: wrap('dont', dont(zl, names), seed, 19) },
+    { part: P6, title: '關於這段緣分，你最該記住的一件事。', body: wrap('keep', svPick(KEEP, b.label, names), seed, 23) }
   );
 
   // 每段掛上「這一段的重點」
@@ -364,11 +376,18 @@ function report(result, names = { A: '你', B: '他' }) {
                 midu: d.midu ? d.midu.key : null };
   sections.forEach(s => { s.takeaway = takeaway(s.title, ctx); });
 
+  /* ★ 替換要在去重之前。
+     去重用的是 8 字滑動視窗，而 {B} 佔三個字元、「他」只佔一個——
+     不先還原的話，同一句話的比對字串會從 11 字變成 13 字，
+     視窗數從 4 個變成 6 個，變得比原本更容易命中，砍掉不該砍的句子。
+     門檻是照人眼訂的，就要餵給它人眼看到的東西。 */
+  const sec = fillNames(sections, names);
+
   /* 重點句多半就是段落的收尾。同一句話在內文與重點框各出現一次，
      讀起來像填充而不是強調——把內文「結尾那一句」拿掉，讓它只出現在框裡。
      只動最後一句：中間的句子常帶著別的資訊，整句砍掉會留下孤句。 */
   const norm = t => t.replace(/[，。；：—「」（）]/g, '');
-  sections.forEach(s => {
+  sec.forEach(s => {
     if (!s.takeaway || !s.body) return;
     const parts = s.body.split('。').filter(Boolean);
     if (parts.length < 4) return;                     // 太短的段落不動，砍掉會留孤句
@@ -384,13 +403,14 @@ function report(result, names = { A: '你', B: '他' }) {
       s.body = kept.join('。') + '。';
   });
 
-  const chars = sections.reduce((n, s) => {
+  /* 字數在替換之後算 */
+  const chars = sec.reduce((n, s) => {
     if (s.body) return n + [...s.body.replace(/\s/g, '')].length;
     if (s.list) return n + s.list.reduce((m, x) => m + [...x].length, 0);
     return n;                       // 表格不計入字數
   }, 0);
 
-  return { sections, chars };
+  return { sections: sec, chars };
 }
 
 module.exports = { report, pillarTable, NOW_BAND, NOW_WEAK, NOW_STRONG, WATCH, CAUTION, ADVICE, MIDU };
