@@ -5137,6 +5137,17 @@ function trackUnlock() {
    所以走 localStorage：同源、同一台裝置，生日完全沒有離開這個瀏覽器。 */
 const YF_CTX_KEY = 'yf-last-draw';
 
+/* 使用者這次抽到配偶星的哪一格（weak_strong／mid／none…）。
+   沒填性別就沒有那一段，回空字串。包 try 是因為這只是統計用的附加資料，
+   算不出來不該讓整個問卷連結壞掉。 */
+function spouseCell() {
+  try {
+    const g = $('a-gender').value;
+    if (g !== 'male' && g !== 'female') return '';
+    return spouseStar(fromDebug(last.result.debug.A), g === 'male').cell;
+  } catch (e) { return ''; }
+}
+
 function stashForSurvey() {
   if (!last || !last.birth) return;
   const d = last.result.dimensions, x = last.result.cross || {};
@@ -5144,8 +5155,11 @@ function stashForSurvey() {
     localStorage.setItem(YF_CTX_KEY, JSON.stringify({
       at: Date.now(),
       a: last.birth.a, b: last.birth.b,
-      pron: $('b-pron').value,
-      gender: $('a-gender').value,   // 沒存的話，從問卷回來配偶星那一段會整段不見          // 還原時要跟著回來，不然稱謂會跳回預設
+      pron: $('b-pron').value,       // 還原時要跟著回來，不然稱謂會跳回預設
+      gender: $('a-gender').value,   // 同上；沒存的話，從問卷回來配偶星那一段會整段不見
+      /* 抽到哪一格。只知道「不準」而不知道哪一格不準，就不知道要改哪段文案。
+         沒填性別的人沒有這一段，存空字串，統計時要排除。 */
+      spouse: spouseCell(),
       total: last.view.total, band: last.view.label,
       tempo: last.view.tempo, chance: last.view.chance, initiator: last.view.initiator,
       wendu_key: d.wendu.key, zhongliang_key: d.zhongliang.key, changdu_key: d.changdu.key,

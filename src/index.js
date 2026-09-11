@@ -196,7 +196,10 @@ const YF_RATING = ['滿準的', '有點像', '不太對'];
 /* 每一項都對應到免費頁上使用者真的看得到、判斷得了的一個判讀，
    而且對應到一個具體的模組或分數——某一項特別多就知道要改哪裡。
    三個維度刻意拆開：全部塞進一個「相處狀況」，收到回報也不知道是哪一項在錯。 */
-const YF_PART = ['band', 'chance', 'tempo', 'initiator', 'wendu', 'zhongliang', 'changdu'];
+/* spouse（你會被什麼樣的人吸引）只有填了性別的人看得到那一段，
+   所以它的回報數會天生低於其他七項，比較時要除以「有看到的人數」，
+   不能直接跟別項比絕對值。 */
+const YF_PART = ['band', 'chance', 'tempo', 'initiator', 'wendu', 'zhongliang', 'changdu', 'spouse'];
 
 /* 生日只留年月日與時辰，而且要是合理的值——不合理就整筆退掉，
    不要把髒資料存進去，之後重跑會被它污染。 */
@@ -252,7 +255,13 @@ async function yuanfenFeedback(request, env) {
       band: str(body.band),
       tempo: str(body.tempo),
       chance: str(body.chance),
-      initiator: str(body.initiator)
+      initiator: str(body.initiator),
+      /* 配偶星抽到哪一格，以及使用者的性別。沒填性別的人看不到那一段，
+         兩欄都會是空的，統計時要先排除——不然分母會把沒看過的人算進去。
+         性別在這裡不是為了蒐集個資，是判讀本身需要：男看財星、女看官殺，
+         不知道是哪一邊就無法拿新版重跑對照。 */
+      spouse: str(body.spouse, 20),
+      gender: str(body.gender, 10)
     },
     keys: {
       wendu: str(body.wendu_key, 20),

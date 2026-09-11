@@ -73,9 +73,9 @@ $('csv').onclick=()=>{
 if(PANE==='yuanfen'){
   const q=v=>'"'+String(v==null?'':v).replaceAll('"','""')+'"';
   const bd=b=>b?b.y+'/'+b.m+'/'+b.d+(b.hour!=null?' '+b.hour+'時':''):'';
-  const head=['時間','準嗎','哪裡不對','好用嗎','你的生日','對方生日','分數','等級','節奏','主動方','機會','溫度key','重量key','長度key','合','沖','留言'];
+  const head=['時間','準嗎','哪裡不對','好用嗎','你的生日','對方生日','分數','等級','節奏','主動方','機會','性別','配偶星格','溫度key','重量key','長度key','合','沖','留言'];
   const text='﻿'+[head.join(','),...YF.map(x=>[x.createdAt,x.rating,x.wrongPart,x.usability,bd(x.a),bd(x.b),
-    x.view&&x.view.total,x.view&&x.view.band,x.view&&x.view.tempo,x.view&&x.view.initiator,x.view&&x.view.chance,
+    x.view&&x.view.total,x.view&&x.view.band,x.view&&x.view.tempo,x.view&&x.view.initiator,x.view&&x.view.chance,x.view&&x.view.gender,x.view&&x.view.spouse,
     x.keys&&x.keys.wendu,x.keys&&x.keys.zhongliang,x.keys&&x.keys.changdu,
     x.keys&&x.keys.crossSweet,x.keys&&x.keys.crossHarsh,x.note].map(q).join(','))].join('\n');
   const a=document.createElement('a');
