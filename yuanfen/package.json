@@ -7,6 +7,7 @@
     "build": "node build.js",
     "lint": "node lint.js && node checkglobals.js && node checkwrap.js && node checkspouse.js",
     "accept": "node accept.js",
+    "plain": "node checkplain.js",
     "calibrate": "node calibrate.js"
   },
   "dependencies": {
