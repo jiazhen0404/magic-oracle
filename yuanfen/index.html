@@ -283,6 +283,14 @@ h1{font-family:var(--serif);
   text-align:center; color:var(--gold-soft); font-size:19px; letter-spacing:.16em;
 }
 #r-report td.use{color:var(--muted); font-size:12px; line-height:1.65; padding-left:14px}
+/* 配偶星那一段的籤詩。沿用免費頁 .verdict .poem 的骨架（襯線、金色、行高 2.1），
+   但字級收到 17px——那邊是主角，這裡是判斷句的附註，不該搶戲。 */
+#r-report .spoem{
+  font-family:var(--serif); color:var(--gold);
+  font-size:17px; line-height:2.1; opacity:.9;
+  margin:22px 0 0; padding-left:14px;
+  border-left:2px solid rgba(217,189,130,.35);
+}
 #r-report .takeaway{
   margin-top:26px; padding:18px 20px 18px 50px; position:relative;
   border:1px solid var(--line); border-radius:5px;
@@ -809,6 +817,16 @@ details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offse
       </div>
       <div class="sc-row">
         <select id="a-sc" aria-label="你的出生時辰"></select>
+      </div>
+      <!-- 「你是」只影響配偶星那一段（男看財星、女看官殺），其餘判讀完全不看性別。
+           選不指定就是那一段不出現，不是給一個亂猜的答案。
+           對方的性別不另外問——上面那個他／她的下拉已經是了。 -->
+      <div class="sc-row">
+        <select id="a-gender" aria-label="你的性別">
+          <option value="">你是：不指定</option>
+          <option value="male">你是：男生</option>
+          <option value="female">你是：女生</option>
+        </select>
       </div>
     </div>
     <div class="field">
@@ -1370,6 +1388,9 @@ function yuanfen(a, b) {
       // 以下是盤面細節，供文案取用——不參與計分，只影響措辭
       yearGan: P.year.gan, yearZhi: P.year.zhi,
       dayGan:  P.day.gan,  dayZhi:  P.day.zhi,
+      /* 月柱索引是給旺衰用的。月令在強弱判定裡權重最高，
+         少了它 spouse.js 算不出東西。純輸出，不參與計分。 */
+      monthGan: P.month.gan, monthZhi: P.month.zhi,
       nayinName: nayinName(P.year.gan, P.year.zhi)
     };
     if (P.hour) {
@@ -4054,6 +4075,354 @@ function takeaway(section, ctx) {
 /* ───────────────────────── */
 
 /* =========================================================================
+   未完籤所 · 日主強弱（旺衰）
+   -------------------------------------------------------------------------
+   這一支是整個引擎裡**最沒有標準答案**的一塊。
+
+   RULES.md 規則 11 原本擋著不做，理由是：旺衰各流派吵不完，判反了不是
+   「不夠深」，是整份喜忌全部顛倒——該說助力的會講成耗損。
+   負責人 2026-09-11 決定要做，那就換一種方式守住它：
+
+     1. 每個有爭議的地方都寫成**具名參數**，不藏在算式裡。
+        師資回覆之後改一個數字就好，不用重寫。
+        每個參數都標了對應 docs/ASK-PRACTITIONERS.md 的第幾題。
+
+     2. 算出來的不只是「強」或「弱」，還有**一個分數與一段中和區**。
+        落在中和區＝這盤本來就難判，這時候上層不准下斷言。
+        跟 shape.js 的 GAP = 8 是同一個精神：
+        敢說「看不出來」的判讀，才會讓人相信說「看得出來」的時候是真的。
+
+     3. 從格預設**不做**（ST_FOLLOW_MODE = 'off'）。
+        從格的喜忌與正格完全相反，是十一題裡唯一「答錯會全反」的一題。
+        在師資明確表態之前，少一層深度好過整份反過來。
+
+   分數怎麼來的：
+     把八個字（沒時辰就六個）逐一對日干分類——
+       幫身：同我（比劫）、生我（印星）
+       剋洩耗：我生（食傷）、我剋（財星）、剋我（官殺）
+     天干一個算一份，地支按藏干的本氣／中氣／餘氣給不同份量，
+     月支再乘上月令權重。最後取 幫 ÷（幫＋耗）×100。
+   ========================================================================= */
+
+/* ---------- 可調參數（全部對應 ASK-PRACTITIONERS.md）---------- */
+
+/* Q1　月令權重。月支的份量是其他地支的幾倍。
+   暫定 3：市面多數排盤把月令當「最重要但非一票否決」，3 倍大致等於
+   讓月令佔總分三成上下。師資若答「一票否決」，這裡改成很大的數字
+   （例如 99）即可，不必改算式。 */
+const ST_W_MONTH = 3;
+
+/* Q2　通根三種根的份量。暫定 6：3：1。
+   一開始寫 3：2：1，被最基本的案例打臉——甲寅甲寅甲寅（滿盤木又得令，
+   教科書等級的身強）只算出 53 分的「中和」。原因是寅藏甲丙戊，
+   3：2：1 讓中氣丙加餘氣戊剛好等於本氣甲，幫身與耗身互相抵銷。
+   次要藏干不該有這種份量。6：3：1 接近常見的人元司令比例（六成／三成／一成）。 */
+const ST_ROOT_WEIGHT = { benqi: 6, zhongqi: 3, yuqi: 1 };
+
+/* Q3　虛透（天干透出但地支完全無根）打幾折。暫定五折。 */
+const ST_EMPTY_GAN_RATIO = 0.5;
+
+/* Q4　中和區。落在這個區間就是「這盤難判」，上層不准下配偶星的斷言。
+   暫定 45–55：訂窄一點會講得比較多，但講錯的機率也高。
+   這個區間的實際命中率，calibrate 會印出來。 */
+const ST_MID_BAND = [45, 55];
+
+/* Q5　從格。'off' ＝ 一律按正格判。**改動前務必先看 ASK-PRACTITIONERS.md Q5。** */
+const ST_FOLLOW_MODE = 'off';
+
+/* Q6　調候。'off' ＝ 一律扶抑。 */
+const ST_TIAOHOU_MODE = 'off';
+
+/* ---------- 基礎表 ---------- */
+
+/* 地支藏干，依序為本氣、中氣、餘氣（天干序：甲0 乙1 丙2 丁3 戊4 己5 庚6 辛7 壬8 癸9）
+   子丑寅卯辰巳午未申酉戌亥 */
+const ST_HIDDEN = [
+  [9],          // 子　癸
+  [5, 9, 7],    // 丑　己癸辛
+  [0, 2, 4],    // 寅　甲丙戊
+  [1],          // 卯　乙
+  [4, 1, 9],    // 辰　戊乙癸
+  [2, 6, 4],    // 巳　丙庚戊
+  [3, 5],       // 午　丁己
+  [5, 3, 1],    // 未　己丁乙
+  [6, 8, 4],    // 申　庚壬戊
+  [7],          // 酉　辛
+  [4, 7, 3],    // 戌　戊辛丁
+  [8, 0],       // 亥　壬甲
+];
+
+const ST_WUXING = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4];   // 木木火火土土金金水水
+const ST_SHENG  = [1, 2, 3, 4, 0];                  // 木生火 火生土 土生金 金生水 水生木
+const ST_KE     = [2, 3, 4, 0, 1];                  // 木剋土 火剋金 土剋水 金剋木 水剋火
+
+const ST_ROOT_ORDER = ['benqi', 'zhongqi', 'yuqi'];
+
+/**
+ * 某個天干對日干是幫身還是剋洩耗
+ * @returns 1 ＝ 幫身（比劫、印星）　-1 ＝ 剋洩耗（食傷、財星、官殺）
+ */
+function stSide(dayGan, gan) {
+  const me = ST_WUXING[dayGan];
+  const it = ST_WUXING[gan];
+  if (it === me) return 1;              // 同我　比劫
+  if (ST_SHENG[it] === me) return 1;    // 生我　印星
+  return -1;                            // 我生／我剋／剋我，都是消耗
+}
+
+/** 這個天干在四柱地支裡有沒有根（同五行即可） */
+function stHasRoot(gan, zhis) {
+  const w = ST_WUXING[gan];
+  return zhis.some(z => ST_HIDDEN[z].some(h => ST_WUXING[h] === w));
+}
+
+/**
+ * 日主強弱
+ * @param P pillars() 的回傳值，hour 可缺
+ * @returns {{ score, band, confident, support, drain, hasHour }}
+ *          score     0–100，越高越強
+ *          band      'strong' | 'mid' | 'weak'
+ *          confident band !== 'mid'。false 時上層不准下斷言
+ */
+function strength(P) {
+  const dayGan = P.day.gan;
+  const hasHour = !!P.hour;
+
+  const zhis = [P.year.zhi, P.month.zhi, P.day.zhi];
+  if (hasHour) zhis.push(P.hour.zhi);
+
+  /* 日干本身不計入——它是被衡量的對象，不是衡量的材料。 */
+  const gans = [P.year.gan, P.month.gan];
+  if (hasHour) gans.push(P.hour.gan);
+
+  let support = 0, drain = 0;
+  const add = (side, amount) => { if (side > 0) support += amount; else drain += amount; };
+
+  /* 天干：一個算一份，虛透打折 */
+  for (const g of gans) {
+    const amount = stHasRoot(g, zhis) ? 1 : ST_EMPTY_GAN_RATIO;
+    add(stSide(dayGan, g), amount);
+  }
+
+  /* 地支：按藏干的本氣／中氣／餘氣給份量，月支再乘月令權重 */
+  const zhiList = [
+    [P.year.zhi, 1],
+    [P.month.zhi, ST_W_MONTH],
+    [P.day.zhi, 1],
+  ];
+  if (hasHour) zhiList.push([P.hour.zhi, 1]);
+
+  for (const [z, mult] of zhiList)
+    ST_HIDDEN[z].forEach((h, i) => {
+      add(stSide(dayGan, h), ST_ROOT_WEIGHT[ST_ROOT_ORDER[i]] * mult);
+    });
+
+  const total = support + drain;
+  const score = total === 0 ? 50 : Math.round(support / total * 1000) / 10;
+
+  const band = score < ST_MID_BAND[0] ? 'weak'
+             : score > ST_MID_BAND[1] ? 'strong'
+             : 'mid';
+
+  return {
+    score, band,
+    confident: band !== 'mid',
+    support: Math.round(support * 10) / 10,
+    drain: Math.round(drain * 10) / 10,
+    hasHour,
+  };
+}
+
+/* ───────────────────────── */
+
+/* =========================================================================
+   未完籤所 · 這段關係對你是滋養還是消耗
+   -------------------------------------------------------------------------
+   六格，依「你目前撐不撐得住」與「你要的類型清不清楚」交叉。
+
+   最要緊的一條：近七成的使用者落在「比較吃力」那一邊。
+   這一格不是壞消息，它回答的是「為什麼我這麼累」——
+   使用者讀完應該覺得「難怪我這麼累」，而不是「原來我命不好」。
+   前者是解釋，後者是判刑。
+
+   另一邊也不寫成「你很幸運」：撐得住只是撐得住，不等於會順利。
+
+   中和那一格不下任何方向的斷言。敢說「看不出來」的判讀，
+   才會讓人相信說「看得出來」的時候是真的。
+   ========================================================================= */
+
+const SPOUSE_COPY = {
+
+  /* 格 1　撐起來吃力 × 對象輪廓清楚　26% */
+  weak_strong: {
+    core: '你多半會被存在感很強的人吸引——那種一出現就佔掉你注意力的。' +
+          '這份吸引是真的，但要接住這樣的人，需要你拿出比平常更多的力氣。' +
+          '兩件事同時成立，不會互相抵消。',
+    poems: [
+      '被吸引跟撐得住，是兩件事。',
+      '你不是不適合，是這件事本來就費力。',
+      '重量是真的，不是你太脆弱。'
+    ]
+  },
+
+  /* 格 2　撐起來吃力 × 對象輪廓模糊　29% */
+  weak_faint: {
+    core: '你想要的那種人，輪廓還沒有很清楚——說得出感覺，說不太出原因。' +
+          '加上你現在的狀態在關係裡多半比較耗力，那份模糊就更難判斷，' +
+          '連自己在猶豫什麼都講不明白。',
+    poems: [
+      '說不上來喜歡{B}哪裡，很正常。',
+      '模糊的未必是{B}，也可能是你要的樣子。',
+      '還沒想清楚之前，累是合理的。'
+    ]
+  },
+
+  /* 格 3　撐得住 × 對象輪廓清楚　11% */
+  strong_strong: {
+    core: '你目前的狀態接得住一段關係，而你偏好的類型也相當明確。' +
+          '該有的底子算是備齊了，只是備齊不等於會走到一起——' +
+          '這一層只說明你有本錢，不說明結果。',
+    poems: [
+      '本錢夠，不代表路已經鋪好。',
+      '你接得住，剩下的是要不要。',
+      '有餘裕的人，選項比較多。'
+    ]
+  },
+
+  /* 格 4　撐得住 × 對象輪廓模糊　12% */
+  strong_faint: {
+    core: '你接得住，這一點不太需要擔心。比較模糊的是你想要什麼——' +
+          '不是沒有偏好，是那個輪廓還沒有成形。' +
+          '所以你現在卡住的地方，多半不在能不能，在想不想得清楚。',
+    poems: [
+      '難的不是能不能，是想不想得明白。',
+      '你有餘裕，只是還沒挑定方向。',
+      '先弄懂自己要什麼，再看對方。'
+    ]
+  },
+
+  /* 格 5　中和，難判　16%　—— 不下任何方向的斷言 */
+  mid: {
+    core: '這一層看不出來。你的狀態剛好落在中間，既不是特別費勁，' +
+          '也不是特別游刃有餘，所以這段關係對你是加分還是負擔，盤上沒有給出方向。' +
+          '卡在中間，本身也是一種狀態。',
+    poems: [
+      '停在中間，也是一個位置。',
+      '看不出來的時候，就先不說。',
+      '沒有既定方向，代表方向由你定。'
+    ]
+  },
+
+  /* 格 6　命中找不到明確的偏好　7% */
+  none: {
+    core: '你的盤裡沒有一個固定的「理想型」。這不代表緣分淡薄，' +
+          '是讓你心動的條件本來就不在既有的設定裡——' +
+          '常見於講不出自己偏好哪一型的人。多半要遇到了才知道。',
+    poems: [
+      '沒有預設，所以什麼都有可能。',
+      '你要的樣子，是遇到之後才長出來的。',
+      '空白不是缺少，是還沒填上。'
+    ]
+  }
+};
+
+/* ───────────────────────── */
+
+/* =========================================================================
+   未完籤所 · 配偶星（這段關係對你是滋養還是消耗）
+   -------------------------------------------------------------------------
+   八字裡「你會被什麼樣的人吸引」看的是配偶星：男命看財星（我剋者）、
+   女命看官殺（剋我者）。配上日主強弱，傳統會判這顆星對你是喜是忌。
+
+   ★ 這一軸最重要的一件事不在程式裡，在文案裡。
+     實測六萬組盤，身弱佔 69%——照傳統寫法，近七成的使用者會讀到
+     「你的正緣會消耗你」。那既傷人又不誠實：身弱財旺描述的是一種
+     關係狀態，不是這個人命不好。
+     所以 spouse-copy.js 把「忌」翻譯成「這段關係會要你付出很多」，
+     判準是讀完該覺得「難怪我這麼累」，不是「原來我命不好」。
+     改這一軸的文案前，先讀 docs/COPY-REQUEST-SPOUSE-STAR.md。
+
+   六格怎麼決定：
+     旺衰落在中和區      → mid（不下助耗的斷言）
+     四柱找不到配偶星    → none
+     其餘                → 身強身弱 × 透干藏支，四格
+
+   兩個「都成立」的情況怎麼取捨：
+     中和 × 無星（約 1.4%）取 none。
+     「找不到配偶星」是一個確定的事實，「強弱難判」是沒有結論——
+     有話可說的時候就不要說沒話可說。
+   ========================================================================= */
+
+
+
+/* 男以財為妻（我剋者）、女以官殺為夫（剋我者）
+   Q10：同性組合一律各自按自己的性別取，不要求使用者自我歸類成
+   「比較男方的那個」——那種問法本身就會冒犯人。
+   而且配偶星在本產品裡講的是「你期待什麼樣的人」，
+   本來就是從自己的命盤看出去的，跟對方是誰無關。
+   詳見 docs/ASK-PRACTITIONERS.md Q10。 */
+function spouseElement(dayGan, isMale) {
+  const me = ST_WUXING[dayGan];
+  if (isMale) return ST_KE[me];                                  // 我剋　財星
+  for (let e = 0; e < 5; e++) if (ST_KE[e] === me) return e;      // 剋我　官殺
+  return me;
+}
+
+/* 掃四柱找配偶星。透干（在天干）比藏支（在地支）明顯。 */
+function spouseHits(P, isMale) {
+  const want = spouseElement(P.day.gan, isMale);
+  const cols = [['year', P.year], ['month', P.month], ['day', P.day]];
+  if (P.hour) cols.push(['hour', P.hour]);
+
+  const hits = [];
+  for (const [col, c] of cols) {
+    if (ST_WUXING[c.gan] === want) hits.push({ col, exposed: true });
+    ST_HIDDEN[c.zhi].forEach((h, rank) => {
+      if (ST_WUXING[h] === want) hits.push({ col, exposed: false, rank });
+    });
+  }
+  return hits;
+}
+
+/* result.debug.A／B 的形狀跟 pillars() 不一樣（那邊是扁的索引），
+   轉成同一個形狀，讓 report.js 不必知道兩種格式。 */
+function fromDebug(d) {
+  const P = {
+    year:  { gan: d.yearGan,  zhi: d.yearZhi },
+    month: { gan: d.monthGan, zhi: d.monthZhi },
+    day:   { gan: d.dayGan,   zhi: d.dayZhi },
+  };
+  if (d.hourGan !== undefined) P.hour = { gan: d.hourGan, zhi: d.hourZhi };
+  return P;
+}
+
+/**
+ * @param P       pillars() 的回傳值
+ * @param isMale  true 男、false 女。不指定時請不要呼叫這支，整段不顯示
+ * @returns {{ cell, core, poem, band, score, hits }}
+ */
+function spouseStar(P, isMale) {
+  const st = strength(P);
+  const hits = spouseHits(P, isMale);
+
+  const cell = hits.length === 0 ? 'none'
+             : !st.confident     ? 'mid'
+             : st.band + '_' + (hits.some(h => h.exposed) ? 'strong' : 'faint');
+
+  const copy = SPOUSE_COPY[cell];
+  return {
+    cell,
+    core: copy.core,
+    poems: copy.poems,
+    band: st.band,
+    score: st.score,
+    hits,
+  };
+}
+
+/* ───────────────────────── */
+
+/* =========================================================================
    未完籤所 · 緣分指數 —— 付費報告組裝
    -------------------------------------------------------------------------
    七個段落，全部模組化。實際模組約 60 段，可組出數萬種報告。
@@ -4066,6 +4435,7 @@ function takeaway(section, ctx) {
      6 需要留意的地方        最低維度
      7 你現在適合怎麼做      重量 key
    ========================================================================= */
+
 
 
 
@@ -4340,8 +4710,12 @@ function weakest(dims) {
 /**
  * @param result yuanfen() 的輸出
  * @param names  { A:'你', B:'{B}' }
+ * @param gender 'male' | 'female' | ''　使用者自己的性別。
+ *               只用在配偶星那一段（男看財星、女看官殺），其餘判讀完全不看。
+ *               空字串＝不指定，那一段整段不出現——寧可少一段，
+ *               也不要隨便挑一邊算給人看。
  */
-function report(result, names = { A: '你', B: '{B}' }) {
+function report(result, names = { A: '你', B: '{B}' }, gender = '') {
   const d = result.dimensions;
   const b = band(result.total);
   const weak = weakest(d);
@@ -4365,6 +4739,16 @@ function report(result, names = { A: '你', B: '{B}' }) {
   const zl = d.zhongliang.key;
   const mf = moveFirst(zl, ch.blockKey);
   const pl = palace(result.debug.A, result.debug.B, zl);
+
+  /* 配偶星只看使用者自己的盤（男看財星、女看官殺），跟{B}是誰無關。
+     沒填性別就整段不出現——寧可少一段，也不要挑一邊亂算給人看。
+     籤詩的挑法跟 copy.js 一致：同一組生日永遠抽到同一句。 */
+  const sp = (gender === 'male' || gender === 'female')
+    ? spouseStar(fromDebug(result.debug.A), gender === 'male')
+    : null;
+  const spPoem = sp
+    ? sp.poems[((seed ^ Math.imul(67, 2654435761)) >>> 0) % sp.poems.length]
+    : null;
 
   const ev = eventsFor(result, b.label)
     .map((t, i) => (TIMELINE[i] || '同時，') + t);   // 佔位符留給出口統一替換
@@ -4401,6 +4785,11 @@ function report(result, names = { A: '你', B: '{B}' }) {
     { part: P3, title: '你要的，和{B}要的，是同一種嗎？',
       body: pl.body },
     { part: P3, title: '在{B}面前，你為什麼會變得不像自己？',   body: wrap('blind', svPick(SELF_BLIND, zl, names), seed, 7) },
+    /* 配偶星。只有填了性別才算得出來——男看財星、女看官殺。
+       放在第三部的最後：前一段講你在{B}面前的變形，
+       接著問「這樣的吸引讓你輕鬆還是費力」，是同一個問題的下一層。 */
+    ...(sp ? [{ part: P3, title: '你被吸引的那一型，會讓你輕鬆還是費力？',
+                body: sp.core, poem: spPoem }] : []),
 
     { part: P4, title: '你們想要的愛情，真的是同一種嗎？',     body: wrap('values', svPick(VALUES, d.changdu.key, names), seed, 47) },
     { part: P4, title: '為什麼同一件事，你們總是想得不一樣？', body: wrap('reading', svPick(READING, d.wendu.key, names), seed, 59) }
@@ -4699,6 +5088,8 @@ buildShichen('b');
    文案裡的對方一律寫成 {B}，由 fill.js 在輸出前換掉。
    下拉只負責決定換成什麼，不影響任何計算。 */
 function names() { return { A: '你', B: $('b-pron').value || '他' }; }
+/* 只給配偶星那一段用。空字串＝不指定＝那一段不出現。 */
+function gender() { return $('a-gender').value || ''; }
 
 $('b-pron').addEventListener('change', () => {
   $('b-label').textContent = $('b-pron').value + '的生日';
@@ -4746,6 +5137,17 @@ function trackUnlock() {
    所以走 localStorage：同源、同一台裝置，生日完全沒有離開這個瀏覽器。 */
 const YF_CTX_KEY = 'yf-last-draw';
 
+/* 使用者這次抽到配偶星的哪一格（weak_strong／mid／none…）。
+   沒填性別就沒有那一段，回空字串。包 try 是因為這只是統計用的附加資料，
+   算不出來不該讓整個問卷連結壞掉。 */
+function spouseCell() {
+  try {
+    const g = $('a-gender').value;
+    if (g !== 'male' && g !== 'female') return '';
+    return spouseStar(fromDebug(last.result.debug.A), g === 'male').cell;
+  } catch (e) { return ''; }
+}
+
 function stashForSurvey() {
   if (!last || !last.birth) return;
   const d = last.result.dimensions, x = last.result.cross || {};
@@ -4753,7 +5155,11 @@ function stashForSurvey() {
     localStorage.setItem(YF_CTX_KEY, JSON.stringify({
       at: Date.now(),
       a: last.birth.a, b: last.birth.b,
-      pron: $('b-pron').value,          // 還原時要跟著回來，不然稱謂會跳回預設
+      pron: $('b-pron').value,       // 還原時要跟著回來，不然稱謂會跳回預設
+      gender: $('a-gender').value,   // 同上；沒存的話，從問卷回來配偶星那一段會整段不見
+      /* 抽到哪一格。只知道「不準」而不知道哪一格不準，就不知道要改哪段文案。
+         沒填性別的人沒有這一段，存空字串，統計時要排除。 */
+      spouse: spouseCell(),
       total: last.view.total, band: last.view.label,
       tempo: last.view.tempo, chance: last.view.chance, initiator: last.view.initiator,
       wendu_key: d.wendu.key, zhongliang_key: d.zhongliang.key, changdu_key: d.changdu.key,
@@ -4908,7 +5314,7 @@ function reveal(a, b) {
     '現在最不適合做的，是哪件事？':             '比「該做什麼」更容易救回一段關係',
     '關於這段緣分，你最該記住的一件事。':       '整份報告收束成一句'
   };
-  const preview = report(last.full, names());
+  const preview = report(last.full, names(), gender());
   // 依部別分組，做成可收合的 <details>；第一組預設展開
   const groups = [];
   preview.sections.forEach(sec => {
@@ -5003,7 +5409,7 @@ $('share-card').addEventListener('click', async () => {
 
 $('u-cta').addEventListener('click', () => {
   if (!last) return;
-  const r = report(last.full, names());
+  const r = report(last.full, names(), gender());
   const box = $('r-report');
   const bodyBox = $('rep-body');
   $('rep-head').textContent = '完整合盤　' + r.chars + ' 字';
@@ -5049,6 +5455,14 @@ $('u-cta').addEventListener('click', () => {
       const p = document.createElement('p');
       p.textContent = sec.body;
       el.appendChild(p);
+    }
+    /* 配偶星那一段附一句籤詩，放在判斷句與「這一段的重點」中間。
+       只有那一段有 poem，其他段跳過。 */
+    if (sec.poem) {
+      const q = document.createElement('p');
+      q.className = 'spoem';
+      q.textContent = sec.poem;
+      el.appendChild(q);
     }
     if (sec.takeaway) {
       const t = document.createElement('p');
@@ -5175,6 +5589,7 @@ function restoreLastDraw() {
     if (typeof v.hour === 'number') { $(p + '-sc').value = String(v.hour); picked[p] = v.hour; }
   };
   put('a', s.a); put('b', s.b);
+  if (s.gender) $('a-gender').value = s.gender;
   if (s.pron) { $('b-pron').value = s.pron; $('b-label').textContent = s.pron + '的生日'; }
   reveal(s.a, s.b);
 }

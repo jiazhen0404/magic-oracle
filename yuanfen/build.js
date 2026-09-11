@@ -7,7 +7,11 @@ const SRC = 'src';
 const ORDER = [
   'fill.js', 'solar.js', 'yuanfen.js', 'flavour.js', 'tempo.js', 'initiator.js', 'chance.js', 'movefirst.js', 'palace.js', 'wrap.js', 'encounter.js', 'copy.js', 'basis.js', 'events.js',
   'other-position.js', 'other-appearance.js', 'other-attitude.js',
-  'dont.js', 'shape.js', 'self-values.js', 'takeaway.js', 'report.js',
+  'dont.js', 'shape.js', 'self-values.js', 'takeaway.js',
+  /* 配偶星三件套要排在 report.js 之前：
+     strength（旺衰）與 spouse-copy（文案）都是 spouse 的材料，
+     spouse 又是 report 的材料。順序錯了會是 undefined，不是報錯。 */
+  'strength.js', 'spouse-copy.js', 'spouse.js', 'report.js',
   'card-text.js', 'card-render.js'
 ];
 

@@ -281,6 +281,9 @@ function yuanfen(a, b) {
       // 以下是盤面細節，供文案取用——不參與計分，只影響措辭
       yearGan: P.year.gan, yearZhi: P.year.zhi,
       dayGan:  P.day.gan,  dayZhi:  P.day.zhi,
+      /* 月柱索引是給旺衰用的。月令在強弱判定裡權重最高，
+         少了它 spouse.js 算不出東西。純輸出，不參與計分。 */
+      monthGan: P.month.gan, monthZhi: P.month.zhi,
       nayinName: nayinName(P.year.gan, P.year.zhi)
     };
     if (P.hour) {

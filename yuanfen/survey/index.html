@@ -127,6 +127,9 @@ body.sent .done{display:block}
         <label class="opt"><input type="checkbox" name="wrong_part" value="wendu"><span>日常相處不是這樣（緣的溫度）</span></label>
         <label class="opt"><input type="checkbox" name="wrong_part" value="zhongliang"><span>誰在付出說反了（緣的重量）</span></label>
         <label class="opt"><input type="checkbox" name="wrong_part" value="changdu"><span>能走多久，判斷不對（緣的長度）</span></label>
+        <!-- 配偶星那一段只有填了性別才會出現，沒填的人看不到，所以這一項
+             不一定適用。文字刻意寫成看得懂的話，不用「配偶星」三個字。 -->
+        <label class="opt"><input type="checkbox" name="wrong_part" value="spouse"><span>我會被什麼樣的人吸引，說得不對</span></label>
       </div>
     </fieldset>
 
@@ -200,6 +203,9 @@ $('f').addEventListener('submit', async e => {
     chance: ctx.chance, initiator: ctx.initiator,
     wendu_key: ctx.wendu_key, zhongliang_key: ctx.zhongliang_key, changdu_key: ctx.changdu_key,
     cross_sweet: ctx.cross_sweet, cross_harsh: ctx.cross_harsh,
+    /* 配偶星抽到哪一格，以及使用者的性別。沒填性別的人兩欄都是空的，
+       統計「這一格準不準」時要先排除他們——他們根本沒看到那一段。 */
+    spouse: ctx.spouse || '', gender: ctx.gender || '',
     rating,
     wrong_part: [...document.querySelectorAll('input[name="wrong_part"]:checked')].map(x => x.value),
     usability: (document.querySelector('input[name="usability"]:checked') || {}).value || '',
