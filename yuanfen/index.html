@@ -393,12 +393,19 @@ h1{font-family:var(--serif);
   .reader-nav{
     position:sticky; bottom:0; margin-top:30px;
     padding:12px 0 calc(12px + env(safe-area-inset-bottom));
-    background:linear-gradient(180deg,rgba(16,11,37,0),rgba(16,11,37,.94) 26%);
+    /* 底色原本只到 94%，還有 6% 會透——捲到一半時，文字會從按鈕底下
+       浮出來，看起來像破版（使用者回報過）。內容其實沒被永久蓋住，
+       捲到底就完整露出來，但「半透明的字壓在按鈕下」讀起來就是壞掉。
+       改成完全不透明，上緣保留短漸層，維持原本柔和收邊的樣子。 */
+    background:linear-gradient(180deg,rgba(16,11,37,0),rgb(16,11,37) 22%);
   }
   .reader-nav button{flex:1; padding:14px 10px}
 }
 @media (max-width:420px){
-  #r-report td.use{display:none}
+  /* 手機藏起「用在哪裡」這一欄是刻意的（窄螢幕放不下），
+     但原本只藏 td 沒藏 th——標題留著、內容不見，變成一個空欄，
+     看起來像壞掉。兩個都要藏。紙本的覆寫在下面也要一起放回來。 */
+  #r-report td.use, #r-report th.use{display:none}
   #r-report td.lab{width:26%}
   #r-report td.p{font-size:18px; letter-spacing:.1em}
 }
@@ -781,7 +788,9 @@ details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offse
   #r-report .takeaway b{color:#555 !important}
   #r-report thead th{background:none !important; color:#555 !important; border-bottom-color:#999 !important}
   #r-report td.p{color:#1a1a1a !important}
-  #r-report td.use{display:table-cell !important}         /* 手機版藏起來的欄位，紙上放得下 */
+  /* 手機版藏起來的欄位，紙上放得下。th 也要一起放回來，
+     不然用手機存成 PDF 會印出一欄沒有標題的說明文字。 */
+  #r-report td.use, #r-report th.use{display:table-cell !important}
   #r-report .cover{display:none !important}
 
   /* 頁首與頁尾的導覽在紙上沒有用 */
