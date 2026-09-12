@@ -391,7 +391,13 @@ function report(result, names = { A: '你', B: '{B}' }, gender = '') {
   );
 
   // 每段掛上「這一段的重點」
-  const ctx = { band: b.label, weak, strong, zl, tempo: tp.name, place: d.changdu.key, ini: ini.label, chance: ch.blockKey, move: zl, palace: pl.aKey,
+  /* ★ 重點句要用「有 GAP 規則」的那個短板，不是單純最低分的那個。
+     weakest(d) 永遠回傳最低的一項；shape.js 則是差距不足 8 分就回 null，
+     內文因此會寫「盤上沒有單一的短板」。兩邊不一致的結果是——
+     內文說沒有短板、底下的重點句卻指名一項，實測 25.5% 的盤會這樣。
+     那正是 RULES.md 規則 8 明令禁止的事，內文遵守了，重點句沒有。
+     weak 本身要留著，底下的 CAUTION[weak] 需要一個值，不能是 null。 */
+  const ctx = { band: b.label, weak: nar.shape.weak, strong, zl, tempo: tp.name, place: d.changdu.key, ini: ini.label, chance: ch.blockKey, move: zl, palace: pl.aKey,
                 wendu: d.wendu.key, changdu: d.changdu.key,
                 midu: d.midu ? d.midu.key : null };
   sections.forEach(s => { s.takeaway = takeaway(s.title, ctx); });

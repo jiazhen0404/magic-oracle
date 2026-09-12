@@ -12,8 +12,11 @@
 
 const T = {
 
-  /* 01 干支表 —— 固定 */
-  table: '算命不是玄學，是把看不見的規律寫成看得懂的表。',
+  /* 01 干支表 —— 這一段刻意不給重點句。
+     原本寫的是「算命不是玄學，是把看不見的規律寫成看得懂的表」，
+     負責人 2026-09-12 決定拿掉。干支表本身就是算式揭露，
+     底下再補一句解釋反而像在替自己辯護。
+     takeaway() 回傳空值時，渲染那一段會整個略過（index.html 的 if (sec.takeaway)）。 */
 
   /* 新增 你們是怎麼開始的 —— 節奏 */
   tempo: {
@@ -264,7 +267,7 @@ const T = {
 function takeaway(section, ctx) {
   const { band, weak, strong, zl, wendu, changdu, midu, tempo, place, ini, chance, move, palace } = ctx;
   const map = {
-    '你們的緣分，究竟有多深？':                 () => T.table,
+    '你們的緣分，究竟有多深？':                 () => '',   // 干支表不給重點句，見上方註解
     '你們是怎麼開始的？':                       () => T.tempo[ctx.tempo],
     '這段曖昧，走到一起的機會有多大？':         () => T.chance[ctx.chance],
     '你要的，和{B}要的，是同一種嗎？':           () => T.palace[ctx.palace],
