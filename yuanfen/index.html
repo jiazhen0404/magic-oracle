@@ -420,6 +420,10 @@ button.draw:hover{background:rgba(217,189,130,.1)}
 button.draw:focus-visible{outline:2px solid var(--gold); outline-offset:3px}
 .err{color:var(--warn); font-size:13px; min-height:1.5em; margin-top:10px}
 .privacy{color:var(--muted); font-size:12px; margin-top:16px; line-height:1.7; opacity:.8}
+/* 現在這一行只剩連結，沒有樣式的話會是瀏覽器預設的藍色底線，
+   在深靛藍底上很突兀也不符合金色識別。 */
+.privacy a{color:var(--gold); text-decoration:none; border-bottom:1px solid rgba(217,189,130,.35); padding-bottom:1px}
+.privacy a:hover{border-bottom-color:var(--gold)}
 .promise{
   margin-top:22px; padding:16px 18px; border:1px solid var(--line-soft); border-radius:5px;
   color:var(--muted); font-size:13px; line-height:1.95;
@@ -859,10 +863,12 @@ details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offse
 
     <button class="btn-img" id="go"><span>開始測算</span></button>
     <p class="err" id="err" role="status"></p>
-    <!-- 2026-09-12 改寫。舊文案寫「除非你主動送出準確度回饋，否則兩組生日不會離開這一頁」，
-         但校準活動開始後，抽籤當下就會把兩組生日存進後台，那句話已經不是事實。
-         行為改了，說法就要跟著改——這一段、條款頁那兩段，三處必須一致。 -->
-    <p class="privacy">不用註冊，不用留 email。測算會把兩組生日記錄下來，用來校準判讀準不準，保留 12 個月後自動刪除。這筆紀錄沒有信箱、姓名，也連不到你是誰。<a href="/privacy/">詳細說明</a></p>
+    <!-- 2026-09-12 兩次改動。先是因為校準活動開始、抽籤當下就會存下兩組生日，
+         舊文案「兩組生日不會離開這一頁」已經不是事實，所以整段改寫；
+         接著負責人決定畫面上不留說明文字，只留連結。
+         ★ 說明本身沒有消失，只是移到條款頁——那一頁的兩段仍然要跟實際行為一致，
+           之後若再改資料怎麼存，privacy/index.html 第 152、163 行要一起改。 -->
+    <p class="privacy"><a href="/privacy/">個資條款</a></p>
     <div class="promise">
       <b>免費的部分不會遮任何一句話</b>
       分數怎麼算的、你們卡在哪裡、接下來往哪個方向走，全部給你，沒有馬賽克也沒有「付費後解鎖」。付費的是更深的一層，不是被藏起來的那一層。
@@ -3926,8 +3932,11 @@ const svPick = (obj, key, names = { A: '你', B: '{B}' }) => {
 
 const T = {
 
-  /* 01 干支表 —— 固定 */
-  table: '算命不是玄學，是把看不見的規律寫成看得懂的表。',
+  /* 01 干支表 —— 這一段刻意不給重點句。
+     原本寫的是「算命不是玄學，是把看不見的規律寫成看得懂的表」，
+     負責人 2026-09-12 決定拿掉。干支表本身就是算式揭露，
+     底下再補一句解釋反而像在替自己辯護。
+     takeaway() 回傳空值時，渲染那一段會整個略過（index.html 的 if (sec.takeaway)）。 */
 
   /* 新增 你們是怎麼開始的 —— 節奏 */
   tempo: {
@@ -4178,7 +4187,7 @@ const T = {
 function takeaway(section, ctx) {
   const { band, weak, strong, zl, wendu, changdu, midu, tempo, place, ini, chance, move, palace } = ctx;
   const map = {
-    '你們的緣分，究竟有多深？':                 () => T.table,
+    '你們的緣分，究竟有多深？':                 () => '',   // 干支表不給重點句，見上方註解
     '你們是怎麼開始的？':                       () => T.tempo[ctx.tempo],
     '這段曖昧，走到一起的機會有多大？':         () => T.chance[ctx.chance],
     '你要的，和{B}要的，是同一種嗎？':           () => T.palace[ctx.palace],
@@ -4952,7 +4961,13 @@ function report(result, names = { A: '你', B: '{B}' }, gender = '') {
   );
 
   // 每段掛上「這一段的重點」
-  const ctx = { band: b.label, weak, strong, zl, tempo: tp.name, place: d.changdu.key, ini: ini.label, chance: ch.blockKey, move: zl, palace: pl.aKey,
+  /* ★ 重點句要用「有 GAP 規則」的那個短板，不是單純最低分的那個。
+     weakest(d) 永遠回傳最低的一項；shape.js 則是差距不足 8 分就回 null，
+     內文因此會寫「盤上沒有單一的短板」。兩邊不一致的結果是——
+     內文說沒有短板、底下的重點句卻指名一項，實測 25.5% 的盤會這樣。
+     那正是 RULES.md 規則 8 明令禁止的事，內文遵守了，重點句沒有。
+     weak 本身要留著，底下的 CAUTION[weak] 需要一個值，不能是 null。 */
+  const ctx = { band: b.label, weak: nar.shape.weak, strong, zl, tempo: tp.name, place: d.changdu.key, ini: ini.label, chance: ch.blockKey, move: zl, palace: pl.aKey,
                 wendu: d.wendu.key, changdu: d.changdu.key,
                 midu: d.midu ? d.midu.key : null };
   sections.forEach(s => { s.takeaway = takeaway(s.title, ctx); });
