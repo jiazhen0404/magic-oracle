@@ -90,6 +90,28 @@ button.send[disabled]{opacity:.4; cursor:default}
 .done a{color:var(--gold); text-decoration:none; border-bottom:1px solid var(--line); padding-bottom:2px}
 body.sent form{display:none}
 body.sent .done{display:block}
+/* 解鎖區。金框跟合盤付費區同一套語言——讓人一眼看出這是「多拿到的東西」。 */
+.unlock{
+  text-align:left; margin:0 0 28px; padding:22px 20px;
+  border:1px solid rgba(217,189,130,.42); border-radius:4px;
+  background:rgba(217,189,130,.05);
+}
+.unlock-tag{
+  font-family:var(--sans); font-size:11.5px; letter-spacing:.24em;
+  color:var(--gold); margin:0 0 10px !important;
+}
+.unlock h3{
+  font-family:var(--serif); font-size:17px; font-weight:400; line-height:1.6;
+  color:var(--gold-soft); margin:0 0 14px; letter-spacing:.04em;
+}
+.unlock p:last-child{
+  color:var(--text, #e8e2d4); font-size:15px; line-height:2; margin:0 !important;
+}
+@media (max-width:420px){
+  .unlock{padding:18px 16px}
+  .unlock h3{font-size:16px}
+  .unlock p:last-child{font-size:14.5px; line-height:1.95}
+}
 .privacy{color:var(--muted); font-size:12px; opacity:.8; line-height:1.75; margin:22px 0 0}
 </style>
 </head>
@@ -104,12 +126,16 @@ body.sent .done{display:block}
   <div class="ctx" id="ctx"><b>你剛才那一盤</b><p id="ctx-text">讀取中…</p></div>
 
   <form id="f">
+    <!-- 2026-09-12 校準活動：從三級改成五級。
+         後端白名單同時保留舊的三個值，不然活動前送出的那些會對不上。 -->
     <fieldset>
-      <legend>整體來說，準嗎？</legend>
-      <div class="opts row">
-        <label class="opt"><input type="radio" name="rating" value="滿準的"><span>滿準的</span></label>
-        <label class="opt"><input type="radio" name="rating" value="有點像"><span>有點像</span></label>
-        <label class="opt"><input type="radio" name="rating" value="不太對"><span>不太對</span></label>
+      <legend>這份合盤有多符合你們現在的真實狀況？</legend>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="rating" value="非常符合"><span>非常符合</span></label>
+        <label class="opt"><input type="radio" name="rating" value="大部分符合"><span>大部分符合</span></label>
+        <label class="opt"><input type="radio" name="rating" value="一半一半"><span>一半一半</span></label>
+        <label class="opt"><input type="radio" name="rating" value="大部分不符合"><span>大部分不符合</span></label>
+        <label class="opt"><input type="radio" name="rating" value="完全不符合"><span>完全不符合</span></label>
       </div>
     </fieldset>
 
@@ -130,7 +156,56 @@ body.sent .done{display:block}
         <!-- 配偶星那一段只有填了性別才會出現，沒填的人看不到，所以這一項
              不一定適用。文字刻意寫成看得懂的話，不用「配偶星」三個字。 -->
         <label class="opt"><input type="checkbox" name="wrong_part" value="spouse"><span>我會被什麼樣的人吸引，說得不對</span></label>
+        <!-- 校準活動補的三項。前八項對應引擎模組，這三項對應付費報告裡
+             講對方與未來的那幾段，原本沒有出口。 -->
+        <label class="opt"><input type="checkbox" name="wrong_part" value="other_person"><span>對方是什麼樣的人，說得不對</span></label>
+        <label class="opt"><input type="checkbox" name="wrong_part" value="future"><span>未來會怎麼發展，說得不對</span></label>
+        <label class="opt"><input type="checkbox" name="wrong_part" value="other" id="wp-other"><span>其他</span></label>
       </div>
+      <textarea id="wrong-other" maxlength="200" placeholder="是哪裡呢？" hidden></textarea>
+    </fieldset>
+
+    <!-- Q3。只在使用者說偏不準時才必填——他要是選「非常符合」，
+         逼他寫「哪裡最不準」本身就不合理，只會換到一句「沒有」。 -->
+    <fieldset id="worst-box" hidden>
+      <legend>如果只能挑一個地方，你覺得哪裡最不準？</legend>
+      <p class="hint">可以直接告訴我們真實情況，不用客氣——我們現在就是想抓出哪裡判斷錯了。</p>
+      <textarea id="worst" maxlength="1000" placeholder="例如：報告說他比較主動，但現實中幾乎都是我主動找他"></textarea>
+    </fieldset>
+
+    <fieldset>
+      <legend>有沒有哪一段讓你覺得特別準？</legend>
+      <p class="hint">選填。知道哪裡準，跟知道哪裡不準一樣重要。</p>
+      <textarea id="best" maxlength="1000" placeholder="選填"></textarea>
+    </fieldset>
+
+    <fieldset>
+      <legend>你們目前真正的關係，比較接近哪一種？</legend>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="real_status" value="剛認識"><span>剛認識</span></label>
+        <label class="opt"><input type="radio" name="real_status" value="朋友"><span>朋友</span></label>
+        <label class="opt"><input type="radio" name="real_status" value="單戀"><span>單戀</span></label>
+        <label class="opt"><input type="radio" name="real_status" value="曖昧"><span>曖昧</span></label>
+        <label class="opt"><input type="radio" name="real_status" value="朋友以上戀人未滿"><span>朋友以上戀人未滿</span></label>
+        <label class="opt"><input type="radio" name="real_status" value="交往中"><span>交往中</span></label>
+        <label class="opt"><input type="radio" name="real_status" value="遠距離"><span>遠距離</span></label>
+        <label class="opt"><input type="radio" name="real_status" value="冷淡中"><span>冷淡中</span></label>
+        <label class="opt"><input type="radio" name="real_status" value="斷聯"><span>斷聯</span></label>
+        <label class="opt"><input type="radio" name="real_status" value="分手"><span>分手</span></label>
+        <label class="opt"><input type="radio" name="real_status" value="前任但仍有聯絡"><span>前任但仍有聯絡</span></label>
+        <label class="opt"><input type="radio" name="real_status" value="其他" id="rs-other"><span>其他</span></label>
+      </div>
+      <textarea id="real-other" maxlength="100" placeholder="那是什麼樣的關係？" hidden></textarea>
+    </fieldset>
+
+    <!-- Q6 必填。這題是拿來決定之後要做什麼內容的，
+         沒有它，這份問卷就只剩「準不準」一個維度。 -->
+    <fieldset>
+      <!-- 預設寫「對方」，script 會依使用者當時選的稱謂換成他／她。
+           這一頁沒有跑代名詞替換，所以 HTML 裡不能留佔位符，會直接印出來。 -->
+      <legend id="want-legend">如果現在只能知道你和對方之間的一件事，你最想知道什麼？</legend>
+      <p class="hint">想到什麼寫什麼，一句話也可以。</p>
+      <textarea id="want" maxlength="1000" placeholder="例如：他到底把我當什麼"></textarea>
     </fieldset>
 
     <fieldset>
@@ -157,6 +232,13 @@ body.sent .done{display:block}
   <div class="done">
     <h2>謝謝，收到了</h2>
     <p>這會幫我們把判讀改準一點。</p>
+    <!-- 解鎖的那一段。內容在結果頁就算好存進 localStorage 了，
+         這裡只負責顯示——問卷頁不載引擎。 -->
+    <div class="unlock" id="unlock-box" hidden>
+      <p class="unlock-tag">已解鎖</p>
+      <h3 id="unlock-title"></h3>
+      <p id="unlock-body"></p>
+    </div>
     <p><a href="/yuanfen/">再測一次</a></p>
   </div>
 </main>
@@ -179,19 +261,75 @@ if (ctx && ctx.total) {
     '找不到剛才的測算結果。<a href="/yuanfen/" style="color:var(--gold)">先去測一次</a>再回來填，回饋才對得上是哪一份判讀。';
 }
 
-/* 第二層只在「不太對」時出現，跟結果頁原本的行為一致 */
+/* 稱謂跟著使用者當時的選擇走。HTML 裡預設是「對方」，
+   讀不到 ctx 時就維持原樣，不會壞掉。 */
+if (ctx && ctx.pron && ctx.pron !== '對方') {
+  $('want-legend').textContent = '如果現在只能知道你和' + ctx.pron + '之間的一件事，你最想知道什麼？';
+}
+
+/* 問卷開始。只送 reading_id，不帶生日——用來算「打開了但沒填完」。
+   射後不理，這支掛掉不該影響填問卷。 */
+if (ctx && ctx.reading_id) {
+  try {
+    fetch('/api/yuanfen-survey-start', {
+      method: 'POST', cache: 'no-store',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ reading_id: ctx.reading_id }),
+    }).catch(() => {});
+  } catch (e) {}
+}
+
+/* 說偏不準的人，才問「哪裡不對」與「哪裡最不準」。
+   選「非常符合」還逼人寫哪裡最不準，只會換到一句「沒有」。 */
+const NEGATIVE = ['一半一半', '大部分不符合', '完全不符合', '不太對'];
 document.querySelectorAll('input[name="rating"]').forEach(r => {
   r.addEventListener('change', () => {
-    const off = document.querySelector('input[name="rating"]:checked').value === '不太對';
+    const off = NEGATIVE.includes(document.querySelector('input[name="rating"]:checked').value);
     $('why-box').hidden = !off;
-    if (!off) document.querySelectorAll('input[name="wrong_part"]:checked').forEach(x => { x.checked = false; });
+    $('worst-box').hidden = !off;
+    if (!off) {
+      document.querySelectorAll('input[name="wrong_part"]:checked').forEach(x => { x.checked = false; });
+      $('wrong-other').hidden = true;
+      $('worst').value = '';
+    }
   });
 });
+
+/* 勾了「其他」才展開補充欄 */
+$('wp-other').addEventListener('change', () => { $('wrong-other').hidden = !$('wp-other').checked; });
+$('rs-other').addEventListener('change', () => { $('real-other').hidden = !$('rs-other').checked; });
+
+/* 切到「謝謝」畫面，並把解鎖的那一段放上去。
+   內容是結果頁先算好存進 ctx 的——這一頁不載引擎。
+   讀不到就只顯示謝謝，不要留一個空框在那裡。 */
+function showUnlock() {
+  if (ctx && ctx.unlock) {
+    $('unlock-title').textContent = ctx.unlock_title || '如果你想往前一步，現在可以怎麼做？';
+    $('unlock-body').textContent = ctx.unlock;
+    $('unlock-box').hidden = false;
+  }
+  document.body.classList.add('sent');
+  window.scrollTo(0, 0);
+}
 
 $('f').addEventListener('submit', async e => {
   e.preventDefault();
   const rating = (document.querySelector('input[name="rating"]:checked') || {}).value;
-  if (!rating) { $('msg').textContent = '至少先回答「準嗎」那一題。'; $('msg').className = 'msg bad'; return; }
+  if (!rating) { $('msg').textContent = '至少先回答第一題。'; $('msg').className = 'msg bad'; return; }
+  /* Q6 必填。這題決定之後要做什麼內容，沒有它這份問卷就只剩「準不準」一個維度。 */
+  if (!$('want').value.trim()) {
+    $('msg').textContent = '最後一題請填一下——那是我們最想知道的。';
+    $('msg').className = 'msg bad';
+    $('want').scrollIntoView({ block: 'center' }); $('want').focus();
+    return;
+  }
+  /* Q3 只在說偏不準時必填 */
+  if (NEGATIVE.includes(rating) && !$('worst').value.trim()) {
+    $('msg').textContent = '既然覺得不太符合，請告訴我們哪裡最不準——那正是我們要抓的。';
+    $('msg').className = 'msg bad';
+    $('worst').scrollIntoView({ block: 'center' }); $('worst').focus();
+    return;
+  }
   if (!ctx || !ctx.a || !ctx.b) {
     $('msg').textContent = '找不到剛才的測算結果，請先回去測一次。';
     $('msg').className = 'msg bad'; return;
@@ -206,8 +344,15 @@ $('f').addEventListener('submit', async e => {
     /* 配偶星抽到哪一格，以及使用者的性別。沒填性別的人兩欄都是空的，
        統計「這一格準不準」時要先排除他們——他們根本沒看到那一段。 */
     spouse: ctx.spouse || '', gender: ctx.gender || '',
+    reading_id: ctx.reading_id || '',
     rating,
     wrong_part: [...document.querySelectorAll('input[name="wrong_part"]:checked')].map(x => x.value),
+    wrong_other: $('wrong-other').value.slice(0, 200),
+    worst: $('worst').value.slice(0, 1000),
+    best: $('best').value.slice(0, 1000),
+    real_status: (document.querySelector('input[name="real_status"]:checked') || {}).value || '',
+    real_other: $('real-other').value.slice(0, 100),
+    want_to_know: $('want').value.slice(0, 1000),
     usability: (document.querySelector('input[name="usability"]:checked') || {}).value || '',
     note: $('note').value.slice(0, 1000)
   };
@@ -221,6 +366,9 @@ $('f').addEventListener('submit', async e => {
       body: JSON.stringify(payload), cache: 'no-store'
     });
     const d = await r.json().catch(() => ({}));
+    /* 已經填過同一份合盤。不算錯誤——直接帶去已解鎖的畫面，
+       不要叫使用者再填一次。 */
+    if (r.status === 409 || d.error === 'already_done') { showUnlock(); return; }
     if (!r.ok || !d.ok) throw new Error(d.error || '送出失敗');
     /* GA4 的參數不能是陣列，串成一條字串；真正要分析的統計看後台，
        那邊存的是陣列，數起來才準。 */
@@ -232,8 +380,8 @@ $('f').addEventListener('submit', async e => {
         tempo: ctx.tempo
       });
     } catch (e) {}
-    document.body.classList.add('sent');
-    window.scrollTo(0, 0);
+    try { gtag('event', 'yuanfen_bonus_unlock', { rating }); } catch (e) {}
+    showUnlock();
   } catch (err) {
     $('send').disabled = false;
     $('msg').className = 'msg bad';
