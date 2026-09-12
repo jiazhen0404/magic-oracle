@@ -111,7 +111,7 @@ export default {
         return await yuanfenFeedback(request, env);
       }
       if (path === '/api/yuanfen-feedback/admin' && request.method === 'GET') {
-        return await yuanfenFeedbackAdmin(request, env);
+        return await yuanfenFeedbackAdmin(request, env, url);
       }
       if (path === '/api/health') {
         return json({
@@ -391,29 +391,74 @@ async function yuanfenFeedback(request, env) {
   return json({ ok: true });
 }
 
-async function yuanfenFeedbackAdmin(request, env) {
+/* 把某個前綴底下的紀錄全部撈出來 */
+async function yfListAll(env, prefix, cap = 20000) {
+  const out = [];
+  let cursor;
+  do {
+    const listed = await env.ORDERS.list({ prefix, cursor, limit: 1000 });
+    const values = await Promise.all(listed.keys.map(k => env.ORDERS.get(k.name, 'json')));
+    values.forEach(v => { if (v) out.push(v); });
+    cursor = listed.list_complete ? undefined : listed.cursor;
+  } while (cursor && out.length < cap);
+  return out;
+}
+
+async function yuanfenFeedbackAdmin(request, env, url) {
   if (!env.ADMIN_KEY || request.headers.get('X-Admin-Key') !== env.ADMIN_KEY) {
     return json({ error: 'unauthorized' }, 401);
   }
   if (!env.ORDERS) return json({ error: 'not_configured' }, 503);
-  const rows = [];
-  let cursor;
-  do {
-    const listed = await env.ORDERS.list({ prefix: 'yfsurvey:', cursor, limit: 1000 });
-    const values = await Promise.all(listed.keys.map(k => env.ORDERS.get(k.name, 'json')));
-    values.forEach(v => { if (v) rows.push(v); });
-    cursor = listed.list_complete ? undefined : listed.cursor;
-  } while (cursor && rows.length < 20000);
+
+  /* 單筆詳細。結果快照最大 20KB，不放進列表——
+     幾百筆一起回傳會變成好幾 MB，後台要等很久才開得起來。 */
+  const one = url && url.searchParams.get('reading');
+  if (one) {
+    const rec = await env.ORDERS.get('yfreading:' + one, 'json');
+    if (!rec) return json({ ok: false, error: 'not_found' }, 404);
+    let result = null;
+    try { result = rec.resultJson ? JSON.parse(rec.resultJson) : null; } catch (e) { result = null; }
+    return json({ ok: true, reading: { ...rec, resultJson: undefined }, result });
+  }
+
+  const rows = await yfListAll(env, 'yfsurvey:');
+  const readings = await yfListAll(env, 'yfreading:');
   rows.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
-  const byRating = {};
-  const byPart = {};
+  readings.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+
+  /* 問卷掛回它那一盤，讓列表一行就看得到生日與當時的分數 */
+  const byId = new Map(readings.map(r => [r.readingId, r]));
+  for (const s of rows) {
+    const r = s.readingId && byId.get(s.readingId);
+    if (!r) continue;
+    s.reading = { a: r.a, b: r.b, gender: r.gender, pron: r.pron, logicVersion: r.logicVersion, createdAt: r.createdAt };
+  }
+
+  const byRating = {}, byPart = {}, byRealStatus = {};
+  let scoreSum = 0, scoreN = 0;
   for (const r of rows) {
     byRating[r.rating] = (byRating[r.rating] || 0) + 1;
+    const sc = YF_RATING_SCORE[r.rating];
+    if (sc) { scoreSum += sc; scoreN++; }
+    if (r.realStatus) byRealStatus[r.realStatus] = (byRealStatus[r.realStatus] || 0) + 1;
     /* wrongPart 現在是陣列；舊紀錄是字串，兩種都要算得到 */
     const parts = Array.isArray(r.wrongPart) ? r.wrongPart : (r.wrongPart ? [r.wrongPart] : []);
     for (const p of parts) byPart[p] = (byPart[p] || 0) + 1;
   }
-  return json({ ok: true, total: rows.length, byRating, byPart, rows });
+
+  /* 漏斗。抽了幾盤、開了問卷幾份、填完幾份——
+     這三個數字是活動要看的，GA4 算得出人數但接不回是哪一盤。 */
+  const funnel = { drawn: readings.length, started: 0, completed: 0 };
+  for (const r of readings) {
+    if (r.surveyStatus === 'started') funnel.started++;
+    else if (r.surveyStatus === 'completed') { funnel.started++; funnel.completed++; }
+  }
+
+  return json({
+    ok: true, total: rows.length, funnel,
+    avgScore: scoreN ? Math.round(scoreSum / scoreN * 100) / 100 : null,
+    byRating, byPart, byRealStatus, rows,
+  });
 }
 
 async function surveyAdmin(request, env, url) {
