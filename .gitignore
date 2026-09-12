@@ -20,3 +20,7 @@ __pycache__/
 # 作業系統雜訊
 .DS_Store
 Thumbs.db
+
+# 文案交件用的暫存資料夾，隨時可以用 scripts/copy-export.js 重產
+合盤文案改稿/
+copy-export/
