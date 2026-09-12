@@ -4,7 +4,40 @@
 .tab{padding:10px 18px;border:0;background:none;cursor:pointer;font:inherit;color:#6b5c75;border-bottom:2px solid transparent;margin-bottom:-1px}
 .tab:hover{color:#302437}
 .tab.on{color:#5b376d;border-bottom-color:#5b376d;font-weight:600}
-.hint{color:#6b5c75;font-size:12.5px;margin:0 0 10px}</style></head>
+.hint{color:#6b5c75;font-size:12.5px;margin:0 0 10px}
+/* ── 校準活動：篩選、分佈、單筆詳細 ── */
+.sub{font-size:16px;margin:34px 0 12px;color:#4a3355}
+.filters{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin:16px 0 10px}
+.filters label{font-size:12.5px;color:#6b5c75;display:flex;flex-direction:column;gap:4px}
+.filters select,.filters input{padding:8px 10px;border:1px solid #ccc;border-radius:8px;font:inherit;background:#fff}
+.lowbtn{padding:9px 14px;border:1px solid #b1467a;border-radius:8px;background:#fff;color:#b1467a;cursor:pointer;font:inherit}
+.lowbtn:hover{background:#b1467a;color:#fff}
+.count{font-size:12.5px;color:#6b5c75;align-self:center}
+.dist{display:flex;gap:2px;margin:4px 0 0;border-radius:8px;overflow:hidden;height:26px;background:#e8e0ec}
+.dist span{display:flex;align-items:center;justify-content:center;color:#fff;font-size:11.5px;min-width:2px}
+.view{padding:6px 10px;border:1px solid #633c76;border-radius:7px;background:#fff;color:#633c76;cursor:pointer;font:inherit;font-size:12.5px;white-space:nowrap}
+.view:hover{background:#633c76;color:#fff}
+.wants{background:#fff;border-radius:14px;padding:6px 0;max-height:50vh;overflow:auto}
+.wants div{padding:11px 16px;border-bottom:1px solid #f0ebf2;font-size:13.5px}
+.wants div:last-child{border-bottom:0}
+.wants b{color:#8a6b9c;font-weight:500;font-size:12px;margin-right:8px}
+/* 單筆詳細。用固定覆蓋層而不是換頁——看完一筆關掉就回到原本的篩選結果，
+   不用重新設一次條件。 */
+.sheet{position:fixed;inset:0;background:rgba(40,28,48,.55);z-index:20;overflow:auto;padding:30px 16px}
+.sheet-box{max-width:900px;margin:auto;background:#fff;border-radius:16px;padding:26px 28px 34px;position:relative}
+.sheet h2{font-size:17px;margin:0 0 18px;color:#4a3355}
+.sheet h3{font-size:13px;letter-spacing:.06em;color:#8a6b9c;margin:26px 0 10px;font-weight:600}
+.close{position:absolute;top:18px;right:20px;padding:7px 13px;border:1px solid #ccc;border-radius:8px;background:#fff;cursor:pointer;font:inherit}
+.kv{display:grid;grid-template-columns:130px 1fr;gap:8px 16px;font-size:13.5px}
+.kv b{font-weight:500;color:#6b5c75}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cmp>div{padding:14px 16px;border-radius:10px;font-size:13.5px;line-height:1.75}
+.cmp .sys{background:#f2edf5;border:1px solid #e3d8e9}
+.cmp .usr{background:#fdf1f6;border:1px solid #f3d9e5}
+.cmp h4{margin:0 0 8px;font-size:12px;letter-spacing:.06em;color:#8a6b9c;font-weight:600}
+.snap{background:#faf8fb;border:1px solid #eee;border-radius:10px;padding:14px 16px;font-size:13px;line-height:1.8;white-space:pre-wrap;max-height:45vh;overflow:auto}
+@media (max-width:720px){.cmp{grid-template-columns:1fr}.kv{grid-template-columns:96px 1fr}}
+</style></head>
 <body><main class="wrap"><h1>問卷報表</h1><div class="bar"><input id="key" type="password" placeholder="管理員密碼"><button id="load">載入報表</button><button id="csv" style="display:none">下載 CSV</button></div><p id="msg"></p>
 <div class="tabs"><button class="tab on" data-pane="survey">使用體驗問卷</button><button class="tab" data-pane="yuanfen">曖昧緣分合盤</button></div>
 
@@ -14,10 +47,64 @@
 </section>
 
 <section id="pane-yuanfen" hidden>
-<div class="cards"><div class="card">回饋筆數<strong id="yf-total">—</strong></div><div class="card">滿準的<strong id="yf-good">—</strong></div><div class="card">有點像<strong id="yf-mid">—</strong></div><div class="card">不太對<strong id="yf-bad">—</strong></div><div class="card">最常說錯的環節<strong id="yf-part">—</strong></div></div>
-<p class="hint">「哪裡不對」對應到判讀的四個環節：tempo 節奏／initiator 主動方／shape 相處狀況／chance 機會。某一項特別多，就是那個模組要改。</p>
-<div class="table"><table><thead><tr><th>時間</th><th>準嗎</th><th>哪裡不對</th><th>好用嗎</th><th>你的生日</th><th>對方生日</th><th>分數</th><th>節奏</th><th>主動方</th><th>機會</th><th>溫度 key</th><th>重量 key</th><th>長度 key</th><th>合／沖</th><th>留言</th></tr></thead><tbody id="yf-rows"></tbody></table></div>
+<div class="cards">
+  <div class="card">抽盤<strong id="yf-drawn">—</strong></div>
+  <div class="card">開了問卷<strong id="yf-started">—</strong></div>
+  <div class="card">填完<strong id="yf-total">—</strong></div>
+  <div class="card">完成率<strong id="yf-rate">—</strong></div>
+  <div class="card">平均符合度<strong id="yf-avg">—</strong></div>
+  <div class="card">最常說不準<strong id="yf-part">—</strong></div>
+</div>
+
+<div class="dist" id="yf-dist"></div>
+
+<!-- 施工單 §十九：低準確度那群最重要，給一個一鍵入口 -->
+<div class="filters">
+  <label>符合度
+    <select id="f-rating"><option value="">全部</option>
+      <option value="5">5 非常符合</option><option value="4">4 大部分符合</option>
+      <option value="3">3 一半一半</option><option value="2">2 大部分不符合</option>
+      <option value="1">1 完全不符合</option></select>
+  </label>
+  <label>真實關係 <select id="f-status"><option value="">全部</option></select></label>
+  <label>不符合項目 <select id="f-part"><option value="">全部</option></select></label>
+  <label>日期起 <input id="f-from" type="date"></label>
+  <label>日期迄 <input id="f-to" type="date"></label>
+  <button class="lowbtn" id="f-low">只看不準的（≤2）</button>
+  <button class="lowbtn" id="f-clear">清除</button>
+  <span class="count" id="f-count"></span>
+</div>
+
+<p class="hint">「不符合項目」前八項對應引擎模組（band 分數帶／chance 機會／tempo 節奏／initiator 主動方／wendu 溫度／zhongliang 重量／changdu 長度／spouse 配偶星），某一項特別多就是那個模組要改。後三項對應報告裡講對方與未來的段落。</p>
+
+<div class="table"><table><thead><tr><th>時間</th><th>編號</th><th>符合度</th><th>真實關係</th><th>不符合項目</th><th>最想知道</th><th>版本</th><th></th></tr></thead><tbody id="yf-rows"></tbody></table></div>
+
+<!-- 施工單 §二十：Q6 的自由回答要能整批看、能搜關鍵字 -->
+<h2 class="sub">大家最想知道什麼？</h2>
+<div class="filters"><label>搜尋 <input id="w-search" placeholder="喜歡／復合／主動／未來…"></label><span class="count" id="w-count"></span></div>
+<div class="wants" id="yf-wants"></div>
 </section>
+
+<!-- 單筆詳細。施工單 §十七 要的是左右對照：
+     系統當時怎麼判 vs 使用者說實際是什麼。並排放才看得出來哪裡錯。 -->
+<div class="sheet" id="detail" hidden>
+  <div class="sheet-box">
+    <button class="close" id="d-close">關閉</button>
+    <h2 id="d-title">—</h2>
+
+    <h3>原始資料</h3>
+    <div class="kv" id="d-raw"></div>
+
+    <h3>系統當時判斷　vs　使用者說的</h3>
+    <div class="cmp" id="d-cmp"></div>
+
+    <h3>使用者回饋</h3>
+    <div class="kv" id="d-fb"></div>
+
+    <h3>當時的完整結果</h3>
+    <div class="snap" id="d-snap">讀取中…</div>
+  </div>
+</div>
 </main>
 <script>
 let DATA=[];const $=id=>document.getElementById(id),esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -34,22 +121,164 @@ document.querySelectorAll('.tab').forEach(t=>{t.onclick=()=>{
   $('csv').style.display=(PANE==='survey'?DATA.length:YF.length)?'inline-block':'none';
 };});
 
+/* 新舊兩套評分都換算成 1–5。活動前送出的是三級，拿掉就統計不到。 */
+const SCORE={非常符合:5,大部分符合:4,一半一半:3,大部分不符合:2,完全不符合:1,滿準的:5,有點像:3,不太對:1};
+const SCORE_LABEL={5:'非常符合',4:'大部分符合',3:'一半一半',2:'大部分不符合',1:'完全不符合'};
+const BAR=['#b1467a','#d1748f','#c9a227','#7ba05b','#4f8a6d'];
+const bd=b=>b?b.y+'/'+b.m+'/'+b.d+(b.hour!=null?' '+String(b.hour).padStart(2,'0')+'時':''):'—';
+const parts=x=>Array.isArray(x.wrongPart)?x.wrongPart:(x.wrongPart?[x.wrongPart]:[]);
+let ADMIN_KEY='';
+
 async function loadYuanfen(key){
+  ADMIN_KEY=key;
   const r=await fetch('/api/yuanfen-feedback/admin',{headers:{'X-Admin-Key':key}});
   const d=await r.json();
   if(!r.ok)throw Error('密碼錯誤或無法載入');
   YF=d.rows||[];
-  const br=d.byRating||{};
+  const fn=d.funnel||{};
+  $('yf-drawn').textContent=fn.drawn||0;
+  $('yf-started').textContent=fn.started||0;
   $('yf-total').textContent=d.total||0;
-  $('yf-good').textContent=br['滿準的']||0;
-  $('yf-mid').textContent=br['有點像']||0;
-  $('yf-bad').textContent=br['不太對']||0;
+  $('yf-rate').textContent=fn.drawn?Math.round((d.total||0)/fn.drawn*100)+'%':'—';
+  $('yf-avg').textContent=d.avgScore!=null?d.avgScore+' / 5':'—';
   const bp=Object.entries(d.byPart||{}).sort((a,b)=>b[1]-a[1]);
   $('yf-part').textContent=bp.length?bp[0][0]+'（'+bp[0][1]+'）':'—';
-  const bd=b=>b?b.y+'/'+b.m+'/'+b.d+(b.hour!=null?' '+String(b.hour).padStart(2,'0')+'時':''):'';
-  $('yf-rows').innerHTML=YF.map(x=>`<tr><td>${esc(new Date(x.createdAt).toLocaleString('zh-TW'))}</td><td>${esc(x.rating)}</td><td>${esc(x.wrongPart)}</td><td>${esc(x.usability)}</td><td>${esc(bd(x.a))}</td><td>${esc(bd(x.b))}</td><td>${esc(x.view&&x.view.total)}</td><td>${esc(x.view&&x.view.tempo)}</td><td>${esc(x.view&&x.view.initiator)}</td><td>${esc(x.view&&x.view.chance)}</td><td>${esc(x.keys&&x.keys.wendu)}</td><td>${esc(x.keys&&x.keys.zhongliang)}</td><td>${esc(x.keys&&x.keys.changdu)}</td><td>${esc((x.keys&&x.keys.crossSweet)+' / '+(x.keys&&x.keys.crossHarsh))}</td><td>${esc(x.note)}</td></tr>`).join('');
+
+  /* 符合度分佈。一條堆疊長條比五個數字好讀——一眼看得出偏哪邊。 */
+  const tot=YF.length;
+  $('yf-dist').innerHTML=tot?[5,4,3,2,1].map(n=>{
+    const c=YF.filter(x=>SCORE[x.rating]===n).length;
+    if(!c)return '';
+    return `<span style="width:${c/tot*100}%;background:${BAR[n-1]}" title="${SCORE_LABEL[n]} ${c} 筆">${c/tot>0.08?c:''}</span>`;
+  }).join(''):'';
+
+  /* 篩選選項照實際出現過的值長出來，不要寫死——寫死的話新增選項就會漏掉 */
+  fill('f-status',[...new Set(YF.map(x=>x.realStatus).filter(Boolean))]);
+  fill('f-part',[...new Set(YF.flatMap(parts))]);
+  render();
   $('csv').style.display='inline-block';
   $('msg').textContent='';
+}
+
+function fill(id,vals){
+  const s=$(id),keep=s.value;
+  s.innerHTML='<option value="">全部</option>'+vals.sort().map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');
+  s.value=keep;
+}
+
+/* 目前篩選條件下的資料。CSV 也用這一份——施工單要求「依目前篩選條件匯出」。 */
+function filtered(){
+  const rt=$('f-rating').value, st=$('f-status').value, pt=$('f-part').value;
+  const from=$('f-from').value, to=$('f-to').value;
+  return YF.filter(x=>{
+    if(rt&&String(SCORE[x.rating]||'')!==rt)return false;
+    if(st&&x.realStatus!==st)return false;
+    if(pt&&!parts(x).includes(pt))return false;
+    const day=String(x.createdAt||'').slice(0,10);
+    if(from&&day<from)return false;
+    if(to&&day>to)return false;
+    return true;
+  });
+}
+
+function render(){
+  const rows=filtered();
+  $('f-count').textContent=rows.length+' / '+YF.length+' 筆';
+  $('yf-rows').innerHTML=rows.map(x=>{
+    const sc=SCORE[x.rating]||'';
+    return `<tr><td>${esc(new Date(x.createdAt).toLocaleString('zh-TW'))}</td>`
+      +`<td style="font-size:12px;color:#8a6b9c">${esc(x.readingId||'—')}</td>`
+      +`<td><b style="color:${BAR[(sc||1)-1]}">${sc||'?'}</b> ${esc(x.rating)}</td>`
+      +`<td>${esc(x.realStatus||'')}${x.realOther?'（'+esc(x.realOther)+'）':''}</td>`
+      +`<td>${esc(parts(x).join('、'))}</td>`
+      +`<td>${esc(String(x.wantToKnow||'').slice(0,40))}</td>`
+      +`<td style="font-size:12px">${esc(x.logicVersion||'—')}</td>`
+      +`<td><button class="view" data-id="${esc(x.id)}">查看</button></td></tr>`;
+  }).join('')||'<tr><td colspan="8" style="color:#8a6b9c">這個條件下沒有資料</td></tr>';
+  renderWants(rows);
+}
+
+function renderWants(rows){
+  const q=$('w-search').value.trim();
+  const list=rows.filter(x=>x.wantToKnow&&(!q||x.wantToKnow.includes(q)));
+  $('w-count').textContent=list.length+' 筆';
+  $('yf-wants').innerHTML=list.map(x=>
+    `<div><b>${esc(SCORE[x.rating]||'?')}分・${esc(x.realStatus||'未填')}</b>${esc(x.wantToKnow)}</div>`
+  ).join('')||'<div style="color:#8a6b9c">沒有符合的回答</div>';
+}
+
+['f-rating','f-status','f-part','f-from','f-to'].forEach(id=>{$(id).onchange=render;});
+$('w-search').oninput=()=>renderWants(filtered());
+$('f-low').onclick=()=>{$('f-rating').value='';render();
+  /* 「≤2」不是單一值，用不到下拉——直接把列表換成低分那群 */
+  const rows=YF.filter(x=>(SCORE[x.rating]||9)<=2);
+  $('f-count').textContent=rows.length+' 筆（只看不準的）';
+  $('yf-rows').innerHTML=rows.map(x=>`<tr><td>${esc(new Date(x.createdAt).toLocaleString('zh-TW'))}</td><td style="font-size:12px;color:#8a6b9c">${esc(x.readingId||'—')}</td><td><b style="color:${BAR[(SCORE[x.rating]||1)-1]}">${SCORE[x.rating]||'?'}</b> ${esc(x.rating)}</td><td>${esc(x.realStatus||'')}</td><td>${esc(parts(x).join('、'))}</td><td>${esc(String(x.worst||'').slice(0,40))}</td><td style="font-size:12px">${esc(x.logicVersion||'—')}</td><td><button class="view" data-id="${esc(x.id)}">查看</button></td></tr>`).join('')||'<tr><td colspan="8" style="color:#8a6b9c">目前沒有低分回饋</td></tr>';
+  renderWants(rows);
+};
+$('f-clear').onclick=()=>{['f-rating','f-status','f-part','f-from','f-to'].forEach(id=>{$(id).value='';});$('w-search').value='';render();};
+
+/* ── 單筆詳細 ── */
+$('yf-rows').onclick=e=>{
+  const b=e.target.closest('.view'); if(!b)return;
+  const x=YF.find(v=>v.id===b.dataset.id); if(x)openDetail(x);
+};
+$('d-close').onclick=()=>{$('detail').hidden=true;};
+$('detail').onclick=e=>{if(e.target===$('detail'))$('detail').hidden=true;};
+
+async function openDetail(x){
+  $('detail').hidden=false;
+  $('d-title').textContent=(x.readingId||'（沒有編號）')+'　'+new Date(x.createdAt).toLocaleString('zh-TW');
+  const rd=x.reading||{};
+  const row=(k,v)=>`<b>${esc(k)}</b><span>${esc(v)}</span>`;
+  $('d-raw').innerHTML=[
+    row('你的生日',bd(rd.a||x.a)),
+    row('對方生日',bd(rd.b||x.b)),
+    row('你的性別',rd.gender==='male'?'男':rd.gender==='female'?'女':'未指定'),
+    row('對方稱謂',rd.pron||'—'),
+    row('合盤版本',x.logicVersion||'—'),
+  ].join('');
+
+  /* 施工單 §十七 的左右對照。左邊是系統當時怎麼判，右邊是使用者說實際上是什麼。
+     並排放才看得出哪一條判反了。 */
+  const v=x.view||{};
+  const sys=[['分數',v.total],['分數帶',v.band],['節奏',v.tempo],['主動方',v.initiator],['機會',v.chance],['配偶星',v.spouse]]
+    .filter(p=>p[1]!=null&&p[1]!=='').map(p=>`${p[0]}：${p[1]}`).join('<br>');
+  const usr=[
+    x.realStatus?'真實關係：'+x.realStatus+(x.realOther?'（'+x.realOther+'）':''):'',
+    parts(x).length?'說不符合的：'+parts(x).join('、')+(x.wrongOther?'（'+x.wrongOther+'）':''):'',
+    x.worst?'最不準：'+x.worst:'',
+  ].filter(Boolean).map(esc).join('<br>');
+  $('d-cmp').innerHTML=
+    `<div class="sys"><h4>系統當時判斷</h4>${sys||'—'}</div>`
+    +`<div class="usr"><h4>使用者說的</h4>${usr||'—'}</div>`;
+
+  $('d-fb').innerHTML=[
+    row('符合度',(SCORE[x.rating]||'?')+' 分・'+(x.rating||'')),
+    row('特別準的',x.best||'—'),
+    row('最想知道',x.wantToKnow||'—'),
+    row('這一頁好用嗎',x.usability||'—'),
+    row('其他留言',x.note||'—'),
+  ].join('');
+
+  /* 當時的完整結果。抓的是那一刻的快照，不是拿現在的版本重算——
+     重算出來的東西使用者從來沒看過，拿它對回饋會對不上。 */
+  $('d-snap').textContent='讀取中…';
+  if(!x.readingId){$('d-snap').textContent='這筆沒有合盤編號（活動開始前送出的）。';return;}
+  try{
+    const r=await fetch('/api/yuanfen-feedback/admin?reading='+encodeURIComponent(x.readingId),{headers:{'X-Admin-Key':ADMIN_KEY}});
+    const d=await r.json();
+    if(!d.ok||!d.result){$('d-snap').textContent='找不到當時的結果快照。';return;}
+    const s=d.result;
+    $('d-snap').textContent=[
+      s.total!=null?s.total+' 分　'+(s.band||''):'',
+      s.tempo?'節奏：'+s.tempo:'',
+      s.initiator?'主動方：'+s.initiator:'',
+      s.chance?'機會：'+s.chance:'',
+      '', s.summary||'', '', s.poem||'', '',
+      ...(s.sections||[]).map(x2=>'・'+(x2.score!=null?x2.score+'　':'')+(x2.text||'')),
+    ].filter(v2=>v2!==undefined).join('\n');
+  }catch(e){$('d-snap').textContent='讀取失敗：'+e.message;}
 }
 
 $('load').onclick=async()=>{const key=$('key').value;sessionStorage.setItem('uw_admin',key);
@@ -72,12 +301,23 @@ $('key').value=sessionStorage.getItem('uw_admin')||'';
 $('csv').onclick=()=>{
 if(PANE==='yuanfen'){
   const q=v=>'"'+String(v==null?'':v).replaceAll('"','""')+'"';
-  const bd=b=>b?b.y+'/'+b.m+'/'+b.d+(b.hour!=null?' '+b.hour+'時':''):'';
-  const head=['時間','準嗎','哪裡不對','好用嗎','你的生日','對方生日','分數','等級','節奏','主動方','機會','性別','配偶星格','溫度key','重量key','長度key','合','沖','留言'];
-  const text='﻿'+[head.join(','),...YF.map(x=>[x.createdAt,x.rating,x.wrongPart,x.usability,bd(x.a),bd(x.b),
-    x.view&&x.view.total,x.view&&x.view.band,x.view&&x.view.tempo,x.view&&x.view.initiator,x.view&&x.view.chance,x.view&&x.view.gender,x.view&&x.view.spouse,
-    x.keys&&x.keys.wendu,x.keys&&x.keys.zhongliang,x.keys&&x.keys.changdu,
-    x.keys&&x.keys.crossSweet,x.keys&&x.keys.crossHarsh,x.note].map(q).join(','))].join('\n');
+  /* 匯出的是「目前篩選條件下」那一批，不是全部——施工單 §二十一 的要求。
+     開頭的 ﻿ 是給 Excel 認 UTF-8 用的，拿掉中文會變亂碼。 */
+  const rows=filtered();
+  const head=['合盤編號','時間','符合度分數','符合度','真實關係','真實關係其他','不符合項目','其他不符合',
+    '最不準','很準的地方','最想知道','好用嗎','留言',
+    '你的生日','對方生日','性別','稱謂','合盤版本',
+    '分數','等級','節奏','主動方','機會','配偶星格','溫度key','重量key','長度key','合','沖'];
+  const text='﻿'+[head.join(','),...rows.map(x=>[
+    x.readingId, x.createdAt, SCORE[x.rating]||'', x.rating,
+    x.realStatus, x.realOther, parts(x).join('、'), x.wrongOther,
+    x.worst, x.best, x.wantToKnow, x.usability, x.note,
+    bd(x.a), bd(x.b),
+    (x.reading&&x.reading.gender)||(x.view&&x.view.gender), (x.reading&&x.reading.pron)||'', x.logicVersion,
+    x.view&&x.view.total, x.view&&x.view.band, x.view&&x.view.tempo, x.view&&x.view.initiator,
+    x.view&&x.view.chance, x.view&&x.view.spouse,
+    x.keys&&x.keys.wendu, x.keys&&x.keys.zhongliang, x.keys&&x.keys.changdu,
+    x.keys&&x.keys.crossSweet, x.keys&&x.keys.crossHarsh].map(q).join(','))].join('\n');
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([text],{type:'text/csv'}));
   a.download='yuanfen-feedback-'+new Date().toISOString().slice(0,10)+'.csv';a.click();return;

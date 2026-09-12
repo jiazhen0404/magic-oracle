@@ -5303,7 +5303,18 @@ function registerReading() {
       }),
     })
       .then(r => r.json())
-      .then(d => { if (d && d.reading_id) { lastReadingId = d.reading_id; try { localStorage.setItem(YF_ID_KEY, d.reading_id); } catch (e) {} } })
+      .then(d => {
+        if (!d || !d.reading_id) return;
+        lastReadingId = d.reading_id;
+        try {
+          localStorage.setItem(YF_ID_KEY, d.reading_id);
+          /* 補寫回問卷要用的那份快照。stashForSurvey() 在抽籤當下就同步跑完了，
+             那個時間點編號還沒從後端回來，存進去會是空字串——
+             問卷就綁不回這一盤。編號到手後補上。 */
+          const s = JSON.parse(localStorage.getItem(YF_CTX_KEY) || 'null');
+          if (s) { s.reading_id = d.reading_id; localStorage.setItem(YF_CTX_KEY, JSON.stringify(s)); }
+        } catch (e) {}
+      })
       .catch(() => {});
   } catch (e) { /* 無痕模式或離線，不影響抽籤 */ }
 }
@@ -5316,6 +5327,19 @@ function spouseCell() {
     const g = $('a-gender').value;
     if (g !== 'male' && g !== 'female') return '';
     return spouseStar(fromDebug(last.result.debug.A), g === 'male').cell;
+  } catch (e) { return ''; }
+}
+
+/* 填完問卷解鎖的那一段。直接送付費報告裡的「如果你想往前一步，現在可以怎麼做？」，
+   不另外寫一套——施工單原本要的「最容易卡住的地方」跟付費第 21 段是同一個問題，
+   寫了會重複。這一段挑出來是因為量過：45 種變體、最常見那版只佔 7.9%、
+   中位數 174 字，正好落在施工單要的 150–250 字，而且是拿到會覺得值得的那種內容。 */
+const UNLOCK_TITLE = '如果你想往前一步，現在可以怎麼做？';
+function unlockSection() {
+  try {
+    const r = report(last.full, names(), gender());
+    const s = r.sections.find(x => x.title === UNLOCK_TITLE);
+    return s ? s.body || '' : '';
   } catch (e) { return ''; }
 }
 
@@ -5332,6 +5356,8 @@ function stashForSurvey() {
          沒填性別的人沒有這一段，存空字串，統計時要排除。 */
       spouse: spouseCell(),
       reading_id: lastReadingId,   // 問卷要靠它綁回這一次合盤
+      unlock_title: UNLOCK_TITLE,
+      unlock: unlockSection(),     // 填完問卷才顯示，先算好放著
       total: last.view.total, band: last.view.label,
       tempo: last.view.tempo, chance: last.view.chance, initiator: last.view.initiator,
       wendu_key: d.wendu.key, zhongliang_key: d.zhongliang.key, changdu_key: d.changdu.key,

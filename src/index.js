@@ -111,7 +111,7 @@ export default {
         return await yuanfenFeedback(request, env);
       }
       if (path === '/api/yuanfen-feedback/admin' && request.method === 'GET') {
-        return await yuanfenFeedbackAdmin(request, env);
+        return await yuanfenFeedbackAdmin(request, env, url);
       }
       if (path === '/api/health') {
         return json({
@@ -198,14 +198,28 @@ async function submitSurvey(request, env) {
      所以這支 API 只能由那個動作觸發，不要拿去記錄一般抽籤。 */
 
 const YF_TTL = 60 * 60 * 24 * 365;                       // 保存 12 個月
-const YF_RATING = ['滿準的', '有點像', '不太對'];
+/* 2026-09-12 校準活動改成五級。舊的三級要留著——活動前送出的那些
+   已經存進 KV 了，白名單拿掉的話，之後重跑統計會把它們判成髒資料。
+   後台顯示時把兩套映到同一條軸上。 */
+const YF_RATING = [
+  '非常符合', '大部分符合', '一半一半', '大部分不符合', '完全不符合',
+  '滿準的', '有點像', '不太對',
+];
+/* 五級與舊三級都換算成 1–5，後台的平均與分佈才算得出來 */
+const YF_RATING_SCORE = {
+  非常符合: 5, 大部分符合: 4, 一半一半: 3, 大部分不符合: 2, 完全不符合: 1,
+  滿準的: 5, 有點像: 3, 不太對: 1,
+};
 /* 每一項都對應到免費頁上使用者真的看得到、判斷得了的一個判讀，
    而且對應到一個具體的模組或分數——某一項特別多就知道要改哪裡。
    三個維度刻意拆開：全部塞進一個「相處狀況」，收到回報也不知道是哪一項在錯。 */
 /* spouse（你會被什麼樣的人吸引）只有填了性別的人看得到那一段，
    所以它的回報數會天生低於其他七項，比較時要除以「有看到的人數」，
    不能直接跟別項比絕對值。 */
-const YF_PART = ['band', 'chance', 'tempo', 'initiator', 'wendu', 'zhongliang', 'changdu', 'spouse'];
+const YF_PART = ['band', 'chance', 'tempo', 'initiator', 'wendu', 'zhongliang', 'changdu', 'spouse',
+                 /* 校準活動補的三項。前八項對應引擎模組，這三項對應
+                    付費報告裡講對方與未來的那幾段，原本沒有出口。 */
+                 'other_person', 'future', 'other'];
 
 /* 生日只留年月日與時辰，而且要是合理的值——不合理就整筆退掉，
    不要把髒資料存進去，之後重跑會被它污染。 */
@@ -377,29 +391,74 @@ async function yuanfenFeedback(request, env) {
   return json({ ok: true });
 }
 
-async function yuanfenFeedbackAdmin(request, env) {
+/* 把某個前綴底下的紀錄全部撈出來 */
+async function yfListAll(env, prefix, cap = 20000) {
+  const out = [];
+  let cursor;
+  do {
+    const listed = await env.ORDERS.list({ prefix, cursor, limit: 1000 });
+    const values = await Promise.all(listed.keys.map(k => env.ORDERS.get(k.name, 'json')));
+    values.forEach(v => { if (v) out.push(v); });
+    cursor = listed.list_complete ? undefined : listed.cursor;
+  } while (cursor && out.length < cap);
+  return out;
+}
+
+async function yuanfenFeedbackAdmin(request, env, url) {
   if (!env.ADMIN_KEY || request.headers.get('X-Admin-Key') !== env.ADMIN_KEY) {
     return json({ error: 'unauthorized' }, 401);
   }
   if (!env.ORDERS) return json({ error: 'not_configured' }, 503);
-  const rows = [];
-  let cursor;
-  do {
-    const listed = await env.ORDERS.list({ prefix: 'yfsurvey:', cursor, limit: 1000 });
-    const values = await Promise.all(listed.keys.map(k => env.ORDERS.get(k.name, 'json')));
-    values.forEach(v => { if (v) rows.push(v); });
-    cursor = listed.list_complete ? undefined : listed.cursor;
-  } while (cursor && rows.length < 20000);
+
+  /* 單筆詳細。結果快照最大 20KB，不放進列表——
+     幾百筆一起回傳會變成好幾 MB，後台要等很久才開得起來。 */
+  const one = url && url.searchParams.get('reading');
+  if (one) {
+    const rec = await env.ORDERS.get('yfreading:' + one, 'json');
+    if (!rec) return json({ ok: false, error: 'not_found' }, 404);
+    let result = null;
+    try { result = rec.resultJson ? JSON.parse(rec.resultJson) : null; } catch (e) { result = null; }
+    return json({ ok: true, reading: { ...rec, resultJson: undefined }, result });
+  }
+
+  const rows = await yfListAll(env, 'yfsurvey:');
+  const readings = await yfListAll(env, 'yfreading:');
   rows.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
-  const byRating = {};
-  const byPart = {};
+  readings.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+
+  /* 問卷掛回它那一盤，讓列表一行就看得到生日與當時的分數 */
+  const byId = new Map(readings.map(r => [r.readingId, r]));
+  for (const s of rows) {
+    const r = s.readingId && byId.get(s.readingId);
+    if (!r) continue;
+    s.reading = { a: r.a, b: r.b, gender: r.gender, pron: r.pron, logicVersion: r.logicVersion, createdAt: r.createdAt };
+  }
+
+  const byRating = {}, byPart = {}, byRealStatus = {};
+  let scoreSum = 0, scoreN = 0;
   for (const r of rows) {
     byRating[r.rating] = (byRating[r.rating] || 0) + 1;
+    const sc = YF_RATING_SCORE[r.rating];
+    if (sc) { scoreSum += sc; scoreN++; }
+    if (r.realStatus) byRealStatus[r.realStatus] = (byRealStatus[r.realStatus] || 0) + 1;
     /* wrongPart 現在是陣列；舊紀錄是字串，兩種都要算得到 */
     const parts = Array.isArray(r.wrongPart) ? r.wrongPart : (r.wrongPart ? [r.wrongPart] : []);
     for (const p of parts) byPart[p] = (byPart[p] || 0) + 1;
   }
-  return json({ ok: true, total: rows.length, byRating, byPart, rows });
+
+  /* 漏斗。抽了幾盤、開了問卷幾份、填完幾份——
+     這三個數字是活動要看的，GA4 算得出人數但接不回是哪一盤。 */
+  const funnel = { drawn: readings.length, started: 0, completed: 0 };
+  for (const r of readings) {
+    if (r.surveyStatus === 'started') funnel.started++;
+    else if (r.surveyStatus === 'completed') { funnel.started++; funnel.completed++; }
+  }
+
+  return json({
+    ok: true, total: rows.length, funnel,
+    avgScore: scoreN ? Math.round(scoreSum / scoreN * 100) / 100 : null,
+    byRating, byPart, byRealStatus, rows,
+  });
 }
 
 async function surveyAdmin(request, env, url) {
