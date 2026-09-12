@@ -393,12 +393,19 @@ h1{font-family:var(--serif);
   .reader-nav{
     position:sticky; bottom:0; margin-top:30px;
     padding:12px 0 calc(12px + env(safe-area-inset-bottom));
-    background:linear-gradient(180deg,rgba(16,11,37,0),rgba(16,11,37,.94) 26%);
+    /* 底色原本只到 94%，還有 6% 會透——捲到一半時，文字會從按鈕底下
+       浮出來，看起來像破版（使用者回報過）。內容其實沒被永久蓋住，
+       捲到底就完整露出來，但「半透明的字壓在按鈕下」讀起來就是壞掉。
+       改成完全不透明，上緣保留短漸層，維持原本柔和收邊的樣子。 */
+    background:linear-gradient(180deg,rgba(16,11,37,0),rgb(16,11,37) 22%);
   }
   .reader-nav button{flex:1; padding:14px 10px}
 }
 @media (max-width:420px){
-  #r-report td.use{display:none}
+  /* 手機藏起「用在哪裡」這一欄是刻意的（窄螢幕放不下），
+     但原本只藏 td 沒藏 th——標題留著、內容不見，變成一個空欄，
+     看起來像壞掉。兩個都要藏。紙本的覆寫在下面也要一起放回來。 */
+  #r-report td.use, #r-report th.use{display:none}
   #r-report td.lab{width:26%}
   #r-report td.p{font-size:18px; letter-spacing:.1em}
 }
@@ -781,7 +788,9 @@ details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offse
   #r-report .takeaway b{color:#555 !important}
   #r-report thead th{background:none !important; color:#555 !important; border-bottom-color:#999 !important}
   #r-report td.p{color:#1a1a1a !important}
-  #r-report td.use{display:table-cell !important}         /* 手機版藏起來的欄位，紙上放得下 */
+  /* 手機版藏起來的欄位，紙上放得下。th 也要一起放回來，
+     不然用手機存成 PDF 會印出一欄沒有標題的說明文字。 */
+  #r-report td.use, #r-report th.use{display:table-cell !important}
   #r-report .cover{display:none !important}
 
   /* 頁首與頁尾的導覽在紙上沒有用 */
@@ -850,7 +859,10 @@ details.basis summary:focus-visible{outline:2px solid var(--gold); outline-offse
 
     <button class="btn-img" id="go"><span>開始測算</span></button>
     <p class="err" id="err" role="status"></p>
-    <p class="privacy">不用註冊，不用留 email。計算在你的裝置上完成。除非你主動送出準確度回饋，否則兩組生日不會離開這一頁。</p>
+    <!-- 2026-09-12 改寫。舊文案寫「除非你主動送出準確度回饋，否則兩組生日不會離開這一頁」，
+         但校準活動開始後，抽籤當下就會把兩組生日存進後台，那句話已經不是事實。
+         行為改了，說法就要跟著改——這一段、條款頁那兩段，三處必須一致。 -->
+    <p class="privacy">不用註冊，不用留 email。測算會把兩組生日記錄下來，用來校準判讀準不準，保留 12 個月後自動刪除。這筆紀錄沒有信箱、姓名，也連不到你是誰。<a href="/privacy/">詳細說明</a></p>
     <div class="promise">
       <b>免費的部分不會遮任何一句話</b>
       分數怎麼算的、你們卡在哪裡、接下來往哪個方向走，全部給你，沒有馬賽克也沒有「付費後解鎖」。付費的是更深的一層，不是被藏起來的那一層。
@@ -5262,6 +5274,39 @@ function trackUnlock() {
    那會被 GA4 的 page_location 收走，也會留在瀏覽紀錄與分享出去的連結裡。
    所以走 localStorage：同源、同一台裝置，生日完全沒有離開這個瀏覽器。 */
 const YF_CTX_KEY = 'yf-last-draw';
+const YF_ID_KEY  = 'yf-reading-id';
+
+/* 這一次合盤的編號。2026-09-12 校準活動開始，抽籤當下就在後端建立紀錄，
+   問卷、解鎖的額外解析、之後的訂單全都掛在同一個編號下。
+
+   刻意是「射後不理」：不 await、失敗也不報錯。這支 API 掛掉的時候，
+   使用者該看到的是他的合盤結果，不是一個他看不懂的錯誤訊息——
+   少一筆校準資料可以接受，抽不出籤不行。 */
+let lastReadingId = '';
+function registerReading() {
+  lastReadingId = '';
+  try {
+    fetch('/api/yuanfen-reading', {
+      method: 'POST', cache: 'no-store',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        a: last.birth.a, b: last.birth.b,
+        gender: $('a-gender').value, pron: $('b-pron').value,
+        /* 結果快照。之後改了判讀邏輯，還是要看得到使用者當時讀到的是什麼。 */
+        result: {
+          total: last.view.total, band: last.view.label,
+          tempo: last.view.tempo, chance: last.view.chance,
+          initiator: last.view.initiator,
+          summary: last.view.summary, poem: last.view.poem,
+          sections: (last.view.sections || []).map(s => ({ score: s.score, text: s.text })),
+        },
+      }),
+    })
+      .then(r => r.json())
+      .then(d => { if (d && d.reading_id) { lastReadingId = d.reading_id; try { localStorage.setItem(YF_ID_KEY, d.reading_id); } catch (e) {} } })
+      .catch(() => {});
+  } catch (e) { /* 無痕模式或離線，不影響抽籤 */ }
+}
 
 /* 使用者這次抽到配偶星的哪一格（weak_strong／mid／none…）。
    沒填性別就沒有那一段，回空字串。包 try 是因為這只是統計用的附加資料，
@@ -5286,6 +5331,7 @@ function stashForSurvey() {
       /* 抽到哪一格。只知道「不準」而不知道哪一格不準，就不知道要改哪段文案。
          沒填性別的人沒有這一段，存空字串，統計時要排除。 */
       spouse: spouseCell(),
+      reading_id: lastReadingId,   // 問卷要靠它綁回這一次合盤
       total: last.view.total, band: last.view.label,
       tempo: last.view.tempo, chance: last.view.chance, initiator: last.view.initiator,
       wendu_key: d.wendu.key, zhongliang_key: d.zhongliang.key, changdu_key: d.changdu.key,
@@ -5361,6 +5407,7 @@ function reveal(a, b) {
   /* birth 保留原始輸入（含時辰），只有送出準確度回饋時才會用到。
      a / b 是免費層用的無時辰版本，兩者不能混用。 */
   last = { result: r, view: c, a: freeA, b: freeB, birth: { a, b }, full: yuanfen(a, b), scene };
+  registerReading();
   $('r-report').classList.remove('on');
   document.body.classList.remove('reading');
   $('u-cta').disabled = false;

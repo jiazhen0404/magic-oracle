@@ -101,6 +101,12 @@ export default {
       if (path === '/api/survey/reward' && request.method === 'POST') {
         return await surveyReward(request, env);
       }
+      if (path === '/api/yuanfen-reading' && request.method === 'POST') {
+        return await yuanfenReading(request, env);
+      }
+      if (path === '/api/yuanfen-survey-start' && request.method === 'POST') {
+        return await yuanfenSurveyStart(request, env);
+      }
       if (path === '/api/yuanfen-feedback' && request.method === 'POST') {
         return await yuanfenFeedback(request, env);
       }
@@ -218,6 +224,68 @@ function yfBirth(v) {
   return out;
 }
 
+/* 判讀邏輯的版本。改動任何會影響輸出的模組時要一起升版，
+   否則之後看回饋不知道使用者當時評的是哪一版。 */
+const YF_LOGIC_VERSION = 'yuanfen_v1.0';
+
+/* 合盤紀錄。2026-09-12 校準活動開始，改成抽籤當下就建立紀錄。
+
+   ★ 這推翻了先前「抽籤本身不呼叫任何 API」的決定。負責人 2026-09-12 拍板，
+     理由是要能算出「抽了但沒填問卷」的分母，那個數字放在 GA4 裡不夠用。
+     改動時同步改了三處說法（合盤頁承諾、條款頁兩段），
+     並拆掉守著舊行為的測試——說的跟做的必須一致，不能只改一邊。
+
+   reading_id 用日期加 48 bits 亂數，不可預測也猜不到別人的。 */
+function yfReadingId() {
+  const d = new Date();
+  const ymd = d.getUTCFullYear() + String(d.getUTCMonth() + 1).padStart(2, '0') + String(d.getUTCDate()).padStart(2, '0');
+  return 'YF-' + ymd + '-' + randomHex(6);
+}
+
+async function yuanfenReading(request, env) {
+  const body = await request.json().catch(() => ({}));
+  const a = yfBirth(body.a), b = yfBirth(body.b);
+  if (!a || !b) return json({ ok: false, error: 'bad_birth' }, 400);
+
+  /* 結果快照。之後改了判讀邏輯，還是要看得到使用者當時讀到的是什麼，
+     否則拿舊回饋對新結果，永遠對不上。上限 20KB，超過就不存
+     ——寧可少一筆快照，也不要讓一次異常的輸入塞爆 KV。 */
+  let snapshot = '';
+  try {
+    snapshot = JSON.stringify(body.result || {});
+    if (snapshot.length > 20000) snapshot = '';
+  } catch (e) { snapshot = ''; }
+
+  const id = yfReadingId();
+  const record = {
+    readingId: id,
+    createdAt: new Date().toISOString(),
+    a, b,
+    gender: String(body.gender || '').slice(0, 10),
+    pron: String(body.pron || '').slice(0, 6),
+    logicVersion: YF_LOGIC_VERSION,
+    resultJson: snapshot,
+    surveyStatus: 'none',
+  };
+  await env.ORDERS.put('yfreading:' + id, JSON.stringify(record), { expirationTtl: YF_TTL });
+  return json({ ok: true, reading_id: id, logic_version: YF_LOGIC_VERSION });
+}
+
+/* 問卷開始。只送 reading_id，不帶生日——用來算「打開了但沒填完」。 */
+async function yuanfenSurveyStart(request, env) {
+  const body = await request.json().catch(() => ({}));
+  const id = String(body.reading_id || '');
+  if (!/^YF-\d{8}-[0-9A-F]{12}$/.test(id)) return json({ ok: false, error: 'bad_id' }, 400);
+  const raw = await env.ORDERS.get('yfreading:' + id);
+  if (!raw) return json({ ok: false, error: 'not_found' }, 404);
+  const rec = JSON.parse(raw);
+  if (rec.surveyStatus === 'none') {
+    rec.surveyStatus = 'started';
+    await env.ORDERS.put('yfreading:' + id, JSON.stringify(rec), { expirationTtl: YF_TTL });
+  }
+  return json({ ok: true, status: rec.surveyStatus });
+}
+
 async function yuanfenFeedback(request, env) {
   if (!env.ORDERS) return json({ ok: false, error: 'not_configured' }, 503);
   let body;
@@ -225,6 +293,21 @@ async function yuanfenFeedback(request, env) {
 
   const a = yfBirth(body.a), b = yfBirth(body.b);
   if (!a || !b) return json({ ok: false, error: 'bad_birth' }, 400);
+
+  /* 綁定當次合盤。舊版沒有 reading_id，所以不強制——沒帶就照舊存成獨立一筆，
+     不要因為新欄位讓還開著舊分頁的人送不出來。 */
+  const readingId = String(body.reading_id || '');
+  let reading = null;
+  if (/^YF-\d{8}-[0-9A-F]{12}$/.test(readingId)) {
+    const raw = await env.ORDERS.get('yfreading:' + readingId);
+    if (raw) {
+      reading = JSON.parse(raw);
+      /* 同一份合盤只能填一次。擋在後端，因為 localStorage 清掉就繞過了。 */
+      if (reading.surveyStatus === 'completed') {
+        return json({ ok: false, error: 'already_done', survey_id: reading.surveyId || '' }, 409);
+      }
+    }
+  }
 
   const rating = String(body.rating || '');
   if (!YF_RATING.includes(rating)) return json({ ok: false, error: 'bad_rating' }, 400);
@@ -244,8 +327,18 @@ async function yuanfenFeedback(request, env) {
     id,
     createdAt: new Date().toISOString(),
     a, b,
+    readingId: reading ? reading.readingId : '',
+    logicVersion: reading ? reading.logicVersion : '',
     rating,
     wrongPart,
+    /* 2026-09-12 校準活動新增的題目。前三題是原本就有的，
+       底下這些是這次要拿來規劃「限時解籤」賣什麼的。 */
+    wrongOther: str(body.wrong_other, 200),      // Q2 選「其他」時的補充
+    worst: str(body.worst, 1000),                // Q3 最不準的地方
+    best: str(body.best, 1000),                  // Q4 特別準的地方
+    realStatus: str(body.real_status, 30),       // Q5 目前真正的關係
+    realOther: str(body.real_other, 100),
+    wantToKnow: str(body.want_to_know, 1000),    // Q6 最想知道什麼
     /* 使用者體驗那兩題，跟準不準是兩件事，分開存 */
     usability: str(body.usability, 60),
     note: str(body.note, 1000),
@@ -272,6 +365,15 @@ async function yuanfenFeedback(request, env) {
     }
   };
   await env.ORDERS.put('yfsurvey:' + id, JSON.stringify(record), { expirationTtl: YF_TTL });
+
+  /* 回頭把合盤紀錄標記成已填。順序刻意是「問卷先存、紀錄後標」——
+     反過來的話，標記成功但問卷寫入失敗，使用者會被永久擋住無法重填。 */
+  if (reading) {
+    reading.surveyStatus = 'completed';
+    reading.surveyId = id;
+    reading.completedAt = record.createdAt;
+    await env.ORDERS.put('yfreading:' + reading.readingId, JSON.stringify(reading), { expirationTtl: YF_TTL });
+  }
   return json({ ok: true });
 }
 
