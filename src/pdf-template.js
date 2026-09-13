@@ -108,7 +108,7 @@ section p:last-child{margin-bottom:0}
 <div class="slip">
   <div class="slip-kicker">完整解籤</div>
   <h1 class="slip-name">__NAME__</h1>
-  <div class="slip-meta">愛情・__SITUATION__</div>
+  <div class="slip-meta">__CATEGORY__・__SITUATION__</div>
   __OUTCOME__
   __POEM__
 </div>
@@ -157,9 +157,16 @@ export function buildPdfHtml(slip, { question = '', drawnAt = '', orderNo = '', 
       + '<div class="asked-txt">' + esc(question.trim()) + '</div></div>'
     : '';
 
+  /* 分類原本寫死「愛情」。2026-09-13 離世毛孩 50 支開賣後，那樣會讓一份
+     談過世毛孩的解讀印著「愛情・離世中」。改由 slipId 的前綴決定。
+     顯示名稱和網站的分類卡一致（感情／毛孩心語）。 */
+  const CATEGORY = { love: '感情', pet: '毛孩心語' };
+  const category = CATEGORY[String(slip.id || '').split('_')[0]] || '';
+
   return TEMPLATE
     .replace('__TITLE__', esc(slip.name) + '｜完整解籤・未完籤所')
     .replace('__NAME__', esc(slip.name))
+    .replace('__CATEGORY__', esc(category))
     .replace('__SITUATION__', esc(slip.situation))
     .replace('__OUTCOME__', slip.outcome ? '<div class="slip-outcome">' + esc(slip.outcome) + '</div>' : '')
     .replace('__POEM__', slip.poem ? '<div class="poem">' + esc(slip.poem) + '</div>' : '')
