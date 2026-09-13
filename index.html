@@ -1206,6 +1206,15 @@ const RETIRED_THEMES=["choice","random"];
 const SKIP_SUBTHEME=["life"];
 /* 已收掉的情境入口 → 導到合併後的那一池。籤文本身都還在。 */
 const RETIRED_SUBS={"單身中":"桃花運勢","求職中":"轉職中"};
+/* 合併後的抽籤池：一個入口，實際從多個 sub 抽。
+   這是「入口設定」不是「資料搬動」——籤文的 sub 沒有被改掉，隨時可以調回來。
+     桃花運勢　抽 桃花運勢 30 ＋ 單身中 35 ＝ 65 支
+     低潮中　　不選情境（sub 是空字串），抽 迷茫中 25 ＋ 日常中 25 ＝ 50 支
+   求職中的 25 支沒有列進任何池，等於留在資料裡但抽不到，和選擇類一樣。 */
+const POOL_SUBS={
+  love:{"桃花運勢":["桃花運勢","單身中"]},
+  life:{"":["迷茫中","日常中"]}
+};
 const SUBTHEMES={
   love:[
     {id:"曖昧中",label:"曖昧中",sub:"還沒說破，想知道對方怎麼想"},
@@ -1254,7 +1263,8 @@ async function draw(theme,sub){
     rt=F.love.includes(p)?"love":F.work.includes(p)?"work":F.choice.includes(p)?"choice":F.pet.includes(p)?"pet":"life";
     return {...p,theme:rt,id:p.n+"-"+Date.now()};
   }
-  pool=(F[theme]||[]).filter(p=>!sub||p.sub===sub);
+  const allow=(POOL_SUBS[theme]||{})[sub||""];
+  pool=(F[theme]||[]).filter(p=>allow?allow.includes(p.sub):(!sub||p.sub===sub));
   if(!pool.length) throw new Error(`找不到「${TL[theme]||theme} / ${sub||"未分類"}」的籤詩資料`);
   const p=pool[Math.floor(Math.random()*pool.length)];
   return {...p,theme:rt,id:p.n+"-"+Date.now()};
