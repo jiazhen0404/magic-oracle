@@ -1662,11 +1662,15 @@ const[screen,setScreen]=useState(()=>{if(initialTheme&&SKIP_SUBTHEME.includes(in
     const section=document.createElement("section");
     section.className="extended-preview";
     section.setAttribute("aria-label","完整延伸解籤預告");
-    // ── 愛情類已經可以購買，其他主題維持預告 ──
-    const EXT_SLUG={"失戀中":"breakup","曖昧中":"flirting","關係中":"relationship","單身中":"single","桃花運勢":"fortune"};
+    // ── 愛情類與離世毛孩可以購買，其他主題維持預告 ──
+    const EXT_SLUG={"失戀中":"breakup","曖昧中":"flirting","關係中":"relationship","單身中":"single","桃花運勢":"fortune","離別中":"departed"};
+    /* 毛孩離別中那 50 支也有延伸籤了。前綴由分類決定，後端 SLIP_ID_RE 與
+       scripts/build-extended.js 的 SLUGS 要跟著一致。 */
+    const EXT_THEME={love:"love",pet:"pet"};
     const extSlug=EXT_SLUG[subtheme]||"";
     const extNo=parseInt(fortuneNumber,10);
-    const slipId=(theme==="love"&&extSlug&&extNo>0)?("love_"+extSlug+"_"+String(extNo).padStart(3,"0")):"";
+    const extTheme=EXT_THEME[theme]||"";
+    const slipId=(extTheme&&extSlug&&extNo>0)?(extTheme+"_"+extSlug+"_"+String(extNo).padStart(3,"0")):"";
 
     if(slipId){
       // 原本這裡寫「約 1300 字」，但 170 支的實際字數是 783～2165，

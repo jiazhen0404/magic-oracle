@@ -24,8 +24,18 @@
 const fs = require('fs');
 const path = require('path');
 
-const OUT = path.join(__dirname, '..', 'src', 'extended-love.json');
-const EXT_SLUG = { '失戀中': 'breakup', '曖昧中': 'flirting', '關係中': 'relationship', '單身中': 'single', '桃花運勢': 'fortune' };
+/* 情境 → slipId 的 slug。這份對照表在三個地方各有一份，必須一致：
+     這裡（產內容）、index.html 的 EXT_SLUG（前台組 id）、src/index.js 的 regex（後端驗 id）
+   校稿站的毛孩情境是「離世中」，正式站顯示為「離別中」，這裡以校稿站的為準。 */
+const SLUGS = {
+  love: { '失戀中': 'breakup', '曖昧中': 'flirting', '關係中': 'relationship', '單身中': 'single', '桃花運勢': 'fortune' },
+  pet: { '離世中': 'departed' },
+};
+const OUT = {
+  love: path.join(__dirname, '..', 'src', 'extended-love.json'),
+  pet: path.join(__dirname, '..', 'src', 'extended-pet.json'),
+};
+const CAT_THEME = { '愛情': 'love', '毛孩': 'pet' };
 
 const file = process.argv[2];
 const WRITE = process.argv.includes('--write');
@@ -48,21 +58,28 @@ function parseSections(html) {
 }
 
 const rows = (() => { const d = JSON.parse(fs.readFileSync(file, 'utf8')); return d.fortunes || d; })();
-const prev = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, 'utf8')) : [];
-const prevById = new Map(prev.map(x => [x.id, x]));
+const prevAll = new Map();
+for (const [theme, p] of Object.entries(OUT)) {
+  if (!fs.existsSync(p)) continue;
+  for (const x of JSON.parse(fs.readFileSync(p, 'utf8'))) prevAll.set(x.id, x);
+}
+const prevById = prevAll;
+const prev = [...prevAll.values()];
 
 const built = [];
 const skipped = [];
 for (const r of rows) {
-  const slug = EXT_SLUG[r.situation];
-  if (!slug || r.category !== '愛情') continue;
+  const theme = CAT_THEME[r.category];
+  const slug = theme && SLUGS[theme][r.situation];
+  if (!slug) continue;
   if (!Number(r.has_extended)) { skipped.push(`${r.id} 沒有延伸籤`); continue; }
   if (Number(r.archived) === 1) { skipped.push(`${r.id} 已封存`); continue; }
   const sections = parseSections(r.extended_html || '');
   if (!sections.length) { skipped.push(`${r.id} 解析不出段落`); continue; }
-  const id = `love_${slug}_${String(r.display_number).padStart(3, '0')}`;
+  const id = `${theme}_${slug}_${String(r.display_number).padStart(3, '0')}`;
   const old = prevById.get(id);
   built.push({
+    theme,
     id,
     situation: r.situation,
     name: strip(r.title_html),
@@ -76,7 +93,7 @@ for (const r of rows) {
 built.sort((a, b) => a.id.localeCompare(b.id));
 
 const chars = x => x.sections.reduce((n, s) => n + s.paragraphs.join('').length, 0);
-console.log(`校稿站愛情延伸籤 → ${built.length} 支（原本 ${prev.length} 支）`);
+console.log(`校稿站的延伸籤 → ${built.length} 支（原本 ${prev.length} 支）`);
 if (skipped.length) { console.log(`  跳過 ${skipped.length}：`); skipped.slice(0, 5).forEach(s => console.log('    ' + s)); }
 
 const gone = prev.filter(x => !built.some(b => b.id === x.id));
@@ -97,7 +114,16 @@ if (shorter) console.log(`  ⚠ 共 ${shorter} 支的內容少於原本的六成
 const nums = built.map(chars);
 console.log(`  章節 ${Math.min(...built.map(b => b.sections.length))}-${Math.max(...built.map(b => b.sections.length))} 段，字數 ${Math.min(...nums)}-${Math.max(...nums)}`);
 
+const byTheme = {};
+for (const b of built) (byTheme[b.theme] = byTheme[b.theme] || []).push(b);
+console.log('  ' + Object.entries(byTheme).map(([k, v]) => `${k} ${v.length} 支`).join('　'));
+
 if (!WRITE) { console.log('\n（試跑，沒有寫檔。確認後加 --write）'); process.exit(0); }
 if (built.length < prev.length) { console.error('\n✗ 數量比原本少，先查清楚再寫入'); process.exit(1); }
-fs.writeFileSync(OUT, JSON.stringify(built, null, 2) + '\n');
-console.log('\nsrc/extended-love.json 已重建。記得 Worker 要重新部署才會生效。');
+for (const [theme, list] of Object.entries(byTheme)) {
+  /* theme 只是這支腳本分檔用的，不寫進檔案——id 本身已經帶著它 */
+  const clean = list.map(({ theme: _t, ...rest }) => rest);
+  fs.writeFileSync(OUT[theme], JSON.stringify(clean, null, 2) + '\n');
+  console.log(`\n${path.relative(path.join(__dirname, '..'), OUT[theme])} 已重建（${clean.length} 支）`);
+}
+console.log('記得 Worker 要重新部署才會生效。');

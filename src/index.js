@@ -12,8 +12,9 @@
  *
  * 其他所有網址都交還給靜態檔案（首頁、籤文頁、圖片⋯⋯）。
  *
- * 延伸籤全文放在 src/extended-love.json，會被打包進程式裡面。
+ * 延伸籤全文放在 src/extended-love.json 與 src/extended-pet.json，會被打包進程式裡面。
  * 它不是網站上的檔案，外面下載不到——這是付費內容唯一安全的放法。
+ * 兩份都由 scripts/build-extended.js 從校稿站的匯出檔重建，不要手改。
  *
  * 需要的設定（在 Cloudflare 後台填，不要寫進這個檔案）：
  *   ECPAY_MERCHANT_ID   綠界商店代號
@@ -23,11 +24,19 @@
  *   ORDERS              KV 儲存空間（暫存訂單用）
  */
 
-import EXTENDED from './extended-love.json';
+import EXTENDED_LOVE from './extended-love.json';
+import EXTENDED_PET from './extended-pet.json';
 import SURVEY_FORTUNES from './survey-fortunes.json';
 import { buildPdfHtml } from './pdf-template.js';
 import { oracleRoutes, oraclePaid } from './oracle.js';
 import { articleRoutes } from './articles.js';
+
+/* 兩份合成一份給下面用。分檔只是為了好維護，id 本身已經帶著分類前綴。
+   離世毛孩那 50 支和愛情共用同一套購買流程與 99 元定價。 */
+const EXTENDED = [...EXTENDED_LOVE, ...EXTENDED_PET];
+/* 可購買的 slipId 格式。要開放新分類就改這一條，下面三個檢查點共用。
+   前台 index.html 的 EXT_SLUG 與 scripts/build-extended.js 的 SLUGS 必須跟著一致。 */
+const SLIP_ID_RE = /^(?:love|pet)_[a-z-]{3,20}_\d{3}$/;
 
 const PRICE = 99;                       // 售價，改這裡就好
 const ORDER_TTL = 60 * 60 * 24;         // 訂單暫存 24 小時後自動消失
@@ -602,7 +611,7 @@ async function createOrder(request, env, url) {
   const consent = body.consent || {};
 
   // ── 檢查 ──
-  if (!/^love_[a-z-]{3,20}_\d{3}$/.test(slipId)) {
+  if (!SLIP_ID_RE.test(slipId)) {
     return json({ error: 'bad_slip_id' }, 400);
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || email.length > 254) {
@@ -892,7 +901,7 @@ function extendedAvailability() {
      （實際章節數 3～10，字數 783～2165）。 */
 function extendedOutline(url) {
   const slipId = url.searchParams.get('id') || '';
-  if (!/^love_[a-z-]{3,20}_\d{3}$/.test(slipId)) return json({ error: 'bad_slip_id' }, 400);
+  if (!SLIP_ID_RE.test(slipId)) return json({ error: 'bad_slip_id' }, 400);
 
   const slip = EXTENDED.find((x) => x.id === slipId);
   if (!slip) return json({ error: 'not_found' }, 404);
@@ -920,7 +929,7 @@ function extendedOutline(url) {
 
 async function readExtended(request, url, env) {
   const slipId = url.searchParams.get('id') || '';
-  if (!/^love_[a-z-]{3,20}_\d{3}$/.test(slipId)) return json({ error: 'bad_slip_id' }, 400);
+  if (!SLIP_ID_RE.test(slipId)) return json({ error: 'bad_slip_id' }, 400);
 
   const token = request.headers.get('X-Unlock-Token') || '';
   if (!/^[A-Za-z0-9]{20,60}$/.test(token)) return json({ error: 'locked' }, 402);
