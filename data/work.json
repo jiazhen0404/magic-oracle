@@ -17,7 +17,8 @@
     "sceneLabel": "這裡學不到新東西了",
     "iconKey": "work-ceiling",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "work-0-14"
   },
   {
     "n": 15,
@@ -37,7 +38,8 @@
     "sceneLabel": "卡住你的不是能力",
     "iconKey": "work-ceiling",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-0-15"
   },
   {
     "n": 16,
@@ -57,7 +59,8 @@
     "sceneLabel": "同時想解決太多事",
     "iconKey": "work-compass",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-0-16"
   },
   {
     "n": 17,
@@ -77,7 +80,8 @@
     "sceneLabel": "只是累過頭了",
     "iconKey": "work-rest",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "work-0-17"
   },
   {
     "n": 18,
@@ -97,7 +101,8 @@
     "sceneLabel": "別人的進度讓你慌",
     "iconKey": "work-keys",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-0-18"
   },
   {
     "n": 19,
@@ -117,7 +122,8 @@
     "sceneLabel": "跟主管處不來",
     "iconKey": "work-ceiling",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "work-0-19"
   },
   {
     "n": 20,
@@ -137,7 +143,8 @@
     "sceneLabel": "是工作內容本身在磨你",
     "iconKey": "work-ceiling",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-0-20"
   },
   {
     "n": 21,
@@ -157,7 +164,8 @@
     "sceneLabel": "付出跟回報不成正比",
     "iconKey": "work-compass",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-0-21"
   },
   {
     "n": 22,
@@ -177,7 +185,8 @@
     "sceneLabel": "想離開但沒有下一站",
     "iconKey": "work-rest",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "work-0-22"
   },
   {
     "n": 23,
@@ -197,7 +206,8 @@
     "sceneLabel": "想去進修",
     "iconKey": "work-keys",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-0-23"
   },
   {
     "n": 24,
@@ -217,7 +227,8 @@
     "sceneLabel": "想跨到隔壁領域",
     "iconKey": "work-ceiling",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "work-0-24"
   },
   {
     "n": 25,
@@ -237,7 +248,8 @@
     "sceneLabel": "家人不支持你換工作",
     "iconKey": "work-ceiling",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-0-25"
   },
   {
     "n": 26,
@@ -257,7 +269,8 @@
     "sceneLabel": "做得多但沒人看見",
     "iconKey": "work-compass",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-0-26"
   },
   {
     "n": 63,
@@ -277,7 +290,8 @@
     "sceneLabel": "想做的跟會做的不一樣",
     "iconKey": "work-rest",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "work-0-63"
   },
   {
     "n": 64,
@@ -297,7 +311,8 @@
     "sceneLabel": "公司的做法違背你的底線",
     "iconKey": "work-keys",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-0-64"
   },
   {
     "n": 65,
@@ -317,7 +332,8 @@
     "sceneLabel": "工作把生活吃掉了",
     "iconKey": "work-ceiling",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "work-0-65"
   },
   {
     "n": 66,
@@ -337,7 +353,8 @@
     "sceneLabel": "產業消息很多，該不該先動",
     "iconKey": "work-ceiling",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-0-66"
   },
   {
     "n": 67,
@@ -357,7 +374,8 @@
     "sceneLabel": "存款不夠，不敢動",
     "iconKey": "work-compass",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-0-67"
   },
   {
     "n": 68,
@@ -377,7 +395,8 @@
     "sceneLabel": "外面的選項變具體了",
     "iconKey": "work-rest",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "work-0-68"
   },
   {
     "n": 69,
@@ -397,7 +416,8 @@
     "sceneLabel": "你需要別人的視角",
     "iconKey": "work-keys",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-0-69"
   },
   {
     "n": 70,
@@ -417,7 +437,8 @@
     "sceneLabel": "還沒到非走不可",
     "iconKey": "work-ceiling",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "work-0-70"
   },
   {
     "n": 71,
@@ -437,7 +458,8 @@
     "sceneLabel": "保留現職比較有底氣",
     "iconKey": "work-ceiling",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-0-71"
   },
   {
     "n": 72,
@@ -457,7 +479,8 @@
     "sceneLabel": "這裡還有東西可以學",
     "iconKey": "work-compass",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-0-72"
   },
   {
     "n": 73,
@@ -477,7 +500,8 @@
     "sceneLabel": "年紀讓你猶豫",
     "iconKey": "work-rest",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "work-0-73"
   },
   {
     "n": 74,
@@ -497,7 +521,8 @@
     "sceneLabel": "過渡期的模糊",
     "iconKey": "work-keys",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-0-74"
   },
   {
     "n": 14,
@@ -517,7 +542,8 @@
     "sceneLabel": "履歷看不出你要應徵什麼",
     "iconKey": "work-resume",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-1-14"
   },
   {
     "n": 15,
@@ -537,7 +563,8 @@
     "sceneLabel": "見面會比紙上好",
     "iconKey": "work-resume",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-1-15"
   },
   {
     "n": 16,
@@ -557,7 +584,8 @@
     "sceneLabel": "流程拖很久",
     "iconKey": "work-hourglass",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "work-1-16"
   },
   {
     "n": 17,
@@ -577,7 +605,8 @@
     "sceneLabel": "第一個 offer 未必最好",
     "iconKey": "work-two-offers",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-1-17"
   },
   {
     "n": 18,
@@ -597,7 +626,8 @@
     "sceneLabel": "面試時覺得氣氛不對",
     "iconKey": "work-puzzle",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-1-18"
   },
   {
     "n": 19,
@@ -617,7 +647,8 @@
     "sceneLabel": "沒有被選上不等於你不夠好",
     "iconKey": "work-resume",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-1-19"
   },
   {
     "n": 20,
@@ -637,7 +668,8 @@
     "sceneLabel": "對方還沒有明確給答案",
     "iconKey": "work-resume",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-1-20"
   },
   {
     "n": 21,
@@ -657,7 +689,8 @@
     "sceneLabel": "薪水還能談",
     "iconKey": "work-hourglass",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "work-1-21"
   },
   {
     "n": 22,
@@ -677,7 +710,8 @@
     "sceneLabel": "對方開始評估你怎麼進入團隊",
     "iconKey": "work-two-offers",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-1-22"
   },
   {
     "n": 23,
@@ -697,7 +731,8 @@
     "sceneLabel": "職缺臨時變動",
     "iconKey": "work-puzzle",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-1-23"
   },
   {
     "n": 24,
@@ -717,7 +752,8 @@
     "sceneLabel": "有人幫你內推",
     "iconKey": "work-resume",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-1-24"
   },
   {
     "n": 25,
@@ -737,7 +773,8 @@
     "sceneLabel": "對方想看你實際做過什麼",
     "iconKey": "work-resume",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-1-25"
   },
   {
     "n": 26,
@@ -757,7 +794,8 @@
     "sceneLabel": "跨領域",
     "iconKey": "work-hourglass",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "work-1-26"
   },
   {
     "n": 63,
@@ -777,7 +815,8 @@
     "sceneLabel": "你設的條件可能太窄",
     "iconKey": "work-two-offers",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-1-63"
   },
   {
     "n": 64,
@@ -797,7 +836,8 @@
     "sceneLabel": "第二輪才是關卡",
     "iconKey": "work-puzzle",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-1-64"
   },
   {
     "n": 65,
@@ -817,7 +857,8 @@
     "sceneLabel": "一直沒有回音",
     "iconKey": "work-resume",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-1-65"
   },
   {
     "n": 66,
@@ -837,7 +878,8 @@
     "sceneLabel": "找太久，開始想降標準",
     "iconKey": "work-resume",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-1-66"
   },
   {
     "n": 67,
@@ -857,7 +899,8 @@
     "sceneLabel": "薪水普通但學得到",
     "iconKey": "work-hourglass",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "work-1-67"
   },
   {
     "n": 68,
@@ -877,7 +920,8 @@
     "sceneLabel": "過渡型工作要看清條件",
     "iconKey": "work-two-offers",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-1-68"
   },
   {
     "n": 69,
@@ -897,7 +941,8 @@
     "sceneLabel": "舊同事帶來的機會",
     "iconKey": "work-puzzle",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-1-69"
   },
   {
     "n": 70,
@@ -917,7 +962,8 @@
     "sceneLabel": "只差一項很具體的條件",
     "iconKey": "work-resume",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-1-70"
   },
   {
     "n": 71,
@@ -937,7 +983,8 @@
     "sceneLabel": "面試講不出具體的東西",
     "iconKey": "work-resume",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-1-71"
   },
   {
     "n": 72,
@@ -957,7 +1004,8 @@
     "sceneLabel": "準備開始接得住更多機會",
     "iconKey": "work-hourglass",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "work-1-72"
   },
   {
     "n": 73,
@@ -977,7 +1025,8 @@
     "sceneLabel": "該拒絕不合適的",
     "iconKey": "work-two-offers",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-1-73"
   },
   {
     "n": 74,
@@ -997,7 +1046,8 @@
     "sceneLabel": "越接近結果，越要確認細節",
     "iconKey": "work-puzzle",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-1-74"
   },
   {
     "n": 14,
@@ -1017,7 +1067,8 @@
     "sceneLabel": "有想走的念頭，但下一步還沒成形",
     "iconKey": "work-compass",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "work-2-14"
   },
   {
     "n": 15,
@@ -1037,7 +1088,8 @@
     "sceneLabel": "把視線往外放，會比較看得清楚",
     "iconKey": "work-open-door",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-2-15"
   },
   {
     "n": 16,
@@ -1057,7 +1109,8 @@
     "sceneLabel": "內轉更順",
     "iconKey": "work-keys",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "work-2-16"
   },
   {
     "n": 17,
@@ -1077,7 +1130,8 @@
     "sceneLabel": "新機會的條件不是唯一答案",
     "iconKey": "work-coins-up",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-2-17"
   },
   {
     "n": 18,
@@ -1097,7 +1151,8 @@
     "sceneLabel": "先遇到不合適機會",
     "iconKey": "work-two-offers",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-2-18"
   },
   {
     "n": 19,
@@ -1117,7 +1172,8 @@
     "sceneLabel": "跨產業可行",
     "iconKey": "work-compass",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "work-2-19"
   },
   {
     "n": 20,
@@ -1137,7 +1193,8 @@
     "sceneLabel": "職稱下降但空間變大",
     "iconKey": "work-open-door",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-2-20"
   },
   {
     "n": 21,
@@ -1157,7 +1214,8 @@
     "sceneLabel": "條件變好，也要看你付出的代價",
     "iconKey": "work-keys",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "work-2-21"
   },
   {
     "n": 22,
@@ -1177,7 +1235,8 @@
     "sceneLabel": "舊公司挽留",
     "iconKey": "work-coins-up",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-2-22"
   },
   {
     "n": 23,
@@ -1197,7 +1256,8 @@
     "sceneLabel": "先弄清楚你真正想換掉的是什麼",
     "iconKey": "work-two-offers",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-2-23"
   },
   {
     "n": 24,
@@ -1217,7 +1277,8 @@
     "sceneLabel": "市場慢，不等於你選錯方向",
     "iconKey": "work-compass",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "work-2-24"
   },
   {
     "n": 25,
@@ -1237,7 +1298,8 @@
     "sceneLabel": "先補一張證照或一件作品",
     "iconKey": "work-open-door",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-2-25"
   },
   {
     "n": 26,
@@ -1257,7 +1319,8 @@
     "sceneLabel": "人脈可能比海投更有用",
     "iconKey": "work-keys",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "work-2-26"
   },
   {
     "n": 63,
@@ -1277,7 +1340,8 @@
     "sceneLabel": "別因門檻高就先替自己淘汰",
     "iconKey": "work-coins-up",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-2-63"
   },
   {
     "n": 64,
@@ -1297,7 +1361,8 @@
     "sceneLabel": "小公司權責更大",
     "iconKey": "work-two-offers",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-2-64"
   },
   {
     "n": 65,
@@ -1317,7 +1382,8 @@
     "sceneLabel": "別讓原本設定的條件困住選擇",
     "iconKey": "work-compass",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "work-2-65"
   },
   {
     "n": 66,
@@ -1337,7 +1403,8 @@
     "sceneLabel": "剛換環境的不舒服，不一定是選錯",
     "iconKey": "work-open-door",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-2-66"
   },
   {
     "n": 67,
@@ -1357,7 +1424,8 @@
     "sceneLabel": "如果只是想逃，先別急著裸辭",
     "iconKey": "work-keys",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "work-2-67"
   },
   {
     "n": 68,
@@ -1377,7 +1445,8 @@
     "sceneLabel": "可以先離開，但要把風險算清楚",
     "iconKey": "work-coins-up",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-2-68"
   },
   {
     "n": 69,
@@ -1397,7 +1466,8 @@
     "sceneLabel": "不要只知道想逃離什麼",
     "iconKey": "work-two-offers",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-2-69"
   },
   {
     "n": 70,
@@ -1417,7 +1487,8 @@
     "sceneLabel": "熟悉的能力仍然是你的籌碼",
     "iconKey": "work-compass",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "work-2-70"
   },
   {
     "n": 71,
@@ -1437,7 +1508,8 @@
     "sceneLabel": "完全換跑道需過渡",
     "iconKey": "work-open-door",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-2-71"
   },
   {
     "n": 72,
@@ -1457,7 +1529,8 @@
     "sceneLabel": "別被現在的職稱框住",
     "iconKey": "work-keys",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "work-2-72"
   },
   {
     "n": 73,
@@ -1477,7 +1550,8 @@
     "sceneLabel": "卡住的可能不是時間，是方法",
     "iconKey": "work-coins-up",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-2-73"
   },
   {
     "n": 74,
@@ -1497,7 +1571,8 @@
     "sceneLabel": "值得離開舒適圈",
     "iconKey": "work-two-offers",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-2-74"
   },
   {
     "n": 14,
@@ -1517,7 +1592,8 @@
     "sceneLabel": "近期表現可能正被重新評估",
     "iconKey": "work-eye-file",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-3-14"
   },
   {
     "n": 15,
@@ -1537,7 +1613,8 @@
     "sceneLabel": "成果被低估",
     "iconKey": "work-eye-file",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-3-15"
   },
   {
     "n": 16,
@@ -1557,7 +1634,8 @@
     "sceneLabel": "分工正在變動",
     "iconKey": "work-chess",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-3-16"
   },
   {
     "n": 17,
@@ -1577,7 +1655,8 @@
     "sceneLabel": "合作關係裡有資訊落差",
     "iconKey": "work-puzzle",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-3-17"
   },
   {
     "n": 18,
@@ -1597,7 +1676,8 @@
     "sceneLabel": "衝突浮現",
     "iconKey": "work-lightning",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-3-18"
   },
   {
     "n": 19,
@@ -1617,7 +1697,8 @@
     "sceneLabel": "有機會往上，但要先把條件做實",
     "iconKey": "work-eye-file",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-3-19"
   },
   {
     "n": 20,
@@ -1637,7 +1718,8 @@
     "sceneLabel": "加薪可談",
     "iconKey": "work-eye-file",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-3-20"
   },
   {
     "n": 21,
@@ -1657,7 +1739,8 @@
     "sceneLabel": "被搶功",
     "iconKey": "work-chess",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-3-21"
   },
   {
     "n": 22,
@@ -1677,7 +1760,8 @@
     "sceneLabel": "被排擠或漏接消息",
     "iconKey": "work-puzzle",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-3-22"
   },
   {
     "n": 23,
@@ -1697,7 +1781,8 @@
     "sceneLabel": "支持要看行動，不只看說法",
     "iconKey": "work-lightning",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-3-23"
   },
   {
     "n": 24,
@@ -1717,7 +1802,8 @@
     "sceneLabel": "有一個溝通落差需要補起來",
     "iconKey": "work-eye-file",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-3-24"
   },
   {
     "n": 25,
@@ -1737,7 +1823,8 @@
     "sceneLabel": "跨部門合作",
     "iconKey": "work-eye-file",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-3-25"
   },
   {
     "n": 26,
@@ -1757,7 +1844,8 @@
     "sceneLabel": "組織調整時先看自己的位置",
     "iconKey": "work-chess",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-3-26"
   },
   {
     "n": 63,
@@ -1777,7 +1865,8 @@
     "sceneLabel": "若出現縮編訊號，提早準備",
     "iconKey": "work-puzzle",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-3-63"
   },
   {
     "n": 64,
@@ -1797,7 +1886,8 @@
     "sceneLabel": "工作量失衡",
     "iconKey": "work-lightning",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-3-64"
   },
   {
     "n": 65,
@@ -1817,7 +1907,8 @@
     "sceneLabel": "團隊太依賴少數人，是一個風險",
     "iconKey": "work-eye-file",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-3-65"
   },
   {
     "n": 66,
@@ -1837,7 +1928,8 @@
     "sceneLabel": "責任範圍可能正在擴大",
     "iconKey": "work-eye-file",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-3-66"
   },
   {
     "n": 67,
@@ -1857,7 +1949,8 @@
     "sceneLabel": "適合主動提案",
     "iconKey": "work-chess",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-3-67"
   },
   {
     "n": 68,
@@ -1877,7 +1970,8 @@
     "sceneLabel": "需要留下紀錄",
     "iconKey": "work-puzzle",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-3-68"
   },
   {
     "n": 69,
@@ -1897,7 +1991,8 @@
     "sceneLabel": "辦公室政治",
     "iconKey": "work-lightning",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-3-69"
   },
   {
     "n": 70,
@@ -1917,7 +2012,8 @@
     "sceneLabel": "真正能幫你的人未必職位最高",
     "iconKey": "work-eye-file",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-3-70"
   },
   {
     "n": 71,
@@ -1937,7 +2033,8 @@
     "sceneLabel": "別人的問題可能最後落到你身上",
     "iconKey": "work-eye-file",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-3-71"
   },
   {
     "n": 72,
@@ -1957,7 +2054,8 @@
     "sceneLabel": "成果需要被看見，而不是等著被發現",
     "iconKey": "work-chess",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-3-72"
   },
   {
     "n": 73,
@@ -1977,7 +2075,8 @@
     "sceneLabel": "短期低潮",
     "iconKey": "work-puzzle",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-3-73"
   },
   {
     "n": 74,
@@ -1997,7 +2096,8 @@
     "sceneLabel": "關係能不能回穩，要看有沒有新的互動方式",
     "iconKey": "work-lightning",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-3-74"
   },
   {
     "n": 14,
@@ -2017,7 +2117,8 @@
     "sceneLabel": "市場有需求但定位太寬",
     "iconKey": "work-focus",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-4-14"
   },
   {
     "n": 15,
@@ -2037,7 +2138,8 @@
     "sceneLabel": "有曝光沒成交",
     "iconKey": "work-focus",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-4-15"
   },
   {
     "n": 16,
@@ -2057,7 +2159,8 @@
     "sceneLabel": "看別人跑得快，開始懷疑自己",
     "iconKey": "work-handshake",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-4-16"
   },
   {
     "n": 17,
@@ -2077,7 +2180,8 @@
     "sceneLabel": "產品需再調整",
     "iconKey": "work-gear",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-4-17"
   },
   {
     "n": 18,
@@ -2097,7 +2201,8 @@
     "sceneLabel": "做很久沒起色，開始想放棄",
     "iconKey": "work-coins-up",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "work-4-18"
   },
   {
     "n": 19,
@@ -2117,7 +2222,8 @@
     "sceneLabel": "現金壓力開始影響你的判斷",
     "iconKey": "work-focus",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-4-19"
   },
   {
     "n": 20,
@@ -2137,7 +2243,8 @@
     "sceneLabel": "定價需要調整",
     "iconKey": "work-focus",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-4-20"
   },
   {
     "n": 21,
@@ -2157,7 +2264,8 @@
     "sceneLabel": "你可能正在服務不適合自己的客人",
     "iconKey": "work-handshake",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-4-21"
   },
   {
     "n": 22,
@@ -2177,7 +2285,8 @@
     "sceneLabel": "廣告有效但承接弱",
     "iconKey": "work-gear",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-4-22"
   },
   {
     "n": 23,
@@ -2197,7 +2306,8 @@
     "sceneLabel": "內容帶流量",
     "iconKey": "work-coins-up",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "work-4-23"
   },
   {
     "n": 24,
@@ -2217,7 +2327,8 @@
     "sceneLabel": "生意還能做，但你已經有點厭倦",
     "iconKey": "work-focus",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-4-24"
   },
   {
     "n": 25,
@@ -2237,7 +2348,8 @@
     "sceneLabel": "合夥問題不是做法，而是方向",
     "iconKey": "work-focus",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-4-25"
   },
   {
     "n": 26,
@@ -2257,7 +2369,8 @@
     "sceneLabel": "合作條件需白紙黑字",
     "iconKey": "work-handshake",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-4-26"
   },
   {
     "n": 63,
@@ -2277,7 +2390,8 @@
     "sceneLabel": "大客戶很誘人，也可能讓你失去主導權",
     "iconKey": "work-gear",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-4-63"
   },
   {
     "n": 64,
@@ -2297,7 +2411,8 @@
     "sceneLabel": "小單累積更穩",
     "iconKey": "work-coins-up",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "work-4-64"
   },
   {
     "n": 65,
@@ -2317,7 +2432,8 @@
     "sceneLabel": "產品線太多",
     "iconKey": "work-focus",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-4-65"
   },
   {
     "n": 66,
@@ -2337,7 +2453,8 @@
     "sceneLabel": "先做主力商品",
     "iconKey": "work-focus",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-4-66"
   },
   {
     "n": 67,
@@ -2357,7 +2474,8 @@
     "sceneLabel": "品牌定位會變清楚",
     "iconKey": "work-handshake",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-4-67"
   },
   {
     "n": 68,
@@ -2377,7 +2495,8 @@
     "sceneLabel": "需要停止低效項目",
     "iconKey": "work-gear",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-4-68"
   },
   {
     "n": 69,
@@ -2397,7 +2516,8 @@
     "sceneLabel": "不是所有花錢都是浪費，也不是所有投資都叫成長",
     "iconKey": "work-coins-up",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "work-4-69"
   },
   {
     "n": 70,
@@ -2417,7 +2537,8 @@
     "sceneLabel": "現在需要的不是等突破，是決定要不要換打法",
     "iconKey": "work-focus",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-4-70"
   },
   {
     "n": 71,
@@ -2437,7 +2558,8 @@
     "sceneLabel": "口碑開始形成",
     "iconKey": "work-focus",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-4-71"
   },
   {
     "n": 72,
@@ -2457,7 +2579,8 @@
     "sceneLabel": "網站與流程要調整",
     "iconKey": "work-handshake",
     "icon": "/assets/oracle-icons/oracle-message.webp",
-    "oracleSymbol": "message"
+    "oracleSymbol": "message",
+    "pid": "work-4-72"
   },
   {
     "n": 73,
@@ -2477,7 +2600,8 @@
     "sceneLabel": "轉型比擴張重要",
     "iconKey": "work-gear",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "work-4-73"
   },
   {
     "n": 74,
@@ -2497,6 +2621,7 @@
     "sceneLabel": "你是在堅持，還是在死撐",
     "iconKey": "work-coins-up",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "work-4-74"
   }
 ]

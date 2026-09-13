@@ -17,7 +17,8 @@
     "sceneLabel": "A較穩定B較有成長",
     "iconKey": "path_not_revealed",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "choice-0-27"
   },
   {
     "n": 28,
@@ -37,7 +38,8 @@
     "sceneLabel": "短期選A長期選B",
     "iconKey": "path_inner_preference",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-0-28"
   },
   {
     "n": 29,
@@ -57,7 +59,8 @@
     "sceneLabel": "你其實偏向其中一邊",
     "iconKey": "path_narrow_problem",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-0-29"
   },
   {
     "n": 30,
@@ -77,7 +80,8 @@
     "sceneLabel": "兩邊都有代價",
     "iconKey": "path_external_noise",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-0-30"
   },
   {
     "n": 31,
@@ -97,7 +101,8 @@
     "sceneLabel": "資訊不足先別選",
     "iconKey": "path_small_test",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-0-31"
   },
   {
     "n": 32,
@@ -117,7 +122,8 @@
     "sceneLabel": "第三個方案會出現",
     "iconKey": "path_not_revealed",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "choice-0-32"
   },
   {
     "n": 33,
@@ -137,7 +143,8 @@
     "sceneLabel": "選可逆的那一邊",
     "iconKey": "path_inner_preference",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-0-33"
   },
   {
     "n": 34,
@@ -157,7 +164,8 @@
     "sceneLabel": "成本比喜歡更重要",
     "iconKey": "path_narrow_problem",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-0-34"
   },
   {
     "n": 35,
@@ -177,7 +185,8 @@
     "sceneLabel": "不要為別人期待選",
     "iconKey": "path_external_noise",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-0-35"
   },
   {
     "n": 36,
@@ -197,7 +206,8 @@
     "sceneLabel": "先試其中一個",
     "iconKey": "path_small_test",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-0-36"
   },
   {
     "n": 37,
@@ -217,7 +227,8 @@
     "sceneLabel": "時間會替你淘汰一項",
     "iconKey": "path_not_revealed",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "choice-0-37"
   },
   {
     "n": 38,
@@ -237,7 +248,8 @@
     "sceneLabel": "較遠的選項更有利",
     "iconKey": "path_inner_preference",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-0-38"
   },
   {
     "n": 75,
@@ -257,7 +269,8 @@
     "sceneLabel": "熟悉的不一定更好",
     "iconKey": "path_narrow_problem",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-0-75"
   },
   {
     "n": 76,
@@ -277,7 +290,8 @@
     "sceneLabel": "新選項風險高但有突破",
     "iconKey": "path_external_noise",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-0-76"
   },
   {
     "n": 77,
@@ -297,7 +311,8 @@
     "sceneLabel": "目前不適合二選一",
     "iconKey": "path_small_test",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-0-77"
   },
   {
     "n": 78,
@@ -317,7 +332,8 @@
     "sceneLabel": "選讓你能睡得著的",
     "iconKey": "path_not_revealed",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "choice-0-78"
   },
   {
     "n": 79,
@@ -337,7 +353,8 @@
     "sceneLabel": "選擇自由度較高的",
     "iconKey": "path_inner_preference",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-0-79"
   },
   {
     "n": 80,
@@ -357,7 +374,8 @@
     "sceneLabel": "先看最壞結果能否承受",
     "iconKey": "path_narrow_problem",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-0-80"
   },
   {
     "n": 81,
@@ -377,7 +395,8 @@
     "sceneLabel": "人情不是決策核心",
     "iconKey": "path_external_noise",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-0-81"
   },
   {
     "n": 82,
@@ -397,7 +416,8 @@
     "sceneLabel": "金錢差距會成關鍵",
     "iconKey": "path_small_test",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-0-82"
   },
   {
     "n": 83,
@@ -417,7 +437,8 @@
     "sceneLabel": "長期生活品質優先",
     "iconKey": "path_not_revealed",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "choice-0-83"
   },
   {
     "n": 84,
@@ -437,7 +458,8 @@
     "sceneLabel": "一邊承諾過多需警覺",
     "iconKey": "path_inner_preference",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-0-84"
   },
   {
     "n": 85,
@@ -457,7 +479,8 @@
     "sceneLabel": "真正問題不是二選一",
     "iconKey": "path_narrow_problem",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-0-85"
   },
   {
     "n": 86,
@@ -477,7 +500,8 @@
     "sceneLabel": "先設截止日再決定",
     "iconKey": "path_external_noise",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-0-86"
   },
   {
     "n": 87,
@@ -497,7 +521,8 @@
     "sceneLabel": "答案會因新消息改變",
     "iconKey": "path_small_test",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-0-87"
   },
   {
     "n": 27,
@@ -517,7 +542,8 @@
     "sceneLabel": "現在可以做決定",
     "iconKey": "path_not_revealed",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "choice-1-27"
   },
   {
     "n": 28,
@@ -537,7 +563,8 @@
     "sceneLabel": "再等一個關鍵資訊",
     "iconKey": "path_inner_preference",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-1-28"
   },
   {
     "n": 29,
@@ -557,7 +584,8 @@
     "sceneLabel": "決定後不要反覆驗證",
     "iconKey": "path_narrow_problem",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-1-29"
   },
   {
     "n": 30,
@@ -577,7 +605,8 @@
     "sceneLabel": "先做小規模測試",
     "iconKey": "path_external_noise",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-1-30"
   },
   {
     "n": 31,
@@ -597,7 +626,8 @@
     "sceneLabel": "需要設定停損點",
     "iconKey": "path_small_test",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-1-31"
   },
   {
     "n": 32,
@@ -617,7 +647,8 @@
     "sceneLabel": "時機比選項更重要",
     "iconKey": "path_not_revealed",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "choice-1-32"
   },
   {
     "n": 33,
@@ -637,7 +668,8 @@
     "sceneLabel": "這次適合保守",
     "iconKey": "path_inner_preference",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-1-33"
   },
   {
     "n": 34,
@@ -657,7 +689,8 @@
     "sceneLabel": "這次適合冒險一步",
     "iconKey": "path_narrow_problem",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-1-34"
   },
   {
     "n": 35,
@@ -677,7 +710,8 @@
     "sceneLabel": "先處理金錢問題",
     "iconKey": "path_external_noise",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-1-35"
   },
   {
     "n": 36,
@@ -697,7 +731,8 @@
     "sceneLabel": "先確認對方承諾",
     "iconKey": "path_small_test",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-1-36"
   },
   {
     "n": 37,
@@ -717,7 +752,8 @@
     "sceneLabel": "合約細節要看清楚",
     "iconKey": "path_not_revealed",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "choice-1-37"
   },
   {
     "n": 38,
@@ -737,7 +773,8 @@
     "sceneLabel": "不要在情緒高點決定",
     "iconKey": "path_inner_preference",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-1-38"
   },
   {
     "n": 75,
@@ -757,7 +794,8 @@
     "sceneLabel": "不要因害怕錯過而答應",
     "iconKey": "path_narrow_problem",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-1-75"
   },
   {
     "n": 76,
@@ -777,7 +815,8 @@
     "sceneLabel": "一週後會更清楚",
     "iconKey": "path_external_noise",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-1-76"
   },
   {
     "n": 77,
@@ -797,7 +836,8 @@
     "sceneLabel": "一個月內有新條件",
     "iconKey": "path_small_test",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-1-77"
   },
   {
     "n": 78,
@@ -817,7 +857,8 @@
     "sceneLabel": "有人會給實用建議",
     "iconKey": "path_not_revealed",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "choice-1-78"
   },
   {
     "n": 79,
@@ -837,7 +878,8 @@
     "sceneLabel": "家人意見可參考但不主導",
     "iconKey": "path_inner_preference",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-1-79"
   },
   {
     "n": 80,
@@ -857,7 +899,8 @@
     "sceneLabel": "你有能力承擔結果",
     "iconKey": "path_narrow_problem",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-1-80"
   },
   {
     "n": 81,
@@ -877,7 +920,8 @@
     "sceneLabel": "拒絕也是一種決定",
     "iconKey": "path_external_noise",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-1-81"
   },
   {
     "n": 82,
@@ -897,7 +941,8 @@
     "sceneLabel": "延期比硬做更好",
     "iconKey": "path_small_test",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-1-82"
   },
   {
     "n": 83,
@@ -917,7 +962,8 @@
     "sceneLabel": "舊方案可重新談",
     "iconKey": "path_not_revealed",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "choice-1-83"
   },
   {
     "n": 84,
@@ -937,7 +983,8 @@
     "sceneLabel": "條件還能談判",
     "iconKey": "path_inner_preference",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-1-84"
   },
   {
     "n": 85,
@@ -957,7 +1004,8 @@
     "sceneLabel": "先問自己真正要什麼",
     "iconKey": "path_narrow_problem",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-1-85"
   },
   {
     "n": 86,
@@ -977,7 +1025,8 @@
     "sceneLabel": "做完會比想像輕鬆",
     "iconKey": "path_external_noise",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-1-86"
   },
   {
     "n": 87,
@@ -997,7 +1046,8 @@
     "sceneLabel": "決定後會開出新路",
     "iconKey": "path_small_test",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-1-87"
   },
   {
     "n": 27,
@@ -1017,7 +1067,8 @@
     "sceneLabel": "方向正確繼續走",
     "iconKey": "path_not_revealed",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "choice-2-27"
   },
   {
     "n": 28,
@@ -1037,7 +1088,8 @@
     "sceneLabel": "方向對但方法要換",
     "iconKey": "path_inner_preference",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-2-28"
   },
   {
     "n": 29,
@@ -1057,7 +1109,8 @@
     "sceneLabel": "需要換跑道",
     "iconKey": "path_narrow_problem",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-2-29"
   },
   {
     "n": 30,
@@ -1077,7 +1130,8 @@
     "sceneLabel": "先累積再轉向",
     "iconKey": "path_external_noise",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-2-30"
   },
   {
     "n": 31,
@@ -1097,7 +1151,8 @@
     "sceneLabel": "適合跨領域",
     "iconKey": "path_small_test",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-2-31"
   },
   {
     "n": 32,
@@ -1117,7 +1172,8 @@
     "sceneLabel": "適合回到原本擅長",
     "iconKey": "path_not_revealed",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "choice-2-32"
   },
   {
     "n": 33,
@@ -1137,7 +1193,8 @@
     "sceneLabel": "遠方／外地更有利",
     "iconKey": "path_inner_preference",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-2-33"
   },
   {
     "n": 34,
@@ -1157,7 +1214,8 @@
     "sceneLabel": "人脈會帶路",
     "iconKey": "path_narrow_problem",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-2-34"
   },
   {
     "n": 35,
@@ -1177,7 +1235,8 @@
     "sceneLabel": "學習新技能是關鍵",
     "iconKey": "path_external_noise",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-2-35"
   },
   {
     "n": 36,
@@ -1197,7 +1256,8 @@
     "sceneLabel": "收入先降後升",
     "iconKey": "path_small_test",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-2-36"
   },
   {
     "n": 37,
@@ -1217,7 +1277,8 @@
     "sceneLabel": "短期不穩長期較好",
     "iconKey": "path_not_revealed",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "choice-2-37"
   },
   {
     "n": 38,
@@ -1237,7 +1298,8 @@
     "sceneLabel": "目前適合守成",
     "iconKey": "path_inner_preference",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-2-38"
   },
   {
     "n": 75,
@@ -1257,7 +1319,8 @@
     "sceneLabel": "新計畫值得開始",
     "iconKey": "path_narrow_problem",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-2-75"
   },
   {
     "n": 76,
@@ -1277,7 +1340,8 @@
     "sceneLabel": "舊方向已到盡頭",
     "iconKey": "path_external_noise",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-2-76"
   },
   {
     "n": 77,
@@ -1297,7 +1361,8 @@
     "sceneLabel": "不要同時走三條路",
     "iconKey": "path_small_test",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-2-77"
   },
   {
     "n": 78,
@@ -1317,7 +1382,8 @@
     "sceneLabel": "先選能累積作品的",
     "iconKey": "path_not_revealed",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "choice-2-78"
   },
   {
     "n": 79,
@@ -1337,7 +1403,8 @@
     "sceneLabel": "先選能累積資源的",
     "iconKey": "path_inner_preference",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-2-79"
   },
   {
     "n": 80,
@@ -1357,7 +1424,8 @@
     "sceneLabel": "先選能保留退路的",
     "iconKey": "path_narrow_problem",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-2-80"
   },
   {
     "n": 81,
@@ -1377,7 +1445,8 @@
     "sceneLabel": "合作比單打獨鬥好",
     "iconKey": "path_external_noise",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-2-81"
   },
   {
     "n": 82,
@@ -1397,7 +1466,8 @@
     "sceneLabel": "獨立做反而更順",
     "iconKey": "path_small_test",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-2-82"
   },
   {
     "n": 83,
@@ -1417,7 +1487,8 @@
     "sceneLabel": "三個月後方向清楚",
     "iconKey": "path_not_revealed",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "choice-2-83"
   },
   {
     "n": 84,
@@ -1437,7 +1508,8 @@
     "sceneLabel": "年底前會定型",
     "iconKey": "path_inner_preference",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-2-84"
   },
   {
     "n": 85,
@@ -1457,7 +1529,8 @@
     "sceneLabel": "一次失敗會幫你校準",
     "iconKey": "path_narrow_problem",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-2-85"
   },
   {
     "n": 86,
@@ -1477,7 +1550,8 @@
     "sceneLabel": "真正適合的比想像務實",
     "iconKey": "path_external_noise",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-2-86"
   },
   {
     "n": 87,
@@ -1497,6 +1571,7 @@
     "sceneLabel": "你需要的是節奏不是答案",
     "iconKey": "path_small_test",
     "icon": "/assets/oracle-icons/oracle-direction.webp",
-    "oracleSymbol": "direction"
+    "oracleSymbol": "direction",
+    "pid": "choice-2-87"
   }
 ]

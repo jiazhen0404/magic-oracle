@@ -17,7 +17,8 @@
     "sceneLabel": "仍有牽掛",
     "iconKey": "love-red-thread",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-0-1"
   },
   {
     "n": 2,
@@ -37,7 +38,8 @@
     "sceneLabel": "正在放下",
     "iconKey": "love-red-thread",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-0-2"
   },
   {
     "n": 3,
@@ -57,7 +59,8 @@
     "sceneLabel": "情緒性分手",
     "iconKey": "love-release",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-0-3"
   },
   {
     "n": 4,
@@ -77,7 +80,8 @@
     "sceneLabel": "深思熟慮分手",
     "iconKey": "love-midnight-message",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-0-4"
   },
   {
     "n": 5,
@@ -97,7 +101,8 @@
     "sceneLabel": "斷聯／封鎖",
     "iconKey": "love-thorns",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-0-5"
   },
   {
     "n": 6,
@@ -117,7 +122,8 @@
     "sceneLabel": "寂寞才靠近",
     "iconKey": "love-friends",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-0-6"
   },
   {
     "n": 7,
@@ -137,7 +143,8 @@
     "sceneLabel": "後悔但害怕重來",
     "iconKey": "love-unsent-letter",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-0-7"
   },
   {
     "n": 8,
@@ -157,7 +164,8 @@
     "sceneLabel": "愧疚但未必復合",
     "iconKey": "love-fallen-rose",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-0-8"
   },
   {
     "n": 9,
@@ -177,7 +185,8 @@
     "sceneLabel": "偷看社群但不聯絡",
     "iconKey": "love-wall",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-0-9"
   },
   {
     "n": 10,
@@ -197,7 +206,8 @@
     "sceneLabel": "等你先開口",
     "iconKey": "love-release",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-0-10"
   },
   {
     "n": 11,
@@ -217,7 +227,8 @@
     "sceneLabel": "新歡影響",
     "iconKey": "love-red-thread",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-0-11"
   },
   {
     "n": 12,
@@ -237,7 +248,8 @@
     "sceneLabel": "第三者尚未穩定",
     "iconKey": "love-red-thread",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-0-12"
   },
   {
     "n": 13,
@@ -257,7 +269,8 @@
     "sceneLabel": "朋友身分重新靠近",
     "iconKey": "love-release",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-0-13"
   },
   {
     "n": 51,
@@ -277,7 +290,8 @@
     "sceneLabel": "肉體吸引仍在",
     "iconKey": "love-midnight-message",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-0-51"
   },
   {
     "n": 52,
@@ -297,7 +311,8 @@
     "sceneLabel": "家庭反對",
     "iconKey": "love-thorns",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-0-52"
   },
   {
     "n": 53,
@@ -317,7 +332,8 @@
     "sceneLabel": "遠距造成分開",
     "iconKey": "love-friends",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-0-53"
   },
   {
     "n": 54,
@@ -337,7 +353,8 @@
     "sceneLabel": "工作壓力退縮",
     "iconKey": "love-unsent-letter",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-0-54"
   },
   {
     "n": 55,
@@ -357,7 +374,8 @@
     "sceneLabel": "反覆分合",
     "iconKey": "love-fallen-rose",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-0-55"
   },
   {
     "n": 56,
@@ -377,7 +395,8 @@
     "sceneLabel": "復合後仍有舊問題",
     "iconKey": "love-wall",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-0-56"
   },
   {
     "n": 57,
@@ -397,7 +416,8 @@
     "sceneLabel": "短期重新聯絡",
     "iconKey": "love-release",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-0-57"
   },
   {
     "n": 58,
@@ -417,7 +437,8 @@
     "sceneLabel": "長等待期",
     "iconKey": "love-red-thread",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-0-58"
   },
   {
     "n": 59,
@@ -437,7 +458,8 @@
     "sceneLabel": "你放下後他回頭",
     "iconKey": "love-red-thread",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-0-59"
   },
   {
     "n": 60,
@@ -457,7 +479,8 @@
     "sceneLabel": "想確認你還在不在",
     "iconKey": "love-release",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-0-60"
   },
   {
     "n": 61,
@@ -477,7 +500,8 @@
     "sceneLabel": "真正結束",
     "iconKey": "love-midnight-message",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-0-61"
   },
   {
     "n": 62,
@@ -497,7 +521,8 @@
     "sceneLabel": "新人會取代舊人",
     "iconKey": "love-thorns",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-0-62"
   },
   {
     "n": 1,
@@ -517,7 +542,8 @@
     "sceneLabel": "雙向好感互相試探",
     "iconKey": "love-double-stars",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-1-1"
   },
   {
     "n": 2,
@@ -537,7 +563,8 @@
     "sceneLabel": "有好感仍觀察",
     "iconKey": "love-eye-rose",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-1-2"
   },
   {
     "n": 3,
@@ -557,7 +584,8 @@
     "sceneLabel": "只想當朋友",
     "iconKey": "love-half-open-rose",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-1-3"
   },
   {
     "n": 4,
@@ -577,7 +605,8 @@
     "sceneLabel": "享受曖昧不承諾",
     "iconKey": "love-friends",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-1-4"
   },
   {
     "n": 5,
@@ -597,7 +626,8 @@
     "sceneLabel": "害怕被拒絕",
     "iconKey": "love-crystal-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-1-5"
   },
   {
     "n": 6,
@@ -617,7 +647,8 @@
     "sceneLabel": "等你先開口",
     "iconKey": "love-unsent-letter",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-1-6"
   },
   {
     "n": 7,
@@ -637,7 +668,8 @@
     "sceneLabel": "單方面投入",
     "iconKey": "love-three-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-1-7"
   },
   {
     "n": 8,
@@ -657,7 +689,8 @@
     "sceneLabel": "享受被喜歡",
     "iconKey": "love-old-moon",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-1-8"
   },
   {
     "n": 9,
@@ -677,7 +710,8 @@
     "sceneLabel": "多線發展／養魚",
     "iconKey": "love-warming-stars",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-1-9"
   },
   {
     "n": 10,
@@ -697,7 +731,8 @@
     "sceneLabel": "第三者／多方選擇",
     "iconKey": "love-fading-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-1-10"
   },
   {
     "n": 11,
@@ -717,7 +752,8 @@
     "sceneLabel": "有好感但時機不對",
     "iconKey": "love-double-stars",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-1-11"
   },
   {
     "n": 12,
@@ -737,7 +773,8 @@
     "sceneLabel": "工作忙無心確認",
     "iconKey": "love-eye-rose",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-1-12"
   },
   {
     "n": 13,
@@ -757,7 +794,8 @@
     "sceneLabel": "朋友以上戀人未滿",
     "iconKey": "love-half-open-rose",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-1-13"
   },
   {
     "n": 51,
@@ -777,7 +815,8 @@
     "sceneLabel": "關係即將升溫",
     "iconKey": "love-friends",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-1-51"
   },
   {
     "n": 52,
@@ -797,7 +836,8 @@
     "sceneLabel": "突然降溫",
     "iconKey": "love-crystal-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-1-52"
   },
   {
     "n": 53,
@@ -817,7 +857,8 @@
     "sceneLabel": "訊息熱見面冷",
     "iconKey": "love-unsent-letter",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-1-53"
   },
   {
     "n": 54,
@@ -837,7 +878,8 @@
     "sceneLabel": "見面熱訊息冷",
     "iconKey": "love-three-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-1-54"
   },
   {
     "n": 55,
@@ -857,7 +899,8 @@
     "sceneLabel": "遠距曖昧",
     "iconKey": "love-old-moon",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-1-55"
   },
   {
     "n": 56,
@@ -877,7 +920,8 @@
     "sceneLabel": "網路認識",
     "iconKey": "love-warming-stars",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-1-56"
   },
   {
     "n": 57,
@@ -897,7 +941,8 @@
     "sceneLabel": "慢熱認真",
     "iconKey": "love-fading-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-1-57"
   },
   {
     "n": 58,
@@ -917,7 +962,8 @@
     "sceneLabel": "短暫吸引",
     "iconKey": "love-double-stars",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-1-58"
   },
   {
     "n": 59,
@@ -937,7 +983,8 @@
     "sceneLabel": "身體吸引較強",
     "iconKey": "love-eye-rose",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-1-59"
   },
   {
     "n": 60,
@@ -957,7 +1004,8 @@
     "sceneLabel": "把你當備選",
     "iconKey": "love-half-open-rose",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-1-60"
   },
   {
     "n": 61,
@@ -977,7 +1025,8 @@
     "sceneLabel": "前任影響未退",
     "iconKey": "love-friends",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-1-61"
   },
   {
     "n": 62,
@@ -997,7 +1046,8 @@
     "sceneLabel": "現實條件阻礙",
     "iconKey": "love-crystal-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-1-62"
   },
   {
     "n": 1,
@@ -1017,7 +1067,8 @@
     "sceneLabel": "相愛但疲憊",
     "iconKey": "love-embrace-heart",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-2-1"
   },
   {
     "n": 2,
@@ -1037,7 +1088,8 @@
     "sceneLabel": "需要安全感",
     "iconKey": "love-embrace-heart",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-2-2"
   },
   {
     "n": 3,
@@ -1057,7 +1109,8 @@
     "sceneLabel": "需要空間",
     "iconKey": "love-space-moon",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "love-2-3"
   },
   {
     "n": 4,
@@ -1077,7 +1130,8 @@
     "sceneLabel": "考慮長期未來",
     "iconKey": "love-rings-home",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-2-4"
   },
   {
     "n": 5,
@@ -1097,7 +1151,8 @@
     "sceneLabel": "舊傷反覆",
     "iconKey": "love-thorns",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-2-5"
   },
   {
     "n": 6,
@@ -1117,7 +1172,8 @@
     "sceneLabel": "信任修復",
     "iconKey": "love-balance",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-2-6"
   },
   {
     "n": 7,
@@ -1137,7 +1193,8 @@
     "sceneLabel": "對方抽離",
     "iconKey": "love-cloud-chain",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-2-7"
   },
   {
     "n": 8,
@@ -1157,7 +1214,8 @@
     "sceneLabel": "投入失衡",
     "iconKey": "love-mended-heart",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-2-8"
   },
   {
     "n": 9,
@@ -1177,7 +1235,8 @@
     "sceneLabel": "外部壓力",
     "iconKey": "love-flying-butterfly",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-2-9"
   },
   {
     "n": 10,
@@ -1197,7 +1256,8 @@
     "sceneLabel": "關係新階段",
     "iconKey": "love-rings-home",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-2-10"
   },
   {
     "n": 11,
@@ -1217,7 +1277,8 @@
     "sceneLabel": "第三者疑慮",
     "iconKey": "love-embrace-heart",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-2-11"
   },
   {
     "n": 12,
@@ -1237,7 +1298,8 @@
     "sceneLabel": "價值觀衝突",
     "iconKey": "love-embrace-heart",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-2-12"
   },
   {
     "n": 13,
@@ -1257,7 +1319,8 @@
     "sceneLabel": "金錢問題",
     "iconKey": "love-space-moon",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "love-2-13"
   },
   {
     "n": 51,
@@ -1277,7 +1340,8 @@
     "sceneLabel": "家庭壓力",
     "iconKey": "love-rings-home",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-2-51"
   },
   {
     "n": 52,
@@ -1297,7 +1361,8 @@
     "sceneLabel": "遠距考驗",
     "iconKey": "love-thorns",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-2-52"
   },
   {
     "n": 53,
@@ -1317,7 +1382,8 @@
     "sceneLabel": "婚姻／承諾議題",
     "iconKey": "love-balance",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-2-53"
   },
   {
     "n": 54,
@@ -1337,7 +1403,8 @@
     "sceneLabel": "生活倦怠",
     "iconKey": "love-cloud-chain",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-2-54"
   },
   {
     "n": 55,
@@ -1357,7 +1424,8 @@
     "sceneLabel": "溝通錯位",
     "iconKey": "love-mended-heart",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-2-55"
   },
   {
     "n": 56,
@@ -1377,7 +1445,8 @@
     "sceneLabel": "親密感下降",
     "iconKey": "love-flying-butterfly",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-2-56"
   },
   {
     "n": 57,
@@ -1397,7 +1466,8 @@
     "sceneLabel": "工作影響關係",
     "iconKey": "love-rings-home",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-2-57"
   },
   {
     "n": 58,
@@ -1417,7 +1487,8 @@
     "sceneLabel": "一方付出過多",
     "iconKey": "love-embrace-heart",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-2-58"
   },
   {
     "n": 59,
@@ -1437,7 +1508,8 @@
     "sceneLabel": "冷戰期",
     "iconKey": "love-embrace-heart",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-2-59"
   },
   {
     "n": 60,
@@ -1457,7 +1529,8 @@
     "sceneLabel": "分手危機",
     "iconKey": "love-space-moon",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "love-2-60"
   },
   {
     "n": 61,
@@ -1477,7 +1550,8 @@
     "sceneLabel": "短期修復",
     "iconKey": "love-rings-home",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-2-61"
   },
   {
     "n": 62,
@@ -1497,7 +1571,8 @@
     "sceneLabel": "需要重新約會",
     "iconKey": "love-thorns",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-2-62"
   },
   {
     "n": 1,
@@ -1517,7 +1592,8 @@
     "sceneLabel": "目前重心不在戀愛",
     "iconKey": "love-eye-rose",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-3-1"
   },
   {
     "n": 2,
@@ -1537,7 +1613,8 @@
     "sceneLabel": "有人默默注意",
     "iconKey": "love-old-moon",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-3-2"
   },
   {
     "n": 3,
@@ -1557,7 +1634,8 @@
     "sceneLabel": "朋友發展成戀人",
     "iconKey": "love-space-moon",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "love-3-3"
   },
   {
     "n": 4,
@@ -1577,7 +1655,8 @@
     "sceneLabel": "前任影響未退",
     "iconKey": "love-social-stars",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-3-4"
   },
   {
     "n": 5,
@@ -1597,7 +1676,8 @@
     "sceneLabel": "新緣接近",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-3-5"
   },
   {
     "n": 6,
@@ -1617,7 +1697,8 @@
     "sceneLabel": "社交桃花增加",
     "iconKey": "love-social-stars",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-3-6"
   },
   {
     "n": 7,
@@ -1637,7 +1718,8 @@
     "sceneLabel": "桃花低潮",
     "iconKey": "love-space-moon",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "love-3-7"
   },
   {
     "n": 8,
@@ -1657,7 +1739,8 @@
     "sceneLabel": "慢熱桃花",
     "iconKey": "love-space-moon",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "love-3-8"
   },
   {
     "n": 9,
@@ -1677,7 +1760,8 @@
     "sceneLabel": "工作場合桃花",
     "iconKey": "love-three-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-3-9"
   },
   {
     "n": 10,
@@ -1697,7 +1781,8 @@
     "sceneLabel": "朋友介紹",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-3-10"
   },
   {
     "n": 11,
@@ -1717,7 +1802,8 @@
     "sceneLabel": "興趣場合認識",
     "iconKey": "love-eye-rose",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-3-11"
   },
   {
     "n": 12,
@@ -1737,7 +1823,8 @@
     "sceneLabel": "網路桃花",
     "iconKey": "love-old-moon",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-3-12"
   },
   {
     "n": 13,
@@ -1757,7 +1844,8 @@
     "sceneLabel": "遠距桃花",
     "iconKey": "love-space-moon",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "love-3-13"
   },
   {
     "n": 51,
@@ -1777,7 +1865,8 @@
     "sceneLabel": "舊識重新靠近",
     "iconKey": "love-social-stars",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-3-51"
   },
   {
     "n": 52,
@@ -1797,7 +1886,8 @@
     "sceneLabel": "年齡差桃花",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-3-52"
   },
   {
     "n": 53,
@@ -1817,7 +1907,8 @@
     "sceneLabel": "比你成熟的人",
     "iconKey": "love-social-stars",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-3-53"
   },
   {
     "n": 54,
@@ -1837,7 +1928,8 @@
     "sceneLabel": "比你年輕的人",
     "iconKey": "love-space-moon",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "love-3-54"
   },
   {
     "n": 55,
@@ -1857,7 +1949,8 @@
     "sceneLabel": "短暫吸引",
     "iconKey": "love-space-moon",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "love-3-55"
   },
   {
     "n": 56,
@@ -1877,7 +1970,8 @@
     "sceneLabel": "穩定型桃花",
     "iconKey": "love-three-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-3-56"
   },
   {
     "n": 57,
@@ -1897,7 +1991,8 @@
     "sceneLabel": "強烈快速吸引",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-3-57"
   },
   {
     "n": 58,
@@ -1917,7 +2012,8 @@
     "sceneLabel": "你還沒準備好",
     "iconKey": "love-eye-rose",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-3-58"
   },
   {
     "n": 59,
@@ -1937,7 +2033,8 @@
     "sceneLabel": "需要先放下舊人",
     "iconKey": "love-old-moon",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-3-59"
   },
   {
     "n": 60,
@@ -1957,7 +2054,8 @@
     "sceneLabel": "主動社交才有變化",
     "iconKey": "love-space-moon",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "love-3-60"
   },
   {
     "n": 61,
@@ -1977,7 +2075,8 @@
     "sceneLabel": "被動也有人靠近",
     "iconKey": "love-social-stars",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-3-61"
   },
   {
     "n": 62,
@@ -1997,7 +2096,8 @@
     "sceneLabel": "有人暗戀但不敢說",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-3-62"
   },
   {
     "n": 101,
@@ -2017,7 +2117,8 @@
     "sceneLabel": "桃花回升",
     "iconKey": "love-warming-stars",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-4-101"
   },
   {
     "n": 102,
@@ -2037,7 +2138,8 @@
     "sceneLabel": "社交桃花增加",
     "iconKey": "love-three-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-4-102"
   },
   {
     "n": 103,
@@ -2057,7 +2159,8 @@
     "sceneLabel": "少而穩的桃花",
     "iconKey": "love-social-stars",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-4-103"
   },
   {
     "n": 104,
@@ -2077,7 +2180,8 @@
     "sceneLabel": "強烈快速吸引",
     "iconKey": "love-distance-message",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-4-104"
   },
   {
     "n": 105,
@@ -2097,7 +2201,8 @@
     "sceneLabel": "朋友發展成戀人",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-4-105"
   },
   {
     "n": 106,
@@ -2117,7 +2222,8 @@
     "sceneLabel": "網路／遠距桃花",
     "iconKey": "love-shooting-heart",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-4-106"
   },
   {
     "n": 107,
@@ -2137,7 +2243,8 @@
     "sceneLabel": "舊人再出現",
     "iconKey": "love-fading-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-4-107"
   },
   {
     "n": 108,
@@ -2157,7 +2264,8 @@
     "sceneLabel": "新緣接近",
     "iconKey": "love-space-moon",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "love-4-108"
   },
   {
     "n": 109,
@@ -2177,7 +2285,8 @@
     "sceneLabel": "有人默默注意",
     "iconKey": "love-old-moon",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-4-109"
   },
   {
     "n": 110,
@@ -2197,7 +2306,8 @@
     "sceneLabel": "桃花低潮",
     "iconKey": "love-three-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-4-110"
   },
   {
     "n": 111,
@@ -2217,7 +2327,8 @@
     "sceneLabel": "工作場合桃花",
     "iconKey": "love-social-stars",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-4-111"
   },
   {
     "n": 112,
@@ -2237,7 +2348,8 @@
     "sceneLabel": "朋友介紹桃花",
     "iconKey": "love-social-stars",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-4-112"
   },
   {
     "n": 113,
@@ -2257,7 +2369,8 @@
     "sceneLabel": "興趣場合桃花",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-4-113"
   },
   {
     "n": 114,
@@ -2277,7 +2390,8 @@
     "sceneLabel": "旅行桃花",
     "iconKey": "love-wall",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "love-4-114"
   },
   {
     "n": 115,
@@ -2297,7 +2411,8 @@
     "sceneLabel": "學習場合桃花",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-4-115"
   },
   {
     "n": 116,
@@ -2317,7 +2432,8 @@
     "sceneLabel": "年齡差桃花",
     "iconKey": "love-eye-rose",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-4-116"
   },
   {
     "n": 117,
@@ -2337,7 +2453,8 @@
     "sceneLabel": "成熟穩定型",
     "iconKey": "love-social-stars",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-4-117"
   },
   {
     "n": 118,
@@ -2357,7 +2474,8 @@
     "sceneLabel": "活潑主動型",
     "iconKey": "love-space-moon",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "love-4-118"
   },
   {
     "n": 119,
@@ -2377,7 +2495,8 @@
     "sceneLabel": "慢熱被動型",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-4-119"
   },
   {
     "n": 120,
@@ -2397,7 +2516,8 @@
     "sceneLabel": "兩個對象出現",
     "iconKey": "love-fading-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-4-120"
   },
   {
     "n": 121,
@@ -2417,7 +2537,8 @@
     "sceneLabel": "短桃花",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-4-121"
   },
   {
     "n": 122,
@@ -2437,7 +2558,8 @@
     "sceneLabel": "長期型桃花",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-4-122"
   },
   {
     "n": 123,
@@ -2457,7 +2579,8 @@
     "sceneLabel": "秋季較旺",
     "iconKey": "love-eye-rose",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-4-123"
   },
   {
     "n": 124,
@@ -2477,7 +2600,8 @@
     "sceneLabel": "冬季較旺",
     "iconKey": "love-warming-stars",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-4-124"
   },
   {
     "n": 125,
@@ -2497,7 +2621,8 @@
     "sceneLabel": "下一個月份轉旺",
     "iconKey": "love-space-moon",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "love-4-125"
   },
   {
     "n": 126,
@@ -2517,7 +2642,8 @@
     "sceneLabel": "三個月內出現",
     "iconKey": "love-three-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-4-126"
   },
   {
     "n": 127,
@@ -2537,7 +2663,8 @@
     "sceneLabel": "先朋友後戀人",
     "iconKey": "love-fading-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-4-127"
   },
   {
     "n": 128,
@@ -2557,7 +2684,8 @@
     "sceneLabel": "舊識變桃花",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-4-128"
   },
   {
     "n": 129,
@@ -2577,7 +2705,8 @@
     "sceneLabel": "遠方的人",
     "iconKey": "love-fading-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-4-129"
   },
   {
     "n": 130,
@@ -2597,7 +2726,8 @@
     "sceneLabel": "需要主動才會開",
     "iconKey": "love-crystal-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-4-130"
   },
   {
     "n": 63,
@@ -2618,7 +2748,8 @@
     "sceneLabel": "仍愛但認為不適合",
     "iconKey": "love-three-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-0-63"
   },
   {
     "n": 64,
@@ -2639,7 +2770,8 @@
     "sceneLabel": "生氣與防衛",
     "iconKey": "love-return-choice",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-0-64"
   },
   {
     "n": 65,
@@ -2660,7 +2792,8 @@
     "sceneLabel": "現實阻礙",
     "iconKey": "love-red-thread",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-0-65"
   },
   {
     "n": 66,
@@ -2681,7 +2814,8 @@
     "sceneLabel": "比較後重新看見你",
     "iconKey": "love-three-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-0-66"
   },
   {
     "n": 67,
@@ -2702,7 +2836,8 @@
     "sceneLabel": "舊人再出現",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-0-67"
   },
   {
     "n": 68,
@@ -2723,7 +2858,8 @@
     "sceneLabel": "只想維持朋友",
     "iconKey": "love-return-choice",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-0-68"
   },
   {
     "n": 69,
@@ -2744,7 +2880,8 @@
     "sceneLabel": "回頭但不承諾",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-0-69"
   },
   {
     "n": 70,
@@ -2765,7 +2902,8 @@
     "sceneLabel": "關係重新評估",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-0-70"
   },
   {
     "n": 71,
@@ -2786,7 +2924,8 @@
     "sceneLabel": "錯過時機",
     "iconKey": "love-release",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-0-71"
   },
   {
     "n": 72,
@@ -2807,7 +2946,8 @@
     "sceneLabel": "結果尚未定型",
     "iconKey": "love-three-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-0-72"
   },
   {
     "n": 63,
@@ -2828,7 +2968,8 @@
     "sceneLabel": "朋友可能變戀人",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-1-63"
   },
   {
     "n": 64,
@@ -2849,7 +2990,8 @@
     "sceneLabel": "對方在等明確訊號",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-1-64"
   },
   {
     "n": 65,
@@ -2870,7 +3012,8 @@
     "sceneLabel": "害怕失去朋友",
     "iconKey": "love-three-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-1-65"
   },
   {
     "n": 66,
@@ -2891,7 +3034,8 @@
     "sceneLabel": "近期可能告白",
     "iconKey": "love-old-moon",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-1-66"
   },
   {
     "n": 67,
@@ -2912,7 +3056,8 @@
     "sceneLabel": "維持現狀較久",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-1-67"
   },
   {
     "n": 68,
@@ -2933,7 +3078,8 @@
     "sceneLabel": "有人競爭",
     "iconKey": "love-three-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-1-68"
   },
   {
     "n": 69,
@@ -2954,7 +3100,8 @@
     "sceneLabel": "誤會需要解開",
     "iconKey": "love-three-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-1-69"
   },
   {
     "n": 70,
@@ -2975,7 +3122,8 @@
     "sceneLabel": "你想得比他多",
     "iconKey": "love-three-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-1-70"
   },
   {
     "n": 71,
@@ -2996,7 +3144,8 @@
     "sceneLabel": "他想得比你多",
     "iconKey": "love-shooting-heart",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-1-71"
   },
   {
     "n": 72,
@@ -3017,7 +3166,8 @@
     "sceneLabel": "結果尚未定型",
     "iconKey": "love-three-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-1-72"
   },
   {
     "n": 63,
@@ -3038,7 +3188,8 @@
     "sceneLabel": "共同目標不足",
     "iconKey": "love-three-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-2-63"
   },
   {
     "n": 64,
@@ -3059,7 +3210,8 @@
     "sceneLabel": "控制與界線",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-2-64"
   },
   {
     "n": 65,
@@ -3080,7 +3232,8 @@
     "sceneLabel": "吃醋與不安全感",
     "iconKey": "love-three-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-2-65"
   },
   {
     "n": 66,
@@ -3101,7 +3254,8 @@
     "sceneLabel": "前任介入",
     "iconKey": "love-old-moon",
     "icon": "/assets/oracle-icons/oracle-thought.webp",
-    "oracleSymbol": "thought"
+    "oracleSymbol": "thought",
+    "pid": "love-2-66"
   },
   {
     "n": 67,
@@ -3122,7 +3276,8 @@
     "sceneLabel": "朋友家人影響",
     "iconKey": "love-flying-butterfly",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-2-67"
   },
   {
     "n": 68,
@@ -3143,7 +3298,8 @@
     "sceneLabel": "關係穩定",
     "iconKey": "love-three-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-2-68"
   },
   {
     "n": 69,
@@ -3164,7 +3320,8 @@
     "sceneLabel": "適合談未來",
     "iconKey": "love-mended-heart",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-2-69"
   },
   {
     "n": 70,
@@ -3185,7 +3342,8 @@
     "sceneLabel": "需要暫時分開",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-2-70"
   },
   {
     "n": 71,
@@ -3206,7 +3364,8 @@
     "sceneLabel": "會度過低潮",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-2-71"
   },
   {
     "n": 72,
@@ -3227,7 +3386,8 @@
     "sceneLabel": "結果取決於溝通",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-2-72"
   },
   {
     "n": 63,
@@ -3248,7 +3408,8 @@
     "sceneLabel": "近期沒有適合對象",
     "iconKey": "love-three-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-3-63"
   },
   {
     "n": 64,
@@ -3269,7 +3430,8 @@
     "sceneLabel": "兩個選擇出現",
     "iconKey": "love-three-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-3-64"
   },
   {
     "n": 65,
@@ -3290,7 +3452,8 @@
     "sceneLabel": "朋友先行型",
     "iconKey": "love-three-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-3-65"
   },
   {
     "n": 66,
@@ -3311,7 +3474,8 @@
     "sceneLabel": "旅行／外地桃花",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-3-66"
   },
   {
     "n": 67,
@@ -3332,7 +3496,8 @@
     "sceneLabel": "學習場合桃花",
     "iconKey": "love-three-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-3-67"
   },
   {
     "n": 68,
@@ -3353,7 +3518,8 @@
     "sceneLabel": "下半年桃花回升",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-3-68"
   },
   {
     "n": 69,
@@ -3374,7 +3540,8 @@
     "sceneLabel": "秋季桃花",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-3-69"
   },
   {
     "n": 70,
@@ -3395,7 +3562,8 @@
     "sceneLabel": "年底前出現",
     "iconKey": "love-new-moon-rose",
     "icon": "/assets/oracle-icons/oracle-bond.webp",
-    "oracleSymbol": "bond"
+    "oracleSymbol": "bond",
+    "pid": "love-3-70"
   },
   {
     "n": 71,
@@ -3416,7 +3584,8 @@
     "sceneLabel": "先享受單身",
     "iconKey": "love-three-stars",
     "icon": "/assets/oracle-icons/oracle-block.webp",
-    "oracleSymbol": "block"
+    "oracleSymbol": "block",
+    "pid": "love-3-71"
   },
   {
     "n": 72,
@@ -3437,6 +3606,7 @@
     "sceneLabel": "正緣型慢慢靠近",
     "iconKey": "love-space-moon",
     "icon": "/assets/oracle-icons/oracle-timing.webp",
-    "oracleSymbol": "timing"
+    "oracleSymbol": "timing",
+    "pid": "love-3-72"
   }
 ]

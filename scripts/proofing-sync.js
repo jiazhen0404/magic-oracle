@@ -3,11 +3,12 @@
    和 proofing-import.js 的差別只有一個，但很關鍵：
 
        proofing-import.js　用「情境＋籤名」配對　→ 610 支只對上 412 支
-       這一支　　　　　　　用「情境＋籤號」配對　→ 679 支全部對得上
+       這一支的第一版　　　用「情境＋籤號」配對　→ 679 支全中，但籤號會被批次二重編
+       現在　　　　　　　　用 pid（校稿站的固定 id）→ 內容怎麼改都不影響
 
-     籤名對不上是因為校稿站在 0017～0047 那幾批 migration 重寫時換過籤名，
-     毛孩的情境也從四組（陪伴／擔心／思念／離別）併成兩組（在世／離世）。
-     籤號從頭到尾沒動過，所以改用籤號配對。
+     籤名、籤號、情境都是內容，不是身分，拿來當配對鍵遲早會壞。
+     校稿站的 id（love-0-1、pet-3-210…）全域唯一且不得更動，那才是身分。
+     正式站每一筆的 pid 由 scripts/stamp-pid.js 烙上，跑過一次就不用再跑。
 
    ★ 兩個目標各自服務誰，改錯地方會白工：
 
@@ -70,17 +71,27 @@ const rows = (() => {
   return d.fortunes || d;
 })();
 
-/* 校稿站索引：分類｜正式站情境｜籤號 */
-const src = new Map();
+/* 主要索引：校稿站的固定 id。每一筆正式站資料都有 pid（scripts/stamp-pid.js 烙的）。
+   籤名、籤號、情境以後怎麼改都不會影響配對。 */
+const byId = new Map();
+for (const r of rows) byId.set(r.id, r);
+
+/* 備援索引：分類｜正式站情境｜籤號。只有在某筆資料沒有 pid 時才會用到，
+   例如將來有人手動新增了一筆卻忘了補 pid。用到就會出警告。 */
+const byKey = new Map();
 for (const r of rows) {
   const n = Number(r.display_number);
   if (!Number.isFinite(n)) continue;
-  src.set(r.category + '|' + prodSub(r.category, r.situation, n) + '|' + n, r);
+  byKey.set(r.category + '|' + prodSub(r.category, r.situation, n) + '|' + n, r);
 }
+let fallbackUsed = 0;
 
 function applyTo(f, cat) {
-  const key = CN[cat] + '|' + f.sub + '|' + Number(f.n);
-  const r = src.get(key);
+  let r = f.pid ? byId.get(f.pid) : undefined;
+  if (!r && !f.pid) {
+    r = byKey.get(CN[cat] + '|' + f.sub + '|' + Number(f.n));
+    if (r) { fallbackUsed++; }
+  }
   if (!r) return 'notfound';
   if (FINAL_ONLY && r.status !== 'final') return 'skipped';
   const st = strip(r.general_html);
@@ -159,6 +170,7 @@ for (const cat of FILES) {
 }
 
 console.log(`\n  網站有變動 ${htmlChanged} 支　bot 有變動 ${dataChanged} 支`);
+if (fallbackUsed) console.log(`  ⚠ 有 ${fallbackUsed} 筆沒有 pid，改用「情境＋籤號」配對。跑一次 scripts/stamp-pid.js 補上。`);
 console.log('  ★ 保留了線上原本的 msg／rx／fw，免費頁仍是五段，其中三段是舊文案。');
 
 if (!WRITE) { console.log('\n（試跑，沒有寫檔。確認後加 --write）'); process.exit(0); }
