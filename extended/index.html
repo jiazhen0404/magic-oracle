@@ -147,10 +147,13 @@ footer{text-align:center;color:var(--faint);font-size:12px;margin-top:56px}
   // 延伸籤的唯一識別是「分類_情境_籤號」，例如 love_breakup_051。
   // 籤號不是連號（失戀中 35 支，編號散在 1~72；桃花運勢是 101~130），
   // 所以要用網址帶來的 n 補零，不能用第幾支去推。
-  var SITU={"失戀中":"breakup","曖昧中":"flirting","關係中":"relationship",
-            "單身中":"single","桃花運勢":"fortune"};
-  var situ = theme==="love" ? SITU[sub] : null;
-  var slipId = (situ && /^[0-9]{1,3}$/.test(n)) ? "love_"+situ+"_"+("00"+n).slice(-3) : null;
+  /* 情境 → slug。這份對照表在 index.html、scripts/build-extended.js、
+     LINE bot 的 flex.js 各有一份，後端還有一條 SLIP_ID_RE，改一邊要改全部。 */
+  var SITU={love:{"失戀中":"breakup","曖昧中":"flirting","關係中":"relationship",
+                  "單身中":"single","桃花運勢":"fortune"},
+            pet:{"離別中":"departed"}};
+  var situ = (SITU[theme]||{})[sub] || null;
+  var slipId = (situ && /^[0-9]{1,3}$/.test(n)) ? theme+"_"+situ+"_"+("00"+n).slice(-3) : null;
 
   var buy=document.getElementById("buy"), draw=document.getElementById("draw"),
       note=document.getElementById("ctaNote"), lead=document.getElementById("lead");
@@ -165,16 +168,16 @@ footer{text-align:center;color:var(--faint);font-size:12px;margin-top:56px}
 
   var state;
   if(slipId){
-    // 帶著一支買得到的愛情籤過來
+    // 帶著一支買得到的籤過來（感情 170 支、離世毛孩 50 支）
     state="ready";
     buy.href="/checkout/?id="+encodeURIComponent(slipId);
     buy.hidden=false;
   } else if(slip){
-    // 帶了籤，但不是愛情——沒有對應的延伸解籤可以賣
+    // 帶了籤，但那一類還沒有延伸解籤可以賣
     state="unsupported_theme";
     draw.hidden=false;
-    draw.textContent="去抽一支愛情籤";
-    note.textContent="延伸解籤目前只有愛情主題，其他主題還沒有。";
+    draw.textContent="去抽一支感情籤";
+    note.textContent="延伸解籤目前有感情類與毛孩「離世中」，其他主題還沒有。";
   } else {
     // 沒帶籤（例如從 footer 或搜尋進來）
     state="no_slip";
