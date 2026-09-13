@@ -29,7 +29,8 @@
        st  ← general_html　　sa ← advice_html　　adv = sa
        t   ← title_html（籤名）　　yu ← poem_html（籤詩）
        jie 是備援欄位，跟著重算保持自洽
-       msg／rx／fw 校稿站沒有對應來源，保留線上原本的，不清空
+       msg／rx／fw 校稿站沒有對應來源。預設保留線上原本的；加 --collapse 會清空，
+                  免費頁就從五格縮成籤語＋狀態推測＋具體建議
 
      outcome／outcomeLabel／sit 也沒有同步。線上的 outcome 是機器鍵
      （turning、clear_good…）配一個 outcomeLabel 顯示字串，校稿站的 outcome
@@ -39,6 +40,7 @@
      node scripts/proofing-sync.js <匯出的.json>              試跑
      node scripts/proofing-sync.js <匯出的.json> --write       實際寫入
      node scripts/proofing-sync.js <匯出的.json> --final-only  只同步狀態為已定稿的籤
+     node scripts/proofing-sync.js <匯出的.json> --collapse    免費頁瘦身，清掉 msg／rx／fw
 */
 const fs = require('fs');
 const path = require('path');
@@ -51,6 +53,18 @@ const FILES = ['love', 'work', 'life', 'pet', 'choice', 'monthly'];
 const file = process.argv[2];
 const WRITE = process.argv.includes('--write');
 const FINAL_ONLY = process.argv.includes('--final-only');
+/* 免費頁瘦身。校稿站只有 general_html ＋ advice_html 兩段，線上卻是五格
+   （狀態推測／內在訊息／可能出現的變化／未來走向／具體建議），多出來的三格
+   是舊文案。清掉之後免費頁剩下籤語＋狀態推測＋具體建議，延伸籤才有區隔。
+
+   msg／rx／fw 本來就是條件渲染，欄位空了自動不顯示；具體建議那格原本不是，
+   已經在 index.html 一起改成條件渲染。
+
+   ★ 是真的從資料裡拿掉，不是只在畫面上隱藏。data/*.json 是公開檔案，
+     只藏不刪等於沒有縮減。要復原就重跑一次不加 --collapse 的同步。
+
+   LINE bot 讀同一份 data/*.json，所以也會跟著瘦身。 */
+const COLLAPSE = process.argv.includes('--collapse');
 if (!file) { console.error('用法：node scripts/proofing-sync.js <匯出的.json> [--write] [--final-only]'); process.exit(1); }
 
 const CN = { love: '愛情', work: '工作', life: '人生', pet: '毛孩', choice: '選擇', monthly: '本月主題籤' };
@@ -99,14 +113,15 @@ function applyTo(f, cat) {
   const t = strip(r.title_html);
   const yu = strip(r.poem_html);
   if (!st || !sa || !t) return 'empty';
-  const before = JSON.stringify([f.st, f.sa, f.adv, f.jie, f.t, f.yu]);
+  const before = JSON.stringify([f.st, f.sa, f.adv, f.jie, f.t, f.yu, f.msg, f.rx, f.fw]);
   f.st = st;
   f.sa = sa;
   f.adv = sa;
   f.t = t;
   if (yu) f.yu = yu;
+  if (COLLAPSE) { f.msg = ''; f.rx = ''; f.fw = ''; }
   f.jie = [f.st, f.rx, f.fw, f.sa].filter(Boolean).join('');
-  return JSON.stringify([f.st, f.sa, f.adv, f.jie, f.t, f.yu]) === before ? 'unchanged' : 'changed';
+  return JSON.stringify([f.st, f.sa, f.adv, f.jie, f.t, f.yu, f.msg, f.rx, f.fw]) === before ? 'unchanged' : 'changed';
 }
 
 /* 校稿站把某支籤封存之後，它要從正式站「消失」，不是留著不更新。
@@ -185,7 +200,9 @@ for (const cat of FILES) {
 console.log(`\n  網站有變動 ${htmlChanged} 支　bot 有變動 ${dataChanged} 支`);
 if (removed) console.log(`  🗑 校稿站已封存，從正式站移除 ${removed} 筆（資料仍在校稿站，隨時可還原）`);
 if (fallbackUsed) console.log(`  ⚠ 有 ${fallbackUsed} 筆沒有 pid，改用「情境＋籤號」配對。跑一次 scripts/stamp-pid.js 補上。`);
-console.log('  ★ 保留了線上原本的 msg／rx／fw，免費頁仍是五段，其中三段是舊文案。');
+console.log(COLLAPSE
+  ? '  ✂ 已清空 msg／rx／fw，免費頁剩籤語＋狀態推測＋具體建議，和校稿站的結構一致。'
+  : '  ★ 保留了線上原本的 msg／rx／fw，免費頁仍是五段，其中三段是舊文案。要瘦身加 --collapse。');
 
 if (!WRITE) { console.log('\n（試跑，沒有寫檔。確認後加 --write）'); process.exit(0); }
 fs.writeFileSync(HTML, text.slice(0, start) + JSON.stringify(embedded) + text.slice(end));
