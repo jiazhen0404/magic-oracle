@@ -109,6 +109,13 @@ function applyTo(f, cat) {
   return JSON.stringify([f.st, f.sa, f.adv, f.jie, f.t, f.yu]) === before ? 'unchanged' : 'changed';
 }
 
+/* 校稿站把某支籤封存之後，它要從正式站「消失」，不是留著不更新。
+   軟刪除的意思是資料留在校稿站，不是留在前台。 */
+function isArchived(f) {
+  const r = f.pid ? byId.get(f.pid) : undefined;
+  return !!r && Number(r.archived) === 1;
+}
+
 function report(label, tally, misses) {
   const line = Object.entries(tally).map(([k, v]) => `${k} ${v}`).join('　');
   console.log(`  ${label.padEnd(22)}${line}`);
@@ -134,8 +141,11 @@ if (JSON.stringify(embedded) !== raw) { console.error('✗ EMBEDDED_FORTUNES 重
 
 console.log('匯出檔共 ' + rows.length + ' 筆\n');
 console.log('網站　index.html 的 EMBEDDED_FORTUNES');
-let htmlChanged = 0;
+let htmlChanged = 0, removed = 0;
 for (const cat of Object.keys(embedded)) {
+  const before = embedded[cat].length;
+  embedded[cat] = embedded[cat].filter(f => !isArchived(f));
+  removed += before - embedded[cat].length;
   const tally = {}; const misses = [];
   for (const f of embedded[cat]) {
     const r = applyTo(f, cat);
@@ -154,7 +164,10 @@ for (const cat of FILES) {
   const p = path.join(DATA_DIR, cat + '.json');
   if (!fs.existsSync(p)) { console.log(`  ${cat}.json 不存在，跳過`); continue; }
   const original = fs.readFileSync(p, 'utf8');
-  const arr = JSON.parse(original);
+  let arr = JSON.parse(original);
+  const beforeLen = arr.length;
+  arr = arr.filter(f => !isArchived(f));
+  removed += beforeLen - arr.length;
   /* 各檔縮排不一樣（pet.json 是 1 格，其他 2 格），沿用原本的，不要整份重排 */
   const indent = (original.match(/^\[\r?\n( +)/) || [, '  '])[1].length;
   const eol = original.endsWith('\n') ? '\n' : '';
@@ -170,6 +183,7 @@ for (const cat of FILES) {
 }
 
 console.log(`\n  網站有變動 ${htmlChanged} 支　bot 有變動 ${dataChanged} 支`);
+if (removed) console.log(`  🗑 校稿站已封存，從正式站移除 ${removed} 筆（資料仍在校稿站，隨時可還原）`);
 if (fallbackUsed) console.log(`  ⚠ 有 ${fallbackUsed} 筆沒有 pid，改用「情境＋籤號」配對。跑一次 scripts/stamp-pid.js 補上。`);
 console.log('  ★ 保留了線上原本的 msg／rx／fw，免費頁仍是五段，其中三段是舊文案。');
 
