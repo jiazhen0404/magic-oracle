@@ -35,8 +35,9 @@
      是直接寫顯示字串（安穩休息、安心離開…），兩邊不是一對一，硬套會把鍵值弄壞。
 
    用法：
-     node scripts/proofing-sync.js <匯出的.json>            試跑
-     node scripts/proofing-sync.js <匯出的.json> --write     實際寫入
+     node scripts/proofing-sync.js <匯出的.json>              試跑
+     node scripts/proofing-sync.js <匯出的.json> --write       實際寫入
+     node scripts/proofing-sync.js <匯出的.json> --final-only  只同步狀態為已定稿的籤
 */
 const fs = require('fs');
 const path = require('path');
@@ -48,7 +49,8 @@ const FILES = ['love', 'work', 'life', 'pet', 'choice', 'monthly'];
 
 const file = process.argv[2];
 const WRITE = process.argv.includes('--write');
-if (!file) { console.error('用法：node scripts/proofing-sync.js <匯出的.json> [--write]'); process.exit(1); }
+const FINAL_ONLY = process.argv.includes('--final-only');
+if (!file) { console.error('用法：node scripts/proofing-sync.js <匯出的.json> [--write] [--final-only]'); process.exit(1); }
 
 const CN = { love: '愛情', work: '工作', life: '人生', pet: '毛孩', choice: '選擇', monthly: '本月主題籤' };
 const strip = s => String(s || '').replace(/<br\s*\/?>/gi, '').replace(/<[^>]*>/g, '').trim();
@@ -80,6 +82,7 @@ function applyTo(f, cat) {
   const key = CN[cat] + '|' + f.sub + '|' + Number(f.n);
   const r = src.get(key);
   if (!r) return 'notfound';
+  if (FINAL_ONLY && r.status !== 'final') return 'skipped';
   const st = strip(r.general_html);
   const sa = strip(r.advice_html);
   const t = strip(r.title_html);

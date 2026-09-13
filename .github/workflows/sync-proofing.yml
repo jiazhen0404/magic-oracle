@@ -1,0 +1,90 @@
+name: 同步校稿站籤文
+
+# 手動觸發。跑完不會直接改 main，而是開一個 PR 讓你先看 diff。
+#
+# 需要的 secrets（Settings → Secrets and variables → Actions）：
+#   PROOFING_EXPORT_URL      例如 https://proof.unfinished.tw/api/export
+#   CF_ACCESS_CLIENT_ID      Cloudflare Access service token 的 Client ID
+#   CF_ACCESS_CLIENT_SECRET  同上的 Client Secret
+#
+# service token 要在 Zero Trust → Access → Service Auth 建立，
+# 再到校稿站那個 Application 的 Policy 加一條 Allow → Service Auth → 選這個 token。
+# 校稿站的 functions/_middleware.js 也要認得 service token（它沒有 email，只有 common_name）。
+
+on:
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: 要同步哪些籤
+        type: choice
+        default: final
+        options:
+          - final   # 只同步狀態為「已定稿」的
+          - all     # 全部同步，含尚未校稿的
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 從校稿站取得匯出檔
+        env:
+          URL: ${{ secrets.PROOFING_EXPORT_URL }}
+          CF_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
+          CF_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error \
+            -H "CF-Access-Client-Id: $CF_ID" \
+            -H "CF-Access-Client-Secret: $CF_SECRET" \
+            "$URL" -o "$RUNNER_TEMP/export.json"
+          node -e '
+            const d = require(process.env.RUNNER_TEMP + "/export.json");
+            if (!Array.isArray(d.fortunes) || !d.fortunes.length) {
+              console.error("匯出檔沒有籤文，可能是被 Access 擋下來回傳了登入頁");
+              process.exit(1);
+            }
+            console.log(`取得 ${d.fortunes.length} 支，匯出時間 ${d.exported_at}`);
+          '
+
+      - name: 套用到 index.html 與 data/*.json
+        run: |
+          set -euo pipefail
+          FLAG=""
+          if [ "${{ inputs.scope }}" = "final" ]; then FLAG="--final-only"; fi
+          node scripts/proofing-sync.js "$RUNNER_TEMP/export.json" --write $FLAG | tee "$RUNNER_TEMP/report.txt"
+
+      - name: 有變動就開 PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet; then
+            echo "沒有任何變動，不開 PR。"
+            exit 0
+          fi
+          BRANCH="sync/proofing-${{ github.run_id }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add index.html data
+          git commit -m "同步校稿站籤文（${{ inputs.scope }}）"
+          git push origin "$BRANCH"
+          {
+            echo "由校稿站匯出檔同步，範圍：\`${{ inputs.scope }}\`。"
+            echo
+            echo "\`index.html\` 的 EMBEDDED_FORTUNES 給網站看，\`data/*.json\` 給 LINE bot 看，兩邊都更新了。"
+            echo "bot 不用重新部署，它每次抓 data/*.json，快取 300 秒。"
+            echo
+            echo '```'
+            cat "$RUNNER_TEMP/report.txt"
+            echo '```'
+          } > "$RUNNER_TEMP/pr-body.md"
+          gh pr create --base main --head "$BRANCH" \
+            --title "同步校稿站籤文（${{ inputs.scope }}）" \
+            --body-file "$RUNNER_TEMP/pr-body.md"
