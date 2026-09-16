@@ -22,6 +22,14 @@
  *   GA4_API_SECRET             GA4 Measurement Protocol 的 API secret ← Secret（沒設就不送 GA4，功能照常）
  *   GA4_MEASUREMENT_ID         G-71RMD00WPJ，寫在 wrangler.jsonc
  *   DB                         既有 D1（unfinished-articles），表結構見 src/line-daily.sql
+ *   LINE_FORWARD_URL           原本 LINE bot（unfinished-oracle）的 Webhook 網址 ← Secret
+ *
+ * ★ 和原本 LINE bot 的關係（重要）：
+ *   一個 LINE 帳號只能設定一個 Webhook 網址。原本的抽籤 bot 是另一個 Worker（unfinished-oracle）。
+ *   Webhook 改指到這裡之後：
+ *     「宇宙指引」「接收今天的訊息」→ 這裡處理
+ *     其他所有事件（感情、工作、低潮中、加好友⋯）→ 原封轉給 LINE_FORWARD_URL，原本的 bot 照常運作
+ *   轉送時用同一把 Channel secret 重新簽章，原本的 bot 驗章會通過，不需要改它的程式。
  *
  * 平台坑（見 CLAUDE.md）：所有 JSON 回應都加 cache-control: no-store。
  */
@@ -165,7 +173,8 @@ async function webhook(request, env, ctx) {
   const raw = await request.text();
   if (!env.LINE_CHANNEL_SECRET) return json({ error: 'not_configured' }, 503);
 
-  const ok = await verifySignature(raw, request.headers.get('x-line-signature') || '', env.LINE_CHANNEL_SECRET);
+  const signature = request.headers.get('x-line-signature') || '';
+  const ok = await verifySignature(raw, signature, env.LINE_CHANNEL_SECRET);
   if (!ok) return json({ error: 'bad_signature' }, 401);
 
   let body;
@@ -173,8 +182,13 @@ async function webhook(request, env, ctx) {
 
   // LINE 後台按「Verify」時 events 是空陣列，直接回 200 就好。
   const events = Array.isArray(body.events) ? body.events : [];
-  const work = Promise.all(events.map(ev => handleEvent(ev, env, ctx).catch(err =>
-    console.error('LINE 今日訊息：處理事件失敗', err && err.stack ? err.stack : err))));
+  const mine = events.filter(isMine);
+  const others = events.filter(ev => !isMine(ev));
+
+  const jobs = mine.map(ev => handleEvent(ev, env, ctx).catch(err =>
+    console.error('LINE 今日訊息：處理事件失敗', err && err.stack ? err.stack : err)));
+  if (others.length) jobs.push(forwardToOriginalBot(env, raw, signature, body, others, mine.length === 0));
+  const work = Promise.all(jobs);
 
   // 先回 200 給 LINE，事情在背景做完（回覆 token 有效時間約 1 分鐘，綽綽有餘）。
   if (ctx && typeof ctx.waitUntil === 'function') ctx.waitUntil(work);
@@ -182,11 +196,58 @@ async function webhook(request, env, ctx) {
   return json({ ok: true });
 }
 
-export async function verifySignature(raw, signature, secret) {
+/** 這個事件歸「今日訊息籤」處理嗎？其他的一律交給原本的 bot。 */
+export function isMine(ev) {
+  return Boolean(intentOf(ev) && ev.source && ev.source.type === 'user' && ev.source.userId);
+}
+
+/**
+ * 把不屬於這裡的事件轉給原本的 LINE bot。
+ * 整批都不是我們的 → 原始內容與原始簽章一個字都不動地轉過去。
+ * 一批裡混了我們的 → 只轉其他事件，用同一把 Channel secret 重新簽章。
+ */
+export async function forwardToOriginalBot(env, raw, signature, body, others, untouched) {
+  const to = String(env.LINE_FORWARD_URL || '').trim();
+  if (!to) {
+    console.error('LINE 今日訊息：沒有設定 LINE_FORWARD_URL，原本 bot 的事件沒有轉出去', others.length);
+    return;
+  }
+  let target;
+  try { target = new URL(to); } catch {
+    console.error('LINE 今日訊息：LINE_FORWARD_URL 不是有效網址');
+    return;
+  }
+  if (/\/api\/line\/webhook\/?$/.test(target.pathname) && /(^|\.)unfinished\.tw$/.test(target.hostname)) {
+    console.error('LINE 今日訊息：LINE_FORWARD_URL 指回自己，已停止轉送以免無限循環');
+    return;
+  }
+  let payload = raw;
+  let sig = signature;
+  if (!untouched) {
+    payload = JSON.stringify({ ...body, events: others });
+    sig = await sign(payload, env.LINE_CHANNEL_SECRET);
+  }
+  try {
+    const res = await fetch(target.toString(), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-line-signature': sig, 'x-forwarded-by': 'unfinished-line-daily' },
+      body: payload,
+    });
+    if (!res.ok) console.error('轉給原本 bot 失敗', res.status, (await res.text()).slice(0, 200));
+  } catch (e) {
+    console.error('轉給原本 bot 失敗', e && e.message);
+  }
+}
+
+async function sign(raw, secret) {
   const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret),
     { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
   const mac = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(raw));
-  const expected = btoa(String.fromCharCode(...new Uint8Array(mac)));
+  return btoa(String.fromCharCode(...new Uint8Array(mac)));
+}
+
+export async function verifySignature(raw, signature, secret) {
+  const expected = await sign(raw, secret);
   if (expected.length !== signature.length) return false;
   let diff = 0;
   for (let i = 0; i < expected.length; i++) diff |= expected.charCodeAt(i) ^ signature.charCodeAt(i);
@@ -212,8 +273,7 @@ export function intentOf(ev) {
 
 async function handleEvent(ev, env, ctx) {
   const intent = intentOf(ev);
-  if (!intent) return;                                   // 不是這個功能的訊息，不插手
-  if (!ev.source || ev.source.type !== 'user' || !ev.source.userId) return;  // 只在一對一聊天使用
+  if (!isMine(ev)) return;                               // 保險：不是這個功能的事件，不插手
   if (!env.DB) { console.error('LINE 今日訊息：沒有 D1（DB）'); return; }
 
   const userId = ev.source.userId;

@@ -9,7 +9,7 @@ import assert from 'node:assert/strict';
 import {
   taipeiDate, addDays, pickWeighted, candidatePool, drawToday, respond,
   verifySignature, intentOf, lineDailyRoutes, summary, fortuneList,
-  saveOrderAttribution, cleanAttribution, landingUrl,
+  saveOrderAttribution, cleanAttribution, landingUrl, isMine,
 } from '../src/line-daily.js';
 
 /* ── D1 模擬 ── */
@@ -362,6 +362,67 @@ await test('Webhook：簽章驗證、Verify 空事件、文字與 postback 觸�
   assert.equal(intentOf({ type: 'message', message: { type: 'text', text: ' 宇宙指引 ' } }), 'open');
   assert.equal(intentOf({ type: 'message', message: { type: 'text', text: '感情' } }), null);
   assert.equal(await verifySignature('x', 'y', SECRET), false);
+});
+
+/* ── 與原本 LINE bot 共存 ── */
+await test('轉送：宇宙指引留在這裡，其他事件原封轉給原本的 bot，簽章對得上', async () => {
+  const OLD = 'https://unfinished-oracle.example.workers.dev/webhook';
+  const env = { ...env0(), LINE_CHANNEL_ACCESS_TOKEN: 'tok', LINE_FORWARD_URL: OLD };
+  const sign = async body => {
+    const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(SECRET), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+    return btoa(String.fromCharCode(...new Uint8Array(await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(body)))));
+  };
+  const sent = [];
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (u, init) => { sent.push({ u: String(u), body: init.body, headers: init.headers }); return new Response('{}'); };
+  const hook = async (events, e = env) => {
+    const body = JSON.stringify({ destination: 'Uxxx', events });
+    const u = new URL('https://unfinished.tw/api/line/webhook');
+    sent.length = 0;
+    const r = await lineDailyRoutes(new Request(u, { method: 'POST', body, headers: { 'x-line-signature': await sign(body) } }), e, null, u);
+    return { r, body, sig: await sign(body) };
+  };
+  const user = { type: 'user', userId: 'U1' };
+  const love = { type: 'message', replyToken: 'a', source: user, message: { type: 'text', text: '感情' } };
+  const pb = { type: 'postback', replyToken: 'b', source: user, postback: { data: 'theme=work' } };
+  const follow = { type: 'follow', replyToken: 'c', source: user };
+  const uni = { type: 'message', replyToken: 'd', source: user, message: { type: 'text', text: '宇宙指引' } };
+  const groupUni = { type: 'message', replyToken: 'e', source: { type: 'group', groupId: 'G', userId: 'U1' }, message: { type: 'text', text: '宇宙指引' } };
+  try {
+    // 1. 全部是原本 bot 的 → 一個字不改、原簽章轉出；這裡不回任何訊息
+    for (const ev of [love, pb, follow, groupUni]) {
+      const { body, sig } = await hook([ev]);
+      assert.equal(sent.length, 1, JSON.stringify(ev));
+      assert.equal(sent[0].u, OLD);
+      assert.equal(sent[0].body, body);
+      assert.equal(sent[0].headers['x-line-signature'], sig);
+    }
+    // 2. 宇宙指引 → 只在這裡回，不轉
+    await hook([uni]);
+    assert.equal(sent.length, 1);
+    assert.equal(sent[0].u, 'https://api.line.me/v2/bot/message/reply');
+    // 3. 混在同一批 → 各走各的；轉出去的只剩別人的事件，且新簽章可被原本 bot 驗過
+    await hook([love, uni, follow]);
+    const fwd = sent.find(x => x.u === OLD);
+    const parsed = JSON.parse(fwd.body);
+    assert.deepEqual(parsed.events.map(e => e.replyToken), ['a', 'c']);
+    assert.equal(parsed.destination, 'Uxxx');
+    assert.ok(await verifySignature(fwd.body, fwd.headers['x-line-signature'], SECRET));
+    assert.equal(sent.filter(x => x.u.includes('api.line.me')).length, 1);
+    // 4. 沒設定轉送網址 → 不會壞，只是不轉（上線步驟要求先設好）
+    await hook([love], { ...env, LINE_FORWARD_URL: '' });
+    assert.equal(sent.length, 0);
+    // 5. 設成自己 → 不轉，避免無限循環
+    await hook([love], { ...env, LINE_FORWARD_URL: 'https://unfinished.tw/api/line/webhook' });
+    assert.equal(sent.length, 0);
+    await hook([love], { ...env, LINE_FORWARD_URL: 'not a url' });
+    assert.equal(sent.length, 0);
+    // 6. 原本 bot 掛掉 → 這裡仍回 200，不影響宇宙指引
+    globalThis.fetch = async (u) => { if (String(u) === OLD) throw new Error('down'); return new Response('{}'); };
+    const { r } = await hook([love, uni]);
+    assert.equal(r.status, 200);
+  } finally { globalThis.fetch = realFetch; }
+  assert.equal(isMine(uni), true); assert.equal(isMine(groupUni), false); assert.equal(isMine(love), false);
 });
 
 /* ── 輸出 ── */

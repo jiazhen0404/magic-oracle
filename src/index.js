@@ -145,6 +145,7 @@ export default {
           hasDb: Boolean(env.DB),
           hasLineSecret: Boolean(env.LINE_CHANNEL_SECRET),
           hasLineToken: Boolean(env.LINE_CHANNEL_ACCESS_TOKEN),
+          hasLineForward: Boolean(env.LINE_FORWARD_URL),   // 原本 LINE bot 的網址，Webhook 改過來之前一定要是 true
           hasGa4Secret: Boolean(env.GA4_API_SECRET),
           // 這是「線上現在跑的是哪一版」。由 Cloudflare 自己填，
           // 不需要人工維護版號，所以不會有忘記更新的問題。
