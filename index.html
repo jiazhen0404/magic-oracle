@@ -1217,7 +1217,7 @@ const POOL_SUBS={
 };
 const SUBTHEMES={
   love:[
-    {id:"曖昧中",label:"曖昧中",sub:"還沒說破，想知道對方怎麼想"},
+    {id:"曖昧中",label:"單戀・暗戀・曖昧",sub:"還沒在一起，想知道對方怎麼想"},
     {id:"關係中",label:"關係中",sub:"在一起了，但有些事想確認"},
     {id:"失戀中",label:"分手中",sub:"已經分開了，但還沒真的過去"},
     {id:"桃花運勢",label:"桃花運勢",sub:"單身，或想知道近期會不會有人出現"}
@@ -1259,7 +1259,10 @@ const TL={love:"愛情",work:"工作",choice:"選擇",life:"人生",pet:"毛孩"
    不能讓它們借用合併後的名稱——否則萬一從舊連結或程式錯誤跑出來，
    會自稱是「轉職中第 14 籤」，和真正抽得到的那支撞號。 */
 const SUB_DISPLAY={"失戀中":"分手中","單身中":"桃花運勢",
-  "迷茫中":"低潮中","日常中":"低潮中"};
+  "迷茫中":"低潮中","日常中":"低潮中",
+  /* 單戀／暗戀 35 支併進「曖昧中」這一池。資料值（sub）沒有改，只改顯示名稱，
+     EXT_SLUG、GA 事件、延伸解籤與校稿站匯出都仍然用「曖昧中」。 */
+  "曖昧中":"單戀・暗戀・曖昧"};
 const subLabel=s=>SUB_DISPLAY[s]||s||"";
 const themeLabel=id=>(THEMES.find(t=>t.id===id)||{}).label||TL[id]||id;
 /* 分類與情境同名時（低潮中）不要印成「低潮中 · 低潮中」 */
@@ -1540,6 +1543,9 @@ const[screen,setScreen]=useState(()=>{if(initialTheme&&SKIP_SUBTHEME.includes(in
     // 原本 GA4 這邊寫 ambiguous / peach_blossom，跟結帳用的 flirting / fortune
     // 是兩套，fortune_id 會對不上結帳編號。以付費端為準，因為那條不能斷。
     "失戀中":"breakup","曖昧中":"flirting","關係中":"relationship","單身中":"single","桃花運勢":"fortune",
+    // 這支 handler 是用畫面上的文字去查，所以 SUB_DISPLAY 改過名的也要有一筆，
+    // 否則 slug 會變 unknown，situation_interest_* 事件就不會送出。
+    "單戀・暗戀・曖昧":"flirting","分手中":"breakup",
     "迷惘中":"confused","求職中":"job_search","轉職中":"career_change","職場中":"workplace","創業中":"business",
     "兩難中":"dilemma","決定中":"decision","方向中":"direction","迷茫中":"lost","家庭中":"family","夢想中":"dream","日常中":"daily",
     "陪伴中":"together","擔心中":"worried","思念中":"missing","離別中":"passed_away","我該不該告白":"confess","需要繼續等他嗎":"wait-for-him","我該轉換跑道嗎":"career-switch","隨機訊息":"random_message"
