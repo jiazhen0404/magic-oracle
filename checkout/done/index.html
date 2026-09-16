@@ -53,7 +53,7 @@ p.sub{font-family:var(--sans);font-size:.8rem;line-height:1.9;color:var(--paper-
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 :focus-visible{outline:1px solid var(--gold);outline-offset:3px}
 </style>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-71RMD00WPJ"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-71RMD00WPJ');</script></head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-71RMD00WPJ"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());/* 從綠界付款頁轉回來時，不要讓 GA4 把這一段記成 ecpay 的 referral，沿用原本的來源（例如 LINE） */gtag('config','G-71RMD00WPJ',/ecpay\.com\.tw/i.test(document.referrer)?{ignore_referrer:'true'}:{});</script></head>
 <body>
 <canvas id="sky"></canvas>
 <div class="wrap" id="wrap">

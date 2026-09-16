@@ -30,6 +30,7 @@ import SURVEY_FORTUNES from './survey-fortunes.json';
 import { buildPdfHtml } from './pdf-template.js';
 import { oracleRoutes, oraclePaid } from './oracle.js';
 import { articleRoutes } from './articles.js';
+import { lineDailyRoutes, saveOrderAttribution, cleanAttribution } from './line-daily.js';
 
 /* 兩份合成一份給下面用。分檔只是為了好維護，id 本身已經帶著分類前綴。
    離世毛孩那 50 支和愛情共用同一套購買流程與 99 元定價。 */
@@ -61,6 +62,12 @@ export default {
       if (movedMatch && MOVED_ARTICLES.includes(movedMatch[1])) {
         return Response.redirect(
           new URL('/articles/love/breakup/' + movedMatch[1] + '/', url).toString(), 301);
+      }
+
+      // LINE Bot 限定「今日訊息籤」。不是它的路徑會回 null，繼續往下走
+      if (path.startsWith('/api/line/') || path.startsWith('/api/line-daily/')) {
+        const line = await lineDailyRoutes(request, env, ctx, url);
+        if (line) return line;
       }
 
       // 真人占卜。不是它的路徑會回 null，繼續往下走
@@ -134,6 +141,11 @@ export default {
           hasCfAccount: Boolean(env.CF_ACCOUNT_ID),
           hasCfToken: Boolean(env.CF_API_TOKEN),
           hasResendKey: Boolean(env.RESEND_API_KEY),
+          // LINE 今日訊息籤
+          hasDb: Boolean(env.DB),
+          hasLineSecret: Boolean(env.LINE_CHANNEL_SECRET),
+          hasLineToken: Boolean(env.LINE_CHANNEL_ACCESS_TOKEN),
+          hasGa4Secret: Boolean(env.GA4_API_SECRET),
           // 這是「線上現在跑的是哪一版」。由 Cloudflare 自己填，
           // 不需要人工維護版號，所以不會有忘記更新的問題。
           // scripts/check-release.mjs 用 deployedAt 跟最新 commit 的時間比對，
@@ -631,6 +643,8 @@ async function createOrder(request, env, url) {
 
   const tradeNo = makeTradeNo();
   const now = new Date();
+  // 訂單來源（UTM）。前端從 localStorage 帶過來，綠界轉回來也不會被蓋掉。
+  const attribution = cleanAttribution(body.attribution);
 
   // ── 寫進暫存 ──
   // 使用者的問題很私密，所以只暫存 24 小時，寄出 PDF 後會立刻刪除。
@@ -644,6 +658,7 @@ async function createOrder(request, env, url) {
       drawnAt,
       amount: PRICE,
       status: 'pending',
+      attribution,
       consent: {
         terms: true,
         digitalContent: true,
@@ -671,6 +686,8 @@ async function createOrder(request, env, url) {
     CustomField1: slipId,
   };
   params.CheckMacValue = await checkMac(params, env.ECPAY_HASH_KEY, env.ECPAY_HASH_IV);
+
+  await saveOrderAttribution(env, { tradeNo, product: 'extended', amount: PRICE, attribution, status: 'pending' });
 
   return json({
     action: ECPAY_URL[env.ECPAY_MODE === 'production' ? 'production' : 'stage'],
@@ -734,6 +751,12 @@ async function ecpayCallback(request, env, ctx, url) {
 
   await env.ORDERS.put('order:' + tradeNo, JSON.stringify(order), {
     expirationTtl: ORDER_TTL,
+  });
+
+  // 訂單來源：付款結果寫進 D1（長期保存、無個資）。失敗不影響收款。
+  await saveOrderAttribution(env, {
+    tradeNo, product: 'extended', amount: order.amount,
+    attribution: order.attribution, status: order.status,
   });
 
   // 付款成功就在背景產 PDF、寄信。

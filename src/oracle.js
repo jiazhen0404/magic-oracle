@@ -29,6 +29,7 @@
  */
 
 import { ECPAY_URL, makeTradeNo, taipeiStamp, checkMac } from './ecpay.js';
+import { saveOrderAttribution, cleanAttribution } from './line-daily.js';
 
 const BUILD = '0831-0a0899';   /* 版本標記，三個頁面下方都會顯示 */
 const PRICE = 399;
@@ -218,6 +219,7 @@ async function createOracleOrder(request, env, url, origin) {
     extra: Array.isArray(o.extra) ? o.extra.slice(0, 2).map(x => String(x).slice(0, 30)) : [],
 
     consent_at: now(),
+    attribution: cleanAttribution(o.attribution),   /* 訂單來源（UTM），無個資 */
     q_note: '', draft: '', images: [], edit_note: '',
     followup: '', fu_reply: '', review: null,
     log: [{ t: now(), who: '系統', act: '建立訂單，等待付款' }]
@@ -225,6 +227,7 @@ async function createOracleOrder(request, env, url, origin) {
 
   /* 還沒付款的訂單只留 24 小時。付款成功後才改成長期保存 */
   await env.ORDERS.put('oracle:' + id, JSON.stringify(order), { expirationTtl: 60 * 60 * 24 });
+  await saveOrderAttribution(env, { tradeNo: id, product: 'oracle', amount, attribution: order.attribution, status: 'pending' });
 
   const params = {
     MerchantID: ec.id,
@@ -321,6 +324,8 @@ export async function oraclePaid(data, env, ctx) {
       } catch (e) { console.error('標記折抵憑證失敗', e.message); }
     }
     await pushIndex(env, id);
+    await saveOrderAttribution(env, { tradeNo: id, product: 'oracle', amount: o.amount,
+      attribution: o.attribution || cleanAttribution({}), status: 'paid' });
     if (ctx) ctx.waitUntil(mailAdmin(env, '新訂單待審問法 ' + id,
       o.name + '｜' + o.teacher + '\n\n' + o.q + '\n\n' + o.background, id));
   } else {
@@ -328,6 +333,8 @@ export async function oraclePaid(data, env, ctx) {
     o.fail_reason = (data.RtnMsg || '').slice(0, 200);
     log(o, '系統', '付款失敗：' + o.fail_reason);
     await put(env, o);
+    await saveOrderAttribution(env, { tradeNo: id, product: 'oracle', amount: o.amount,
+      attribution: o.attribution || cleanAttribution({}), status: 'failed' });
   }
 
   return new Response('1|OK', { headers: { 'content-type': 'text/plain' } });

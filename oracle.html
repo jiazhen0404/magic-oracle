@@ -1679,6 +1679,13 @@ function toPay(){
 
 let paying = false;
 
+/* 訂單來源：首頁把 UTM 存在 localStorage（unfinished_utm，30 天）。
+   綠界轉回來的網址沒有 UTM，不會蓋掉它，所以建單時帶上這份就不會被記成 ecpay。 */
+function readAttribution(){
+  try{ return JSON.parse(localStorage.getItem('unfinished_utm') || '{}') || {}; }
+  catch(e){ return {}; }
+}
+
 function pay(){
   if(paying) return;
   const mail = document.getElementById('mail').value.trim();
@@ -1710,7 +1717,8 @@ function pay(){
       background:    S.result.background || '',
       extra:         S.result.extra || [],
       deep_token:    deepToken,
-      consent:       true
+      consent:       true,
+      attribution:   readAttribution()
     })
   })
   .then(function(r){ return r.json().then(function(d){ return { ok:r.ok, d:d } }) })

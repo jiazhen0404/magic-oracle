@@ -18,6 +18,7 @@
   // Secret 不受影響，不要寫進來（這個檔案在 GitHub 上是公開的）：
   //   ADMIN_KEY / TEACHER_KEYS / ANTHROPIC_API_KEY
   //   RESEND_API_KEY / 綠界三把
+  //   LINE_CHANNEL_SECRET / LINE_CHANNEL_ACCESS_TOKEN / GA4_API_SECRET（LINE 今日訊息籤）
   // ═══════════════════════════════════════════════════════════
   "vars": {
     // ── 延伸籤（99 元）。不要動 ──
@@ -35,6 +36,9 @@
     "ADMIN_EMAIL": "jiazhen0404@gmail.com",
     // ── 文章後台發布用（不是密鑰，token 要用 wrangler secret put）──
     "GITHUB_REPO": "jiazhen0404/magic-oracle",
+
+    // ── LINE 今日訊息籤：GA4 伺服器端事件（API secret 放 Secret：GA4_API_SECRET）──
+    "GA4_MEASUREMENT_ID": "G-71RMD00WPJ",
 
     "SITE_URL": "https://unfinished.tw",
     "WORKER_URL": "https://unfinished.tw",

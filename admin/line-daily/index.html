@@ -1,0 +1,228 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LINE 今日訊息｜未完籤所後台</title><meta name="robots" content="noindex,nofollow">
+<style>
+:root{--gold:#d9bd82;--soft:#d7cfe2;--faint:#a89ab8;--line:rgba(217,189,130,.28)}
+*{box-sizing:border-box}
+body{margin:0;background:#120c22;color:#f3edf7;font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;line-height:1.7}
+.wrap{max-width:1180px;margin:auto;padding:26px 20px 80px}
+h1{font-size:20px;color:var(--gold);letter-spacing:.1em;margin:0 0 4px}
+h2{font-size:15px;color:var(--gold);letter-spacing:.08em;margin:30px 0 10px}
+.sub{color:var(--faint);font-size:13px;margin-bottom:18px}
+.nav{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;margin-bottom:14px}
+.nav a{color:var(--faint);text-decoration:none}.nav a.on{color:var(--gold)}
+.gate{max-width:420px;margin:80px auto;text-align:center}
+input,textarea,select,button{font-family:inherit;font-size:14px}
+input,textarea,select{width:100%;background:#1b1233;color:#f3edf7;border:1px solid var(--line);border-radius:9px;padding:9px 11px}
+textarea{min-height:150px;line-height:1.85;resize:vertical}
+label{display:block;font-size:12px;color:var(--faint);margin:12px 0 4px;letter-spacing:.04em}
+button{cursor:pointer;border-radius:999px;padding:9px 18px;border:1px solid var(--line);background:#2a1c4a;color:#f1e5c8}
+button.primary{background:linear-gradient(180deg,#8168ad,#50387d);border-color:rgba(217,189,130,.6);color:#fff}
+button:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px;align-items:center}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.card{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:rgba(27,18,51,.6)}
+.card b{display:block;font-size:24px;color:#f1e5c8;font-weight:600;font-variant-numeric:tabular-nums}
+.card span{font-size:12px;color:var(--faint)}
+.card small{display:block;font-size:11.5px;color:var(--faint);margin-top:2px}
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin-top:12px}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:860px}
+th,td{padding:8px 10px;border-bottom:1px solid rgba(217,189,130,.12);text-align:left;vertical-align:top}
+th{color:var(--faint);font-weight:500;font-size:12px;cursor:pointer;white-space:nowrap;user-select:none}
+th.num,td.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.item{cursor:pointer}tr.item:hover{background:rgba(217,189,130,.07)}
+tr.off td{opacity:.5}
+.tag{display:inline-block;font-size:11px;padding:1px 8px;border-radius:999px;background:rgba(217,189,130,.14);color:var(--gold)}
+.tag.on{background:rgba(88,160,110,.28);color:#a8e0be}.tag.off{background:rgba(200,90,90,.2);color:#f0b4b4}
+.msg{margin-top:14px;font-size:13px;padding:10px 13px;border-radius:9px;white-space:pre-wrap}
+.msg.ok{background:rgba(88,160,110,.16);color:#a8e0be}
+.msg.err{background:rgba(200,90,90,.16);color:#f0b4b4}
+.hint{color:var(--faint);font-size:12px;margin-top:6px}
+.two{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+dialog{background:#170f2c;color:#f3edf7;border:1px solid var(--line);border-radius:14px;max-width:640px;width:calc(100% - 32px);padding:20px}
+dialog::backdrop{background:rgba(5,3,12,.7)}
+@media(max-width:700px){.filters,.two{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+
+<div id="gate" class="gate">
+  <h1>LINE 今日訊息</h1>
+  <div class="sub">請輸入管理金鑰</div>
+  <input id="key" type="password" placeholder="ADMIN_KEY" autocomplete="off">
+  <div class="row" style="justify-content:center"><button class="primary" id="enter">進入</button></div>
+  <div id="gateMsg"></div>
+</div>
+
+<div id="app" hidden>
+  <nav class="nav"><a href="/admin/articles/">文章後台</a><a href="/oracle/admin">真人占卜後台</a><a class="on" href="/admin/line-daily/">LINE 今日訊息</a></nav>
+  <h1>LINE 今日訊息</h1>
+  <div class="sub">LINE 好友限定的每日一抽。日期一律以台灣時間計算。<span id="gen"></span></div>
+
+  <h2>抽籤</h2>
+  <div class="cards" id="cDraw"></div>
+  <h2>導流與轉換</h2>
+  <div class="cards" id="cSite"></div>
+  <div class="hint">導流人數＝按下「我有一件事想問」的不重複使用者。CTR＝導流人數 ÷ 同期間抽籤人數。
+    訂單只計 utm_source=line／utm_medium=bot／utm_campaign=universe_daily 且付款成功者。</div>
+
+  <h2>籤支</h2>
+  <div class="filters">
+    <input id="q" placeholder="搜尋編號、標題、內文或提醒">
+    <select id="cat"><option value="">全部分類</option></select>
+    <select id="act"><option value="">啟用＋停用</option><option value="1">只看啟用</option><option value="0">只看停用</option></select>
+  </div>
+  <div class="hint" id="count"></div>
+  <div class="tablewrap"><table>
+    <thead><tr>
+      <th data-k="fortune_id">編號</th><th data-k="title">標題</th><th data-k="category">分類</th>
+      <th data-k="weight" class="num">權重</th><th data-k="is_active">狀態</th>
+      <th data-k="total" class="num">抽中</th><th data-k="d7" class="num">7 日</th><th data-k="d30" class="num">30 日</th>
+      <th data-k="ctaClicks" class="num">CTA</th><th data-k="ctr" class="num">CTR</th>
+    </tr></thead>
+    <tbody id="rows"></tbody>
+  </table></div>
+</div>
+
+<dialog id="dlg">
+  <div style="display:flex;align-items:center;gap:10px">
+    <span style="color:var(--gold);letter-spacing:.08em" id="dTitle">編輯</span>
+    <button id="dClose" style="margin-left:auto">關閉</button>
+  </div>
+  <label>標題</label><input id="f_title">
+  <label>籤文</label><textarea id="f_content"></textarea>
+  <label>今日提醒</label><input id="f_reminder">
+  <div class="two">
+    <div><label>分類（只有後台看得到）</label><input id="f_category"></div>
+    <div><label>權重（1.0 一般／0.7 特殊／0.4 稀有）</label><input id="f_weight" type="number" step="0.05" min="0" max="5"></div>
+    <div><label>狀態</label><select id="f_active"><option value="1">啟用</option><option value="0">停用（不會再被抽到）</option></select></div>
+  </div>
+  <div class="hint">停用不會刪除資料，之前抽過這支的紀錄都還在。</div>
+  <div class="row"><button class="primary" id="save">儲存</button></div>
+  <div id="dMsg"></div>
+</dialog>
+
+<script>
+const $ = id => document.getElementById(id);
+let KEY = '';
+try { KEY = sessionStorage.getItem('uw_admin_key') || ''; } catch (e) {}
+let DATA = [], SORT = { k: 'fortune_id', dir: 1 }, CUR = null;
+
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmt = n => Number(n || 0).toLocaleString('zh-TW');
+
+async function api(path, opts = {}) {
+  const res = await fetch(path, { cache: 'no-store', ...opts,
+    headers: { 'X-Admin-Key': KEY, 'content-type': 'application/json', ...(opts.headers || {}) } });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw Object.assign(new Error(data.hint || data.error || res.status), { status: res.status });
+  return data;
+}
+function msg(el, text, ok) { $(el).innerHTML = text ? '<div class="msg ' + (ok ? 'ok' : 'err') + '">' + esc(text) + '</div>' : ''; }
+const card = (label, value, note) => '<div class="card"><span>' + esc(label) + '</span><b>' + value + '</b>' + (note ? '<small>' + esc(note) + '</small>' : '') + '</div>';
+
+async function loadSummary() {
+  const s = await api('/api/line-daily/admin/summary');
+  $('gen').textContent = '　今天：' + s.today;
+  $('cDraw').innerHTML =
+    card('今日抽籤人數', fmt(s.drawUsers.today)) +
+    card('昨日抽籤人數', fmt(s.drawUsers.yesterday)) +
+    card('7 日抽籤人數', fmt(s.drawUsers.d7), '不重複') +
+    card('30 日抽籤人數', fmt(s.drawUsers.d30), '不重複') +
+    card('累積抽籤次數', fmt(s.totalDraws)) +
+    card('不重複抽籤用戶', fmt(s.uniqueUsers)) +
+    card('今日重複查看人數', fmt(s.repeatViewUsersToday), '不算新的抽籤');
+  $('cSite').innerHTML =
+    card('導流網站人數', fmt(s.toSiteUsers.d30), '30 日｜今日 ' + fmt(s.toSiteUsers.today) + '｜7 日 ' + fmt(s.toSiteUsers.d7) + '｜累積 ' + fmt(s.toSiteUsers.total)) +
+    card('LINE → 網站 CTR', s.ctr.d30 + '%', '30 日｜今日 ' + s.ctr.today + '%｜7 日 ' + s.ctr.d7 + '%｜累積 ' + s.ctr.total + '%') +
+    card('LINE → 訂單數', fmt(s.orders.d30.count), '30 日｜累積 ' + fmt(s.orders.total.count)) +
+    card('LINE → 營收', 'NT$' + fmt(s.orders.d30.revenue), '30 日｜累積 NT$' + fmt(s.orders.total.revenue)) +
+    card('所有 LINE 來源營收', 'NT$' + fmt(s.orders.allLineSources.revenue), '累積，含 Rich Menu 其他按鈕｜' + fmt(s.orders.allLineSources.count) + ' 筆');
+}
+
+async function loadFortunes() {
+  const p = new URLSearchParams();
+  if ($('q').value.trim()) p.set('q', $('q').value.trim());
+  if ($('cat').value) p.set('category', $('cat').value);
+  if ($('act').value) p.set('active', $('act').value);
+  const d = await api('/api/line-daily/admin/fortunes?' + p);
+  DATA = d.fortunes;
+  const sel = $('cat').value;
+  $('cat').innerHTML = '<option value="">全部分類</option>' +
+    d.categories.map(c => '<option value="' + esc(c.category) + '">' + esc(c.category) + '（' + c.n + '）</option>').join('');
+  $('cat').value = sel;
+  render();
+}
+
+function val(f, k) {
+  if (k === 'total' || k === 'd7' || k === 'd30') return f.draws[k];
+  if (k === 'is_active') return f.is_active ? 1 : 0;
+  return f[k];
+}
+function render() {
+  const rows = DATA.slice().sort((a, b) => {
+    const x = val(a, SORT.k), y = val(b, SORT.k);
+    return (x > y ? 1 : x < y ? -1 : 0) * SORT.dir;
+  });
+  const active = DATA.filter(f => f.is_active).length;
+  $('count').textContent = '共 ' + DATA.length + ' 支，啟用 ' + active + ' 支。點任一列可查看與編輯。';
+  $('rows').innerHTML = rows.map(f =>
+    '<tr class="item' + (f.is_active ? '' : ' off') + '" data-id="' + esc(f.fortune_id) + '">' +
+    '<td>' + esc(f.fortune_id) + '</td><td>' + esc(f.title) + '</td><td><span class="tag">' + esc(f.category) + '</span></td>' +
+    '<td class="num">' + f.weight.toFixed(2) + '</td>' +
+    '<td><span class="tag ' + (f.is_active ? 'on">啟用' : 'off">停用') + '</span></td>' +
+    '<td class="num">' + fmt(f.draws.total) + '</td><td class="num">' + fmt(f.draws.d7) + '</td><td class="num">' + fmt(f.draws.d30) + '</td>' +
+    '<td class="num">' + fmt(f.ctaClicks) + '</td><td class="num">' + f.ctr + '%</td></tr>').join('');
+}
+
+function openEdit(id) {
+  CUR = DATA.find(f => f.fortune_id === id);
+  if (!CUR) return;
+  $('dTitle').textContent = CUR.fortune_id + '｜編輯';
+  $('f_title').value = CUR.title;
+  $('f_content').value = CUR.content;
+  $('f_reminder').value = CUR.reminder;
+  $('f_category').value = CUR.category;
+  $('f_weight').value = CUR.weight;
+  $('f_active').value = CUR.is_active ? '1' : '0';
+  msg('dMsg', '');
+  $('dlg').showModal();
+}
+
+async function save() {
+  $('save').disabled = true;
+  try {
+    await api('/api/line-daily/admin/fortune', { method: 'POST', body: JSON.stringify({
+      fortune_id: CUR.fortune_id,
+      title: $('f_title').value, content: $('f_content').value, reminder: $('f_reminder').value,
+      category: $('f_category').value, weight: Number($('f_weight').value), is_active: $('f_active').value === '1',
+    }) });
+    msg('dMsg', '已儲存。', true);
+    await loadFortunes();
+  } catch (e) { msg('dMsg', '儲存失敗：' + e.message); }
+  $('save').disabled = false;
+}
+
+async function enter() {
+  try {
+    await loadSummary();
+    try { sessionStorage.setItem('uw_admin_key', KEY); } catch (e) {}
+    $('gate').hidden = true; $('app').hidden = false;
+    await loadFortunes();
+  } catch (e) {
+    msg('gateMsg', e.status === 401 ? '金鑰不正確' : '讀取失敗：' + e.message);
+  }
+}
+
+$('enter').onclick = () => { KEY = $('key').value.trim(); enter(); };
+$('key').onkeydown = e => { if (e.key === 'Enter') $('enter').click(); };
+let t; $('q').oninput = () => { clearTimeout(t); t = setTimeout(loadFortunes, 300); };
+$('cat').onchange = loadFortunes; $('act').onchange = loadFortunes;
+$('rows').onclick = e => { const tr = e.target.closest('tr.item'); if (tr) openEdit(tr.dataset.id); };
+document.querySelectorAll('th[data-k]').forEach(th => th.onclick = () => {
+  SORT = { k: th.dataset.k, dir: SORT.k === th.dataset.k ? -SORT.dir : (th.classList.contains('num') ? -1 : 1) };
+  render();
+});
+$('dClose').onclick = () => $('dlg').close();
+$('save').onclick = save;
+if (KEY) enter();
+</script>
+</div></body></html>

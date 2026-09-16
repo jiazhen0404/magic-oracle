@@ -300,6 +300,13 @@ email.addEventListener('blur', () => {
   err.textContent = bad ? '這個信箱看起來不太對，再確認一次好嗎？' : '';
 });
 
+/* 訂單來源：首頁把 UTM 存在 localStorage（unfinished_utm，30 天）。
+   綠界轉回來的網址沒有 UTM，不會蓋掉它，所以建單時帶上這份就不會被記成 ecpay。 */
+function readAttribution(){
+  try{ return JSON.parse(localStorage.getItem('unfinished_utm') || '{}') || {}; }
+  catch(e){ return {}; }
+}
+
 form.addEventListener('submit', async ev => {
   ev.preventDefault();
   if(submit.disabled) return;
@@ -316,7 +323,8 @@ form.addEventListener('submit', async ev => {
         question: QUESTION,
         email: email.value.trim(),
         drawnAt: DRAWN_AT,
-        consent: { terms: true, digitalContent: true, consentAt: new Date().toISOString() }
+        consent: { terms: true, digitalContent: true, consentAt: new Date().toISOString() },
+        attribution: readAttribution()
       })
     });
     if(!res.ok){
