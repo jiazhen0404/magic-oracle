@@ -614,6 +614,13 @@ async function createOrder(request, env, url) {
   if (!SLIP_ID_RE.test(slipId)) {
     return json({ error: 'bad_slip_id' }, 400);
   }
+  // 格式對不代表這支籤真的有延伸內容。/checkout/ 只用正規表達式檢查網址參數，
+  // 所以像 love_flirting_073 這種「格式合法但還沒寫延伸籤」的編號，
+  // 以前可以一路付完款，最後才在 deliverReading 卡在 slip_not_found——
+  // 錢收了、PDF 產不出來。收款前先擋掉。
+  if (!EXTENDED.some((x) => x.id === slipId)) {
+    return json({ error: 'slip_not_found' }, 404);
+  }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || email.length > 254) {
     return json({ error: 'bad_email' }, 400);
   }
