@@ -8,7 +8,8 @@
     "lint": "node lint.js && node checkglobals.js && node checkwrap.js && node checkspouse.js",
     "accept": "node accept.js",
     "plain": "node checkplain.js",
-    "calibrate": "node calibrate.js"
+    "calibrate": "node calibrate.js",
+    "density": "node checkdensity.js"
   },
   "dependencies": {
     "jsdom": "^30.0.1"
