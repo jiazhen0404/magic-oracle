@@ -102,7 +102,11 @@ const RULES = [
       const openPos = PAT.posTone.test(open), openNeg = PAT.negTone.test(open);
       // 先移除被否定的子句，否則「不會累積成問題」會被當成負面
       const body = (core + close).replace(/(不會|不再|不是|並非|沒有|不容易|不至於)[^，。；]{0,10}/g, '');
-      const bodyNeg = /(不對等|消耗|退讓|越來越小|磨|受不了|吵|僵住|走散|爆|拉扯|很硬|累|沒被看見|吞回去)/.test(body);
+      /* 「累」要排除「累積」——後者是正面的，而且新版文案很常用
+         （「相處的順度一直在累積」）。不排除的話這條規則會永遠擋著它，
+         而那是規則誤判，不是文案有問題。
+         「磨」同理排除「磨合」：磨損是負面，磨合不是。 */
+      const bodyNeg = /(不對等|消耗|退讓|越來越小|磨(?!合)|受不了|吵|僵住|走散|爆|拉扯|很硬|累(?!積)|沒被看見|吞回去)/.test(body);
       const bodyPos = /(難得|很順|默契|信任|禁得起|放心|厚)/.test(body);   // 「舒服」在本產品常指對方舒服＝使用者累，不列入
       if (openPos && bodyNeg && !bodyPos) return '開場正面，內文負面';
       if (openNeg && bodyPos && !bodyNeg) return '開場負面，內文正面';
