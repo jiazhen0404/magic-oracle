@@ -9,7 +9,7 @@ import assert from 'node:assert/strict';
 import {
   taipeiDate, addDays, pickWeighted, candidatePool, drawToday, respond,
   verifySignature, intentOf, lineDailyRoutes, summary, fortuneList,
-  saveOrderAttribution, cleanAttribution, landingUrl, isMine,
+  saveOrderAttribution, cleanAttribution, landingUrl, isMine, drawParams, DRAW_CATEGORY,
 } from '../src/line-daily.js';
 
 /* ── D1 模擬 ── */
@@ -348,14 +348,33 @@ await test('Webhook：簽章驗證、Verify 空事件、文字與 postback 觸�
     await Promise.all(ctxP);
     const names = sent.filter(x => x.u.includes('google-analytics')).map(x => x.body.events[0].name);
     assert.deepEqual(names, ['line_daily_draw_start', 'line_daily_draw_complete']);
+    const start = sent.filter(x => x.u.includes('google-analytics'))[0].body.events[0].params;
+    assert.equal(start.draw_category, 'universe');
+    assert.equal(start.draw_source, 'line');
+    assert.equal(start.debug_mode, undefined, '沒開 GA4_DEBUG 時不帶 debug_mode');
     const complete = sent.filter(x => x.u.includes('google-analytics'))[1].body;
-    assert.match(complete.events[0].params.fortune_id, /^\d{3}$/);
-    assert.ok(complete.events[0].params.fortune_category);
+    const cp = complete.events[0].params;
+    assert.match(cp.fortune_id, /^\d{3}$/);
+    assert.ok(cp.fortune_category);
+    assert.equal(cp.draw_category, 'universe');
+    assert.equal(cp.draw_source, 'line');
+    assert.equal(cp.draw_id, 'universe_' + cp.fortune_id);
+    const titleRow = env.DB.raw.prepare('SELECT title FROM line_daily_fortunes WHERE fortune_id=?').get(cp.fortune_id);
+    assert.equal(cp.draw_title, titleRow.title);
+    // 不能有任何個資欄位
+    assert.ok(!/userId|user_id|email|phone|name"/i.test(JSON.stringify(cp)), JSON.stringify(cp));
     assert.ok(!JSON.stringify(complete).includes('Ug'), 'GA4 不應收到 LINE User ID 本身');
     ctxP.length = 0;
     await respond('open', 'Ug', env2, { waitUntil: p => ctxP.push(p) }, {});
     await Promise.all(ctxP);
-    assert.equal(sent.filter(x => x.u.includes('google-analytics')).at(-1).body.events[0].name, 'line_daily_repeat_view');
+    const rv = sent.filter(x => x.u.includes('google-analytics')).at(-1).body.events[0];
+    assert.equal(rv.name, 'line_daily_repeat_view');
+    assert.equal(rv.params.draw_category, 'universe');
+    // GA4_DEBUG 開啟時帶 debug_mode，DebugView 才看得到
+    ctxP.length = 0;
+    await respond('draw', 'Udebug', { ...env2, GA4_DEBUG: '1' }, { waitUntil: p => ctxP.push(p) }, {});
+    await Promise.all(ctxP);
+    assert.equal(sent.filter(x => x.u.includes('google-analytics')).at(-1).body.events[0].params.debug_mode, 1);
   } finally { globalThis.fetch = realFetch; }
   assert.equal(intentOf({ type: 'message', message: { type: 'text', text: '今天,有一句話想給你' } }), 'open');
   assert.equal(intentOf({ type: 'message', message: { type: 'text', text: '宇宙指引' } }), 'open');
@@ -423,6 +442,14 @@ await test('轉送：宇宙指引留在這裡，其他事件原封轉給原本�
     assert.equal(r.status, 200);
   } finally { globalThis.fetch = realFetch; }
   assert.equal(isMine(uni), true); assert.equal(isMine(groupUni), false); assert.equal(isMine(love), false);
+});
+
+await test('GA4 參數：五種分類的值與施工單一致', async () => {
+  assert.deepEqual(DRAW_CATEGORY, { '感情': 'love', '工作': 'work', '低潮中': 'low_mood', '宇宙指引': 'universe', '限定主題': 'limited' });
+  assert.deepEqual(drawParams('universe'), { draw_category: 'universe', draw_source: 'line' });
+  assert.deepEqual(drawParams('universe', { fortune_id: '023', title: '最近反覆出現的夢正在提醒你' }),
+    { draw_category: 'universe', draw_source: 'line', draw_id: 'universe_023', draw_title: '最近反覆出現的夢正在提醒你' });
+  assert.equal(drawParams('love', { fortune_id: '1', title: 'x'.repeat(150) }).draw_title.length, 100);
 });
 
 /* ── 輸出 ── */

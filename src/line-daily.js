@@ -290,7 +290,7 @@ export async function respond(intent, userId, env, ctx, opts = {}) {
     const peek = await drawToday(db, userId, { ...opts, onlyPeek: true });
     if (peek.status === 'existing') {
       await logEvent(db, userId, 'repeat_view', peek.draw, opts.now);
-      bg(ga4(env, userId, 'line_daily_repeat_view', { fortune_id: peek.draw.fortune_id }));
+      bg(ga4(env, userId, 'line_daily_repeat_view', { fortune_id: peek.draw.fortune_id, ...drawParams('universe', peek.draw) }));
       return [await fortuneMessage(env, peek.draw, { repeat: true })];
     }
     return [introMessage()];
@@ -304,15 +304,17 @@ export async function respond(intent, userId, env, ctx, opts = {}) {
   if (result.status === 'existing') {
     // 按鈕按第二次、或兩個請求同時進來：給同一支，記成「再看一次」，不算新的抽籤
     await logEvent(db, userId, 'repeat_view', result.draw, opts.now);
-    bg(ga4(env, userId, 'line_daily_repeat_view', { fortune_id: result.draw.fortune_id }));
+    bg(ga4(env, userId, 'line_daily_repeat_view', { fortune_id: result.draw.fortune_id, ...drawParams('universe', result.draw) }));
     return [await fortuneMessage(env, result.draw, { repeat: true })];
   }
 
   await logEvent(db, userId, 'draw_start', result.draw, opts.now);
-  bg(ga4(env, userId, 'line_daily_draw_start', {}).then(() =>
+  // 事件名稱不變；新增 draw_category 等參數。fortune_id／fortune_category 保留，舊報表不會斷。
+  bg(ga4(env, userId, 'line_daily_draw_start', drawParams('universe')).then(() =>
     ga4(env, userId, 'line_daily_draw_complete', {
       fortune_id: result.draw.fortune_id,
       fortune_category: result.draw.category || '',
+      ...drawParams('universe', result.draw),
     })));
   return [await fortuneMessage(env, result.draw, { repeat: false })];
 }
@@ -448,7 +450,7 @@ async function goToSite(url, env, ctx) {
     if (!draw) return redirect(landingUrl(env));
 
     await logEvent(env.DB, draw.line_user_id, 'to_site', draw);
-    const p = ga4(env, draw.line_user_id, 'line_daily_to_site', { fortune_id: draw.fortune_id });
+    const p = ga4(env, draw.line_user_id, 'line_daily_to_site', { fortune_id: draw.fortune_id, ...drawParams('universe', draw) });
     if (ctx && typeof ctx.waitUntil === 'function') ctx.waitUntil(p);
     return redirect(landingUrl(env, draw.fortune_id));
   } catch (e) {
@@ -462,6 +464,31 @@ async function goToSite(url, env, ctx) {
    LINE 聊天室裡沒有網頁，gtag 用不了，只能由後端代送。
    不送 LINE User ID 本身，只送它的雜湊。
    ══════════════════════════════════════════════════ */
+
+/* 抽籤分類（draw_category）。LINE 圖文選單的五個抽籤入口共用同一套值，
+   原本的 bot（unfinished-oracle）送事件時也要用這一套，GA4 報表才對得起來。 */
+export const DRAW_CATEGORY = {
+  '感情': 'love',
+  '工作': 'work',
+  '低潮中': 'low_mood',
+  '宇宙指引': 'universe',
+  '限定主題': 'limited',
+};
+
+/**
+ * 組 GA4 事件參數。只放籤的資訊，不放任何個資
+ * （姓名、LINE User ID、Email、電話一律不送）。
+ *   draw_category  love / work / low_mood / universe / limited
+ *   draw_source    固定 line
+ *   draw_id        例：universe_023（有抽到籤才帶）
+ *   draw_title     籤的標題（有抽到籤才帶；GA4 參數值上限 100 字）
+ */
+export function drawParams(category, draw) {
+  const p = { draw_category: category, draw_source: 'line' };
+  if (draw && draw.fortune_id) p.draw_id = `${category}_${draw.fortune_id}`;
+  if (draw && draw.title) p.draw_title = String(draw.title).slice(0, 100);
+  return p;
+}
 
 async function ga4(env, userId, name, params) {
   if (!env.GA4_API_SECRET || !env.GA4_MEASUREMENT_ID) return;
@@ -477,7 +504,13 @@ async function ga4(env, userId, name, params) {
       body: JSON.stringify({
         client_id: clientId,
         non_personalized_ads: true,
-        events: [{ name, params: { ...params, platform: 'line_bot', engagement_time_msec: 1 } }],
+        events: [{ name, params: {
+          ...params,
+          platform: 'line_bot',
+          engagement_time_msec: 1,
+          // 驗證用：Cloudflare 加一把 Secret「GA4_DEBUG = 1」，事件就會出現在 GA4 DebugView。測完刪掉即可。
+          ...(/^(1|true)$/i.test(String(env.GA4_DEBUG || '')) ? { debug_mode: 1 } : {}),
+        } }],
       }),
     });
   } catch (e) {
