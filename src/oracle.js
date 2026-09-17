@@ -31,7 +31,7 @@
 import { ECPAY_URL, makeTradeNo, taipeiStamp, checkMac } from './ecpay.js';
 import { saveOrderAttribution, cleanAttribution } from './line-daily.js';
 
-const BUILD = '0831-0a0899';   /* 版本標記，三個頁面下方都會顯示 */
+const BUILD = '0917-img';   /* 版本標記，三個頁面下方都會顯示 */
 const PRICE = 399;
 /* 折抵暫停中。設 0 之後不管前端傳什麼都收滿 399。
    要恢復改回 99，同時要把 oracle.html 的 CREDIT_ON 改成 true。 */
@@ -446,6 +446,39 @@ async function adminApi(request, env, ctx, path, origin) {
     log(o, '你', o.invoice_no ? ('填入發票號碼 ' + o.invoice_no) : '清除發票號碼');
     await put(env, o);
     return json({ ok: true }, 200, origin);
+  }
+
+  /* 審稿時直接改牌陣照片（刪除／補傳）。客人還沒看到之前都可以改 */
+  if (path === '/api/oracle/admin/delete-image' && request.method === 'POST') {
+    const b = await request.json();
+    const o = await get(env, b.id);
+    if (!o) return json({ error: 'not_found' }, 404, origin);
+    const key = String(b.key || '');
+    if ((o.images || []).indexOf(key) < 0) return json({ error: 'no_such_image' }, 400, origin);
+    o.images = o.images.filter(k => k !== key);
+    log(o, '你', '刪掉一張照片');
+    await put(env, o);
+    if (env.MEDIA) { try { await env.MEDIA.delete(key); } catch (e) {} }
+    return json({ ok: true, images: o.images }, 200, origin);
+  }
+
+  if (path === '/api/oracle/admin/upload' && request.method === 'POST') {
+    if (!env.MEDIA) return json({ error: 'no_bucket' }, 500, origin);
+    const id = new URL(request.url).searchParams.get('id') || '';
+    const o = await get(env, id);
+    if (!o) return json({ error: 'not_found' }, 404, origin);
+    if ((o.images || []).length >= MAX_IMAGES) return json({ error: 'full', hint: '已經有 ' + MAX_IMAGES + ' 張了' }, 400, origin);
+    const type = request.headers.get('Content-Type') || 'image/jpeg';
+    if (!/^image\//.test(type)) return json({ error: 'not_image' }, 400, origin);
+    const buf = await request.arrayBuffer();
+    if (buf.byteLength > 8 * 1024 * 1024) return json({ error: 'too_big', hint: '單張請小於 8MB' }, 400, origin);
+    const ext = type.indexOf('png') >= 0 ? 'png' : (type.indexOf('webp') >= 0 ? 'webp' : 'jpg');
+    const k = 'admin/' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6) + '.' + ext;
+    await env.MEDIA.put(k, buf, { httpMetadata: { contentType: type } });
+    o.images = (o.images || []).concat([k]);
+    log(o, '你', '補上一張照片');
+    await put(env, o);
+    return json({ ok: true, key: k, images: o.images }, 200, origin);
   }
 
   if (path === '/api/oracle/admin/act' && request.method === 'POST') {
@@ -1086,6 +1119,11 @@ label{display:block;font-size:12.5px;color:var(--dim);margin-bottom:6px}
 .shots a{display:block;width:76px;height:76px;border-radius:8px;overflow:hidden;
   border:1px solid var(--line2)}
 .shots img{width:100%;height:100%;object-fit:cover;display:block}
+.shot{position:relative}
+.shot-x{position:absolute;top:-7px;right:-7px;width:22px;height:22px;border-radius:50%;
+  border:1px solid var(--line2);background:#1a1726;color:#E8DCC0;font-size:14px;line-height:18px;
+  padding:0;cursor:pointer;font-family:inherit}
+.shot-x:hover{background:#5a2330;color:#fff}
 .logs{font-size:12px;color:#6F6880;line-height:1.9;margin-top:12px;
   border-top:1px solid var(--line);padding-top:10px}
 table.bk{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
@@ -1163,6 +1201,7 @@ function signOut(){
 }
 var KEY = sessionStorage.getItem('uw_admin') || '';
 var ALL = [], TEACHERS = [], CANMAIL = false, F = 'todo';
+var MAXIMG = ${MAX_IMAGES};
 /* 信件裡的直達連結 */
 var WANT = new URLSearchParams(location.search).get('id') || '';
 
@@ -1278,10 +1317,73 @@ function scan(t){
   P.forEach(function(p){ if(p[0].test(t)) f.push('· '+p[1]) });
   return f;
 }
-function shots(imgs){
-  if(!imgs || !imgs.length) return '';
-  return '<label>牌陣照片</label><div class="shots">'+imgs.map(function(k){
-    return '<a href="/media/'+k+'" target="_blank"><img src="/media/'+k+'" alt=""></a>' }).join('')+'</div>';
+/* 牌陣照片。照片網址一律是 /oracle/media/…（以前寫成 /media/ 所以破圖） */
+function shotList(imgs){
+  return (imgs||[]).map(function(k){
+    return '<div class="shot">'
+      + '<a href="/oracle/media/'+k+'" target="_blank"><img src="/oracle/media/'+k+'" alt=""></a>'
+      + '<button class="shot-x" data-adel="'+k+'" title="刪掉這張">×</button></div>';
+  }).join('');
+}
+function shots(o){
+  var n = (o.images||[]).length;
+  var h = '<label>牌陣照片（'+n+' / '+MAXIMG+' 張，客人看得到）</label>';
+  h += '<div class="shots" id="as_'+o.id+'">'+shotList(o.images)+'</div>';
+  h += '<input type="file" accept="image/*" multiple id="au_'+o.id+'" style="display:none" onchange="aUpload(\\''+o.id+'\\',this)">';
+  h += '<button class="b ghost" style="width:100%;margin-bottom:6px" id="aub_'+o.id+'"'
+     + (n>=MAXIMG?' disabled':'')
+     + ' onclick="document.getElementById(\\'au_'+o.id+'\\').click()">'
+     + (n>=MAXIMG ? '已達上限，要換請先刪掉一張' : '＋ 補傳照片') + '</button>';
+  return h;
+}
+function refreshShots(o){
+  var box = document.getElementById('as_'+o.id);
+  if(box) box.innerHTML = shotList(o.images);
+  var n = (o.images||[]).length;
+  var b = document.getElementById('aub_'+o.id);
+  if(b){
+    b.disabled = n >= MAXIMG;
+    b.textContent = n >= MAXIMG ? '已達上限，要換請先刪掉一張' : '＋ 補傳照片';
+  }
+  if(box && box.previousElementSibling)
+    box.previousElementSibling.textContent = '牌陣照片（'+n+' / '+MAXIMG+' 張，客人看得到）';
+}
+document.addEventListener('click', function(e){
+  var t = e.target;
+  if(!t || !t.dataset || !t.dataset.adel) return;
+  var key = t.dataset.adel;
+  var o = ALL.filter(function(x){ return (x.images||[]).indexOf(key) >= 0 })[0];
+  if(!o || !confirm('刪掉這張照片？刪掉後無法復原。')) return;
+  api('/api/oracle/admin/delete-image', { id: o.id, key: key }).then(function(d){
+    o.images = d.images || [];
+    refreshShots(o);
+  }).catch(function(){ alert('刪不掉，請重試') });
+});
+/* 一張一張傳，避免同時寫入把彼此蓋掉 */
+function aUpload(id, input){
+  var files = Array.prototype.slice.call(input.files || []);
+  input.value = '';
+  var o = ALL.filter(function(x){ return x.id===id })[0];
+  if(!o || !files.length) return;
+  var room = MAXIMG - (o.images||[]).length;
+  if(room <= 0){ alert('已經有 '+MAXIMG+' 張了'); return }
+  if(files.length > room){ alert('只能再加 '+room+' 張，會先傳前面 '+room+' 張'); files = files.slice(0, room) }
+  var b = document.getElementById('aub_'+id);
+  if(b){ b.disabled = true; b.textContent = '上傳中…' }
+  var chain = Promise.resolve();
+  files.forEach(function(f){
+    chain = chain.then(function(){
+      if(f.size > 8*1024*1024) throw new Error(f.name + ' 超過 8MB');
+      return fetch('/api/oracle/admin/upload?id='+encodeURIComponent(id), { method:'POST',
+        headers:{'X-Key':KEY,'Content-Type':f.type||'image/jpeg'}, body:f
+      }).then(function(r){ return r.json() }).then(function(d){
+        if(!d.ok) throw new Error(d.hint || '上傳失敗');
+        o.images = d.images || [];
+        refreshShots(o);
+      });
+    });
+  });
+  chain.catch(function(e){ alert(e.message || '上傳失敗') }).then(function(){ refreshShots(o) });
 }
 
 function card(o){
@@ -1326,7 +1428,7 @@ function card(o){
   if(o.st === 'draft_wait' || o.st === 'draft_doing'){
     var s = scan(o.draft);
     if(s.length) h += '<div class="warn">自動檢查<br>'+s.join('<br>')+'</div>';
-    h += shots(o.images);
+    h += shots(o);
     h += '<label>稿件（'+(o.draft||'').length+' 字，可直接修改）</label>';
     h += '<textarea id="d_'+o.id+'" rows="12">'+esc(o.draft)+'</textarea>';
     h += '<label>退回時的說明</label>';
@@ -1340,6 +1442,7 @@ function card(o){
   if(o.st === 'sent'){
     h += '<div class="hint">已於 '+fmt(o.sent_at)+' 寄出。客人可以留評價，之後手動結案即可。</div>';
     h += '<details><summary>看稿件</summary><div class="reading">'+esc(o.draft)+'</div></details>';
+    h += '<details><summary>牌陣照片（'+(o.images||[]).length+'）</summary>'+shots(o)+'</details>';
     h += '<div class="btns" style="margin-top:10px">'+b(o.id,'close','ghost','手動結案')+'</div>';
   }
 
@@ -1710,6 +1813,12 @@ function card(o){
 
   if(['draft_wait','draft_doing','fu_review','fu_doing'].indexOf(o.st) >= 0){
     h += '<div class="hint">已交出，等待平台審閱。</div>';
+    if(o.images && o.images.length){
+      h += '<label>你上傳的牌陣照片（'+o.images.length+' 張）</label><div class="shots">'
+         + o.images.map(function(k){
+             return '<a href="/oracle/media/'+k+'" target="_blank"><img src="/oracle/media/'+k+'" alt=""></a>' }).join('')
+         + '</div>';
+    }
     h += '<details><summary>看你寫的</summary><div class="reading">'
        + esc(o.st.indexOf('fu')===0 ? o.fu_reply : o.draft)+'</div></details>';
   }
@@ -1929,7 +2038,7 @@ function show(o){
     h += '<div class="reading">'+esc(o.draft)+'</div>';
     if(o.images && o.images.length){
       h += '<div class="shots">'+o.images.map(function(k){
-        return '<a href="/media/'+k+'" target="_blank"><img src="/media/'+k+'" alt="牌陣"></a>' }).join('')+'</div>';
+        return '<a href="/oracle/media/'+k+'" target="_blank"><img src="/oracle/media/'+k+'" alt="牌陣"></a>' }).join('')+'</div>';
     }
   }
 
