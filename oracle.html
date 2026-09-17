@@ -272,6 +272,15 @@ p{font-size:14.5px;color:var(--text)}
 .spec dt{color:var(--dim);white-space:nowrap}
 .spec dd{color:var(--text);margin:0}
 
+.voice{margin:4px 0 16px;padding:12px 14px;border-left:2px solid var(--gold-dim);
+  background:rgba(216,184,126,.05);border-radius:0 10px 10px 0}
+.voice .lbl{font-size:12px;color:var(--gold-dim);margin-bottom:6px}
+.voice p{font-size:13.5px;color:var(--text);line-height:1.75;margin:0}
+.rv{padding:16px 0;border-bottom:1px solid var(--line)}
+.rv:last-of-type{border-bottom:0}
+.rv .who{font-size:12px;color:var(--gold-dim);margin-bottom:8px;letter-spacing:.04em}
+.rv p{font-size:14px;color:var(--text);line-height:1.85;margin:0}
+.rvmore{font-size:12.5px;color:var(--dim);margin-top:6px}
 .noreview{font-size:13.5px;color:var(--dim);line-height:1.9;
   border:1px dashed var(--line);border-radius:10px;padding:18px}
 
@@ -906,6 +915,36 @@ const TEACHERS=[
 /* 舊變數保留給既有程式碼使用 */
 const SEERS=TEACHERS;
 
+/* ── 客人評價：後台按「通過」後，自動從這裡帶進來 ── */
+function normName(x){ return String(x||'').replace(/老師|先生|\s/g,'').toLowerCase() }
+function reviewHtml(r){
+  const m = /^(\d{4})-(\d{2})/.exec(r.month||'');
+  const when = m ? `${m[1]}.${m[2]}` : '';
+  return `<div class="rv"><div class="who">匿名${r.topic?`｜${esc(r.topic)}`:''}${when?`　${when}`:''}</div>`
+       + `<p>${esc(r.text)}</p></div>`;
+}
+function showVoices(){
+  TEACHERS.forEach(t=>{
+    const el = document.getElementById('voice-'+t.id);
+    if(!el) return;
+    if(!t.reviews.length){ el.hidden = true; return }
+    const r = t.reviews[0];
+    const txt = r.text.length > 60 ? r.text.slice(0,60)+'…' : r.text;
+    el.innerHTML = `<div class="lbl">客人回饋・${t.reviews.length} 則</div><p>「${esc(txt)}」</p>`;
+    el.hidden = false;
+  });
+}
+fetch('/api/oracle/reviews', { cache:'no-store' })
+  .then(r => r.ok ? r.json() : { reviews: [] })
+  .then(d => {
+    (d.reviews||[]).forEach(r=>{
+      const t = TEACHERS.find(x => x.id === r.tid || normName(x.name) === normName(r.teacher));
+      if(t && r.text) t.reviews.push(r);
+    });
+    showVoices();
+  })
+  .catch(function(){});
+
 
 const STEPS=['真人占卜','選擇老師','聯絡方式','注意事項','整理問題','確認問題','付款'];
 const MAIL_RE=/^[^\s]+[^\s]+\.[a-zA-Z]{2,}$/;
@@ -1046,6 +1085,8 @@ document.getElementById('deck').innerHTML = TEACHERS.map(t=>`
       <ul class="tgood">${t.best.slice(0,3).map(q=>`<li>${q}</li>`).join('')}</ul>
     </div>
 
+    <div class="voice" id="voice-${t.id}" hidden></div>
+
     <div class="tverify"><span>真人老師</span><span>未完籤所合作占卜師</span><span>${t.years}</span></div>
 
     <div class="tfoot">
@@ -1105,7 +1146,8 @@ function openTeacher(id){
 
     <h3 class="sh-h">他們也曾經把故事交給${t.name}</h3>
     ${t.reviews.length
-      ? t.reviews.map(r=>`<div class="tsec"><div class="lbl">★★★★★　${r.who}｜${r.topic}</div><p class="val">${r.text}</p></div>`).join('')
+      ? t.reviews.slice(0, 12).map(reviewHtml).join('')
+        + `<div class="rvmore">以上為匿名刊出，皆來自實際完成服務的客人，經客人同意公開。</div>`
       : `<div class="noreview">這位老師還在累積評價。<br>所有評價都來自實際完成服務的客人，我們不會自行撰寫。</div>`}
 
     <div class="buybox">

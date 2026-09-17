@@ -31,7 +31,7 @@
 import { ECPAY_URL, makeTradeNo, taipeiStamp, checkMac } from './ecpay.js';
 import { saveOrderAttribution, cleanAttribution } from './line-daily.js';
 
-const BUILD = '0917-img';   /* 版本標記，三個頁面下方都會顯示 */
+const BUILD = '0917-review';   /* 版本標記，三個頁面下方都會顯示 */
 const PRICE = 399;
 /* 折抵暫停中。設 0 之後不管前端傳什麼都收滿 399。
    要恢復改回 99，同時要把 oracle.html 的 CREDIT_ON 改成 true。 */
@@ -137,6 +137,15 @@ export async function oracleRoutes(request, env, ctx, url) {
           'Cache-Control': 'public, max-age=31536000'
         }
       });
+    }
+
+    /* 前台老師頁用：已通過審核的公開評價（匿名，不含訂單編號與任何個資） */
+    if (path === '/api/oracle/reviews') {
+      if (!env.ORDERS) return json({ reviews: [] }, 200, origin);
+      const list = await publicReviews(env);
+      return json({ reviews: list.map(r => ({
+        teacher: r.teacher, tid: r.tid, topic: r.topic, text: r.text, month: String(r.at || '').slice(0, 7)
+      })) }, 200, origin);
     }
 
     if (path === '/api/oracle/credit') {
@@ -553,6 +562,8 @@ async function adminApi(request, env, ctx, path, origin) {
 
     } else if (b.act === 'review_ok') {
       if (!o.review) return json({ error: 'no_review' }, 400, origin);
+      if (!String(o.review.text || '').trim())
+        return json({ error: 'no_text', hint: '這位客人只留了給老師的話，沒有公開評價可以通過' }, 400, origin);
       o.review.ok = true;
       log(o, '你', '評價審核通過');
 
@@ -577,10 +588,49 @@ async function adminApi(request, env, ctx, path, origin) {
     }
 
     await put(env, o);
+    if (/^review_/.test(b.act)) await syncReview(env, o, teacherList(env));
     return json({ ok: true, st: o.st }, 200, origin);
   }
 
   return json({ error: 'not_found' }, 404, origin);
+}
+
+/* ══════════════════════════════════════════════════
+   公開評價清單
+   存在 KV 的 oracle:reviews，沒有到期日（訂單 180 天後會消失，評價要留著）。
+   後台按「通過／取消公開／存修改」時同步更新。
+   ══════════════════════════════════════════════════ */
+const REVIEW_KEY = 'oracle:reviews';
+
+function teacherIdOf(name, teachers) {
+  const norm = x => String(x || '').replace(/老師|先生|\s/g, '').toLowerCase();
+  const n = norm(name);
+  const t = teachers.find(t => t.id === name || norm(t.name) === n || norm(t.id) === n);
+  return t ? t.id : '';
+}
+
+async function publicReviews(env) {
+  const raw = await env.ORDERS.get(REVIEW_KEY);
+  if (raw) return JSON.parse(raw);
+  /* 第一次使用：把以前已經按過「通過」的評價補進來 */
+  const teachers = teacherList(env);
+  const list = (await listOrders(env, 400))
+    .filter(o => o.review && o.review.ok && String(o.review.text || '').trim())
+    .map(o => reviewRow(o, teachers));
+  await env.ORDERS.put(REVIEW_KEY, JSON.stringify(list));
+  return list;
+}
+
+function reviewRow(o, teachers) {
+  return { id: o.id, teacher: o.teacher, tid: teacherIdOf(o.teacher, teachers),
+           topic: o.review.topic || '', text: o.review.text, at: o.review.at || now() };
+}
+
+async function syncReview(env, o, teachers) {
+  const list = (await publicReviews(env)).filter(r => r.id !== o.id);
+  if (o.review && o.review.ok && String(o.review.text || '').trim()) list.push(reviewRow(o, teachers));
+  list.sort((a, b) => String(b.at).localeCompare(String(a.at)));
+  await env.ORDERS.put(REVIEW_KEY, JSON.stringify(list.slice(0, 300)));
 }
 
 /* ══════════════════════════════════════════════════
@@ -1248,6 +1298,8 @@ function login(){
   }).catch(function(){ document.getElementById('gerr').hidden = false });
 }
 function load(){ api('/api/oracle/admin/list').then(render) }
+/* 有公開評價、還沒通過的，才算待審 */
+function needReview(o){ return !!(o.review && !o.review.ok && String(o.review.text||'').trim()) }
 
 function render(d){
   if(d.orders) ALL = d.orders;
@@ -1260,15 +1312,17 @@ function render(d){
     var n = g[0]==='book'
       ? ALL.filter(function(o){ return o.paid }).length
       : g[0]==='review'
-      ? ALL.filter(function(o){ return o.review }).length
+      ? ALL.filter(needReview).length
       : (g[2] ? ALL.filter(function(o){ return g[2].indexOf(o.st)>=0 }).length : ALL.length);
     return '<button class="'+(F===g[0]?'on':'')+'" onclick="setF(\\''+g[0]+'\\')">'+g[1]+'<b>'+n+'</b></button>';
   }).join('');
   if(F === 'book'){ loadBook(); return; }
   if(F === 'review'){
-    var rv = ALL.filter(function(o){ return o.review });
+    var rv = ALL.filter(function(o){ return o.review }).sort(function(a,b){
+      return (needReview(b)?1:0) - (needReview(a)?1:0) || String(b.review.at).localeCompare(String(a.review.at));
+    });
     document.getElementById('list').innerHTML = rv.length
-      ? '<div class="hint" style="padding:0 2px 12px">審過的評價按「複製」，貼到 oracle.html 對應老師的 reviews 陣列裡。</div>'
+      ? '<div class="hint" style="padding:0 2px 12px">按「通過」就會自動顯示在前台老師頁，不用再貼程式碼。待審的排在最前面。</div>'
         + rv.map(reviewCard).join('')
       : '<div class="empty">還沒有客人留下評價</div>';
     return;
@@ -1468,8 +1522,13 @@ function card(o){
 
   if(o.review){
     if(o.review.text){
-      h += '<div class="warn" style="margin-top:12px">公開評價（'+(o.review.ok?'已通過':'待審')+'）：'
+      h += '<div class="warn" style="margin-top:12px">公開評價（'+(o.review.ok?'已公開':'待審')+'）：'
          + esc(o.review.text)+'</div>';
+      h += '<div class="btns" style="margin-top:8px">'
+         + (o.review.ok
+            ? '<button class="b no" onclick="act2(\\''+o.id+'\\',\\'review_no\\')">取消公開</button>'
+            : '<button class="b ok" onclick="act2(\\''+o.id+'\\',\\'review_ok\\')">通過，顯示在老師頁</button>')
+         + '<button class="b ghost" onclick="setF(\\'review\\')">到評價分頁修改文字</button></div>';
     }
     if(o.review.note){
       h += '<div class="warn" style="margin-top:8px;border-left-color:var(--go);color:#B9D9C2">'
@@ -1593,7 +1652,8 @@ function reviewCard(o){
   var r = o.review;
   var h = '<div class="card">';
   h += '<div class="top"><span class="id">'+esc(o.id)+' · '+fmt(r.at)+'</span>'
-     + '<span class="tag '+(r.ok?'done':'wait')+'">'+(r.ok?'已通過':'待審')+'</span></div>';
+     + (!String(r.text||'').trim() ? '<span class="tag done">只給老師</span></div>'
+        : '<span class="tag '+(r.ok?'done':'wait')+'">'+(r.ok?'已公開':'待審')+'</span></div>');
   h += '<dl><dt>老師</dt><dd>'+esc(o.teacher)+'</dd>'
      + '<dt>問的是</dt><dd>'+esc(o.q)+'</dd></dl>';
   h += '<label>類別</label><input id="rt_'+o.id+'" value="'+esc(r.topic)+'">';
@@ -1605,12 +1665,16 @@ function reviewCard(o){
   }
   h += '<div class="btns">'
      + '<button class="b ghost" onclick="saveReview(\\''+o.id+'\\')">存修改</button>'
-     + (r.ok
+     + (!String(r.text||'').trim() ? ''
+        : r.ok
         ? '<button class="b no" onclick="act2(\\''+o.id+'\\',\\'review_no\\')">取消公開</button>'
         : '<button class="b ok" onclick="act2(\\''+o.id+'\\',\\'review_ok\\')">通過</button>')
-     + '<button class="b mid" onclick="copyReview(\\''+o.id+'\\')">複製</button>'
      + '</div>';
-  if(r.ok) h += '<div class="hint" style="margin-top:9px">已通過。按「複製」拿到可以貼進 oracle.html 的那一行。</div>';
+  h += '<div class="hint" style="margin-top:9px">'
+     + (!String(r.text||'').trim() ? '客人沒有留公開評價，只有給老師的話，不需要審核。'
+        : r.ok ? '已公開在 '+esc(o.teacher)+' 的老師頁（匿名）。改字後按「存修改」，前台會跟著更新。'
+        : '按「通過」後會匿名顯示在 '+esc(o.teacher)+' 的老師頁。')
+     + '</div>';
   return h + '</div>';
 }
 
@@ -1618,17 +1682,10 @@ function saveReview(id){
   api('/api/oracle/admin/act', { id:id, act:'review_edit',
     text: val('rx_'+id), topic: val('rt_'+id) }).then(load);
 }
-function copyReview(id){
-  var line = "{ who:'匿名', topic:'" + val('rt_'+id).replace(/'/g,'') + "', text:'"
-           + val('rx_'+id).replace(/'/g,'').replace(/\\n/g,' ') + "' },";
-  if(navigator.clipboard){
-    navigator.clipboard.writeText(line).then(function(){ alert('複製好了，貼到 oracle.html 的 reviews 陣列裡') });
-  } else {
-    prompt('複製這一行：', line);
-  }
-}
 function act2(id, a){
-  api('/api/oracle/admin/act', { id:id, act:a }).then(load);
+  if(a === 'review_no' && !confirm('取消公開？前台老師頁會拿掉這則評價。')) return;
+  api('/api/oracle/admin/act', { id:id, act:a }).then(load)
+    .catch(function(){ alert('沒有成功，請重試') });
 }
 
 function saveText(id, kind){
