@@ -20,3 +20,6 @@ __pycache__/
 # 作業系統雜訊
 .DS_Store
 Thumbs.db
+
+# Claude Code 本機設定（預覽伺服器等）
+.claude/
