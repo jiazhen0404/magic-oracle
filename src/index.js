@@ -54,6 +54,16 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
 
+    // HTTP 一律永久轉到 HTTPS。
+    // 注意：靜態頁面會先於 Worker 被送出，所以這一段只保得住 /api/* 這類由 Worker 處理的路徑。
+    // 網站首頁與各分類頁的 HTTP 轉址，要靠 Cloudflare 後台的 SSL/TLS → Edge Certificates →
+    // Always Use HTTPS（開了才會全站生效）。
+    if (url.protocol === 'http:') {
+      const https = new URL(url);
+      https.protocol = 'https:';
+      return Response.redirect(https.toString(), 301);
+    }
+
     try {
       // 分手系列文章 2026-09 從抽籤路徑搬到文章分類下。舊網址永久轉址。
       // 靜態資源會先於 Worker 被送出，所以這裡只在舊檔案已刪除時才會執行到。
