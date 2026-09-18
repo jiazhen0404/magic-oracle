@@ -78,3 +78,28 @@ a{color:inherit}
   .wa-lead{font-size:16px}
   .wa-article p{font-size:16px}
 }
+
+/* ── SEO 文章補充樣式（2026-09 新增，只增不改）── */
+.wa-article h3{
+  margin:34px 0 12px;color:#f0e4c6;
+  font-family:"Noto Serif TC","Songti TC",serif;font-size:21px;line-height:1.55;font-weight:600;
+}
+.wa-article ul,.wa-article ol{margin:0 0 19px;padding-left:1.35em;color:var(--ww-body);font-size:17px}
+.wa-article li{margin:9px 0}
+.wa-article strong{color:#f1e5c8}
+.wa-article a{color:#e0cb99}
+.wa-ctabox{
+  margin:42px 0;padding:26px 24px;border:1px solid rgba(217,189,130,.34);border-radius:18px;
+  background:rgba(58,39,88,.32);
+}
+.wa-ctabox h3{margin:0 0 10px;font-size:22px;color:#f4e8c9}
+.wa-ctabox p{margin:0 0 6px;font-size:16px}
+.wa-ctabox .wa-btn{margin-top:14px}
+.wa-ctanote{display:block;margin-top:10px;font-size:13px;color:var(--ww-muted)}
+@media(max-width:900px){
+  .wa-article h3{font-size:19px}
+  .wa-article ul,.wa-article ol{font-size:16px}
+  .wa-ctabox{padding:22px 18px}
+  .wa-ctabox h3{font-size:20px}
+  .wa-btn{display:block;text-align:center;padding:14px 18px}
+}
