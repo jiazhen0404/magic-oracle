@@ -24,6 +24,26 @@
   - `situation_interest_work_job_search`
   - `situation_interest_pet_passed_away`
 
+## 抽籤漏斗
+
+- `draw_start`：使用者在「想一件事」頁按下「我準備好了」時送出。
+- `draw_complete`：籤文結果頁出現時送出（每週一籤不送）。
+
+兩個事件的參數形狀刻意一致：`theme`、`subtheme`、加上共同管道補的 `fortune_id`。
+所以 `draw_complete ÷ draw_start` 就是完成率，可以再按主題或情境切分。
+
+`draw_start` 涵蓋三種進入方式：首頁「今天抽一籤」、SEO 頁的深連結
+（`/?theme=love&sub=失戀中#start`）、以及結果頁的「再抽一次」。三種都會經過同一個
+函式，所以不會有某個來源算不到的情況。
+
+「再抽一次」會重新送一次 `draw_start`，跟後續的 `draw_complete` 一對一，
+完成率不會超過 100%。
+
+注意：`人生` 分類在 `SKIP_SUBTHEME` 裡，兩個事件的 `subtheme` 都會是 `none`。
+
+另有一個舊事件 `start_draw`（只在首頁按鈕送，帶 `entry_point`），
+和 `draw_start` 不是同一件事，沒有移除以免既有報表斷掉。
+
 ## 延伸解籤預告
 
 一般籤結果頁會顯示「我想看完整延伸解籤」；每週一籤與限時內容不顯示。
