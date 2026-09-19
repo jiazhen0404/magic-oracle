@@ -269,7 +269,9 @@ textarea::placeholder{color:var(--text-faint)}
 
 /* ── 斗內頁面 ── */
 .donate-page{display:flex;flex-direction:column;min-height:100vh;animation:fade .5s ease}
-.donate-scroll{flex:1;overflow-y:auto;padding:10px 22px 30px}
+/* 跟 .about-scroll 同樣的處理：沒有上限時桌機會攤成 1200px 以上，
+   連 .donate-page-btn（width:100%）都會變成一整條橫跨畫面的按鈕。 */
+.donate-scroll{flex:1;overflow-y:auto;padding:10px 22px 30px;width:100%;max-width:480px;margin:0 auto}
 .donate-hero{text-align:center;padding:30px 0 20px}
 .donate-star{font-size:32px;display:block;margin-bottom:10px}
 .donate-page-title{color:var(--gold);font-size:20px;letter-spacing:.28em;text-shadow:0 0 16px rgba(217,189,130,.4);margin-bottom:6px}
@@ -872,7 +874,10 @@ function magicOraclePay(){
 }
 /* ── 介紹頁 ── */
 .about-page{display:flex;flex-direction:column;min-height:100vh;animation:fade .5s ease}
-.about-scroll{flex:1;overflow-y:auto;padding:10px 22px 30px}
+/* 文字欄置中。沒有上限時桌機會攤成 1200px 以上，文字全貼在左邊，
+   右半邊整片空的。480px 跟抽籤頁的 .device 一致，介紹頁最寬的一行
+   實測 401px，套上去不會讓任何句子重新折行。手機寬度不受影響。 */
+.about-scroll{flex:1;overflow-y:auto;padding:10px 22px 30px;width:100%;max-width:480px;margin:0 auto}
 .about-hero{text-align:center;padding:28px 0 22px;display:flex;flex-direction:column;align-items:center;gap:8px}
 .about-orb{width:72px;height:72px;border-radius:50%;background:radial-gradient(circle at 38% 36%, rgba(180,150,220,.9), rgba(70,45,130,.7) 60%, rgba(14,10,34,.8));border:1px solid var(--gold-line);box-shadow:0 0 36px rgba(122,103,172,.5),inset 0 0 20px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;color:var(--gold);animation:floaty 6s ease-in-out infinite}
 .about-name{font-size:22px;letter-spacing:.3em;color:var(--gold);text-shadow:0 0 18px rgba(217,189,130,.4)}
