@@ -1519,7 +1519,14 @@ function App(){const initialQuery=new URLSearchParams(window.location.search);
 const rawTheme=initialQuery.get("theme")||"";const rawSub=initialQuery.get("sub")||"";
 const initialTheme=RETIRED_THEMES.includes(rawTheme)?"":rawTheme;
 const initialSub=(()=>{if(!initialTheme)return "";if(SKIP_SUBTHEME.includes(initialTheme))return "";return RETIRED_SUBS[rawSub]||rawSub;})();
-const[screen,setScreen]=useState(()=>{if(initialTheme&&SKIP_SUBTHEME.includes(initialTheme))return "think";if(initialTheme&&initialSub)return "think";if(initialTheme)return "subtheme";if(window.location.hash==="#about")return "about";return window.location.hash==="#start"||initialQuery.has("entry")?"theme":"home";});const[fortune,setFortune]=useState(null);const[note,setNote]=useState("");const[showShare,setShowShare]=useState(false);const[showSidebar,setShowSidebar]=useState(false);const[selTheme,setSelTheme]=useState(initialTheme||"love");const[selSubTheme,setSelSubTheme]=useState(initialSub||"");useEffect(()=>{document.documentElement.setAttribute("data-screen",screen);},[screen]);const go=s=>{setShowSidebar(false);setScreen(s==="draw"?"theme":s);};const pick=t=>{setFortune(draw(t));setScreen("drawing");};const onDraw=async()=>{
+const[screen,setScreen]=useState(()=>{if(initialTheme&&SKIP_SUBTHEME.includes(initialTheme))return "think";if(initialTheme&&initialSub)return "think";if(initialTheme)return "subtheme";if(window.location.hash==="#about")return "about";return window.location.hash==="#start"||initialQuery.has("entry")?"theme":"home";});const[fortune,setFortune]=useState(null);const[note,setNote]=useState("");const[showShare,setShowShare]=useState(false);const[showSidebar,setShowSidebar]=useState(false);const[selTheme,setSelTheme]=useState(initialTheme||"love");const[selSubTheme,setSelSubTheme]=useState(initialSub||"");useEffect(()=>{document.documentElement.setAttribute("data-screen",screen);},[screen]);
+/* 導覽列的「關於」是 <a href="/#about">，「開始抽籤」是 <a href="/#start">。
+   在首頁點它們的時候路徑沒變，瀏覽器只改網址後面的 #、不重新載入頁面，
+   而上面 useState 的初始值只在掛載時讀一次 hash——所以畫面完全不動，
+   使用者看到的就是「點了沒反應」。從別的頁點才正常，因為那是整頁重載。
+   抽籤流程用的是 history.replaceState，那個不會觸發 hashchange，不會跟這裡打架。 */
+useEffect(()=>{const onHash=()=>{const h=window.location.hash;if(h==="#about")setScreen("about");else if(h==="#start")setScreen("theme");else if(h==="")setScreen("home");};window.addEventListener("hashchange",onHash);return()=>window.removeEventListener("hashchange",onHash);},[]);
+const go=s=>{setShowSidebar(false);setScreen(s==="draw"?"theme":s);};const pick=t=>{setFortune(draw(t));setScreen("drawing");};const onDraw=async()=>{
   /* 抽籤漏斗的起點。參數形狀刻意跟 Result 裡的 draw_complete 完全一致
      （含 SKIP_SUBTHEME 的 "none" 規則），兩個事件才能在 GA4 直接相除，
      算出每個主題／情境的完成率。
@@ -2051,8 +2058,8 @@ const[screen,setScreen]=useState(()=>{if(initialTheme&&SKIP_SUBTHEME.includes(in
     section.innerHTML =
       '<div class="about-section-title">聯絡資訊</div>' +
       '<div class="about-contact">' +
+        '<div class="about-contact-row"><span class="about-contact-label">名稱</span><span>沐金創意工作室</span></div>' +
         '<div class="about-contact-row"><span class="about-contact-label">Email</span><a href="mailto:jiazhen0404@gmail.com">jiazhen0404@gmail.com</a></div>' +
-        '<div class="about-contact-row"><span class="about-contact-label">聯絡電話</span><a href="tel:0982028355">0982-028-355</a></div>' +
       '</div>';
 
     about.insertBefore(divider, footer);
