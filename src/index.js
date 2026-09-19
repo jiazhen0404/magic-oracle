@@ -1104,7 +1104,9 @@ async function sendMail(slip, order, pdfBytes, env) {
     body: JSON.stringify({
       from,
       to: [order.email],
-      reply_to: 'hello@unfinished.tw',
+      // 寄件人（from／MAIL_FROM）必須留在 unfinished.tw，那是 Resend 驗證過的網域，
+      // 換成 Gmail 會被退 403、整批信都寄不出去。這裡只改「客人按回覆會寄到哪」。
+      reply_to: 'jiazhen0404@gmail.com',
       subject: '你的完整解籤：' + slip.name,
       html: mailHtml(slip, order),
       text: mailText(slip, order),
