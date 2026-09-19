@@ -25,3 +25,9 @@ README-v6.txt
 README-v7.txt
 GA4-TRACKING.md
 QA_610_*.txt
+
+# --- 緣分合盤的文案原稿與改稿紀錄，不可以公開 ---
+# 這是 yuanfen/src/copy.js 的來源文字，約兩萬六千字，等於整份合盤的內容。
+# 放進 repo 是為了留版本紀錄，但 wrangler 的 assets directory 是整個根目錄，
+# 沒有排除就會變成 unfinished.tw/合盤文案改稿/文字檔/copy.txt 公開可下載。
+合盤文案改稿/
