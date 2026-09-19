@@ -1028,6 +1028,18 @@ html { overflow-x:hidden; }
   margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw);
   box-sizing:border-box;
 }
+/* 桌機上這排是多餘的：首頁＝站頭 logo、抽籤＝開始抽籤、介紹＝關於、
+   真人占卜＝一模一樣，四項全部重複頂部站頭，於是畫面上下疊了兩排選單。
+   901px 這個數字不是隨便挑的——assets/site-header.css 第 72 行是
+   @media(max-width:900px) 時隱藏 .ww-pill-nav 改顯示漢堡。兩邊接在同一點，
+   才不會有某個寬度區間「站頭收起來了、這排也不見」而完全沒有導覽。
+   900px 以下（手機、平板直立）完全不受影響，這排仍是唯一看得見的導覽。 */
+@media(min-width:901px){
+  .home > .nav,
+  .device > .nav,
+  .about-page > .nav,
+  .donate-page > .nav { display:none }
+}
 /* 「真人占卜」四個字不可以被折成兩行 */
 .nav .lbl{ white-space:nowrap; font-size:12px; letter-spacing:.12em }
 /* 圖示與文字之間鬆一點 */
