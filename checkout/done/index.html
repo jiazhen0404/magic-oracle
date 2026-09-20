@@ -100,7 +100,7 @@ async function poll(){
     const d = await r.json();
 
     if(d.status === 'paid'){
-      await unlock(d.slipId);
+      await unlock(d.slipId, d.amount);
       return;
     }
     if(d.status === 'failed'){
@@ -120,7 +120,7 @@ async function poll(){
 
 /* 付款成功後，換一張解鎖憑證存進這台瀏覽器，
    之後回到閱讀頁就能直接看，不用再輸入任何東西。 */
-async function unlock(slipId){
+async function unlock(slipId, amount){
   show('ok','付款成功','謝謝你。正在為你解鎖完整解籤⋯','');
   try{
     const r = await fetch('/api/unlock', {
@@ -133,7 +133,7 @@ async function unlock(slipId){
     const id = sid || slipId;
 
     // 伺服器說這筆還沒被記過，才送 purchase。見下方 reportPurchase。
-    if(countPurchase) reportPurchase(id);
+    if(countPurchase) reportPurchase(id, amount);
 
     try{ localStorage.setItem('unfinished.unlock.' + id, token); }catch(e){}
 
@@ -161,27 +161,36 @@ async function unlock(slipId){
 
    已知會漏記：使用者付款成功後直接關掉視窗、沒有回到這一頁。
    要補這一段需要 server-side Measurement Protocol，見施工報告。 */
-function reportPurchase(slipId){
+function reportPurchase(slipId, amount){
   try{
-    const m = /^love_([a-z-]+)_(\d{3})$/.exec(slipId || '');
+    // 愛情與毛孩共用同一套付款流程與定價，兩邊都要記。
+    // 舊版只比對 ^love_，於是 50 支毛孩延伸籤的購買完全沒有進 GA4。
+    const m = /^(love|pet)_([a-z-]+)_(\d{3})$/.exec(slipId || '');
     if(!m || !tradeNo) return;
 
+    const theme = m[1];
     const SUB = { breakup:'失戀中', flirting:'曖昧中', relationship:'關係中',
-                  single:'單身中', fortune:'桃花運勢' };
-    const subtheme = SUB[m[1]] || '';
-    const num = String(parseInt(m[2], 10));
-    const b = { theme:'love', theme_label:'愛情', subtheme:subtheme,
+                  single:'單身中', fortune:'桃花運勢',
+                  departed:'離別中', together:'陪伴中',
+                  worried:'擔心中', missing:'思念中' };
+    const THEME_LABEL = { love:'愛情', pet:'毛孩' };
+    const subtheme = SUB[m[2]] || '';
+    const num = String(parseInt(m[3], 10));
+    const b = { theme:theme, theme_label:THEME_LABEL[theme] || theme, subtheme:subtheme,
                 fortune_number:num, fortune_title:'' };
+
+    // 金額用訂單的實收值。寫死 99 的話，日後調價或做優惠，GA4 的營收就會與實收不符。
+    const value = Number(amount) > 0 ? Number(amount) : 99;
 
     gtag('event','purchase', Object.assign({}, b, {
       transaction_id: tradeNo,          // 綠界的 MerchantTradeNo，同一筆訂單永遠同一個
-      currency:'TWD', value:99,
-      items:[{ item_id:'extended_love_' + num,
-               item_name:'延伸解籤・' + (subtheme || 'love'),
-               item_category:'love', item_category2:subtheme,
-               price:99, quantity:1 }]
+      currency:'TWD', value:value,
+      items:[{ item_id:'extended_' + theme + '_' + num,
+               item_name:'延伸解籤・' + (subtheme || theme),
+               item_category:theme, item_category2:subtheme,
+               price:value, quantity:1 }]
     }));
-    gtag('event','purchase_love', b);
+    gtag('event','purchase_' + theme, b);
   }catch(e){ console.warn('GA4 purchase 送出失敗', e); }
 }
 

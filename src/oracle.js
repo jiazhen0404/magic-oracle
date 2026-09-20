@@ -351,10 +351,31 @@ export async function oraclePaid(data, env, ctx) {
 
 /* 付款完成頁用來輪詢 */
 async function oracleStatus(request, env, origin) {
-  const id = new URL(request.url).searchParams.get('no') || '';
+  const url = new URL(request.url);
+  const id = url.searchParams.get('no') || '';
   const o = await get(env, id);
   if (!o) return json({ st: 'not_found' }, 404, origin);
-  return json({ id: o.id, st: o.st, paid: !!o.paid, teacher: o.teacher }, 200, origin);
+
+  /* GA4 的 purchase 只能記一次。比照延伸籤（src/index.js 的 gaPurchaseReportedAt），
+     去重旗標記在訂單上而不是瀏覽器裡——使用者會重新整理成功頁、回上一頁、
+     換分頁、甚至換一台裝置開同一個網址，localStorage 擋不住這些。
+
+     只有帶 ga=1 才會消耗旗標，而那只有付款完成頁會帶。
+     查詢進度頁（/oracle/order）也讀這個端點，不加這道限制的話，
+     客人先從信件點進查詢進度就會把旗標用掉，purchase 從此再也不會送。 */
+  let countPurchase = false;
+  if (o.paid && url.searchParams.get('ga') === '1' && !o.ga_purchase_at) {
+    o.ga_purchase_at = now();
+    countPurchase = true;
+    await put(env, o);
+  }
+
+  /* amount 是實收金額，不是固定的 PRICE——有折抵時會少 DEEP_CREDIT。
+     GA4 要送實際金額，不能寫死 399。 */
+  return json({
+    id: o.id, st: o.st, paid: !!o.paid, teacher: o.teacher,
+    amount: o.amount, countPurchase,
+  }, 200, origin);
 }
 
 /* ══════════════════════════════════════════════════
@@ -2195,6 +2216,11 @@ document.getElementById('mail').addEventListener('keydown', function(e){ if(e.ke
 const PAGE_DONE = `<!doctype html><html lang="zh-Hant"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>未完籤所 · 付款完成</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-71RMD00WPJ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());
+/* 從綠界付款頁轉回來時，不要讓 GA4 把這一段記成 ecpay 的 referral，沿用原本的來源。
+   跟 checkout/done/index.html 用的是同一招。 */
+gtag('config','G-71RMD00WPJ',/ecpay\\.com\\.tw/i.test(document.referrer)?{ignore_referrer:'true'}:{});</script>
 <link rel="icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/assets/icon-180.png"><style>${CSS}
 body{background:#0D0818}
 .card{background:#1C1330;border-color:#3E2C5C}
@@ -2210,7 +2236,9 @@ var tries = 0;
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 
 function poll(){
-  fetch('/api/oracle/status?no=' + encodeURIComponent(NO), { cache: 'no-store' })
+  /* ga=1 告訴後端「這裡是付款完成頁」，只有這一頁能消耗 purchase 的去重旗標。
+     查詢進度頁也讀同一個端點，但不帶這個參數。 */
+  fetch('/api/oracle/status?ga=1&no=' + encodeURIComponent(NO), { cache: 'no-store' })
     .then(function(r){ return r.json() })
     .then(function(d){
       if (d.paid) return done(d);
@@ -2220,7 +2248,33 @@ function poll(){
     .catch(function(){ if (++tries > 15) slow(); else setTimeout(poll, 2000) });
 }
 
+/* GA4：purchase。刻意用跟延伸籤同一個事件名稱 purchase，
+   讓兩條收入線流進同一個 GA4 關鍵事件、也就是 Ads 的同一個購買轉換，
+   不另外開一個轉換動作。
+
+   兩道關卡都過了才送：
+     1. 後端回 paid。那個狀態只有綠界 ReturnURL 通知、且驗章與金額都對得上才會寫進 KV。
+     2. 後端回 countPurchase: true。去重旗標記在訂單上，
+        重新整理、回上一頁、換裝置都不會被算成第二筆。
+
+   金額送實收的 d.amount，不是常數 399——有折抵時會少 DEEP_CREDIT。 */
+function reportPurchase(d){
+  try{
+    if (!d || !d.countPurchase || !NO) return;
+    var amount = Number(d.amount);
+    if (!(amount > 0)) return;
+    gtag('event','purchase', {
+      theme:'oracle', theme_label:'真人占卜',
+      transaction_id: NO, currency:'TWD', value: amount,
+      items:[{ item_id:'oracle_reading', item_name:'真人占卜・一個問題',
+               item_category:'oracle', price: amount, quantity:1 }]
+    });
+    gtag('event','purchase_oracle', { theme:'oracle', theme_label:'真人占卜' });
+  }catch(e){ console.warn('GA4 purchase 送出失敗', e); }
+}
+
 function done(d){
+  reportPurchase(d);
   document.getElementById('box').innerHTML =
     '<img src="/assets/logo.png" alt="未完籤所" class="big-logo">'
   + '<div class="card" style="text-align:center">'

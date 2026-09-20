@@ -40,11 +40,11 @@ README-articles-admin.md
 META-RISK-NOTES.md
 WORK-ORACLE-REVISION-README.txt
 
-# 真人占卜後端的「舊複本」，87KB、整份原始碼，含後台路徑與綠界驗章邏輯。
-# 實際執行的是 src/oracle.js（src/index.js 的 import 相對於 src/），
-# 根目錄這份自 2026-09-05 起就是死檔，但一直公開可下載。
-# 確認過 oracle.html 沒有載入任何外部腳本、全站也沒有引用 /oracle.js，擋掉不影響前台。
-# 註：這裡故意不寫成 /oracle.js，因為不確定 Cloudflare 的實作支不支援開頭斜線錨定；
+# 根目錄那份 oracle.js（真人占卜後端的舊複本，87KB、含後台路徑與綠界驗章邏輯）
+# 已經在這個 commit 一併刪除——它自 2026-09-05 起就沒有任何人引用：
+# Worker 進入點是 src/index.js，它 import 的 './oracle.js' 指向 src/oracle.js。
+# 這一條留著當護欄，萬一日後有人又把檔案複製到根目錄，不會再重蹈覆轍。
+# 註：故意不寫成 /oracle.js，因為不確定 Cloudflare 支不支援開頭斜線錨定；
 # 不加斜線一定匹配得到，而它同時匹配到的 src/oracle.js 本來就已經被 src/ 排除。
 oracle.js
 
