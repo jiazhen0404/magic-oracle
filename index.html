@@ -754,6 +754,23 @@ function magicOraclePay(){
   box-shadow:0 12px 34px rgba(0,0,0,.25),inset 0 0 28px rgba(199,156,82,.05);text-align:center;
 }
 .extended-preview-kicker{color:var(--gold);font-size:11px;letter-spacing:.2em}
+/* 抽籤者的真實心聲。獨立一塊，不放進 .extended-preview 裡面——
+   付費卡片是商品說明，這裡是別人說的話，混在一起會變成電商好評卡。
+   邊框透明度沿用 .talk-band 的 .26（付費卡片是 .48），讓它退一步、
+   不跟購買按鈕搶視線。圓角與外距也跟 .talk-band 一致。 */
+.slip-voice{
+  margin:14px 0 4px;padding:18px 18px 16px;border:1px solid rgba(199,156,82,.26);
+  border-radius:18px;background:linear-gradient(150deg,rgba(38,24,60,.82),rgba(16,10,27,.9));
+  text-align:center;
+}
+.slip-voice-title{color:var(--gold);font-size:11px;letter-spacing:.2em}
+/* 引文靠左：置中的長引文在手機上每行起點不一，讀起來很吃力。 */
+.slip-voice-quote{
+  margin-top:12px;text-align:left;font-family:var(--serif);
+  font-size:14.5px;line-height:2;color:var(--text);overflow-wrap:anywhere;
+}
+.slip-voice-by{margin-top:12px;font-size:12px;letter-spacing:.08em;color:var(--text-soft)}
+.slip-voice-note{margin-top:6px;font-size:10.5px;letter-spacing:.12em;color:var(--text-faint)}
 .talk-band{
   margin:14px 0 4px;padding:20px 18px;border:1px solid rgba(199,156,82,.26);
   border-radius:18px;background:linear-gradient(150deg,rgba(28,19,48,.86),rgba(16,10,27,.92));
@@ -1682,6 +1699,22 @@ const go=s=>{setShowSidebar(false);setScreen(s==="draw"?"theme":s);};const pick=
      原本這裡是掛在 document 上的全域 input 監聽，只要是 TEXTAREA 就抓，
      頁面上之後只要多一個文字框，就會默默蓋掉買家在「想一件事」寫的問題。
      這個值是 /checkout/ 唯一的來源（顯示 + 印進 PDF），不能不寫，但不該抓這麼寬。 */
+  /* 抽籤者的真實心聲。取自真實且經授權的回饋，為節錄。2026-09-20 上線。
+
+     要換內容就改這裡，其他地方不用動。三條規矩：
+     1. 只能放使用者真的說過的話，不可以自己補寫他沒說過的內容。
+     2. 不可以把示範文案或模擬對話標示成真實回饋。
+     3. 不放姓名、LINE 帳號、頭像或任何可指認個人的資訊。
+
+     目前只有節錄、沒有完整版，所以不做「閱讀完整回饋」展開按鈕
+     （施工單三-7）；連帶也不送 testimonial_expand 事件（五-5）。
+     日後若拿到完整授權全文，再一併補上展開與該事件。 */
+  const SLIP_VOICE={
+    text:"「您開發的網站真的很厲害，我明明只是問我分手後破冰之後對方的想法，而籤筒點出了我並沒有提到的……」",
+    by:"— 感情解籤使用者",
+    note:"使用者真實回饋・節錄",
+  };
+
   function addExtendedPreview(){
     const frame=document.querySelector(".device > .scroll > .frame");
     const resultScroll=frame?.parentElement;
@@ -1920,6 +1953,30 @@ const go=s=>{setShowSidebar(false);setScreen(s==="draw"?"theme":s);};const pick=
     const actionsRow=frame.querySelector(".actions");
     if(actionsRow){ actionsRow.insertAdjacentElement("beforebegin",section); }
     else { frame.insertAdjacentElement("afterend",section); }
+
+    /* 抽籤者的真實心聲。掛在 section 的「後面」而不是裡面，所以它是付費卡片的
+       同層兄弟，不會被塞進卡片內——位置自然落在「購買按鈕之下、分享籤文與
+       再抽一次之上」，因為 section 本身就插在 .actions 前面。
+
+       只有真的買得到的籤才顯示：沒有 slipId 的主題走預告版本、沒有那顆按鈕，
+       在沒有價格的頁面放購買心得沒有意義。
+
+       全部用 textContent 寫入，不碰 innerHTML——回饋是外部文字，
+       這樣就不需要另外處理跳脫。 */
+    if(section.querySelector(".extended-preview-btn")){
+      const voice=document.createElement("section");
+      voice.className="slip-voice";
+      voice.setAttribute("aria-label","抽籤者的真實心聲");
+      const vRow=function(cls,text){
+        const el=document.createElement("div");
+        el.className=cls; el.textContent=text; return el;
+      };
+      voice.appendChild(vRow("slip-voice-title","✦ 抽籤者的真實心聲 ✦"));
+      voice.appendChild(vRow("slip-voice-quote",SLIP_VOICE.text));
+      voice.appendChild(vRow("slip-voice-by",SLIP_VOICE.by));
+      voice.appendChild(vRow("slip-voice-note",SLIP_VOICE.note));
+      section.insertAdjacentElement("afterend",voice);
+    }
 
     /* extended_entry_view —— 這一批的核心指標：到底有多少人真的看到延伸籤入口。
        必須是「捲進視窗」才送，不是「渲染完成」就送。站上既有的
