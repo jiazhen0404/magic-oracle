@@ -858,10 +858,19 @@ function magicOraclePay(){
 .talk-note{margin-top:11px;font-size:11.5px;color:var(--text-soft);letter-spacing:.04em}
 .extended-preview-title{margin-top:9px;font-family:"Noto Serif TC","Songti TC",serif;font-size:19px;line-height:1.55;color:var(--text)}
 .extended-preview-copy{margin:10px auto 16px;max-width:310px;color:var(--text-soft);font-size:12.5px;line-height:1.85}
+/* 原本這句跟上一句是同一個區塊、中間只有一個 <br>。拆開後會多出一段上邊距，
+   設 0 讓兩句的間距維持接近原本的一行。 */
+.extended-preview-asks-lead{margin-top:0}
 /* 三個核心問題。要比說明文字醒目（14.5px vs 12.5px、金色 vs 灰紫），
    但不能蓋過 19px 的主標——它們是主標的支撐，不是另一個標題。 */
 .extended-preview-asks{display:flex;flex-direction:column;gap:7px;margin:0 auto 16px;
   max-width:310px;text-align:left}
+/* 上面那條 display:flex 會蓋掉 hidden 屬性內建的 display:none，
+   少了這一行，章節預覽出現後三個問題根本收不起來（實測高度完全沒變）。
+   -lead 走的是 .extended-preview-copy、沒有 display 宣告，hidden 本來就有效，
+   這裡一併寫上，日後若有人給它加 display 也不會再踩同一個坑。 */
+.extended-preview-asks[hidden],
+.extended-preview-asks-lead[hidden]{display:none}
 .extended-preview-asks span{position:relative;padding-left:16px;color:#f0dfae;
   font-family:"Noto Serif TC","Songti TC",serif;font-size:14.5px;line-height:1.6}
 .extended-preview-asks span::before{content:"—";position:absolute;left:0;color:var(--gold);opacity:.65}
@@ -1905,7 +1914,10 @@ const go=s=>{setShowSidebar(false);setScreen(s==="draw"?"theme":s);};const pick=
           +'</ul>'
           +'<div class="extended-preview-closing">'+esc(sales.c)+'</div>'
         : '<div class="extended-preview-title">這支籤，還有更深一層的答案。</div>'
-          +'<div class="extended-preview-copy">你已經看見'+pitch.seen+'。<br>但你真正想知道的，也許是：</div>'
+          +'<div class="extended-preview-copy">你已經看見'+pitch.seen+'。</div>'
+          /* 這句引言與下面的三個問題是一組，章節預覽出現時要一起收起來，
+             否則會留下一個「也許是：」的懸空冒號。所以從原本的 <br> 拆成獨立元素。 */
+          +'<div class="extended-preview-copy extended-preview-asks-lead">但你真正想知道的，也許是：</div>'
           +'<div class="extended-preview-asks"><span>'+pitch.q1+'</span><span>這次的轉折代表什麼？</span><span>我現在該怎麼做？</span></div>'
           +'<div class="extended-preview-copy">完整解籤會沿著你剛剛抽到的籤意，繼續拆解可能的發展、'+pitch.tail+'，以及你適合採取的下一步。</div>';
 
@@ -1957,6 +1969,17 @@ const go=s=>{setShowSidebar(false);setScreen(s==="draw"?"theme":s);};const pick=
             tocBtn.hidden=false;          // 還有沒露出的章節，才需要展開
           }
           peek.hidden=false;
+          /* 章節預覽出現之後，上面那三個問題就是重複資訊——
+             「他還會主動嗎？」跟章節「對方現在怎麼想」在講同一件事，
+             使用者等於把類似的內容讀兩次。章節標題來自這支籤自己的資料，
+             資訊量更高，所以留章節、收問題。
+
+             不是一開始就藏起來：目錄抓失敗時下面的 catch 什麼都不做，
+             那三個問題要留在原地當退路，不能讓卡片整段空掉。 */
+          const asksEl=section.querySelector(".extended-preview-asks");
+          const asksLead=section.querySelector(".extended-preview-asks-lead");
+          if(asksEl)asksEl.hidden=true;
+          if(asksLead)asksLead.hidden=true;
         })
         .catch(function(err){ console.warn("延伸籤目錄載入失敗",err); });
 
