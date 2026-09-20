@@ -25,6 +25,32 @@ README-v6.txt
 README-v7.txt
 GA4-TRACKING.md
 QA_610_*.txt
+# 2026-09-20 清查發現以下這些一直是公開可讀的（實測都回 200）。
+# 都沒有外洩金鑰，但沒有理由對外公開。清查方式：把根目錄每個檔案
+# 逐一 fetch，看哪些不是 404。日後在根目錄新增檔案時要重做一次這個檢查。
+
+# 列出完整 API 清單與資料保存規則，還點名 /api/resend-pdf 需要 X-Admin-Key。
+CLAUDE.md
+
+# 說明文章後台怎麼設定，揭露 /admin/articles/ 與 /survey/admin/ 的位置，
+# 以及用到 ADMIN_KEY 與 GITHUB_TOKEN（只有教學，沒有實際值）。
+README-articles-admin.md
+
+# 內部風控筆記，含對外廣告用語的規避原則。
+META-RISK-NOTES.md
+WORK-ORACLE-REVISION-README.txt
+
+# 真人占卜後端的「舊複本」，87KB、整份原始碼，含後台路徑與綠界驗章邏輯。
+# 實際執行的是 src/oracle.js（src/index.js 的 import 相對於 src/），
+# 根目錄這份自 2026-09-05 起就是死檔，但一直公開可下載。
+# 確認過 oracle.html 沒有載入任何外部腳本、全站也沒有引用 /oracle.js，擋掉不影響前台。
+# 註：這裡故意不寫成 /oracle.js，因為不確定 Cloudflare 的實作支不支援開頭斜線錨定；
+# 不加斜線一定匹配得到，而它同時匹配到的 src/oracle.js 本來就已經被 src/ 排除。
+oracle.js
+
+# 條款頁的孤兒副本。正式頁面是 /privacy/，這份沒有任何地方連過去、
+# sitemap 也沒收錄，留著只會變成重複內容。
+privacy-index.html
 
 # --- 緣分合盤的文案原稿與改稿紀錄，不可以公開 ---
 # 這是 yuanfen/src/copy.js 的來源文字，約兩萬六千字，等於整份合盤的內容。
