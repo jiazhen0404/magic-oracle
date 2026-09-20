@@ -58,16 +58,36 @@
 
 | 要改什麼 | 去哪裡改 |
 |---|---|
-| `ECPAY_MODE`、`CF_ACCOUNT_ID` | **只改 `wrangler.jsonc`**，推 GitHub |
+| 任何一般變數（看 `wrangler.jsonc` 的 `vars` 區塊，目前 11 個，含兩個綠界模式、寄件人、三位占卜師信箱） | **只改 `wrangler.jsonc`**，推 GitHub |
 | 六把 Secret | Cloudflare 後台 |
 | 程式碼 | GitHub |
 
 **不要在 Cloudflare 後台碰一般變數**，那一區應該永遠是空的。
 
-### 2. 新版本不會自動接管流量
+### 2. 推任何分支都會自動接管正式流量
 
-已進入手動模式：**每次建置完都要去 Deployments 把最上面「有 main 標記」那筆推上線。**
-判斷線上跑的是不是新版：打開 `/api/health`，看有沒有新欄位。
+> 2026-09-20 更正。這一段原本寫「新版本不會自動接管流量，已進入手動模式」，
+> 那個說法**不成立**，而且因為誤信它而出過一次線上事故。
+
+**推上 GitHub 的任何分支（不只 `main`），約 5 分鐘後會自動部署並接管 unfinished.tw 的正式流量。**
+沒有人按任何按鈕。建置需要時間，**推完立刻看 `/api/health` 會顯示舊的 `versionId`，
+不要因此以為沒事**，要等五分鐘以上再看。
+
+因此：**推分支之前一定要確認分支沒有落後線上。**
+
+```
+git rev-list --count HEAD..origin/main     # 不是 0 就先 rebase 到 origin/main
+```
+
+2026-09-20 的事故就是推了一支落後 12 個 commit 的分支：正式站倒退，
+35 支延伸籤（`love_flirting_073`～`107`）消失、SEO 文章頁 404、
+LINE／客人評價／GA4 後端事件失效。最嚴重的是舊版沒有付款前的存在性檢查，
+**買家付得了 NT$99 卻拿不到 PDF**。
+
+判斷線上跑的是哪一版：打開 `/api/health`，看 `versionId` 與 `deployedAt`。
+`extendedCount` 應為 **255**，且 `hasDb`／`hasLineSecret`／`hasLineToken`／
+`hasLineForward`／`hasGa4Secret` 五個欄位都要在——欄位**整個不見**代表跑的是
+舊程式，不是設定沒填。發現倒退就去 Deployments 回滾到已知正常的 `versionId`。
 
 ### 3. API 回應會被 Cloudflare 快取
 
@@ -100,7 +120,15 @@
 | 服務 | 狀態 | 位置 |
 |---|---|---|
 | 延伸籤 NT$99 | **已上線**，綠界 production，信用卡 | 解籤結果頁 |
-| 真人占卜 | **金流尚未串接**，價格與產能未定 | 首頁（暫時） |
+| 真人占卜 NT$399 | **已上線**，綠界 production（`ORACLE_ECPAY_MODE`） | 首頁、解籤結果頁、`/oracle.html` |
+
+真人占卜是**另一套獨立系統**，程式在 `src/oracle.js`，不共用延伸籤的訂單流程。
+價格寫在 `src/oracle.js` 的 `const PRICE = 399`。健康檢查是 `/api/oracle/health`
+（與 `/api/health` 分開），會回報 `mode`、`price`、綠界／後台金鑰／KV／R2／寄信
+狀態，以及已設定的占卜師。目前三位：lightwalker、iris、james。
+
+`ORACLE_ECPAY_MODE` **預設值是 `stage`**，正式收款要在 `wrangler.jsonc` 明寫
+`production`。它是一般變數，會被建置洗掉——見上面「Cloudflare 的一般變數」那段。
 
 延伸籤流程：抽籤 → 解籤結果頁 → `/checkout/?id=籤支編號` → 綠界 →
 `/api/ecpay-callback` 驗章 → 產 PDF → Resend 寄信 → **立刻刪除信箱與問題**。
@@ -116,7 +144,9 @@
 ## 其他既有資源
 
 - 條款頁 `/privacy/` 已存在，三段式（服務條款／隱私權／退款）
-- 客服信箱 `hello@unfinished.tw`
+- 客服信箱 `hello@unfinished.tw`（Cloudflare Email Routing 轉寄到 `jiazhen0404@gmail.com`）。
+  這個地址同時是 Resend 的寄件人網域，**不要改成 Gmail**，改了所有信都會被退 403。
+  客人按「回覆」會回到 Gmail（`src/index.js` 的 `reply_to`）。
 - GA4 已設定，追蹤 ID `G-71RMD00WPJ`
 - 已設定 robots.txt、sitemap.xml、Open Graph／Twitter Card
 - 手動補寄 PDF：`/api/resend-pdf`，需 `X-Admin-Key`
