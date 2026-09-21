@@ -765,8 +765,11 @@ function magicOraclePay(){
 }
 .slip-voice-title{color:var(--gold);font-size:11px;letter-spacing:.2em}
 /* min-height 讓長短不一的內容不會把購買按鈕上下推（施工單九）。
-   不寫死高度——固定高度會在短的那幾則留下大片空白。 */
-.slip-voice-stage{position:relative;margin-top:12px;min-height:150px;text-align:left}
+   不寫死高度——固定高度會在短的那幾則留下大片空白。
+   ★ 只在真的會切換時才給（.is-carousel 由 JS 加）。單則回饋不會切換，
+     撐 150px 只是把購買按鈕往下推，正好是這次要收掉的東西。 */
+.slip-voice-stage{position:relative;margin-top:12px;text-align:left}
+.slip-voice.is-carousel .slip-voice-stage{min-height:150px}
 /* 淡入淡出。沒顯示的那幾則用 absolute 疊著，不佔高度也不能被點到。 */
 .slip-voice-item{position:absolute;inset:0;opacity:0;transition:opacity .35s ease;pointer-events:none}
 .slip-voice-item.on{position:relative;opacity:1;pointer-events:auto}
@@ -781,26 +784,24 @@ function magicOraclePay(){
 }
 .slip-voice-by{margin-top:10px;font-size:12px;letter-spacing:.06em;color:var(--text-soft)}
 .slip-voice-tag{margin-top:8px;font-size:10.5px;letter-spacing:.1em;color:var(--text-faint)}
-/* 箭頭在文字左右兩側，但用 flex 各佔一欄、不是絕對定位浮在文字上，
-   所以結構上就不可能遮住字（施工單六的禁止項）。
-   stage 要 min-width:0，否則長文會把 flex 容器撐爆、產生水平捲動。 */
-.slip-voice-body{display:flex;align-items:center;gap:8px;margin-top:12px}
-.slip-voice-body .slip-voice-stage{flex:1;min-width:0;margin-top:0}
-.slip-voice-arrow{flex:0 0 auto}
-.slip-voice-nav{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:12px}
-/* 窄螢幕改成上下排：卡片在 375px 時只有 289px 寬，兩顆箭頭加間距吃掉 76px，
-   文字欄只剩 145px、一行放不到 10 個字。所以 560 以下讓文字佔滿整行，
-   箭頭換到下面。DOM 不動，只靠 order 與 flex-wrap 換位置。 */
-@media(max-width:560px){
-  .slip-voice-body{flex-wrap:wrap;justify-content:center;gap:10px}
-  .slip-voice-body .slip-voice-stage{flex:0 0 100%;order:-1}
-}
+/* 控制器全部擠在同一列：‹ 3 / 9 ›（施工單七）。
+   舊版是「文字左右各一顆箭頭」再加「底下獨立一列頁碼」，兩層結構在手機上
+   吃掉約 66px，正是把購買按鈕推下去的原因之一。箭頭移到頁碼兩側之後，
+   文字永遠佔滿整行，也就不再需要 560 以下那組換位規則。 */
+.slip-voice-nav{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:10px}
 .slip-voice-arrow{
-  width:30px;height:30px;border:1px solid rgba(199,156,82,.3);border-radius:50%;
+  flex:0 0 auto;width:30px;height:30px;border:1px solid rgba(199,156,82,.3);border-radius:50%;
   background:transparent;color:var(--gold-soft);font-size:13px;line-height:1;cursor:pointer;
 }
 .slip-voice-arrow:hover{border-color:var(--gold);color:var(--gold)}
-.slip-voice-page{min-width:44px;font-size:11px;letter-spacing:.14em;color:var(--text-faint)}
+.slip-voice-page{min-width:52px;text-align:center;font-size:11px;letter-spacing:.14em;color:var(--text-faint)}
+/* 「閱讀完整回饋」。預設 hidden，JS 量到真的溢出才拿掉（施工單六）。 */
+.slip-voice-toggle{
+  margin-top:8px;padding:0;border:0;background:transparent;cursor:pointer;
+  color:var(--gold-soft);font-size:12px;letter-spacing:.06em;
+  text-decoration:underline;text-underline-offset:3px;
+}
+.slip-voice-toggle:hover{color:var(--gold)}
 @media(prefers-reduced-motion:reduce){.slip-voice-item{transition:none}}
 
 /* ── 結果頁付費區的桌機排版（施工單五）──
@@ -837,7 +838,53 @@ function magicOraclePay(){
   .extended-preview-bullets li{font-size:15px;line-height:1.7}
   .extended-preview-closing{font-size:15px;line-height:1.7}
   .extended-preview-copy{font-size:15px;line-height:1.7}
+  /* 回饋預設夾 4 行（施工單六）。只在手機夾——桌機一行放得下 25 個字，
+     夾了反而會對一段本來就看得完的文字長出一顆多餘的按鈕。
+     夾的是顯示，不是內容：展開之後看到的是完整原文，沒有截字串。 */
+  .slip-voice-quote.is-clamped{
+    display:-webkit-box;-webkit-box-orient:vertical;
+    -webkit-line-clamp:4;line-clamp:4;overflow:hidden;
+  }
+  /* 購買按鈕 56～64px（施工單十）。原本沒給手機版高度，落在 48。
+     ★ 必須寫成 html[data-screen="result"] 開頭，不能只寫 .extended-preview-btn——
+       基礎樣式 .extended-preview-btn{min-height:48px} 在更後面的 <style> 區塊，
+       同權重時後面的贏，只寫類別名會被吃掉（量過，實際還是 48）。
+       不能為了讓它生效去搬 <style> 的順序，所以改用跟上面桌機那條一樣的權重。 */
+  html[data-screen="result"] .extended-preview-btn{min-height:58px;font-size:15px}
 }
+/* iPhone SE 這類 375px 螢幕，按鈕內距扣掉後只剩約 257px，
+   15px 的「解鎖這支籤的完整解讀　NT$ 99」放不下、會斷成兩行，
+   高度被撐到 66px（超出施工單十的 56～64）。字級收一點讓它維持一行。 */
+@media(max-width:390px){
+  html[data-screen="result"] .extended-preview-btn{font-size:13.5px;letter-spacing:.02em}
+}
+/* ── 手機版 sticky CTA（施工單十一）──
+   掛在 <body> 底下、不是掛在 .device 裡面：.device 有 overflow:hidden，
+   而且只要任何一層祖先有 transform，position:fixed 就會改成相對那一層定位、
+   黏不到視窗底部。掛 body 是唯一穩的做法。
+   只在結果頁出現——換頁時 data-screen 一變它就自己收起來，
+   不必依賴 JS 記得清掉（再抽一次、回首頁都涵蓋到）。 */
+.slip-sticky-cta{
+  position:fixed;left:0;right:0;bottom:0;z-index:60;
+  padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));
+  background:linear-gradient(180deg,rgba(16,10,27,0),rgba(16,10,27,.92) 32%);
+  transform:translateY(120%);transition:transform .28s ease;
+  pointer-events:none;
+}
+/* env(safe-area-inset-bottom) 是 iPhone Safari 底部工具列與 Home 指示條的高度。
+   不加這段，按鈕在 iPhone 上會被工具列蓋住一半（施工單十一）。 */
+.slip-sticky-cta.on{transform:translateY(0);pointer-events:auto}
+.slip-sticky-btn{
+  display:block;width:100%;max-width:520px;margin:0 auto;min-height:56px;
+  border:1px solid rgba(240,228,200,.55);border-radius:999px;
+  background:linear-gradient(120deg,#8A6BB5,#D9BD82);
+  color:#2A1B3D;font-size:15px;letter-spacing:.06em;font-weight:600;cursor:pointer;
+  box-shadow:0 8px 24px rgba(0,0,0,.45);
+}
+/* 桌機不出現：原本的按鈕在桌機很快就捲得到，再黏一條只是擋住內容（施工單十二）。 */
+@media(min-width:901px){.slip-sticky-cta{display:none}}
+html:not([data-screen="result"]) .slip-sticky-cta{display:none}
+@media(prefers-reduced-motion:reduce){.slip-sticky-cta{transition:none}}
 .talk-band{
   margin:14px 0 4px;padding:20px 18px;border:1px solid rgba(199,156,82,.26);
   border-radius:18px;background:linear-gradient(150deg,rgba(28,19,48,.86),rgba(16,10,27,.92));
@@ -1775,62 +1822,68 @@ const go=s=>{setShowSidebar(false);setScreen(s==="draw"?"theme":s);};const pick=
      原本這裡是掛在 document 上的全域 input 監聽，只要是 TEXTAREA 就抓，
      頁面上之後只要多一個文字框，就會默默蓋掉買家在「想一件事」寫的問題。
      這個值是 /checkout/ 唯一的來源（顯示 + 印進 PDF），不能不寫，但不該抓這麼寬。 */
-  /* 抽籤者的真實心聲。取自真實且經授權的回饋，為節錄。2026-09-20 上線。
+  /* 付費區的顧客回饋。2026-09-20 建立，2026-09-21 改為只顯示真實且已授權者。
 
-     要換內容就改這裡，其他地方不用動。三條規矩：
-     1. 只能放使用者真的說過的話，不可以自己補寫他沒說過的內容。
-     2. 不可以把示範文案或模擬對話標示成真實回饋。
-     3. 不放姓名、LINE 帳號、頭像或任何可指認個人的資訊。
+     ★ 一則回饋要出現在正式站，三個開關必須同時是 true（施工單十三）：
 
-     目前只有節錄、沒有完整版，所以不做「閱讀完整回饋」展開按鈕
-     （施工單三-7）；連帶也不送 testimonial_expand 事件（五-5）。
-     日後若拿到完整授權全文，再一併補上展開與該事件。 */
-  /* 付費區的輪播內容。2026-09-20 建立。
+       isRealFeedback     真的有人說過這句話。不是改寫、不是模擬、不是 AI 生成。
+       permissionConfirmed 對方明確同意被放在付款頁當推薦素材。
+                          公開發文不等於同意做廣告用途，這兩件事要分開問。
+       enabled            這則目前要不要上架。想暫時下架就改這個，不必刪資料。
 
-     ★ 這份清單裡有兩種東西，絕對不可以混為一談：
+     少一個就不顯示，沒有例外、沒有「反正看起來像真的」。
+     判斷寫在 VISIBLE_VOICES，渲染端只讀過濾後的結果，
+     所以將來有人往清單裡塞東西，也不會因為忘了加條件就漏出去。
 
-     kind:"real"    真的有人說過的話。逐字節錄，標上署名與「真實回饋」。
-                    新增前必須確認兩件事：內容屬實、而且對方同意被放在
-                    付款頁當推薦素材。公開發文不等於同意拿來做廣告。
-     kind:"example" 情境示例。沒有人說過這些話，是用來幫讀者對號入座的描述。
-                    因此：不加引號、不署名、卡片上明寫「情境示例・非顧客回饋」。
-                    寫法一律用第二人稱描述處境，不可以寫成第一人稱的使用心得——
-                    那樣即使標了示例，讀起來還是像假評價。
+     ★ 可以做的整理：節錄、刪個資、刪不影響原意的贅字、匿名化。
+       不可以做的：補寫對方沒說過的效果、加「超準」「真的復合了」這類話、
+       把語氣改得更有推薦感。節錄之後意思必須跟原文一致。
 
-     每張卡片自己帶著身分標記，不依賴區塊標題。使用者從任何一張看起
-     都不會誤讀成顧客評價（施工單十四-11）。
+     ★ quote 是卡片上顯示的節錄，fullQuote 是完整版（有才填）。
+       兩者不同時，卡片會長出「閱讀完整回饋」；相同或沒填就不長（施工單六）。
 
-     cat 是顯示用的分類標籤，必須符合該則的實際內容。
-     那則真實回饋講的是「分手後破冰」，所以標失戀中，不是曖昧中。 */
+     ★ 下面 8 則 ex- 開頭的是「情境草稿」，沒有人說過那些話。
+       留著是給你未來蒐集回饋時當分類參考用的，三個開關都是 false，
+       正式站不會顯示（施工單十四）。拿到真實回饋後請新增一則，
+       不要把草稿改一改就標成真的。 */
   const SLIP_VOICES=[
-    { id:"real-threads-001", kind:"real", cat:"感情・失戀中",
-      text:"「您開發的網站真的很厲害，我明明只是問我分手後破冰之後對方的想法，而籤筒點出了我並沒有提到的……」",
-      by:"— 感情解籤使用者" },
+    { id:"real-threads-001", category:"感情", subcategory:"失戀中",
+      quote:"「您開發的網站真的很厲害，我明明只是問我分手後破冰之後對方的想法，而籤筒點出了我並沒有提到的……」",
+      fullQuote:"", by:"— 感情解籤使用者", source:"Threads",
+      isRealFeedback:true, permissionConfirmed:true, enabled:true, createdAt:"2026-09-20" },
 
-    { id:"ex-flirting-001", kind:"example", cat:"感情・曖昧中",
-      text:"曖昧快一年，訊息幾乎沒有斷過，但每次想把關係講清楚，話題就被輕輕帶開。你分不出他是慢熱，還是根本沒打算往前。" },
-
-    { id:"ex-crush-001", kind:"example", cat:"感情・單戀暗戀",
-      text:"喜歡上同公司的人，每天都會遇到、也會聊上幾句。你想知道那些互動是他對誰都一樣，還是真的對你不同——但開口的風險太高。" },
-
-    { id:"ex-reunion-001", kind:"example", cat:"感情・復合",
-      text:"分手三個月，他突然又傳訊息來。語氣像什麼都沒發生過。你不確定這是想回來，還是只是寂寞，而你也還沒想好自己要不要。" },
-
-    { id:"ex-fortune-001", kind:"example", cat:"感情・桃花運勢",
-      text:"單身很久，最近遇到一個讓你會分心的人。你想知道這次是真的有機會，還是又是自己想太多——你已經不太敢相信自己的直覺了。" },
-
-    { id:"ex-breakup-001", kind:"example", cat:"感情・失戀中",
-      text:"分手之後，你才把一些片段拼起來，開始懷疑當時是不是還有別人。你不確定要不要問清楚，也不確定知道了會不會比較好過。" },
-
-    { id:"ex-relationship-001", kind:"example", cat:"感情・關係中",
-      text:"交往好幾年了，吵架變少，話也變少。你們像室友一樣生活在一起。你說不出哪裡壞掉了，只知道跟以前不一樣了。" },
-
-    { id:"ex-career-001", kind:"example", cat:"工作・轉職中",
-      text:"每天早上都不想去上班，但房租和帳單讓你不敢走。你想知道現在到底是該撐住，還是該把時間花在找下一個地方。" },
-
-    { id:"ex-jobhunt-001", kind:"example", cat:"工作・求職中",
-      text:"投了兩個月，面試也去了幾場，然後就沒有下文。你開始懷疑是不是自己的問題，也不確定還要再等多久才合理。" },
+    /* ↓ 以下為情境草稿，非顧客回饋，正式站不顯示。 */
+    { id:"ex-flirting-001", category:"感情", subcategory:"曖昧中",
+      quote:"曖昧快一年，訊息幾乎沒有斷過，但每次想把關係講清楚，話題就被輕輕帶開。",
+      source:"draft", isRealFeedback:false, permissionConfirmed:false, enabled:false },
+    { id:"ex-crush-001", category:"感情", subcategory:"單戀暗戀",
+      quote:"喜歡上同公司的人，每天都會遇到、也會聊上幾句，但開口的風險太高。",
+      source:"draft", isRealFeedback:false, permissionConfirmed:false, enabled:false },
+    { id:"ex-reunion-001", category:"感情", subcategory:"復合",
+      quote:"分手三個月，他突然又傳訊息來，語氣像什麼都沒發生過。",
+      source:"draft", isRealFeedback:false, permissionConfirmed:false, enabled:false },
+    { id:"ex-fortune-001", category:"感情", subcategory:"桃花運勢",
+      quote:"單身很久，最近遇到一個讓你會分心的人，但你已經不太敢相信自己的直覺。",
+      source:"draft", isRealFeedback:false, permissionConfirmed:false, enabled:false },
+    { id:"ex-breakup-001", category:"感情", subcategory:"失戀中",
+      quote:"分手之後，你才把一些片段拼起來，開始懷疑當時是不是還有別人。",
+      source:"draft", isRealFeedback:false, permissionConfirmed:false, enabled:false },
+    { id:"ex-relationship-001", category:"感情", subcategory:"關係中",
+      quote:"交往好幾年了，吵架變少，話也變少，你們像室友一樣生活在一起。",
+      source:"draft", isRealFeedback:false, permissionConfirmed:false, enabled:false },
+    { id:"ex-career-001", category:"工作", subcategory:"轉職中",
+      quote:"每天早上都不想去上班，但房租和帳單讓你不敢走。",
+      source:"draft", isRealFeedback:false, permissionConfirmed:false, enabled:false },
+    { id:"ex-jobhunt-001", category:"工作", subcategory:"求職中",
+      quote:"投了兩個月，面試也去了幾場，然後就沒有下文。",
+      source:"draft", isRealFeedback:false, permissionConfirmed:false, enabled:false },
   ];
+
+  /* 正式站唯一的顯示來源。三個開關缺一不可（施工單十三）。
+     === true 而不是判斷真假值：欄位忘了寫、寫成字串 "false" 都會被擋下來。 */
+  const VISIBLE_VOICES=SLIP_VOICES.filter(function(v){
+    return v.isRealFeedback===true && v.permissionConfirmed===true && v.enabled===true;
+  });
 
   function addExtendedPreview(){
     const frame=document.querySelector(".device > .scroll > .frame");
@@ -2095,54 +2148,88 @@ const go=s=>{setShowSidebar(false);setScreen(s==="draw"?"theme":s);};const pick=
        全部用 textContent 寫入，不碰 innerHTML——回饋是外部文字，
        這樣就不需要另外處理跳脫。 */
     const buyBtn=section.querySelector(".extended-preview-btn");
-    if(buyBtn){
-      /* 依籤文主題排序：同情境的排前面，其次同大分類，最後才是其他。
+    /* 沒有任何一則通過三個開關就整塊不渲染——不留空卡片、不留孤零零的標題。
+       這是安全閥：哪天授權被撤回、把 enabled 關掉，前台會自己收乾淨。 */
+    if(buyBtn&&VISIBLE_VOICES.length){
+      /* 依籤文主題排序：同情境最前，其次是相近情境，再來同大分類（施工單八）。
          用 slice() 複製再排，不要就地改動 SLIP_VOICES 的順序——
          那是模組層級的常數，抽下一支籤還會再讀一次。 */
+      const NEAR={ "失戀中":["復合","關係中"], "復合":["失戀中","關係中"],
+                   "單戀暗戀":["曖昧中","桃花運勢"], "曖昧中":["單戀暗戀","桃花運勢"],
+                   "桃花運勢":["曖昧中","單戀暗戀"], "關係中":["復合","失戀中"],
+                   "求職中":["轉職中","職場中"], "轉職中":["求職中","職場中"] };
       const mainCat=(theme==="work")?"工作":"感情";
-      const order=SLIP_VOICES.slice().sort(function(a,b){
-        const score=function(v){
-          if(subtheme&&v.cat.indexOf(subtheme)>=0)return 0;
-          if(v.cat.indexOf(mainCat)===0)return 1;
-          return 2;
-        };
-        return score(a)-score(b);
-      });
+      const near=NEAR[subtheme]||[];
+      const score=function(v){
+        if(subtheme&&v.subcategory===subtheme)return 0;
+        if(near.indexOf(v.subcategory)>=0)return 1;
+        if(v.category===mainCat)return 2;
+        return 3;
+      };
+      const order=VISIBLE_VOICES.slice().sort(function(a,b){return score(a)-score(b);});
+
+      /* 起始項目不固定在第 1 則（施工單九）：在「分數最好的那一群」裡面隨機。
+         只在同分組內隨機，所以隨機不會把不相干的分類推到第一個——
+         相關性優先，隨機只負責讓同樣相關的幾則輪流當開場。 */
+      const best=score(order[0]);
+      let tie=0; while(tie<order.length&&score(order[tie])===best)tie++;
+      const startAt=Math.floor(Math.random()*tie);
 
       const voice=document.createElement("section");
       voice.className="slip-voice";
-      voice.setAttribute("aria-label","抽籤者的心聲與常見情境");
+      voice.setAttribute("aria-label","顧客回饋");
       const row=function(cls,text){
         const el=document.createElement("div"); el.className=cls; el.textContent=text; return el;
       };
-      /* 標題保持中性：這個輪播裡同時有真實回饋與情境示例，
-         標題不能宣稱全部都是真人說的話。身分由每張卡片自己標。 */
-      voice.appendChild(row("slip-voice-title","✦ 你可能正在經歷 ✦"));
+      /* 這個區塊現在只放真實且已授權的回饋，所以標題可以直說是顧客回饋。
+         ★ 若日後要放非顧客內容，標題必須改回中性說法、每張卡另外標身分，
+           不可以沿用這個標題——那會變成把模擬內容冒充成證言。 */
+      voice.appendChild(row("slip-voice-title","✦ 顧客回饋 ✦"));
 
       const stage=document.createElement("div");
       stage.className="slip-voice-stage";
+      const toggles=[];
       order.forEach(function(v,i){
         const item=document.createElement("article");
-        item.className="slip-voice-item"+(i===0?" on":"");
-        item.appendChild(row("slip-voice-cat",v.cat));
-        item.appendChild(row("slip-voice-quote",v.text));
-        if(v.kind==="real"){
-          item.appendChild(row("slip-voice-by",v.by));
-          item.appendChild(row("slip-voice-tag","真實使用者回饋・節錄"));
-        }else{
-          /* 沒有人說過這段話，所以不署名，並且明講它是示例。
-             這張標記不可以拿掉（施工單十四-11）。 */
-          item.appendChild(row("slip-voice-tag","情境示例・非顧客回饋"));
-        }
+        item.className="slip-voice-item"+(i===startAt?" on":"");
+        item.appendChild(row("slip-voice-cat",v.category+"・"+v.subcategory));
+
+        /* 手機上先夾成 4 行（施工單六）。夾的是 CSS，不是截字串——
+           截字串會讓「閱讀完整回饋」按下去之後字數對不上，而且桌機
+           明明放得下也會被截掉。 */
+        const q=row("slip-voice-quote",v.quote);
+        q.classList.add("is-clamped");
+        item.appendChild(q);
+
+        const tog=document.createElement("button");
+        tog.type="button"; tog.className="slip-voice-toggle"; tog.hidden=true;
+        tog.textContent="閱讀完整回饋";
+        tog.addEventListener("click",function(){
+          const open=q.classList.toggle("is-clamped")===false;
+          if(open&&v.fullQuote&&v.fullQuote!==v.quote)q.textContent=v.fullQuote;
+          tog.textContent=open?"收起":"閱讀完整回饋";
+          if(open)track("testimonial_expand",v);
+        });
+        item.appendChild(tog);
+        /* 量測要等元素真的進到畫面上才準，所以先記起來，插入 DOM 之後再判斷。 */
+        toggles.push({q:q,tog:tog});
+
+        item.appendChild(row("slip-voice-by",v.by||"— 解籤使用者"));
+        /* 能走到這裡的都已通過三個開關，所以標記就是這一行、沒有別的分支。 */
+        item.appendChild(row("slip-voice-tag","真實顧客回饋・節錄"));
         stage.appendChild(item);
       });
-      let idx=0, timer=null, paused=false, seen=false;
+      let idx=startAt, timer=null, paused=false, seen=false;
       const items=stage.querySelectorAll(".slip-voice-item");
       const reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion:reduce)").matches;
 
       /* 只有兩則以上才有輪播；一則就是靜態卡片，不長箭頭也不顯示頁碼（九-13）。 */
       let pageEl=null;
+      voice.appendChild(stage);
+      /* 只有真的會切換時才保留固定高度（見 CSS 的 .is-carousel）。
+         單則時撐 150px 是純浪費——那正是要收掉的高度。 */
       if(items.length>1){
+        voice.classList.add("is-carousel");
         const mkArrow=function(label,step){
           const b=document.createElement("button");
           b.type="button"; b.className="slip-voice-arrow"; b.textContent=label;
@@ -2153,22 +2240,34 @@ const go=s=>{setShowSidebar(false);setScreen(s==="draw"?"theme":s);};const pick=
           });
           return b;
         };
-        /* 箭頭與文字在同一列、各佔一欄，文字欄 flex:1。 */
-        const body=document.createElement("div");
-        body.className="slip-voice-body";
-        body.appendChild(mkArrow("‹",-1));
-        body.appendChild(stage);
-        body.appendChild(mkArrow("›",1));
-        voice.appendChild(body);
-
+        /* 箭頭與頁碼擠在同一列（施工單七）。舊版是「文字左右各一顆箭頭」
+           再加「底下獨立一列頁碼」，兩層結構在手機上吃掉約 66px，
+           而那正是把購買按鈕推下去的原因之一。現在合成一列。 */
         const nav=document.createElement("div");
         nav.className="slip-voice-nav";
         pageEl=document.createElement("div");
         pageEl.className="slip-voice-page";
+        nav.appendChild(mkArrow("‹",-1));
         nav.appendChild(pageEl);
+        nav.appendChild(mkArrow("›",1));
         voice.appendChild(nav);
-      }else{
-        voice.appendChild(stage);
+
+        /* 手機滑動切換（施工單七）。只認水平位移明顯大於垂直的手勢，
+           否則使用者想上下捲動頁面時會被誤判成切換。
+           passive:true——這裡不呼叫 preventDefault，垂直捲動不能被卡住。 */
+        let sx=0, sy=0, tracking=false;
+        stage.addEventListener("touchstart",function(e){
+          if(e.touches.length!==1){tracking=false;return;}
+          sx=e.touches[0].clientX; sy=e.touches[0].clientY; tracking=true;
+        },{passive:true});
+        stage.addEventListener("touchend",function(e){
+          if(!tracking)return; tracking=false;
+          const t=e.changedTouches&&e.changedTouches[0]; if(!t)return;
+          const dx=t.clientX-sx, dy=t.clientY-sy;
+          if(Math.abs(dx)<40||Math.abs(dx)<=Math.abs(dy))return;
+          paused=true; stop();
+          show(idx+(dx<0?1:-1),true);
+        },{passive:true});
       }
 
       function show(n,manual){
@@ -2186,14 +2285,16 @@ const go=s=>{setShowSidebar(false);setScreen(s==="draw"?"theme":s);};const pick=
       }
       function stop(){ if(timer){clearInterval(timer);timer=null;} }
 
-      /* 事件只帶匿名 id、分類與類型，不含任何個資（十三）。
+      /* 事件只帶匿名 id 與分類，不含任何個資（十三）。
+         回饋原文一個字都不進事件——那是顧客說的話，不該流進分析工具。
          自動輪播不送事件——7 秒一次會灌爆 GA4，數字也沒有意義。 */
       function track(name,v){
-        try{gtag("event",name,{testimonial_id:v.id,testimonial_category:v.cat,
-          testimonial_kind:v.kind,theme:theme,subtheme:subtheme});}catch(e){}
+        try{gtag("event",name,{testimonial_id:v.id,testimonial_category:v.category,
+          testimonial_subcategory:v.subcategory,theme:theme,subtheme:subtheme});}catch(e){}
       }
 
-      if(pageEl)pageEl.textContent="1 / "+items.length;
+      /* 起始頁碼跟著 startAt，不是寫死的 1——隨機開場時顯示的必須是實際那一則。 */
+      if(pageEl)pageEl.textContent=(idx+1)+" / "+items.length;
       voice.addEventListener("mouseenter",stop);
       voice.addEventListener("mouseleave",function(){ if(!paused)start(); });
 
@@ -2202,7 +2303,7 @@ const go=s=>{setShowSidebar(false);setScreen(s==="draw"?"theme":s);};const pick=
         new IntersectionObserver(function(entries){
           entries.forEach(function(en){
             if(en.isIntersecting){
-              if(!seen){seen=true;track("testimonial_view",order[0]);}
+              if(!seen){seen=true;track("testimonial_view",order[idx]);}
               if(!paused)start();
             }else stop();
           });
@@ -2211,6 +2312,71 @@ const go=s=>{setShowSidebar(false);setScreen(s==="draw"?"theme":s);};const pick=
 
       /* ⑥ 回饋放在「看完整目錄」與 ⑦ 購買按鈕之間（施工單三）。 */
       section.insertBefore(voice,buyBtn);
+
+      /* 進 DOM 之後才量得到高度。超過夾住的行數才長出「閱讀完整回饋」——
+         沒溢出就不長，不然短回饋底下會掛一顆按下去沒反應的按鈕。
+         +2 是抗捨入誤差：scrollHeight 與 clientHeight 在某些縮放比例下
+         會差 1px，不留餘裕的話每則都會誤判成溢出。
+         用 rAF 等一次繪製，字型還沒套用時量到的行高是錯的。 */
+      requestAnimationFrame(function(){
+        toggles.forEach(function(t){
+          if(t.q.scrollHeight>t.q.clientHeight+2)t.tog.hidden=false;
+        });
+      });
+    }
+
+    /* ── 手機版 sticky CTA（施工單十一）──
+       只做一件事：把原本那顆購買按鈕的 click 轉發過去。
+       不自己組訂單、不自己送 purchase、不複製任何金流邏輯——
+       複製一份就等於多一條會走偏的路，日後改價格或改流程會漏掉這裡。 */
+    if(buyBtn){
+      document.querySelectorAll(".slip-sticky-cta").forEach(function(el){el.remove();});
+      const bar=document.createElement("div");
+      bar.className="slip-sticky-cta";
+      const sb=document.createElement("button");
+      sb.type="button"; sb.className="slip-sticky-btn";
+      sb.textContent="解鎖完整解籤　NT$99";
+      sb.addEventListener("click",function(){
+        try{gtag("event","sticky_cta_click",{theme:theme,subtheme:subtheme});}catch(e){}
+        buyBtn.click();                     // 完全走原本的購買流程
+      });
+      bar.appendChild(sb);
+      document.body.appendChild(bar);
+
+      /* 兩個條件同時成立才顯示：已經捲進付費區、而且原本的按鈕還沒出現。
+         兩顆購買按鈕同時在畫面上會讓人不知道該按哪一顆（施工單十一）。 */
+      /* 用捲動事件量位置，不用 IntersectionObserver。
+         原因：結果頁是捲在 .device > .scroll 這個內層容器裡，不是捲整份文件，
+         而站上同時有 window 捲動的情況；IO 在這種巢狀捲動結構下，
+         實際驗證時無法確認有沒有觸發（預覽環境完全不回呼）。
+         這裡只是兩次 getBoundingClientRect，用 rAF 節流後成本可以忽略，
+         而且在任何瀏覽器都量得到——可驗證比理論上更省更重要。 */
+      const visible=function(el){
+        const r=el.getBoundingClientRect();
+        return r.bottom>0 && r.top<(window.innerHeight||0);
+      };
+      let queued=null;
+      const sync=function(){
+        queued=null;
+        /* 已經捲進付費區、而且原本那顆按鈕還沒出現時才顯示。
+           兩顆購買按鈕同時在畫面上會讓人不知道該按哪一顆（施工單十一）。 */
+        bar.classList.toggle("on", visible(section) && !visible(buyBtn));
+      };
+      /* 用 setTimeout 節流，不用 requestAnimationFrame。兩個原因：
+         1. rAF 在背景分頁會被瀏覽器暫停，回到前景前不會回呼；
+            切換一個 class 不需要對齊影格，沒必要承擔這個行為差異。
+         2. 寫成 (window.requestAnimationFrame||setTimeout)(sync) 會掉 this 綁定，
+            Chrome 直接丟 Illegal invocation。要嘛 .bind(window)，要嘛別用。
+         60ms 對「顯示／隱藏一條按鈕」綽綽有餘，捲動時每秒最多算 16 次。 */
+      const onScroll=function(){
+        if(queued)return;
+        queued=setTimeout(sync,60);
+      };
+      /* capture:true：scroll 事件不會冒泡，但會走捕獲階段，
+         所以掛在 window 上就收得到任何內層容器的捲動，不必先找出是哪一層在捲。 */
+      window.addEventListener("scroll",onScroll,{passive:true,capture:true});
+      window.addEventListener("resize",onScroll,{passive:true});
+      sync();
     }
 
     /* extended_entry_view —— 這一批的核心指標：到底有多少人真的看到延伸籤入口。
