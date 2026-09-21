@@ -773,6 +773,11 @@ function magicOraclePay(){
 /* 淡入淡出。沒顯示的那幾則用 absolute 疊著，不佔高度也不能被點到。 */
 .slip-voice-item{position:absolute;inset:0;opacity:0;transition:opacity .35s ease;pointer-events:none}
 .slip-voice-item.on{position:relative;opacity:1;pointer-events:auto}
+/* 量高度專用：短暫把每一則都改成 relative，才量得到它自己的內容高度
+   （平時 absolute + inset:0 會貼成舞台的高度，量到的是舞台不是內容）。
+   權重要比 .slip-voice-item.on 高，否則當前那則不會被這條蓋掉。
+   JS 在同一個同步區塊內加上又移除，中間不會繪製，畫面上看不到。 */
+.slip-voice-stage.is-measuring .slip-voice-item{position:relative;opacity:0;pointer-events:none}
 .slip-voice-cat{
   display:inline-block;padding:3px 10px;border:1px solid rgba(199,156,82,.3);
   border-radius:999px;color:var(--gold-soft);font-size:10.5px;letter-spacing:.1em;
@@ -2313,16 +2318,39 @@ const go=s=>{setShowSidebar(false);setScreen(s==="draw"?"theme":s);};const pick=
       /* ⑥ 回饋放在「看完整目錄」與 ⑦ 購買按鈕之間（施工單三）。 */
       section.insertBefore(voice,buyBtn);
 
-      /* 進 DOM 之後才量得到高度。超過夾住的行數才長出「閱讀完整回饋」——
-         沒溢出就不長，不然短回饋底下會掛一顆按下去沒反應的按鈕。
-         +2 是抗捨入誤差：scrollHeight 與 clientHeight 在某些縮放比例下
-         會差 1px，不留餘裕的話每則都會誤判成溢出。
-         用 rAF 等一次繪製，字型還沒套用時量到的行高是錯的。 */
-      requestAnimationFrame(function(){
+      /* 進 DOM 之後才量得到高度。
+         ★ 不可以用 requestAnimationFrame。分頁切到背景時瀏覽器會暫停 rAF，
+           而抽籤動畫有好幾秒，使用者很可能切去別的 app 再切回來——
+           那樣 rAF 一直不回呼，「閱讀完整回饋」就永遠不會出現。
+           實測確認過：背景分頁下溢出明明是 true，按鈕還是 hidden。
+         所以改成：立刻量一次、字型載入完成再量一次、切回前景再量一次。
+         measure() 寫成可以重複呼叫，多量幾次只是多算幾次矩形。 */
+      const measure=function(){
         toggles.forEach(function(t){
-          if(t.q.scrollHeight>t.q.clientHeight+2)t.tog.hidden=false;
+          /* 已經展開的不要動——展開後文字不再溢出，重量一次會把「收起」藏起來，
+             使用者就收不回去了。只在還夾著的時候決定按鈕要不要出現。 */
+          if(!t.q.classList.contains("is-clamped"))return;
+          /* +2 抗捨入誤差：scrollHeight 與 clientHeight 在某些縮放比例下會差 1px，
+             不留餘裕的話每則都會誤判成溢出。 */
+          t.tog.hidden=!(t.q.scrollHeight>t.q.clientHeight+2);
         });
-      });
+        if(items.length>1){
+          /* 各則長短不一會讓購買按鈕上下跳（實測差 26px）。量出最高的那一則，
+             把舞台撐到剛好那麼高——比寫死 150px 準，短的時候也不會留白。
+             量的時候要先把全部改成 relative：平時非當前則是 absolute、
+             inset:0 會直接貼成舞台的高度，量到的是舞台自己、不是內容。
+             加上與移除在同一個同步區塊內，中間不會發生繪製，所以看不到跳動。 */
+          stage.classList.add("is-measuring");
+          let max=0;
+          items.forEach(function(it){ const h=it.getBoundingClientRect().height; if(h>max)max=h; });
+          stage.classList.remove("is-measuring");
+          if(max)stage.style.minHeight=Math.ceil(max)+"px";
+        }
+      };
+      measure();
+      if(document.fonts&&document.fonts.ready&&document.fonts.ready.then)document.fonts.ready.then(measure);
+      document.addEventListener("visibilitychange",function(){ if(!document.hidden)measure(); });
+      setTimeout(measure,400);          // 沒有 document.fonts 時的保險
     }
 
     /* ── 手機版 sticky CTA（施工單十一）──
