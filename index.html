@@ -754,54 +754,6 @@ function magicOraclePay(){
   box-shadow:0 12px 34px rgba(0,0,0,.25),inset 0 0 28px rgba(199,156,82,.05);text-align:center;
 }
 .extended-preview-kicker{color:var(--gold);font-size:11px;letter-spacing:.2em}
-/* 抽籤者的真實心聲。獨立一塊，不放進 .extended-preview 裡面——
-   付費卡片是商品說明，這裡是別人說的話，混在一起會變成電商好評卡。
-   邊框透明度沿用 .talk-band 的 .26（付費卡片是 .48），讓它退一步、
-   不跟購買按鈕搶視線。圓角與外距也跟 .talk-band 一致。 */
-.slip-voice{
-  margin:16px 0 18px;padding:16px 16px 14px;border:1px solid rgba(199,156,82,.26);
-  border-radius:16px;background:linear-gradient(150deg,rgba(38,24,60,.82),rgba(16,10,27,.9));
-  text-align:center;
-}
-.slip-voice-title{color:var(--gold);font-size:11px;letter-spacing:.2em}
-/* min-height 讓長短不一的內容不會把購買按鈕上下推（施工單九）。
-   不寫死高度——固定高度會在短的那幾則留下大片空白。 */
-.slip-voice-stage{position:relative;margin-top:12px;min-height:150px;text-align:left}
-/* 淡入淡出。沒顯示的那幾則用 absolute 疊著，不佔高度也不能被點到。 */
-.slip-voice-item{position:absolute;inset:0;opacity:0;transition:opacity .35s ease;pointer-events:none}
-.slip-voice-item.on{position:relative;opacity:1;pointer-events:auto}
-.slip-voice-cat{
-  display:inline-block;padding:3px 10px;border:1px solid rgba(199,156,82,.3);
-  border-radius:999px;color:var(--gold-soft);font-size:10.5px;letter-spacing:.1em;
-}
-/* 正文靠左：置中的長段中文每行起點不一，手機上特別難讀。 */
-.slip-voice-quote{
-  margin-top:10px;font-family:var(--serif);font-size:15px;line-height:1.75;
-  color:var(--text);overflow-wrap:anywhere;
-}
-.slip-voice-by{margin-top:10px;font-size:12px;letter-spacing:.06em;color:var(--text-soft)}
-.slip-voice-tag{margin-top:8px;font-size:10.5px;letter-spacing:.1em;color:var(--text-faint)}
-/* 箭頭在文字左右兩側，但用 flex 各佔一欄、不是絕對定位浮在文字上，
-   所以結構上就不可能遮住字（施工單六的禁止項）。
-   stage 要 min-width:0，否則長文會把 flex 容器撐爆、產生水平捲動。 */
-.slip-voice-body{display:flex;align-items:center;gap:8px;margin-top:12px}
-.slip-voice-body .slip-voice-stage{flex:1;min-width:0;margin-top:0}
-.slip-voice-arrow{flex:0 0 auto}
-.slip-voice-nav{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:12px}
-/* 窄螢幕改成上下排：卡片在 375px 時只有 289px 寬，兩顆箭頭加間距吃掉 76px，
-   文字欄只剩 145px、一行放不到 10 個字。所以 560 以下讓文字佔滿整行，
-   箭頭換到下面。DOM 不動，只靠 order 與 flex-wrap 換位置。 */
-@media(max-width:560px){
-  .slip-voice-body{flex-wrap:wrap;justify-content:center;gap:10px}
-  .slip-voice-body .slip-voice-stage{flex:0 0 100%;order:-1}
-}
-.slip-voice-arrow{
-  width:30px;height:30px;border:1px solid rgba(199,156,82,.3);border-radius:50%;
-  background:transparent;color:var(--gold-soft);font-size:13px;line-height:1;cursor:pointer;
-}
-.slip-voice-arrow:hover{border-color:var(--gold);color:var(--gold)}
-.slip-voice-page{min-width:44px;font-size:11px;letter-spacing:.14em;color:var(--text-faint)}
-@media(prefers-reduced-motion:reduce){.slip-voice-item{transition:none}}
 
 /* ── 結果頁付費區的桌機排版（施工單五）──
    只在 data-screen="result" 生效，其他畫面的 .device 完全不受影響。
@@ -824,8 +776,6 @@ function magicOraclePay(){
   html[data-screen="result"] .extended-preview-closing{font-size:15.5px;line-height:1.7}
   html[data-screen="result"] .extended-preview-copy{font-size:15px;line-height:1.7}
   html[data-screen="result"] .extended-preview-btn{min-height:52px;font-size:15px}
-  html[data-screen="result"] .slip-voice{padding:18px 20px 16px}
-  html[data-screen="result"] .slip-voice-quote{font-size:15.5px;line-height:1.75}
 }
 /* ── 手機版（施工單六）── */
 @media(max-width:900px){
@@ -1775,62 +1725,6 @@ const go=s=>{setShowSidebar(false);setScreen(s==="draw"?"theme":s);};const pick=
      原本這裡是掛在 document 上的全域 input 監聽，只要是 TEXTAREA 就抓，
      頁面上之後只要多一個文字框，就會默默蓋掉買家在「想一件事」寫的問題。
      這個值是 /checkout/ 唯一的來源（顯示 + 印進 PDF），不能不寫，但不該抓這麼寬。 */
-  /* 抽籤者的真實心聲。取自真實且經授權的回饋，為節錄。2026-09-20 上線。
-
-     要換內容就改這裡，其他地方不用動。三條規矩：
-     1. 只能放使用者真的說過的話，不可以自己補寫他沒說過的內容。
-     2. 不可以把示範文案或模擬對話標示成真實回饋。
-     3. 不放姓名、LINE 帳號、頭像或任何可指認個人的資訊。
-
-     目前只有節錄、沒有完整版，所以不做「閱讀完整回饋」展開按鈕
-     （施工單三-7）；連帶也不送 testimonial_expand 事件（五-5）。
-     日後若拿到完整授權全文，再一併補上展開與該事件。 */
-  /* 付費區的輪播內容。2026-09-20 建立。
-
-     ★ 這份清單裡有兩種東西，絕對不可以混為一談：
-
-     kind:"real"    真的有人說過的話。逐字節錄，標上署名與「真實回饋」。
-                    新增前必須確認兩件事：內容屬實、而且對方同意被放在
-                    付款頁當推薦素材。公開發文不等於同意拿來做廣告。
-     kind:"example" 情境示例。沒有人說過這些話，是用來幫讀者對號入座的描述。
-                    因此：不加引號、不署名、卡片上明寫「情境示例・非顧客回饋」。
-                    寫法一律用第二人稱描述處境，不可以寫成第一人稱的使用心得——
-                    那樣即使標了示例，讀起來還是像假評價。
-
-     每張卡片自己帶著身分標記，不依賴區塊標題。使用者從任何一張看起
-     都不會誤讀成顧客評價（施工單十四-11）。
-
-     cat 是顯示用的分類標籤，必須符合該則的實際內容。
-     那則真實回饋講的是「分手後破冰」，所以標失戀中，不是曖昧中。 */
-  const SLIP_VOICES=[
-    { id:"real-threads-001", kind:"real", cat:"感情・失戀中",
-      text:"「您開發的網站真的很厲害，我明明只是問我分手後破冰之後對方的想法，而籤筒點出了我並沒有提到的……」",
-      by:"— 感情解籤使用者" },
-
-    { id:"ex-flirting-001", kind:"example", cat:"感情・曖昧中",
-      text:"曖昧快一年，訊息幾乎沒有斷過，但每次想把關係講清楚，話題就被輕輕帶開。你分不出他是慢熱，還是根本沒打算往前。" },
-
-    { id:"ex-crush-001", kind:"example", cat:"感情・單戀暗戀",
-      text:"喜歡上同公司的人，每天都會遇到、也會聊上幾句。你想知道那些互動是他對誰都一樣，還是真的對你不同——但開口的風險太高。" },
-
-    { id:"ex-reunion-001", kind:"example", cat:"感情・復合",
-      text:"分手三個月，他突然又傳訊息來。語氣像什麼都沒發生過。你不確定這是想回來，還是只是寂寞，而你也還沒想好自己要不要。" },
-
-    { id:"ex-fortune-001", kind:"example", cat:"感情・桃花運勢",
-      text:"單身很久，最近遇到一個讓你會分心的人。你想知道這次是真的有機會，還是又是自己想太多——你已經不太敢相信自己的直覺了。" },
-
-    { id:"ex-breakup-001", kind:"example", cat:"感情・失戀中",
-      text:"分手之後，你才把一些片段拼起來，開始懷疑當時是不是還有別人。你不確定要不要問清楚，也不確定知道了會不會比較好過。" },
-
-    { id:"ex-relationship-001", kind:"example", cat:"感情・關係中",
-      text:"交往好幾年了，吵架變少，話也變少。你們像室友一樣生活在一起。你說不出哪裡壞掉了，只知道跟以前不一樣了。" },
-
-    { id:"ex-career-001", kind:"example", cat:"工作・轉職中",
-      text:"每天早上都不想去上班，但房租和帳單讓你不敢走。你想知道現在到底是該撐住，還是該把時間花在找下一個地方。" },
-
-    { id:"ex-jobhunt-001", kind:"example", cat:"工作・求職中",
-      text:"投了兩個月，面試也去了幾場，然後就沒有下文。你開始懷疑是不是自己的問題，也不確定還要再等多久才合理。" },
-  ];
 
   function addExtendedPreview(){
     const frame=document.querySelector(".device > .scroll > .frame");
@@ -2084,134 +1978,6 @@ const go=s=>{setShowSidebar(false);setScreen(s==="draw"?"theme":s);};const pick=
     const actionsRow=frame.querySelector(".actions");
     if(actionsRow){ actionsRow.insertAdjacentElement("beforebegin",section); }
     else { frame.insertAdjacentElement("afterend",section); }
-
-    /* 抽籤者的真實心聲。掛在 section 的「後面」而不是裡面，所以它是付費卡片的
-       同層兄弟，不會被塞進卡片內——位置自然落在「購買按鈕之下、分享籤文與
-       再抽一次之上」，因為 section 本身就插在 .actions 前面。
-
-       只有真的買得到的籤才顯示：沒有 slipId 的主題走預告版本、沒有那顆按鈕，
-       在沒有價格的頁面放購買心得沒有意義。
-
-       全部用 textContent 寫入，不碰 innerHTML——回饋是外部文字，
-       這樣就不需要另外處理跳脫。 */
-    const buyBtn=section.querySelector(".extended-preview-btn");
-    if(buyBtn){
-      /* 依籤文主題排序：同情境的排前面，其次同大分類，最後才是其他。
-         用 slice() 複製再排，不要就地改動 SLIP_VOICES 的順序——
-         那是模組層級的常數，抽下一支籤還會再讀一次。 */
-      const mainCat=(theme==="work")?"工作":"感情";
-      const order=SLIP_VOICES.slice().sort(function(a,b){
-        const score=function(v){
-          if(subtheme&&v.cat.indexOf(subtheme)>=0)return 0;
-          if(v.cat.indexOf(mainCat)===0)return 1;
-          return 2;
-        };
-        return score(a)-score(b);
-      });
-
-      const voice=document.createElement("section");
-      voice.className="slip-voice";
-      voice.setAttribute("aria-label","抽籤者的心聲與常見情境");
-      const row=function(cls,text){
-        const el=document.createElement("div"); el.className=cls; el.textContent=text; return el;
-      };
-      /* 標題保持中性：這個輪播裡同時有真實回饋與情境示例，
-         標題不能宣稱全部都是真人說的話。身分由每張卡片自己標。 */
-      voice.appendChild(row("slip-voice-title","✦ 你可能正在經歷 ✦"));
-
-      const stage=document.createElement("div");
-      stage.className="slip-voice-stage";
-      order.forEach(function(v,i){
-        const item=document.createElement("article");
-        item.className="slip-voice-item"+(i===0?" on":"");
-        item.appendChild(row("slip-voice-cat",v.cat));
-        item.appendChild(row("slip-voice-quote",v.text));
-        if(v.kind==="real"){
-          item.appendChild(row("slip-voice-by",v.by));
-          item.appendChild(row("slip-voice-tag","真實使用者回饋・節錄"));
-        }else{
-          /* 沒有人說過這段話，所以不署名，並且明講它是示例。
-             這張標記不可以拿掉（施工單十四-11）。 */
-          item.appendChild(row("slip-voice-tag","情境示例・非顧客回饋"));
-        }
-        stage.appendChild(item);
-      });
-      let idx=0, timer=null, paused=false, seen=false;
-      const items=stage.querySelectorAll(".slip-voice-item");
-      const reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion:reduce)").matches;
-
-      /* 只有兩則以上才有輪播；一則就是靜態卡片，不長箭頭也不顯示頁碼（九-13）。 */
-      let pageEl=null;
-      if(items.length>1){
-        const mkArrow=function(label,step){
-          const b=document.createElement("button");
-          b.type="button"; b.className="slip-voice-arrow"; b.textContent=label;
-          b.setAttribute("aria-label",step<0?"上一則":"下一則");
-          b.addEventListener("click",function(){
-            paused=true; stop();           // 手動切換後就不再自動播（九-8）
-            show(idx+step,true);
-          });
-          return b;
-        };
-        /* 箭頭與文字在同一列、各佔一欄，文字欄 flex:1。 */
-        const body=document.createElement("div");
-        body.className="slip-voice-body";
-        body.appendChild(mkArrow("‹",-1));
-        body.appendChild(stage);
-        body.appendChild(mkArrow("›",1));
-        voice.appendChild(body);
-
-        const nav=document.createElement("div");
-        nav.className="slip-voice-nav";
-        pageEl=document.createElement("div");
-        pageEl.className="slip-voice-page";
-        nav.appendChild(pageEl);
-        voice.appendChild(nav);
-      }else{
-        voice.appendChild(stage);
-      }
-
-      function show(n,manual){
-        const next=(n+items.length)%items.length;
-        if(next===idx&&pageEl)return;
-        items[idx].classList.remove("on");
-        idx=next;
-        items[idx].classList.add("on");
-        if(pageEl)pageEl.textContent=(idx+1)+" / "+items.length;
-        if(manual)track("testimonial_next",order[idx]);
-      }
-      function start(){
-        if(timer||paused||reduced||items.length<2)return;
-        timer=setInterval(function(){show(idx+1,false);},7000);
-      }
-      function stop(){ if(timer){clearInterval(timer);timer=null;} }
-
-      /* 事件只帶匿名 id、分類與類型，不含任何個資（十三）。
-         自動輪播不送事件——7 秒一次會灌爆 GA4，數字也沒有意義。 */
-      function track(name,v){
-        try{gtag("event",name,{testimonial_id:v.id,testimonial_category:v.cat,
-          testimonial_kind:v.kind,theme:theme,subtheme:subtheme});}catch(e){}
-      }
-
-      if(pageEl)pageEl.textContent="1 / "+items.length;
-      voice.addEventListener("mouseenter",stop);
-      voice.addEventListener("mouseleave",function(){ if(!paused)start(); });
-
-      /* 捲出畫面就停掉計時（九-11），順便在第一次看見時送 testimonial_view。 */
-      if(window.IntersectionObserver){
-        new IntersectionObserver(function(entries){
-          entries.forEach(function(en){
-            if(en.isIntersecting){
-              if(!seen){seen=true;track("testimonial_view",order[0]);}
-              if(!paused)start();
-            }else stop();
-          });
-        },{threshold:.4}).observe(voice);
-      }else start();
-
-      /* ⑥ 回饋放在「看完整目錄」與 ⑦ 購買按鈕之間（施工單三）。 */
-      section.insertBefore(voice,buyBtn);
-    }
 
     /* extended_entry_view —— 這一批的核心指標：到底有多少人真的看到延伸籤入口。
        必須是「捲進視窗」才送，不是「渲染完成」就送。站上既有的
