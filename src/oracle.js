@@ -36,6 +36,10 @@ const PRICE = 399;
 /* 折抵暫停中。設 0 之後不管前端傳什麼都收滿 399。
    要恢復改回 99，同時要把 oracle.html 的 CREDIT_ON 改成 true。 */
 const DEEP_CREDIT = 0;                   /* 已買延伸籤可折抵，前端傳 hasDeep */
+/* 老師一單的報酬。平台留 PRICE - TEACHER_FEE = 100。
+   ⚠️ 折抵如果開回來（DEEP_CREDIT = 99），客人實收只有 300，
+   平台就只剩 1 元。要恢復折抵之前，這個數字必須一起重新談。 */
+const TEACHER_FEE = 299;
 const MODEL = 'claude-sonnet-5';
 const MAX_TURNS = 10;
 const MAX_CHARS = 800;
@@ -393,7 +397,9 @@ async function adminApi(request, env, ctx, path, origin) {
 
   if (path === '/api/oracle/admin/list') {
     return json({
-      orders: await listOrders(env, 80),
+      /* 400 是索引本身的上限，等於「目前存得到的全部」。
+         原本是 80，第 81 筆以後在後台直接消失。 */
+      orders: await listOrders(env, 400),
       teachers: teacherList(env).map(t => ({ id: t.id, name: t.name })),
       canMail: !!env.RESEND_API_KEY
     }, 200, origin);
@@ -577,14 +583,23 @@ async function adminApi(request, env, ctx, path, origin) {
          這顆按鈕讓你看過之後判斷算不算同一個問題的延伸，是才放行轉成正式追問。
          守門權在你手上，所以不會變成免費送第二次占卜——ALLOW_FOLLOWUP 維持關閉，
          客人端還是沒有自助追問的入口。 */
-      if (o.st !== 'sent') return json({ error: 'bad_state' }, 400, origin);
+      /* done 也要能開。只認 sent 的話，一張單一輩子只能來回一次，
+         客人第二次再問就按不下去了。 */
+      if (o.st !== 'sent' && o.st !== 'done') return json({ error: 'bad_state' }, 400, origin);
       const ft = String(b.followup || '').trim();
       if (!ft) return json({ error: 'need_text' }, 400, origin);
+      /* followup / fu_reply 都只有一格，開新一輪之前要先把上一輪收起來，
+         不然第二輪會把第一輪蓋掉，往來紀錄就斷了。 */
+      if (o.followup) {
+        o.fu_rounds = o.fu_rounds || [];
+        o.fu_rounds.push({ t: o.done_at || now(), q: o.followup, a: o.fu_reply || '' });
+        if (o.fu_rounds.length > 10) o.fu_rounds = o.fu_rounds.slice(-10);
+      }
       o.followup = ft.slice(0, 400);
       o.fu_reply = '';
       o.edit_note = '';          /* 不清掉的話，老師端會印出寫稿階段的舊「需要修改」 */
       o.st = 'fu_wait';
-      log(o, '你', '把客人留言轉成追問，派給 ' + o.teacher);
+      log(o, '你', '開第 ' + ((o.fu_rounds || []).length + 1) + ' 輪追問，派給 ' + o.teacher);
       ctx.waitUntil(mailTeacher(env, o, '客人提出追問\n\n' + o.followup));
 
     } else if (b.act === 'fu_send') {
@@ -686,6 +701,31 @@ async function syncReview(env, o, teachers) {
    老師端 API
    ══════════════════════════════════════════════════ */
 
+/* 台北時間的「年-月」。sent_at 存的是 UTC，台北凌晨 0～8 點寄出的單
+   會落在前一個 UTC 日，直接切字串的話月初月底會整整差一個月。
+   台灣沒有日光節約，固定 +8 小時就夠。 */
+function taipeiMonth(iso) {
+  const d = new Date(iso || '');
+  if (isNaN(d.getTime())) return '';
+  return new Date(d.getTime() + 8 * 60 * 60 * 1000).toISOString().slice(0, 7);
+}
+
+/* 老師的本月報酬。規則：
+   月份以「寄給客人那天」認定，不是下單日也不是結案日。
+   退款的單不計入——它們的狀態不在 teacher/list 的 keep 清單裡，
+   根本不會傳到老師端，所以這裡不用再排除一次。 */
+function teacherPay(orders) {
+  const month = taipeiMonth(new Date().toISOString());
+  const rows = orders.filter(o => o.paid && o.sent_at && taipeiMonth(o.sent_at) === month);
+  return {
+    month: month,
+    fee: TEACHER_FEE,
+    count: rows.length,
+    total: rows.length * TEACHER_FEE,
+    rows: rows.map(o => ({ id: o.id, sent_at: o.sent_at }))
+  };
+}
+
 function teacherList(env) {
   return String(env.TEACHER_KEYS || '').split(',').map(s => s.trim()).filter(Boolean)
     .map(s => {
@@ -707,7 +747,9 @@ async function teacherApi(request, env, ctx, path, origin) {
   if (!env.ORDERS) return json({ error: 'no_kv' }, 500, origin);
 
   if (path === '/api/oracle/teacher/list') {
-    const all = await listOrders(env, 80);
+    /* 這裡一定要抓滿，因為是「先抓最新 N 筆、再篩出這位老師的」。
+       原本抓 80，三位老師分下來，她自己比較早期的單等於整批消失。 */
+    const all = await listOrders(env, 400);
     const keep = ['writing', 'draft_wait', 'draft_doing', 'fu_wait',
                   'fu_review', 'fu_doing', 'sent', 'done'];
     const mine = all.filter(o =>
@@ -717,6 +759,7 @@ async function teacherApi(request, env, ctx, path, origin) {
       canUpload: !!env.MEDIA,
       minDraft: MIN_DRAFT,
       maxImages: MAX_IMAGES,
+      pay: teacherPay(mine),
       orders: mine.map(o => {
         const c = Object.assign({}, o);
         delete c.email;      // 老師看不到客人信箱
@@ -1261,6 +1304,25 @@ function tone(s){return TONE[s]||'wait'}
 function label(s){return LABEL[s]||s}
 function fmt(t){return String(t||'').slice(0,16).replace('T',' ')}
 function val(id){var e=document.getElementById(id);return e?e.value:''}
+/* 追問的往來紀錄。followup / fu_reply 只存「當前這一輪」，先前的輪次收在
+   fu_rounds，這裡合起來依序列出。正在進行中的那一輪已經有專屬區塊在顯示，
+   所以排除掉，不然會重複印兩次。 */
+function fuRounds(o){
+  var rs = (o.fu_rounds||[]).slice();
+  if(o.followup && ['fu_wait','fu_review','fu_doing'].indexOf(o.st) < 0)
+    rs.push({ t:o.done_at||'', q:o.followup, a:o.fu_reply||'' });
+  return rs;
+}
+function fuHistory(o){
+  var rs = fuRounds(o);
+  if(!rs.length) return '';
+  return '<details style="margin-top:8px"><summary>追問紀錄（'+rs.length+'）</summary>'
+    + rs.map(function(r,i){
+        return '<div class="warn" style="margin-top:8px">第 '+(i+1)+' 輪　'+fmt(r.t)
+             + '<br>客人：'+esc(r.q)+'</div><div class="reading">'
+             + esc(r.a||'（還沒回覆）')+'</div>' }).join('')
+    + '</details>';
+}
 `;
 
 const PAGE_ADMIN = `<!doctype html><html lang="zh-Hant"><head>
@@ -1547,18 +1609,27 @@ function card(o){
     h += '<div class="hint">已於 '+fmt(o.sent_at)+' 寄出。客人可以留評價，之後手動結案即可。</div>';
     h += '<details><summary>看稿件</summary><div class="reading">'+esc(o.draft)+'</div></details>';
     h += '<details><summary>牌陣照片（'+(o.images||[]).length+'）</summary>'+shots(o)+'</details>';
-    /* 客人的延伸問題幾乎都寫在「想給老師的話」，先帶進來讓你改；沒留言時這一段收合 */
-    h += '<details'+((o.review && o.review.note) ? ' open' : '')+' style="margin-top:12px">'
-       + '<summary>客人追問，派給老師回覆</summary>';
+    h += '<div class="btns" style="margin-top:10px">'+b(o.id,'close','ghost','手動結案')+'</div>';
+  }
+
+  /* 已寄出和已完成都可以開新一輪追問。已完成也要能開，否則一張單只能來回一次。 */
+  if(o.st === 'sent' || o.st === 'done'){
+    var done = (o.fu_rounds||[]).length + (o.followup ? 1 : 0);
+    if(o.st === 'done'){
+      h += '<div class="hint">已結案。客人再問的話，可以從下面開新的一輪。</div>';
+      h += '<details><summary>看稿件</summary><div class="reading">'+esc(o.draft)+'</div></details>';
+      h += '<details><summary>牌陣照片（'+(o.images||[]).length+'）</summary>'+shots(o)+'</details>';
+    }
+    h += '<details'+((o.review && o.review.note && !done) ? ' open' : '')+' style="margin-top:12px">'
+       + '<summary>'+(done ? '再開一輪追問' : '客人追問，派給老師回覆')+'</summary>';
     h += '<label>要給老師的追問內容</label>';
     h += '<textarea id="fo_'+o.id+'" rows="3" placeholder="客人想追問什麼。確定是同一個問題的延伸再放行。">'
-       + esc((o.review && o.review.note) || '')+'</textarea>';
+       + esc(done ? '' : ((o.review && o.review.note) || ''))+'</textarea>';
     h += '<div class="btns"><button class="b ok" onclick="fuOpen(\\''+o.id+'\\')">轉成追問，派給'
        + esc(o.teacher)+'</button></div>';
     h += '<div class="hint">按下去狀態變「追問待回覆」，系統寄信通知老師，老師端就會出現回覆框。'
-       + '老師寫完回到你這裡審稿，通過才寄給客人。</div>';
+       + '老師寫完回到你這裡審稿，通過才寄給客人——老師沒辦法跳過你直接寄。</div>';
     h += '</details>';
-    h += '<div class="btns" style="margin-top:10px">'+b(o.id,'close','ghost','手動結案')+'</div>';
   }
 
   if(o.st === 'fu_wait'){
@@ -1580,6 +1651,8 @@ function card(o){
     h += '<div class="warn">原因：'+esc(o.q_note)+'<br>請到綠界後台完成退刷，回來按下方按鈕。</div>';
     h += '<div class="btns">'+b(o.id,'refunded','ok','已完成退款')+'</div>';
   }
+
+  h += fuHistory(o);
 
   /* 不分狀態都可以回信，客人隨時可能來問事情 */
   h += '<details style="margin-top:12px"><summary>回信給客人</summary>';
@@ -1839,6 +1912,7 @@ const PAGE_TEACHER = `<!doctype html><html lang="zh-Hant"><head>
 <div id="app" hidden>
   <div class="bar"><h1><img src="/assets/logo-mark.png" alt="" class="lg"><span id="me"></span><em id="cnt"></em></h1></div>
   <div class="tabs" id="tabs"></div>
+  <div class="wrap" id="pay"></div>
   <div class="wrap" id="list"></div>
   <div class="navbar">
     <button onclick="signOut()">登出</button>
@@ -1853,7 +1927,7 @@ function signOut(){
 }
 var MAXIMG = ${MAX_IMAGES}, MINWORD = ${MIN_DRAFT};
 var KEY = sessionStorage.getItem('uw_teacher') || '';
-var ALL = [], CANUP = false, ME = '', F = 'todo';
+var ALL = [], CANUP = false, ME = '', F = 'todo', PAY = null;
 var WANT = new URLSearchParams(location.search).get('id') || '';
 var G = [
   ['todo','要寫的',['writing','fu_wait']],
@@ -1883,7 +1957,9 @@ function render(d){
   if(d.orders) ALL = d.orders;
   if(typeof d.canUpload !== 'undefined') CANUP = d.canUpload;
   if(d.me) ME = d.me.name;
+  if(d.pay) PAY = d.pay;
   document.getElementById('me').textContent = ME;
+  renderPay();
   var todo = ALL.filter(function(o){ return ['writing','fu_wait'].indexOf(o.st)>=0 }).length;
   document.getElementById('cnt').textContent = todo ? '有 '+todo+' 件要寫' : '目前沒有待辦';
   document.getElementById('tabs').innerHTML = G.map(function(g){
@@ -1920,6 +1996,25 @@ function focusWanted(){
   }, 60);
 }
 function setF(f){ F = f; render({}) }
+
+/* 本月報酬。金額由後端算好送過來，這裡只負責顯示——
+   月份要用台北時間切，交給後端統一處理比較不會跟裝置時區打架。 */
+function renderPay(){
+  var el = document.getElementById('pay');
+  if(!el) return;
+  if(!PAY){ el.innerHTML = ''; return }
+  var h = '<div class="card"><div class="top">'
+        + '<span class="id">'+esc(PAY.month)+'　本月報酬</span>'
+        + '<span class="tag done">NT$ '+PAY.total+'</span></div>';
+  h += '<div class="hint">已寄給客人 '+PAY.count+' 單 × '+PAY.fee+' 元。'
+     + '以寄出給客人那天計算，退款的單不計入。</div>';
+  if(PAY.rows && PAY.rows.length){
+    h += '<details><summary>看是哪幾單</summary><div class="logs">'
+       + PAY.rows.map(function(r){ return fmt(r.sent_at)+'　'+esc(r.id) }).join('<br>')
+       + '</div></details>';
+  }
+  el.innerHTML = h + '</div>';
+}
 
 function card(o){
   var h = '<div class="card" id="c_card_'+o.id+'">';
@@ -1983,12 +2078,8 @@ function card(o){
       h += '<div class="hint" style="margin-top:8px">公開評價：' + esc(o.review.text) + '</div>';
     }
     h += '<details><summary>看內容</summary><div class="reading">'+esc(o.draft)+'</div></details>';
-    /* 走完追問變成「已完成」之後，追問和回覆就只剩這裡看得到了 */
-    if(o.followup){
-      h += '<details><summary>看追問與你的回覆</summary>'
-         + '<div class="warn">客人追問：'+esc(o.followup)+'</div>'
-         + '<div class="reading">'+esc(o.fu_reply || '（還沒回覆）')+'</div></details>';
-    }
+    /* 走完追問之後，每一輪的往來就只剩這裡看得到了 */
+    h += fuHistory(o);
   }
   return h + '</div>';
 }
