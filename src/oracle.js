@@ -647,12 +647,21 @@ async function adminApi(request, env, ctx, path, origin) {
 
     } else if (b.act === 'close') {
       /* 臨時狀況用的手門，任何狀態都收——有時候就是沒辦法照系統走。
-         但完成通知只在「解讀確實寄出去過」才寄：那封信寫的是
-         「本次服務到這裡完成，請留幾句評價」，半途強制結案還寄給
-         什麼都沒收到的客人，只會讓她一頭霧水。 */
-      const notify = !!o.sent_at;
-      o.st = 'done'; o.done_at = now();
-      log(o, '你', notify ? '手動結案，已寄完成通知' : '手動結案（解讀沒寄出過，未寄通知）');
+         分兩種，差別留在訂單裡（close_kind）也留在紀錄裡：
+           done   事情確實做完了，包含在系統外另行解決的
+           undone 沒做完就收掉
+         完成通知只在「標記完成」且「解讀確實寄出去過」才寄。那封信寫的是
+         「本次服務到這裡完成，請留幾句評價」，寄給什麼都沒收到的客人
+         只會讓她一頭霧水。 */
+      const asDone = b.kind !== 'undone';
+      const notify = asDone && !!o.sent_at;
+      o.st = 'done';
+      o.done_at = now();
+      o.close_kind = asDone ? 'done' : 'undone';
+      o.close_note = String(b.close_note || '').slice(0, 200);
+      log(o, '你', (asDone ? '結案・完成' : '結案・未完成')
+                 + (o.close_note ? '：' + o.close_note : '')
+                 + (notify ? '（已寄完成通知）' : '（未寄通知）'));
       if (notify) ctx.waitUntil(mailCustomerDone(env, o));
 
     } else {
@@ -951,6 +960,9 @@ function publicView(o) {
     followup: o.followup,
     fu_reply: o.st === 'done' ? o.fu_reply : '',
     sent_at: o.sent_at || '',
+    /* 退款與否要看這個，不能看 st——手動結案會把 st 蓋成 done，
+       但退款這件事已經發生，不該從客人眼前消失 */
+    refunded_at: o.refunded_at || '',
     hasReview: !!o.review
   };
 }
@@ -1676,13 +1688,19 @@ function card(o){
        + '</details>';
   }
 
-  /* 臨時狀況用的手門，不分狀態都在。已結案的不用再按；退款那兩個狀態
-     不給按，因為結案會把狀態蓋成 done，對帳上的退款紀錄就不見了——
-     那兩個有自己的退款按鈕。 */
-  if(o.st !== 'done' && o.st !== 'refund' && o.st !== 'refunded'){
-    h += '<div class="btns" style="margin-top:12px">'
-       + '<button class="b ghost" onclick="closeOrder(\\''+o.id+'\\')">手動結案</button></div>';
+  /* 臨時狀況用的手門，每一筆都有，不分狀態。退款的單也能按——
+     對帳改看 refunded_at，不會因為狀態被蓋成 done 就把退款算成實收。 */
+  if(o.close_kind){
+    h += '<div class="hint" style="margin-top:12px">'
+       + (o.close_kind === 'undone' ? '已結案・未完成' : '已結案・完成')
+       + '　'+fmt(o.done_at)
+       + (o.close_note ? '<br>原因：'+esc(o.close_note) : '') + '</div>';
   }
+  h += '<label style="margin-top:12px">結案原因（選填，只有你看得到）</label>';
+  h += '<input id="cn_'+o.id+'" placeholder="例如：客人臨時取消、我們另外處理掉了">';
+  h += '<div class="btns">'
+     + '<button class="b ok" onclick="closeOrder(\\''+o.id+'\\',1)">結案・完成</button>'
+     + '<button class="b no" onclick="closeOrder(\\''+o.id+'\\',0)">結案・未完成</button></div>';
 
   if(o.review){
     if(o.review.text){
@@ -1720,6 +1738,10 @@ function loadBook(){
 
 function ym(t){ return String(t || '').slice(0, 7); }
 
+/* 退款要看 refunded_at，不能看 st——手動結案會把 st 蓋成 done，
+   用 st 判斷的話那一筆會被算成實收，帳就錯了。 */
+function isRefunded(r){ return !!r.refunded_at }
+
 function renderBook(){
   if(!BOOK.length){
     document.getElementById('list').innerHTML = '<div class="empty">還沒有已付款的訂單</div>';
@@ -1738,8 +1760,8 @@ function renderBook(){
     var rows = months[k];
     var gross = 0, refund = 0, noInv = 0;
     rows.forEach(function(r){
-      if(r.st === 'refunded'){ refund += r.amount } else { gross += r.amount }
-      if(r.st !== 'refunded' && !r.invoice_no) noInv++;
+      if(isRefunded(r)){ refund += r.amount } else { gross += r.amount }
+      if(!isRefunded(r) && !r.invoice_no) noInv++;
     });
 
     h += '<div class="card">';
@@ -1753,12 +1775,12 @@ function renderBook(){
 
     h += '<table class="bk"><tr><th>日期</th><th>編號</th><th>金額</th><th>發票</th></tr>';
     rows.forEach(function(r){
-      h += '<tr' + (r.st === 'refunded' ? ' class="rf"' : '') + '>'
+      h += '<tr' + (isRefunded(r) ? ' class="rf"' : '') + '>'
          + '<td>' + esc(String(r.paid_at).slice(5,10)) + '</td>'
          + '<td class="mono">' + esc(r.id.slice(-8)) + '<br><span class="sub2">'
          + esc(r.teacher) + (r.hasDeep ? '・折抵' : '') + '</span></td>'
-         + '<td>' + (r.st === 'refunded' ? '<s>' + r.amount + '</s>' : r.amount) + '</td>'
-         + '<td>' + (r.st === 'refunded'
+         + '<td>' + (isRefunded(r) ? '<s>' + r.amount + '</s>' : r.amount) + '</td>'
+         + '<td>' + (isRefunded(r)
               ? '—'
               : '<input class="inv" data-inv="' + r.id + '" id="iv_' + r.id
                 + '" value="' + esc(r.invoice_no) + '" placeholder="填號碼">')
@@ -1801,7 +1823,7 @@ function csv(month){
   var body = rows.map(function(r){
     return [String(r.paid_at).slice(0,19).replace('T',' '), r.id, r.trade_no, r.amount,
             r.hasDeep ? '是' : '否', r.teacher,
-            r.st === 'refunded' ? '已退款' : '正常', r.invoice_no].join(',');
+            isRefunded(r) ? '已退款' : '正常', r.invoice_no].join(',');
   }).join('\\n');
   /* 加 BOM，Excel 開中文才不會變亂碼 */
   var blob = new Blob(['\\ufeff' + head + body], { type: 'text/csv;charset=utf-8' });
@@ -1852,14 +1874,17 @@ function act2(id, a){
     .catch(function(){ alert('沒有成功，請重試') });
 }
 
-/* 結案的後果不一樣，所以確認視窗要講清楚會不會寄信給客人 */
-function closeOrder(id){
+/* 兩種結案的後果不一樣，確認視窗要先講清楚會不會寄信給客人 */
+function closeOrder(id, asDone){
   var o = ALL.filter(function(x){ return x.id === id })[0];
-  var msg = (o && o.sent_at)
-    ? '結案這一筆？\\n客人會收到「本次服務已完成」的通知信，並邀請她留評價。'
-    : '直接結案？\\n解讀還沒寄給客人，所以不會寄完成通知，只是把這一筆收掉。';
+  var notify = asDone && o && o.sent_at;
+  var msg = asDone
+    ? (notify ? '標記為「完成」結案？\\n客人會收到「本次服務已完成」的通知信，並邀請她留評價。'
+              : '標記為「完成」結案？\\n解讀沒有寄出過，所以不會寄通知信。')
+    : '標記為「未完成」結案？\\n不會寄任何信給客人，只是把這一筆收掉並記下原因。';
   if(!confirm(msg)) return;
-  api('/api/oracle/admin/act', { id:id, act:'close' })
+  api('/api/oracle/admin/act', { id:id, act:'close',
+      kind: asDone ? 'done' : 'undone', close_note: val('cn_'+id).trim() })
     .then(load).catch(function(){ alert('沒有成功，請重試') });
 }
 
@@ -2281,7 +2306,7 @@ function eta(o){
   if(o.st === 'sent' || o.st === 'done'){
     return '<dt>已寄出</dt><dd>'+esc(String(o.sent_at||'').slice(0,16).replace('T',' '))+'</dd>';
   }
-  if(['refund','refunded'].indexOf(o.st) >= 0) return '';
+  if(o.refunded_at || ['refund','refunded'].indexOf(o.st) >= 0) return '';
   return '<dt>預計完成</dt><dd>付款後 24–48 小時內</dd>';
 }
 
@@ -2307,7 +2332,9 @@ function show(o){
   if(o.st === 'draft_wait' || o.st === 'draft_doing')
     h += '<div class="hint">老師已完成，我們正在校閱，很快就會寄給你。</div>';
   if(o.st === 'refund') h += '<div class="warn">這一題我們沒有辦法接，正在為你辦理退款。</div>';
-  if(o.st === 'refunded') h += '<div class="warn">退款已完成。</div>';
+  /* 看 refunded_at 不看 st：手動結案會把 st 蓋成 done，
+     但「已經退錢給你」這件事不該從客人眼前消失 */
+  if(o.refunded_at) h += '<div class="warn">退款已完成。</div>';
 
   if(o.draft){
     h += '<div class="reading">'+esc(o.draft)+'</div>';
