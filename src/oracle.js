@@ -489,6 +489,34 @@ async function adminApi(request, env, ctx, path, origin) {
       log(o, '你', '退回重寫：' + note);
       ctx.waitUntil(mailTeacher(env, o, '退回重寫\n\n' + note));
 
+    } else if (b.act === 'mail_customer') {
+      /* 客人直接來問事情時，從後台回信。寄出的內容會留在訂單裡，
+         之後打開這一筆就看得到跟她講過什麼，不用回信箱翻。
+         不分狀態都可以寄，因為客人隨時可能來問。 */
+      const msg = String(b.text || '').trim();
+      if (!msg) return json({ error: 'need_text' }, 400, origin);
+      if (!o.email) return json({ error: 'no_email' }, 400, origin);
+      o.mails = o.mails || [];
+      o.mails.push({ t: now(), text: msg.slice(0, 2000) });
+      if (o.mails.length > 20) o.mails = o.mails.slice(-20);
+      log(o, '你', '回信給客人（' + msg.length + ' 字）');
+      ctx.waitUntil(mailCustomer(env, o, '關於你的訂單', msg));
+
+    } else if (b.act === 'fu_open') {
+      /* 客人的延伸問題多半寫在「想給老師的話」那一欄，那一欄是單向的，兩邊都沒有回覆框。
+         這顆按鈕讓你看過之後判斷算不算同一個問題的延伸，是才放行轉成正式追問。
+         守門權在你手上，所以不會變成免費送第二次占卜——ALLOW_FOLLOWUP 維持關閉，
+         客人端還是沒有自助追問的入口。 */
+      if (o.st !== 'sent') return json({ error: 'bad_state' }, 400, origin);
+      const ft = String(b.followup || '').trim();
+      if (!ft) return json({ error: 'need_text' }, 400, origin);
+      o.followup = ft.slice(0, 400);
+      o.fu_reply = '';
+      o.edit_note = '';          /* 不清掉的話，老師端會印出寫稿階段的舊「需要修改」 */
+      o.st = 'fu_wait';
+      log(o, '你', '把客人留言轉成追問，派給 ' + o.teacher);
+      ctx.waitUntil(mailTeacher(env, o, '客人提出追問\n\n' + o.followup));
+
     } else if (b.act === 'fu_send') {
       if (!o.fu_reply) return json({ error: 'no_reply' }, 400, origin);
       o.st = 'done'; o.done_at = now();
@@ -582,6 +610,7 @@ async function teacherApi(request, env, ctx, path, origin) {
         const c = Object.assign({}, o);
         delete c.email;      // 老師看不到客人信箱
         delete c.trade_no;
+        delete c.mails;      // 你跟客人的私下往來，老師也不用看到
         return c;
       })
     }, 200, origin);
@@ -1333,6 +1362,17 @@ function card(o){
   if(o.st === 'sent'){
     h += '<div class="hint">已於 '+fmt(o.sent_at)+' 寄出。客人可以留評價，之後手動結案即可。</div>';
     h += '<details><summary>看稿件</summary><div class="reading">'+esc(o.draft)+'</div></details>';
+    /* 客人的延伸問題幾乎都寫在「想給老師的話」，先帶進來讓你改；沒留言時這一段收合 */
+    h += '<details'+((o.review && o.review.note) ? ' open' : '')+' style="margin-top:12px">'
+       + '<summary>客人追問，派給老師回覆</summary>';
+    h += '<label>要給老師的追問內容</label>';
+    h += '<textarea id="fo_'+o.id+'" rows="3" placeholder="客人想追問什麼。確定是同一個問題的延伸再放行。">'
+       + esc((o.review && o.review.note) || '')+'</textarea>';
+    h += '<div class="btns"><button class="b ok" onclick="fuOpen(\\''+o.id+'\\')">轉成追問，派給'
+       + esc(o.teacher)+'</button></div>';
+    h += '<div class="hint">按下去狀態變「追問待回覆」，系統寄信通知老師，老師端就會出現回覆框。'
+       + '老師寫完回到你這裡審稿，通過才寄給客人。</div>';
+    h += '</details>';
     h += '<div class="btns" style="margin-top:10px">'+b(o.id,'close','ghost','手動結案')+'</div>';
   }
 
@@ -1354,6 +1394,20 @@ function card(o){
   if(o.st === 'refund'){
     h += '<div class="warn">原因：'+esc(o.q_note)+'<br>請到綠界後台完成退刷，回來按下方按鈕。</div>';
     h += '<div class="btns">'+b(o.id,'refunded','ok','已完成退款')+'</div>';
+  }
+
+  /* 不分狀態都可以回信，客人隨時可能來問事情 */
+  h += '<details style="margin-top:12px"><summary>回信給客人</summary>';
+  h += '<textarea id="m_'+o.id+'" rows="4" placeholder="直接寫給客人的話。寄出後會留在下面，之後打開這一筆還看得到。"></textarea>';
+  h += '<div class="btns"><button class="b ok" onclick="mailCust(\\''+o.id+'\\')">寄出</button></div>';
+  h += '<div class="hint">信裡會自動附上訂單查詢連結。老師看不到這裡的往來。</div>';
+  h += '</details>';
+  if(o.mails && o.mails.length){
+    h += '<details style="margin-top:8px"><summary>已回信給客人（'+o.mails.length+'）</summary>'
+       + o.mails.slice().reverse().map(function(m){
+           return '<div class="reading"><div class="hint" style="margin-bottom:6px">'
+                + fmt(m.t)+'</div>'+esc(m.text)+'</div>' }).join('')
+       + '</details>';
   }
 
   if(o.review){
@@ -1521,6 +1575,22 @@ function act2(id, a){
   api('/api/oracle/admin/act', { id:id, act:a }).then(load);
 }
 
+function mailCust(id){
+  var t = val('m_'+id).trim();
+  if(t.length < 2){ alert('先寫點內容'); return }
+  if(!confirm('寄給客人？')) return;
+  api('/api/oracle/admin/act', { id:id, act:'mail_customer', text:t })
+    .then(load).catch(function(){ alert('沒有成功，請重試') });
+}
+
+function fuOpen(id){
+  var t = val('fo_'+id).trim();
+  if(t.length < 5){ alert('追問內容再多寫一點'); return }
+  if(!confirm('轉成追問派給老師？老師會收到通知信。')) return;
+  api('/api/oracle/admin/act', { id:id, act:'fu_open', followup:t })
+    .then(load).catch(function(){ alert('沒有成功，請重試') });
+}
+
 function saveText(id, kind){
   var body = { id: id, act: 'edit_draft' };
   if(kind === 'd') body.draft = val('d_'+id); else body.fu_reply = val('f_'+id);
@@ -1649,13 +1719,16 @@ function focusWanted(){
     if(to){ F = to[0]; render({}); return }
   }
   setTimeout(function(){
-    var el = document.getElementById('t_card_' + WANT);
+    /* 一定要先把 WANT 清掉再去找卡片。找不到就直接 return、WANT 留著的話，
+       之後每次重畫都會再跑一次這裡，把分頁硬拉回這一筆所在的那一組——
+       老師按「要寫的」「審稿中」就會像壞掉一樣彈回「已完成」。 */
+    var want = WANT; WANT = '';
+    var el = document.getElementById('c_card_' + want);   /* 卡片 id 是 c_card_，不是 t_card_ */
     if(!el) return;
     el.scrollIntoView({ behavior:'smooth', block:'start' });
     el.classList.add('lit');
-    var box = document.getElementById('t_' + WANT);
+    var box = document.getElementById('t_' + want);
     if(box) box.focus();
-    WANT = '';
   }, 60);
 }
 function setF(f){ F = f; render({}) }
@@ -1716,6 +1789,12 @@ function card(o){
       h += '<div class="hint" style="margin-top:8px">公開評價：' + esc(o.review.text) + '</div>';
     }
     h += '<details><summary>看內容</summary><div class="reading">'+esc(o.draft)+'</div></details>';
+    /* 走完追問變成「已完成」之後，追問和回覆就只剩這裡看得到了 */
+    if(o.followup){
+      h += '<details><summary>看追問與你的回覆</summary>'
+         + '<div class="warn">客人追問：'+esc(o.followup)+'</div>'
+         + '<div class="reading">'+esc(o.fu_reply || '（還沒回覆）')+'</div></details>';
+    }
   }
   return h + '</div>';
 }
