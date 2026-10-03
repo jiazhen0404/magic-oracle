@@ -1696,7 +1696,9 @@ function card(o){
        + '　'+fmt(o.done_at)
        + (o.close_note ? '<br>原因：'+esc(o.close_note) : '') + '</div>';
   }
-  h += '<label style="margin-top:12px">結案原因（選填，只有你看得到）</label>';
+  /* 原因老師也看得到——她需要知道這一筆為什麼收掉，不然會一直等。
+     不想讓她看到的話就留空，結案照樣成立。 */
+  h += '<label style="margin-top:12px">結案原因（選填，老師也看得到）</label>';
   h += '<input id="cn_'+o.id+'" placeholder="例如：客人臨時取消、我們另外處理掉了">';
   h += '<div class="btns">'
      + '<button class="b ok" onclick="closeOrder(\\''+o.id+'\\',1)">結案・完成</button>'
@@ -2121,7 +2123,15 @@ function card(o){
        + esc(o.st.indexOf('fu')===0 ? o.fu_reply : o.draft)+'</div></details>';
   }
   if(o.st === 'sent' || o.st === 'done'){
-    h += '<div class="hint">已寄給客人。</div>';
+    /* 強制結案會把任何狀態變成 done，所以不能寫死「已寄給客人」——
+       有可能根本沒寄出過。 */
+    h += '<div class="hint">'+(o.sent_at ? '已寄給客人。' : '這一筆沒有寄出解讀。')+'</div>';
+    /* 被收掉的單要讓老師知道，不然她會一直等或繼續寫 */
+    if(o.close_kind === 'undone'){
+      h += '<div class="warn">這一筆已由平台結案・未完成　'+fmt(o.done_at)
+         + (o.close_note ? '<br>原因：'+esc(o.close_note) : '')
+         + (o.sent_at ? '' : '<br>不用再寫了。') + '</div>';
+    }
     if(o.review && o.review.note){
       h += '<div class="warn" style="border-left-color:var(--go);color:#B9D9C2">'
          + '客人想跟你說：<br>' + esc(o.review.note) + '</div>';
