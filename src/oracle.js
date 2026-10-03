@@ -393,7 +393,9 @@ async function adminApi(request, env, ctx, path, origin) {
 
   if (path === '/api/oracle/admin/list') {
     return json({
-      orders: await listOrders(env, 80),
+      /* 400 是索引本身的上限，等於「目前存得到的全部」。
+         原本是 80，第 81 筆以後在後台直接消失。 */
+      orders: await listOrders(env, 400),
       teachers: teacherList(env).map(t => ({ id: t.id, name: t.name })),
       canMail: !!env.RESEND_API_KEY
     }, 200, origin);
@@ -577,14 +579,23 @@ async function adminApi(request, env, ctx, path, origin) {
          這顆按鈕讓你看過之後判斷算不算同一個問題的延伸，是才放行轉成正式追問。
          守門權在你手上，所以不會變成免費送第二次占卜——ALLOW_FOLLOWUP 維持關閉，
          客人端還是沒有自助追問的入口。 */
-      if (o.st !== 'sent') return json({ error: 'bad_state' }, 400, origin);
+      /* done 也要能開。只認 sent 的話，一張單一輩子只能來回一次，
+         客人第二次再問就按不下去了。 */
+      if (o.st !== 'sent' && o.st !== 'done') return json({ error: 'bad_state' }, 400, origin);
       const ft = String(b.followup || '').trim();
       if (!ft) return json({ error: 'need_text' }, 400, origin);
+      /* followup / fu_reply 都只有一格，開新一輪之前要先把上一輪收起來，
+         不然第二輪會把第一輪蓋掉，往來紀錄就斷了。 */
+      if (o.followup) {
+        o.fu_rounds = o.fu_rounds || [];
+        o.fu_rounds.push({ t: o.done_at || now(), q: o.followup, a: o.fu_reply || '' });
+        if (o.fu_rounds.length > 10) o.fu_rounds = o.fu_rounds.slice(-10);
+      }
       o.followup = ft.slice(0, 400);
       o.fu_reply = '';
       o.edit_note = '';          /* 不清掉的話，老師端會印出寫稿階段的舊「需要修改」 */
       o.st = 'fu_wait';
-      log(o, '你', '把客人留言轉成追問，派給 ' + o.teacher);
+      log(o, '你', '開第 ' + ((o.fu_rounds || []).length + 1) + ' 輪追問，派給 ' + o.teacher);
       ctx.waitUntil(mailTeacher(env, o, '客人提出追問\n\n' + o.followup));
 
     } else if (b.act === 'fu_send') {
@@ -707,7 +718,9 @@ async function teacherApi(request, env, ctx, path, origin) {
   if (!env.ORDERS) return json({ error: 'no_kv' }, 500, origin);
 
   if (path === '/api/oracle/teacher/list') {
-    const all = await listOrders(env, 80);
+    /* 這裡一定要抓滿，因為是「先抓最新 N 筆、再篩出這位老師的」。
+       原本抓 80，三位老師分下來，她自己比較早期的單等於整批消失。 */
+    const all = await listOrders(env, 400);
     const keep = ['writing', 'draft_wait', 'draft_doing', 'fu_wait',
                   'fu_review', 'fu_doing', 'sent', 'done'];
     const mine = all.filter(o =>
@@ -1261,6 +1274,25 @@ function tone(s){return TONE[s]||'wait'}
 function label(s){return LABEL[s]||s}
 function fmt(t){return String(t||'').slice(0,16).replace('T',' ')}
 function val(id){var e=document.getElementById(id);return e?e.value:''}
+/* 追問的往來紀錄。followup / fu_reply 只存「當前這一輪」，先前的輪次收在
+   fu_rounds，這裡合起來依序列出。正在進行中的那一輪已經有專屬區塊在顯示，
+   所以排除掉，不然會重複印兩次。 */
+function fuRounds(o){
+  var rs = (o.fu_rounds||[]).slice();
+  if(o.followup && ['fu_wait','fu_review','fu_doing'].indexOf(o.st) < 0)
+    rs.push({ t:o.done_at||'', q:o.followup, a:o.fu_reply||'' });
+  return rs;
+}
+function fuHistory(o){
+  var rs = fuRounds(o);
+  if(!rs.length) return '';
+  return '<details style="margin-top:8px"><summary>追問紀錄（'+rs.length+'）</summary>'
+    + rs.map(function(r,i){
+        return '<div class="warn" style="margin-top:8px">第 '+(i+1)+' 輪　'+fmt(r.t)
+             + '<br>客人：'+esc(r.q)+'</div><div class="reading">'
+             + esc(r.a||'（還沒回覆）')+'</div>' }).join('')
+    + '</details>';
+}
 `;
 
 const PAGE_ADMIN = `<!doctype html><html lang="zh-Hant"><head>
@@ -1547,18 +1579,27 @@ function card(o){
     h += '<div class="hint">已於 '+fmt(o.sent_at)+' 寄出。客人可以留評價，之後手動結案即可。</div>';
     h += '<details><summary>看稿件</summary><div class="reading">'+esc(o.draft)+'</div></details>';
     h += '<details><summary>牌陣照片（'+(o.images||[]).length+'）</summary>'+shots(o)+'</details>';
-    /* 客人的延伸問題幾乎都寫在「想給老師的話」，先帶進來讓你改；沒留言時這一段收合 */
-    h += '<details'+((o.review && o.review.note) ? ' open' : '')+' style="margin-top:12px">'
-       + '<summary>客人追問，派給老師回覆</summary>';
+    h += '<div class="btns" style="margin-top:10px">'+b(o.id,'close','ghost','手動結案')+'</div>';
+  }
+
+  /* 已寄出和已完成都可以開新一輪追問。已完成也要能開，否則一張單只能來回一次。 */
+  if(o.st === 'sent' || o.st === 'done'){
+    var done = (o.fu_rounds||[]).length + (o.followup ? 1 : 0);
+    if(o.st === 'done'){
+      h += '<div class="hint">已結案。客人再問的話，可以從下面開新的一輪。</div>';
+      h += '<details><summary>看稿件</summary><div class="reading">'+esc(o.draft)+'</div></details>';
+      h += '<details><summary>牌陣照片（'+(o.images||[]).length+'）</summary>'+shots(o)+'</details>';
+    }
+    h += '<details'+((o.review && o.review.note && !done) ? ' open' : '')+' style="margin-top:12px">'
+       + '<summary>'+(done ? '再開一輪追問' : '客人追問，派給老師回覆')+'</summary>';
     h += '<label>要給老師的追問內容</label>';
     h += '<textarea id="fo_'+o.id+'" rows="3" placeholder="客人想追問什麼。確定是同一個問題的延伸再放行。">'
-       + esc((o.review && o.review.note) || '')+'</textarea>';
+       + esc(done ? '' : ((o.review && o.review.note) || ''))+'</textarea>';
     h += '<div class="btns"><button class="b ok" onclick="fuOpen(\\''+o.id+'\\')">轉成追問，派給'
        + esc(o.teacher)+'</button></div>';
     h += '<div class="hint">按下去狀態變「追問待回覆」，系統寄信通知老師，老師端就會出現回覆框。'
-       + '老師寫完回到你這裡審稿，通過才寄給客人。</div>';
+       + '老師寫完回到你這裡審稿，通過才寄給客人——老師沒辦法跳過你直接寄。</div>';
     h += '</details>';
-    h += '<div class="btns" style="margin-top:10px">'+b(o.id,'close','ghost','手動結案')+'</div>';
   }
 
   if(o.st === 'fu_wait'){
@@ -1580,6 +1621,8 @@ function card(o){
     h += '<div class="warn">原因：'+esc(o.q_note)+'<br>請到綠界後台完成退刷，回來按下方按鈕。</div>';
     h += '<div class="btns">'+b(o.id,'refunded','ok','已完成退款')+'</div>';
   }
+
+  h += fuHistory(o);
 
   /* 不分狀態都可以回信，客人隨時可能來問事情 */
   h += '<details style="margin-top:12px"><summary>回信給客人</summary>';
@@ -1983,12 +2026,8 @@ function card(o){
       h += '<div class="hint" style="margin-top:8px">公開評價：' + esc(o.review.text) + '</div>';
     }
     h += '<details><summary>看內容</summary><div class="reading">'+esc(o.draft)+'</div></details>';
-    /* 走完追問變成「已完成」之後，追問和回覆就只剩這裡看得到了 */
-    if(o.followup){
-      h += '<details><summary>看追問與你的回覆</summary>'
-         + '<div class="warn">客人追問：'+esc(o.followup)+'</div>'
-         + '<div class="reading">'+esc(o.fu_reply || '（還沒回覆）')+'</div></details>';
-    }
+    /* 走完追問之後，每一輪的往來就只剩這裡看得到了 */
+    h += fuHistory(o);
   }
   return h + '</div>';
 }
