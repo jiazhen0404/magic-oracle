@@ -646,9 +646,14 @@ async function adminApi(request, env, ctx, path, origin) {
       log(o, '你', '修改評價文字');
 
     } else if (b.act === 'close') {
+      /* 臨時狀況用的手門，任何狀態都收——有時候就是沒辦法照系統走。
+         但完成通知只在「解讀確實寄出去過」才寄：那封信寫的是
+         「本次服務到這裡完成，請留幾句評價」，半途強制結案還寄給
+         什麼都沒收到的客人，只會讓她一頭霧水。 */
+      const notify = !!o.sent_at;
       o.st = 'done'; o.done_at = now();
-      log(o, '你', '手動結案');
-      ctx.waitUntil(mailCustomerDone(env, o));
+      log(o, '你', notify ? '手動結案，已寄完成通知' : '手動結案（解讀沒寄出過，未寄通知）');
+      if (notify) ctx.waitUntil(mailCustomerDone(env, o));
 
     } else {
       return json({ error: 'bad_act' }, 400, origin);
@@ -1613,7 +1618,6 @@ function card(o){
     h += '<div class="hint">已於 '+fmt(o.sent_at)+' 寄出。客人可以留評價，之後手動結案即可。</div>';
     h += '<details><summary>看稿件</summary><div class="reading">'+esc(o.draft)+'</div></details>';
     h += '<details><summary>牌陣照片（'+(o.images||[]).length+'）</summary>'+shots(o)+'</details>';
-    h += '<div class="btns" style="margin-top:10px">'+b(o.id,'close','ghost','手動結案')+'</div>';
   }
 
   /* 已寄出和已完成都可以開新一輪追問。已完成也要能開，否則一張單只能來回一次。 */
@@ -1670,6 +1674,14 @@ function card(o){
            return '<div class="reading"><div class="hint" style="margin-bottom:6px">'
                 + fmt(m.t)+'</div>'+esc(m.text)+'</div>' }).join('')
        + '</details>';
+  }
+
+  /* 臨時狀況用的手門，不分狀態都在。已結案的不用再按；退款那兩個狀態
+     不給按，因為結案會把狀態蓋成 done，對帳上的退款紀錄就不見了——
+     那兩個有自己的退款按鈕。 */
+  if(o.st !== 'done' && o.st !== 'refund' && o.st !== 'refunded'){
+    h += '<div class="btns" style="margin-top:12px">'
+       + '<button class="b ghost" onclick="closeOrder(\\''+o.id+'\\')">手動結案</button></div>';
   }
 
   if(o.review){
@@ -1838,6 +1850,17 @@ function act2(id, a){
   if(a === 'review_no' && !confirm('取消公開？前台老師頁會拿掉這則評價。')) return;
   api('/api/oracle/admin/act', { id:id, act:a }).then(load)
     .catch(function(){ alert('沒有成功，請重試') });
+}
+
+/* 結案的後果不一樣，所以確認視窗要講清楚會不會寄信給客人 */
+function closeOrder(id){
+  var o = ALL.filter(function(x){ return x.id === id })[0];
+  var msg = (o && o.sent_at)
+    ? '結案這一筆？\\n客人會收到「本次服務已完成」的通知信，並邀請她留評價。'
+    : '直接結案？\\n解讀還沒寄給客人，所以不會寄完成通知，只是把這一筆收掉。';
+  if(!confirm(msg)) return;
+  api('/api/oracle/admin/act', { id:id, act:'close' })
+    .then(load).catch(function(){ alert('沒有成功，請重試') });
 }
 
 function mailCust(id){
