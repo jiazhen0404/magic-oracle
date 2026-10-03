@@ -1611,7 +1611,12 @@ const go=s=>{setShowSidebar(false);setScreen(s==="draw"?"theme":s);};const pick=
 <script>
 /* 分類興趣與延伸解籤需求追蹤 v1 */
 (function(){
-  const themeByLabel={"愛情":"love","工作":"work","選擇":"choice","生活":"life","毛孩心語":"pet","本月主題籤":"monthly","隨機一籤":"random"};
+  /* 跟情境那張表一樣，這是用「畫面上的主題卡文字」去查分類代號，
+     所以 THEMES 裡改過 label 的也要各有一筆，否則 theme 會變 unknown、
+     category_interest_* 與 situation_interest_* 都只會送出 unknown 那版。
+     THEMES 目前顯示：感情／工作／低潮中／毛孩心語／本月主題籤。
+     舊名（愛情、生活、選擇、隨機一籤）留著，舊連結與收掉的入口還查得到。 */
+  const themeByLabel={"感情":"love","愛情":"love","工作":"work","選擇":"choice","低潮中":"life","生活":"life","毛孩心語":"pet","本月主題籤":"monthly","隨機一籤":"random"};
   const themeLabels={love:"愛情",work:"工作",choice:"選擇",life:"生活",pet:"毛孩心語",monthly:"本月主題籤",random:"隨機一籤"};
   const situationSlugs={
     // 愛情這五個的 slug 一律跟付費端（src/extended-love.json 的 id）一致。
