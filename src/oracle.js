@@ -36,6 +36,10 @@ const PRICE = 399;
 /* 折抵暫停中。設 0 之後不管前端傳什麼都收滿 399。
    要恢復改回 99，同時要把 oracle.html 的 CREDIT_ON 改成 true。 */
 const DEEP_CREDIT = 0;                   /* 已買延伸籤可折抵，前端傳 hasDeep */
+/* 老師一單的報酬。平台留 PRICE - TEACHER_FEE = 100。
+   ⚠️ 折抵如果開回來（DEEP_CREDIT = 99），客人實收只有 300，
+   平台就只剩 1 元。要恢復折抵之前，這個數字必須一起重新談。 */
+const TEACHER_FEE = 299;
 const MODEL = 'claude-sonnet-5';
 const MAX_TURNS = 10;
 const MAX_CHARS = 800;
@@ -697,6 +701,31 @@ async function syncReview(env, o, teachers) {
    老師端 API
    ══════════════════════════════════════════════════ */
 
+/* 台北時間的「年-月」。sent_at 存的是 UTC，台北凌晨 0～8 點寄出的單
+   會落在前一個 UTC 日，直接切字串的話月初月底會整整差一個月。
+   台灣沒有日光節約，固定 +8 小時就夠。 */
+function taipeiMonth(iso) {
+  const d = new Date(iso || '');
+  if (isNaN(d.getTime())) return '';
+  return new Date(d.getTime() + 8 * 60 * 60 * 1000).toISOString().slice(0, 7);
+}
+
+/* 老師的本月報酬。規則：
+   月份以「寄給客人那天」認定，不是下單日也不是結案日。
+   退款的單不計入——它們的狀態不在 teacher/list 的 keep 清單裡，
+   根本不會傳到老師端，所以這裡不用再排除一次。 */
+function teacherPay(orders) {
+  const month = taipeiMonth(new Date().toISOString());
+  const rows = orders.filter(o => o.paid && o.sent_at && taipeiMonth(o.sent_at) === month);
+  return {
+    month: month,
+    fee: TEACHER_FEE,
+    count: rows.length,
+    total: rows.length * TEACHER_FEE,
+    rows: rows.map(o => ({ id: o.id, sent_at: o.sent_at }))
+  };
+}
+
 function teacherList(env) {
   return String(env.TEACHER_KEYS || '').split(',').map(s => s.trim()).filter(Boolean)
     .map(s => {
@@ -730,6 +759,7 @@ async function teacherApi(request, env, ctx, path, origin) {
       canUpload: !!env.MEDIA,
       minDraft: MIN_DRAFT,
       maxImages: MAX_IMAGES,
+      pay: teacherPay(mine),
       orders: mine.map(o => {
         const c = Object.assign({}, o);
         delete c.email;      // 老師看不到客人信箱
@@ -1882,6 +1912,7 @@ const PAGE_TEACHER = `<!doctype html><html lang="zh-Hant"><head>
 <div id="app" hidden>
   <div class="bar"><h1><img src="/assets/logo-mark.png" alt="" class="lg"><span id="me"></span><em id="cnt"></em></h1></div>
   <div class="tabs" id="tabs"></div>
+  <div class="wrap" id="pay"></div>
   <div class="wrap" id="list"></div>
   <div class="navbar">
     <button onclick="signOut()">登出</button>
@@ -1896,7 +1927,7 @@ function signOut(){
 }
 var MAXIMG = ${MAX_IMAGES}, MINWORD = ${MIN_DRAFT};
 var KEY = sessionStorage.getItem('uw_teacher') || '';
-var ALL = [], CANUP = false, ME = '', F = 'todo';
+var ALL = [], CANUP = false, ME = '', F = 'todo', PAY = null;
 var WANT = new URLSearchParams(location.search).get('id') || '';
 var G = [
   ['todo','要寫的',['writing','fu_wait']],
@@ -1926,7 +1957,9 @@ function render(d){
   if(d.orders) ALL = d.orders;
   if(typeof d.canUpload !== 'undefined') CANUP = d.canUpload;
   if(d.me) ME = d.me.name;
+  if(d.pay) PAY = d.pay;
   document.getElementById('me').textContent = ME;
+  renderPay();
   var todo = ALL.filter(function(o){ return ['writing','fu_wait'].indexOf(o.st)>=0 }).length;
   document.getElementById('cnt').textContent = todo ? '有 '+todo+' 件要寫' : '目前沒有待辦';
   document.getElementById('tabs').innerHTML = G.map(function(g){
@@ -1963,6 +1996,25 @@ function focusWanted(){
   }, 60);
 }
 function setF(f){ F = f; render({}) }
+
+/* 本月報酬。金額由後端算好送過來，這裡只負責顯示——
+   月份要用台北時間切，交給後端統一處理比較不會跟裝置時區打架。 */
+function renderPay(){
+  var el = document.getElementById('pay');
+  if(!el) return;
+  if(!PAY){ el.innerHTML = ''; return }
+  var h = '<div class="card"><div class="top">'
+        + '<span class="id">'+esc(PAY.month)+'　本月報酬</span>'
+        + '<span class="tag done">NT$ '+PAY.total+'</span></div>';
+  h += '<div class="hint">已寄給客人 '+PAY.count+' 單 × '+PAY.fee+' 元。'
+     + '以寄出給客人那天計算，退款的單不計入。</div>';
+  if(PAY.rows && PAY.rows.length){
+    h += '<details><summary>看是哪幾單</summary><div class="logs">'
+       + PAY.rows.map(function(r){ return fmt(r.sent_at)+'　'+esc(r.id) }).join('<br>')
+       + '</div></details>';
+  }
+  el.innerHTML = h + '</div>';
+}
 
 function card(o){
   var h = '<div class="card" id="c_card_'+o.id+'">';
