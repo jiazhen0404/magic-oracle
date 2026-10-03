@@ -45,7 +45,12 @@ const MAX_TURNS = 10;
 const MAX_CHARS = 800;
 const RATE_LIMIT = 30;
 const RATE_WINDOW = 3600;
-const KEEP_DAYS = 180;
+/* 訂單不自動刪除。原本 180 天到期，但到期是「整筆連信箱一起消失」——
+   客人事後回頭問，你既寄不了信也查不到當初做了什麼，對帳與老師報酬
+   也一起斷掉。
+   ⚠️ 代價：客人的信箱、稱呼、問題與背景會一直留著。線上 /privacy/
+   目前對真人占卜完全沒有交代保存規則，那段還沒補。 */
+const INDEX_MAX = 5000;   /* 訂單索引保留幾筆 id。超過才會從清單掉出去 */
 /* 免費追問。關掉的理由：客人很容易拿追問去問第二個主題，
    等於多送一次占卜。要開回來把 false 改成 true 就好。 */
 const ALLOW_FOLLOWUP = false;
@@ -86,8 +91,6 @@ function ecpayConf(env) {
   return { mode: 'stage', id: ECPAY_TEST.id, key: ECPAY_TEST.key,
            iv: ECPAY_TEST.iv, url: ECPAY_URL.stage };
 }
-const TTL = 60 * 60 * 24 * KEEP_DAYS;
-
 function now() { return new Date().toISOString(); }
 const NL = String.fromCharCode(10);   /* 信件換行 */
 
@@ -958,12 +961,13 @@ async function get(env, id) {
   return raw ? JSON.parse(raw) : null;
 }
 async function put(env, o) {
-  await env.ORDERS.put('oracle:' + o.id, JSON.stringify(o), { expirationTtl: TTL });
+  /* 不帶 expirationTtl，Cloudflare 就不會自動清掉 */
+  await env.ORDERS.put('oracle:' + o.id, JSON.stringify(o));
 }
 async function pushIndex(env, id) {
   const idx = JSON.parse((await env.ORDERS.get('oracle:idx')) || '[]');
   idx.unshift(id);
-  await env.ORDERS.put('oracle:idx', JSON.stringify(idx.slice(0, 400)));
+  await env.ORDERS.put('oracle:idx', JSON.stringify(idx.slice(0, INDEX_MAX)));
 }
 async function listOrders(env, n) {
   const idx = JSON.parse((await env.ORDERS.get('oracle:idx')) || '[]');
