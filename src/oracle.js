@@ -2507,8 +2507,26 @@ function reportPurchase(d){
   }catch(e){ console.warn('GA4 purchase 送出失敗', e); }
 }
 
+/* Meta：Purchase。跟上面 GA4 purchase 同樣兩道關卡：後端回 paid（綠界通知驗章、金額相符），
+   且後端回 countPurchase: true（去重旗標在訂單上，重新整理、換裝置都只有第一次）。
+   再加這台瀏覽器的 localStorage 記號與 eventID，雙重保險。
+   金額用訂單實收（有折抵時會少），不送姓名、信箱、問題內容。 */
+function reportMetaPurchase(d){
+  try{
+    if (!d || !d.paid || !d.countPurchase || !NO || !window.trackMetaEvent) return;
+    var amount = Number(d.amount);
+    if (!(amount > 0)) return;
+    var P = (window.UnfinishedMeta && window.UnfinishedMeta.products.oracle) || { id:'oracle_reading' };
+    window.trackMetaEvent('Purchase', {
+      value: amount, currency: 'TWD',
+      content_name: '真人占卜', content_ids: [P.id], content_type: 'product'
+    }, { once: NO, store: 'local', eventID: 'purchase_' + NO });
+  }catch(e){}
+}
+
 function done(d){
   reportPurchase(d);
+  reportMetaPurchase(d);
   document.getElementById('box').innerHTML =
     '<img src="/assets/logo.png" alt="未完籤所" class="big-logo">'
   + '<div class="card" style="text-align:center">'

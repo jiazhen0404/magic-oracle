@@ -192,6 +192,28 @@ function reportPurchase(slipId, amount){
     }));
     gtag('event','purchase_' + theme, b);
   }catch(e){ console.warn('GA4 purchase 送出失敗', e); }
+  reportMetaPurchase(slipId, amount);
+}
+
+/* ── Meta：Purchase ──
+   跟上面 GA4 的 purchase 走同一道關卡，只在 reportPurchase 裡被呼叫，所以：
+     1. 付款成功：/api/order-status 回 paid（綠界 ReturnURL 通知、驗章與金額都對才會是 paid）
+     2. 只算一次：/api/unlock 回 countPurchase: true（旗標記在後端訂單上，
+        重新整理、回上一頁、換分頁、換裝置都只有第一次會是 true）
+   另外再加兩層保險：這台瀏覽器記住「這筆已送過」（localStorage），
+   並且帶 eventID = 'purchase_' + 訂單編號，讓 Meta 端也能認出同一筆。
+   付款失敗、還沒確認、建立訂單、按購買按鈕，都不會走到這裡。
+   金額用訂單的實收金額；不送信箱或任何個資。 */
+function reportMetaPurchase(slipId, amount){
+  try{
+    if(!tradeNo || !window.trackMetaEvent) return;
+    const value = Number(amount);
+    if(!(value > 0)) return;
+    window.trackMetaEvent('Purchase', {
+      value: value, currency: 'TWD',
+      content_name: 'Extended Reading', content_ids: [slipId], content_type: 'product'
+    }, { once: tradeNo, store: 'local', eventID: 'purchase_' + tradeNo });
+  }catch(e){}
 }
 
 function show(kind, t, b, s){

@@ -1030,6 +1030,17 @@ const DEEP_CREDIT = 99;          /* 已購未完深解可折抵 */
 let hasDeep = false;
 let deepToken = '';
 
+/* ── Meta：ViewConsultation ──
+   這一頁就是真人占卜的服務介紹（老師、價格、流程），打開就算看到服務內容。
+   首頁與解籤結果頁上的「看看真人占卜」只是入口，不算。一次頁面載入只送一次。
+   價格用這一頁實際顯示的 PRICE。 */
+try{
+  const P = (window.UnfinishedMeta && window.UnfinishedMeta.products.oracle) || { id:'oracle_reading' };
+  window.trackMetaCustomEvent && window.trackMetaCustomEvent('ViewConsultation', {
+    content_type:'consultation', service_id:P.id, value:PRICE, currency:'TWD'
+  }, { once:'oracle_page' });
+}catch(e){}
+
 /* 折抵暫停中。要恢復把 false 改成 true，
    同時要把 src/oracle.js 的 DEEP_CREDIT 改回 99，兩邊一起才有用。 */
 const CREDIT_ON = false;
@@ -1766,7 +1777,25 @@ function pay(){
   .then(function(r){ return r.json().then(function(d){ return { ok:r.ok, d:d } }) })
   .then(function(x){
     if(!x.ok || !x.d.ok) throw new Error(x.d.error || 'fail');
-    goEcpay(x.d.action, x.d.fields);
+
+    /* ── Meta：InitiateCheckout ──
+       後端已經建立訂單、即將送去綠界的這一刻才送。
+       金額與訂單編號取自後端回傳的綠界欄位（有折抵時金額會比 399 少），
+       同一筆訂單只送一次。送出後等 0.3 秒再跳綠界；Pixel 沒載入就直接跳。 */
+    let sentIc = false;
+    try{
+      const fd = x.d.fields || {};
+      const amount = Number(fd.TotalAmount), orderNo = fd.MerchantTradeNo;
+      const P = (window.UnfinishedMeta && window.UnfinishedMeta.products.oracle) || { id:'oracle_reading' };
+      if(window.trackMetaEvent && amount > 0 && orderNo){
+        sentIc = !!window.trackMetaEvent('InitiateCheckout', {
+          content_name:'真人占卜', content_ids:[P.id], content_type:'product',
+          value:amount, currency:'TWD', num_items:1
+        }, { once:orderNo, store:'session', eventID:'ic_' + orderNo });
+      }
+    }catch(e){}
+    if(sentIc && window.UnfinishedMeta) window.UnfinishedMeta.thenNavigate(function(){ goEcpay(x.d.action, x.d.fields); }, 300);
+    else goEcpay(x.d.action, x.d.fields);
   })
   .catch(function(e){
     paying = false;

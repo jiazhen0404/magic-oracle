@@ -148,6 +148,8 @@ LINE／客人評價／GA4 後端事件失效。最嚴重的是舊版沒有付款
   這個地址同時是 Resend 的寄件人網域，**不要改成 Gmail**，改了所有信都會被退 403。
   客人按「回覆」會回到 Gmail（`src/index.js` 的 `reply_to`）。
 - GA4 已設定，追蹤 ID `G-71RMD00WPJ`
+- Meta Pixel 已設定，ID `1141537454976539`，程式集中在 `assets/meta-pixel.js`，
+  事件清單見 `META-TRACKING.md`。各頁只呼叫 `trackMetaEvent`／`trackMetaCustomEvent`，**不要再加第二段 Base Code 或 `fbq('init')`**
 - 已設定 robots.txt、sitemap.xml、Open Graph／Twitter Card
 - 手動補寄 PDF：`/api/resend-pdf`，需 `X-Admin-Key`
 

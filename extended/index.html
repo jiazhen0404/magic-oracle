@@ -188,13 +188,35 @@ footer{text-align:center;color:var(--faint);font-size:12px;margin-top:56px}
   gtag("event","extended_page_view",{page_state:state,utm_source:src,utm_medium:med,
        theme:theme,subtheme:sub,fortune_number:n,fortune_title:slip});
 
+  /* Meta：ViewExtendedReading。這一頁就是 NT$99 延伸解籤的商品介紹頁，進來就算看到商品。
+     有帶一支買得到的籤時 product_id 是那支籤（例：love_breakup_051），
+     沒帶籤時用通用的 extended_reading。一次頁面載入只送一次。 */
+  var EXT_PRICE=(window.UnfinishedMeta&&window.UnfinishedMeta.products.extended.price)||99;
+  try{window.trackMetaCustomEvent&&window.trackMetaCustomEvent("ViewExtendedReading",
+    {content_type:"extended_reading",category:theme||"unknown",product_id:slipId||"extended_reading",
+     value:EXT_PRICE,currency:"TWD"},{once:"extended_page"});}catch(e){}
+
   // 這裡送 extended_checkout_click（跟解籤結果頁那顆按鈕同一個事件名），
   // 不送 begin_checkout —— begin_checkout 統一在 /checkout/ 那一頁送。
   // 兩邊都送的話，走「解籤頁 → /extended/ → /checkout/」的人會被算兩次。
-  if(buy) buy.addEventListener("click",function(){
+  if(buy) buy.addEventListener("click",function(ev){
     gtag("event","extended_checkout_click",{button_location:"extended_page",price_shown:99,
          slip_id:slipId,utm_source:src,utm_medium:med,
          theme:theme,subtheme:sub,fortune_number:n,fortune_title:slip});
+    /* Meta：AddToCart（下一步是 /checkout/ 確認頁，還不是付款）。
+       一般點擊時等 0.3 秒再換頁，讓事件送得出去；
+       按著 Ctrl／⌘ 開新分頁的情況不攔，照瀏覽器原本的行為。 */
+    if(!slipId) return;
+    var sent=false;
+    try{sent=!!(window.trackMetaEvent&&window.trackMetaEvent("AddToCart",
+      {content_name:"Extended Reading",content_ids:[slipId],content_type:"product",value:EXT_PRICE,currency:"TWD"},
+      {throttle:2000,throttleKey:"atc:"+slipId}));}catch(e){}
+    var plain=ev.button===0&&!ev.metaKey&&!ev.ctrlKey&&!ev.shiftKey&&!ev.altKey&&buy.target!=="_blank";
+    if(sent&&plain&&window.UnfinishedMeta){
+      ev.preventDefault();
+      var href=buy.href;
+      window.UnfinishedMeta.thenNavigate(function(){location.href=href;},300);
+    }
   });
 
   if(draw) draw.addEventListener("click",function(){
