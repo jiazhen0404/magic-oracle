@@ -2460,7 +2460,7 @@ body{background:#0D0818}
 .card{background:#1C1330;border-color:#3E2C5C}
 .bar{background:rgba(13,8,24,.96);border-color:#3E2C5C}
 .big-logo{display:block;width:min(150px,40%);height:auto;margin:30px auto 10px;opacity:.95}
-</style></head><body>
+</style><script src="/assets/meta-pixel.js"></script><noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=1141537454976539&ev=PageView&noscript=1"></noscript></head><body>
 <div class="bar"><h1><img src="/assets/logo-mark.png" alt="" class="lg">真人占卜</h1></div>
 <div class="wrap" id="box"><div class="empty">正在確認付款…</div></div>
 <script>

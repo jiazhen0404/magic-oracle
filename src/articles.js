@@ -95,6 +95,7 @@ const SITE_FOOTER = `<style id="site-footer-v1">
 </style>
 <footer class="site-footer"><nav class="site-footer-inner" aria-label="網站地圖"><div class="site-footer-col"><span class="site-footer-h">抽籤主題</span><a href="/love/">愛情</a><a href="/work/">工作</a><a href="/life/">人生</a><a href="/pet/">毛孩</a><a href="/choice/">選擇</a></div><div class="site-footer-col"><span class="site-footer-h">更多內容</span><a href="/monthly/">本月主題籤</a><a href="/articles/">未完文章</a><a href="/extended/">延伸解籤</a></div><div class="site-footer-col"><span class="site-footer-h">服務</span><a href="/oracle.html">真人占卜</a><a href="/feedback/">意見回饋</a><a href="/survey/">使用者問卷</a></div><div class="site-footer-col"><span class="site-footer-h">條款</span><a href="/privacy/#terms">服務條款</a><a href="/privacy/#privacy">隱私權</a><a href="/privacy/#refund">退款說明</a></div><div class="site-footer-col"><span class="site-footer-h">聯絡與追蹤</span><a href="https://line.me/R/ti/p/@017vwhwj?utm_source=web&amp;utm_medium=footer&amp;utm_campaign=line_add">LINE 官方帳號</a><a href="https://www.threads.com/@eating_for_justice" target="_blank" rel="noopener">Threads</a><a href="mailto:hello@unfinished.tw">客服信箱</a></div></nav><p>© 2026 未完籤所 MAGIC ORACLE</p></footer>`;
 
+const PIXEL = `<script src="/assets/meta-pixel.js"></script><noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=1141537454976539&ev=PageView&noscript=1"></noscript>`; // Meta Pixel，見 assets/meta-pixel.js
 const GA = `<script async src="https://www.googletagmanager.com/gtag/js?id=G-71RMD00WPJ"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-71RMD00WPJ');</script>`;
 
 const UTM = `<script>
@@ -163,7 +164,7 @@ export function renderPage(a, links, siblings) {
     `<meta property="og:url" content="${url}">` +
     `<meta property="og:image" content="https://unfinished.tw/assets/og-cover.jpg">` +
     `<meta name="twitter:card" content="summary_large_image">` +
-    GA + UTM +
+    GA + PIXEL + UTM +
     `<script type="application/ld+json">${JSON.stringify(ld)}</script>` +
     `<style>\n${STYLE}\n</style></head><body><div class="wrap">` +
     `<div class="crumb">${crumbs.join(' / ')}</div>\n\n` +
