@@ -333,6 +333,22 @@ form.addEventListener('submit', async ev => {
     }
     const { action, fields } = await res.json();
 
+    /* ── Meta：InitiateCheckout ──
+       放在「後端已經建立訂單、即將送去綠界」這一刻，不是看到這一頁、也不是按下按鈕。
+       金額與訂單編號都從後端回傳的綠界欄位拿（TotalAmount / MerchantTradeNo），
+       不用頁面上寫死的數字。同一筆訂單只會送一次（以訂單編號去重，重新整理也一樣）。 */
+    let sentIc = false;
+    try{
+      const amount = Number(fields && fields.TotalAmount);
+      const orderNo = fields && fields.MerchantTradeNo;
+      if(window.trackMetaEvent && amount > 0 && orderNo){
+        sentIc = !!window.trackMetaEvent('InitiateCheckout', {
+          content_name: 'Extended Reading', content_ids: [SLIP_ID], content_type: 'product',
+          value: amount, currency: 'TWD', num_items: 1
+        }, { once: orderNo, store: 'session', eventID: 'ic_' + orderNo });
+      }
+    }catch(e){}
+
     const f = document.createElement('form');
     f.method = 'POST'; f.action = action;
     for(const [k, v] of Object.entries(fields)){
@@ -341,7 +357,9 @@ form.addEventListener('submit', async ev => {
       f.appendChild(i);
     }
     document.body.appendChild(f);
-    f.submit();
+    /* 事件送出後等 0.3 秒再跳綠界，避免被換頁截斷。Pixel 沒載入就不等。 */
+    if(sentIc && window.UnfinishedMeta) window.UnfinishedMeta.thenNavigate(function(){ f.submit(); }, 300);
+    else f.submit();
   }catch(e){
     console.error(e);
     submit.disabled = false;

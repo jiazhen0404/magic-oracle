@@ -24,6 +24,7 @@ README.md
 README-v6.txt
 README-v7.txt
 GA4-TRACKING.md
+META-TRACKING.md
 QA_610_*.txt
 # 2026-09-20 清查發現以下這些一直是公開可讀的（實測都回 200）。
 # 都沒有外洩金鑰，但沒有理由對外公開。清查方式：把根目錄每個檔案
