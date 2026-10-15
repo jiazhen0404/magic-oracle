@@ -53,6 +53,8 @@ function build(spec) {
     dateModified: spec.dateModified
   });
   if (article.url) article.url = url;
+  /* 2026-10 新增：規格檔有 author 才加，舊文章重建時不受影響 */
+  if (spec.author) article.author = { '@type': 'Organization', name: spec.author, url: SITE + '/' };
   const crumbs = spec.crumb.concat([[null, spec.crumbLast]]);
   const breadcrumb = {
     '@context': 'https://schema.org', '@type': 'BreadcrumbList',
