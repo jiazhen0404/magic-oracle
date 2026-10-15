@@ -366,6 +366,7 @@
 
   <url><loc>https://unfinished.tw/articles/</loc></url>
   <url><loc>https://unfinished.tw/articles/love/</loc></url>
+  <url><loc>https://unfinished.tw/articles/love/unrequited/</loc><lastmod>2026-10-15</lastmod></url>
   <url><loc>https://unfinished.tw/articles/work/</loc></url>
   <url><loc>https://unfinished.tw/articles/life/</loc></url>
   <url><loc>https://unfinished.tw/articles/pet/</loc></url>
@@ -379,11 +380,11 @@
   </url>
   <url>
     <loc>https://unfinished.tw/articles/love/relationship/</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-10-15</lastmod>
   </url>
   <url>
     <loc>https://unfinished.tw/articles/love/breakup/</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-10-15</lastmod>
   </url>
   <url>
     <loc>https://unfinished.tw/articles/love/ambiguity/</loc>
@@ -400,5 +401,45 @@
   <url>
     <loc>https://unfinished.tw/articles/love/ambiguity/hot-and-cold-situationship/</loc>
     <lastmod>2026-09-12</lastmod>
+  </url>
+  <url>
+    <loc>https://unfinished.tw/articles/love/relationship/care-or-control/</loc>
+    <lastmod>2026-10-15</lastmod>
+  </url>
+  <url>
+    <loc>https://unfinished.tw/articles/love/relationship/emotional-dependency-vs-love/</loc>
+    <lastmod>2026-10-15</lastmod>
+  </url>
+  <url>
+    <loc>https://unfinished.tw/articles/love/relationship/is-this-relationship-worth-continuing/</loc>
+    <lastmod>2026-10-15</lastmod>
+  </url>
+  <url>
+    <loc>https://unfinished.tw/articles/love/relationship/how-to-make-up-after-a-fight/</loc>
+    <lastmod>2026-10-15</lastmod>
+  </url>
+  <url>
+    <loc>https://unfinished.tw/articles/love/relationship/silent-treatment-vs-cooling-off/</loc>
+    <lastmod>2026-10-15</lastmod>
+  </url>
+  <url>
+    <loc>https://unfinished.tw/articles/love/relationship/different-values-in-relationship/</loc>
+    <lastmod>2026-10-15</lastmod>
+  </url>
+  <url>
+    <loc>https://unfinished.tw/articles/love/relationship/losing-yourself-in-a-relationship/</loc>
+    <lastmod>2026-10-15</lastmod>
+  </url>
+  <url>
+    <loc>https://unfinished.tw/articles/love/relationship/repeating-relationship-patterns/</loc>
+    <lastmod>2026-10-15</lastmod>
+  </url>
+  <url>
+    <loc>https://unfinished.tw/articles/love/breakup/why-is-it-so-hard-to-break-up/</loc>
+    <lastmod>2026-10-15</lastmod>
+  </url>
+  <url>
+    <loc>https://unfinished.tw/articles/love/unrequited/why-do-i-like-people-who-dont-like-me/</loc>
+    <lastmod>2026-10-15</lastmod>
   </url>
 </urlset>
